@@ -12,9 +12,9 @@ Includes all the data that we have used to estimate the treatment effects of org
 Here are all the data that are results of the code. 
 
 1. Expected effects
-   a. composting_effect: what is the expected effect on composting at each of the different phases of the bans for CT and VT
-   b. disposal_effect:
-   c. disposal_effect_size:
+   a. composting_effect: what is the expected effect on composting at each of the different phases of the bans for CT and VT \\
+   b. disposal_effect: \\
+   c. disposal_effect_size:\\
    d. municipal_effect
    
 2. Power results
