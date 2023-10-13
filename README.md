@@ -44,7 +44,7 @@ Here are all the data that are results of the code.
    a. mae_placebo
    b. mape_state
 
-5. Treatment effects results
+5. Treatment effects results 
    a. tr_res_multiple_composting
    b. tr_res_municipal_multiple
    c. tr_res_municipal_multiple_composting
@@ -62,6 +62,9 @@ Here are all the data that are results of the code.
    o. treat_state_good
    p. treat_state_passage
 
-6. Year Placebo
+7. Year Placebo
   a. year_placebo
+
+8. All State Level Results:
+   a. xy_plot_data
    
