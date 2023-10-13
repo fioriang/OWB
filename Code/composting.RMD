@@ -1,0 +1,1672 @@
+---
+title: "composting_BC"
+author: "Fiori Anglou"
+date: "2023-05-12"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(ggpubr)
+library(stringr)
+library(fixest)
+library(knitr)
+library(zoo)
+library(tidyr)
+library(tictoc)
+library(purrr)
+library(extrafont)
+state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
+post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
+```
+
+# Basic Data
+
+
+```{r, include=FALSE}
+loadfonts(device = "win")
+
+plotCol <- c('royalblue4','deepskyblue3','skyblue','purple1','purple4','lightslateblue','darkmagenta', 'mediumorchid', 'goldenrod', 'honeydew3', '#417c5b3','palegreen3','plum', "aquamarine", "brown4", "cyan4", "darkslategray3", "darkolivegreen4")
+
+ut_colors <- c(
+  rgb(132, 59,14, max=255), # dark orange
+  rgb(255, 127, 21, max=255), # bright orange
+  rgb(191,87,0, max=255), # ut orange
+  rgb(51,73,72, max=255), # dark grey
+  rgb(156, 173, 183, max=255), #light grey
+  rgb(191,87,0,alpha=50, max=255))# ut orange
+
+# Population
+population <-  read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+population_2020 <- read.csv(paste0(state_data_path,"/00. Controls/Population/population_2020.csv"))
+population_2020 <- population_2020[population_2020$state_id !="DC",]
+population_2020$county_name[population_2020$county_name=="doña ana"] <- "dona ana"
+population <- rbind(population, population_2020)
+rm(population_2020)
+
+
+# Waste Data#
+#power2 <- read.csv("power2_2.csv")
+power2 <- read.csv("power2_impexp.csv")
+all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
+#bans <- c(2015, 2015, 2016, 2014, 2016)
+#bans <- c(2014, 2014, 2016, 2014, 2016)
+#bans <- c(2012, 2013, 2014, 2011, 2014) #passage dates
+
+```
+
+## Pre-Processing
+
+```{r, include=FALSE}
+year_start <- 2010
+year_cutoff <- 2018
+year_end <- 2011
+
+dt <- power2
+
+dt <- 
+  dt %>% 
+  filter(
+    year >= year_start, 
+    year <= year_cutoff, 
+    type %in% c("composting")
+    ) %>% 
+  group_by (year, state_id, county_name) %>% 
+  summarise(tons = sum(tons)) %>% 
+  left_join (
+    population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+    by = c("state_id", "year")
+  ) %>%
+  left_join (
+    population,
+    by = c("state_id", "county_name", "year")
+  ) %>% 
+  mutate(
+    tons_pc = ifelse(is.na(county_name),tons/state_pop, tons/pop), 
+    county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id) )
+  ) %>% 
+  filter(
+    tons_pc > 0
+  )
+
+
+#Exclude missing values and small values
+exc<- as.data.frame(
+    dt %>% 
+      group_by(county_id) %>% 
+      filter(state_id != "CT", state_id != "RI") %>% 
+      summarize(
+        m = mean(tons_pc), 
+        min_year = min(year), 
+        min_tons = min(tons_pc), 
+        max_tons = max(tons_pc)) %>%
+      filter(
+        min_year > year_start)
+  )
+
+dt <- dt[!(dt$county_id %in% exc$county_id),]
+dt <- dt[dt$year >=year_start  & dt$year <=year_cutoff,]
+exc<- 
+  as.data.frame(
+    dt %>% 
+      group_by(county_id) %>% 
+      summarize(n=  n()) %>% 
+      filter(
+        n < (year_cutoff- year_start+1)
+      )
+  )
+dt <- dt[!(dt$county_id %in% exc$county_id),]
+# Percentage change in disposal tons
+f <- as.data.frame(
+  dt %>% filter(state_id!="CT") %>% 
+    group_by(county_id) %>%
+    mutate(
+      percentage = (tons-dplyr::lag(tons, n = 1, default = NA))/dplyr::lag(tons, n = 1, default = NA),
+      percentage_1 = (tons-dplyr::lead(tons, n = 1, default = NA))/dplyr::lead(tons, n = 1, default = NA)
+    )
+)
+
+f <- f[!is.na(f$percentage),]
+threshold <- 3
+exclude2 <- unique(f$county_id[f$percentage > threshold | f$percentage < -threshold | f$percentage_1 > threshold | f$percentage_1 < -threshold])
+dt <- dt[!dt$county_id %in% exclude2,]
+
+donors <- unique(dt$county_id)
+rm(f, exc, exclude2)
+
+#Transform Box Cox 
+# x <- dt$tons_pc
+# b <- MASS::boxcox(lm(x~ 1))
+# lambda_county_composting <- b$x[which.max(b$y)]
+# rm(x,b)
+
+dt<- 
+  dt %>% 
+  group_by(state_id) %>% 
+  mutate(
+    tons_pc = tons_pc
+    #tons_pc = log(tons_pc)
+    #tons_pc = (tons_pc^lambda_county_composting-1)/lambda_county_composting, 
+    #tons_pc_real = (lambda_county_composting*tons_pc+1)^(1/lambda_county_composting)
+    #range = max(tons_pc)-min(tons_pc),
+    #mint = min(tons_pc),
+    #tons_pc = (tons_pc-mint)/range,
+    #tons_pc_real = tons_pc*range + mint
+  )
+
+dt_initial <- dt
+```
+
+
+## Functions
+```{r, include=FALSE}
+do_many_times <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don,sample_size)
+{
+  n <- length(y_train)+ length(y_test) + length(y_att)
+  # Approach 1- Coefficient and Intercept
+  x <- rowMeans(x[, sample(n_don, sample_size)])
+  x_train <- x[1:test_ind_end1]
+  x_test <-  x[(test_ind_end1+1):test_ind_end2]
+  x_att <- x[(test_ind_end2+1):n]
+  
+  coef <- sum((x_train - mean(x_train)) * (y_train - mean(y_train))) / sum((x_train - mean(x_train))^2)
+  intercept <- mean(y_train)-coef * mean(x_train)
+  
+  MA <- mean(abs((intercept + x_test * coef - y_test) / y_test))
+  att <- mean(intercept + x_att * coef - y_att)
+  #ss_res <- sum((y_train - intercept - x_train * coef)^2)
+  #ss_tot <- sum((y_train - mean(y_train))^2)
+  r <- 1 - sum((y_train - intercept - x_train * coef)^2) /  sum((y_train - mean(y_train))^2)
+  c(r, MA, att)
+}
+
+do_many_times_v2 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
+{
+  # Approach 2- Only Intercept  
+  samples <- sample(n_don, sample_size)
+  x <- rowMeans(x[, samples])
+  n <- length(y_train)+ length(y_test) + length(y_att)
+  #diff_train <- y_train-x[1:test_ind_end1]
+  #diff_test <- y_test - x[(test_ind_end1+1):test_ind_end2]
+  #diff_att <- y_att-x[(test_ind_end2+1):n]
+  
+  intercept <- mean(y_train-x[1:test_ind_end1])
+  
+  ss_res <- sum((y_train-x[1:test_ind_end1] - intercept)^2) #calculating the in-sample R-squared
+  ss_tot <- sum((y_train-mean(y_train))^2)
+  r <- 1- ss_res/ss_tot
+  #MA  <- ((intercept - diff_test)/y_test) %>% abs %>%  mean
+  MA  <- (intercept + x[(test_ind_end1+1):test_ind_end2] - y_test ) %>% abs %>%  mean
+  
+  #MA  <- ((intercept + x[(test_ind_end1+1):test_ind_end2] - y_test )/y_test) %>% abs %>%  mean
+  att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% mean
+  c(r, MA, att,c(samples))
+}
+
+do_many_times_v2_yearly <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
+{
+  # Approach 2- Only Intercept
+  samples <- sample(n_don, sample_size)
+  x <- rowMeans(x[, samples])
+  n <- length(y_train)+ length(y_test) + length(y_att)
+  intercept <- mean(y_train-x[1:test_ind_end1])
+  
+  ss_res <- sum((y_train-x[1:test_ind_end1] - intercept)^2) #calculating the in-sample R-squared
+  ss_tot <- sum((y_train-mean(y_train))^2)
+  r <- 1- ss_res/ss_tot
+  #MA  <- ((intercept - diff_test)/y_test) %>% abs %>%  mean
+  MA  <- (intercept + x[(test_ind_end1+1):test_ind_end2] - y_test ) %>% abs %>%  mean
+  att <- (y_att-x[(test_ind_end2+1):n]-intercept)
+  c(r, MA, att,c(samples))
+  
+}
+
+in_sample_R2 <- function (k, dt, donors,iterations_scale, option, ban_year, offset, samp)
+{
+  treated_location <- donors[k]
+  year_end <- ban_year-offset
+  don_new <- donors[donors!=treated_location]
+  
+  n_don <- length(don_new)
+  test_ind_end1 <- year_end - year_start+1
+  test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
+  
+  y <- dt[dt$county_id==treated_location, "tons_pc"]
+  y_train <- y[1:test_ind_end1]
+  y_test <- y[(test_ind_end1+1): test_ind_end2]
+  y_att <- y[(test_ind_end2+1): length(y)]
+  
+  x <- dt[dt$county_id!=treated_location, c("tons_pc", "county_id")]
+  x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
+  
+  res <- c(0,0,0, 0, 0,0,0,0)
+  #Initialize x's so it takes less time
+  for ( f in 1:length(samp))
+  {
+    sample_size <- samp[f]
+    iterations <- min(iterations_scale* sample_size, 10000)
+    #tic()
+    #if (option=="V1")
+    #{
+    #  all <- lapply(seq(1:iterations),do_many_times,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    #}else{
+    all <- lapply(seq(1:iterations),do_many_times_v3,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    #}
+    #toc()
+    all <- all %>% sapply(c) %>% t
+    
+    colnames(all) <- c(
+      "r_sq",
+      "mape", 
+      "att",
+      paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+    )
+    
+    all <- 
+      all %>% 
+      as_tibble %>%
+      filter(r_sq > 0) %>% 
+      arrange(mape) %>% 
+      slice(1:100) %>% 
+      mutate(
+        sample_size = samp[f], 
+        county_id = treated_location, 
+        iterations = iterations, 
+        ban_year = ban_year
+      ) %>%  
+      pivot_longer(
+        cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
+        names_to = "donor_number", 
+        values_to = "chosen_donor"
+      )
+    
+    res <- rbind(res, all)
+  }
+  res %>% 
+    as_tibble 
+}
+
+
+in_sample_R2_v2 <- function (k, dt, donors,iterations_scale, option, ban_year, offset, samp)
+{
+  treated_location <- donors[k]
+  year_end <- ban_year-offset
+  state_treated <- ifelse(
+    str_length(treated_location)>2, 
+    substr(treated_location, str_length(treated_location)-1, str_length(treated_location)), 
+    treated_location)
+  
+  don_new <- donors[donors!=treated_location]
+  don_new <- 
+    don_new %>% 
+    as_tibble %>% 
+    mutate(
+      state = ifelse( 
+        str_length(value)>2, 
+        substr(value, str_length(value)-1, str_length(value)), 
+        value)
+    ) %>% 
+    filter(
+      state != state_treated
+    ) %>% as.data.frame()
+  
+  don_new <- don_new[,"value"]
+  
+  n_don <- length(don_new)
+  test_ind_end1 <- year_end - year_start+1
+  test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
+  
+  y <- dt[dt$county_id==treated_location, "tons_pc"]
+  y_train <- y[1:test_ind_end1]
+  y_test <- y[(test_ind_end1+1): test_ind_end2]
+  y_att <- y[(test_ind_end2+1): length(y)]
+  
+  x <- dt[dt$county_id!=treated_location, c("tons_pc", "county_id")]
+  x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
+
+  res <- tibble(
+    r_sq = 0, 
+    mape = 0, 
+    att=0, 
+    cf=0, 
+    sample_size=0, 
+    county_id ="", 
+    iterations = 0, 
+    ban_year = 0, 
+    donor_number="", 
+    chosen_donor=0
+  )
+  
+  for ( f in 1:length(samp))
+  {
+    sample_size <- samp[f]
+    iterations <- min(iterations_scale* sample_size, 15000)
+
+    all <- lapply(seq(1:iterations),do_many_times_v3,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    all <- all %>% sapply(c) %>% t
+    
+    colnames(all) <- c(
+      "r_sq",
+      "mape", 
+      "att",
+      "cf",
+      paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+    )
+    
+    all <- 
+      all %>% 
+      as_tibble %>%
+      #for counties
+      #filter(r_sq > 0, mape < 0.1) %>% 
+      # for states
+      filter(r_sq > 0) %>% 
+      arrange(mape) %>% 
+      slice(1:100) %>% 
+      mutate(
+        sample_size = samp[f], 
+        county_id = treated_location, 
+        iterations = iterations, 
+        ban_year = ban_year,
+        att = att/cf
+      ) %>%  
+      pivot_longer(
+        cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
+        names_to = "donor_number", 
+        values_to = "chosen_donor"
+      )
+    
+    res <- rbind(res, all)
+  }
+  res %>% 
+    as_tibble 
+}
+
+
+in_sample_R2_no_same_state <- function (k, dt, donors,iterations_scale, option, ban_year, offset, samp)
+{
+  treated_location <- donors[k]
+  year_end <- ban_year-offset
+  state_treated <- ifelse(
+    str_length(treated_location)>2, 
+    substr(treated_location, str_length(treated_location)-1, str_length(treated_location)), 
+    treated_location)
+  
+  don_new <- donors[donors!=treated_location]
+  don_new <- 
+    don_new %>% 
+    as_tibble %>% 
+    mutate(
+      state = ifelse( 
+        str_length(value)>2, 
+        substr(value, str_length(value)-1, str_length(value)), 
+        value)
+    ) %>% 
+    filter(
+      state != state_treated
+    ) %>% as.data.frame()
+  
+  don_new <- don_new[,"value"]
+  
+  n_don <- length(don_new)
+  test_ind_end1 <- year_end - year_start+1
+  test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
+  
+  y <- dt[dt$county_id==treated_location, "tons_pc"]
+  y_train <- y[1:test_ind_end1]
+  y_test <- y[(test_ind_end1+1): test_ind_end2]
+  y_att <- y[(test_ind_end2+1): length(y)]
+  
+  x <- dt[dt$county_id!=treated_location, c("tons_pc", "county_id")]
+  x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
+  
+  res <- c(0,0,0, 0, 0,0,0)
+  #Initialize x's so it takes less time
+  for ( f in 1:length(samp))
+  {
+    sample_size <- samp[f]
+    iterations <- min(iterations_scale* sample_size, 10000)
+    #tic()
+    #if (option=="V1")
+    #{
+    #  all <- lapply(seq(1:iterations),do_many_times,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    #}else{
+    all <- lapply(seq(1:iterations),do_many_times_v2,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    #}
+    #toc()
+    all <- all %>% sapply(c) %>% t
+    
+    colnames(all) <- c(
+      "r_sq",
+      "mape", 
+      "att",
+      paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+    )
+    
+    all <- 
+      all %>% 
+      as_tibble %>%
+      filter(r_sq >0) %>% 
+      arrange(mape) %>% 
+      slice(1:100) %>%
+      mutate(
+        sample_size = samp[f], 
+        county_id = treated_location, 
+        iterations = iterations, 
+        ban_year = ban_year
+      ) %>%  
+      pivot_longer(
+        cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
+        names_to = "donor_number", 
+        values_to = "chosen_donor"
+      )
+    
+    res <- rbind(res, all)
+    
+  }
+  res %>% 
+    as_tibble 
+}
+
+in_sample_R2_yearly <- function (k, dt, donors,iterations_scale, ban_year, offset, samp)
+{
+  treated_location <- donors[k]
+  year_end <- ban_year-offset
+  don_new <- donors[donors!=treated_location]
+  
+  n_don <- length(don_new)
+  test_ind_end1 <- year_end - year_start+1
+  test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
+  
+  y <- dt[dt$county_id==treated_location, "tons_pc"]
+  y_train <- y[1:test_ind_end1]
+  y_test <- y[(test_ind_end1+1): test_ind_end2]
+  y_att <- y[(test_ind_end2+1): length(y)]
+  
+  x <- dt[dt$county_id!=treated_location, c("tons_pc", "county_id")]
+  x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
+  n_att <- length(y)-test_ind_end2
+  
+  res <- c(rep(0,10))
+  
+  for ( f in 1:length(samp))
+  {
+    sample_size <- samp[f]
+    iterations <- min(iterations_scale* sample_size, 10000)
+    all <- lapply(seq(1:iterations),do_many_times_v2_yearly,x, test_ind_end1, test_ind_end2, y_train, y_test, y_att,n_don, sample_size)
+    
+    all <- all %>% sapply(c) %>% t %>% as_tibble
+    
+    colnames(all) <- c(
+      "r_sq",
+      "mape", 
+      paste0(rep("att", n_att), paste0("_", c(1:n_att))),  
+      paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+    )
+    
+    all <- 
+      all %>% 
+      as_tibble %>%
+      arrange(mape) %>% 
+      slice(1:100) %>% 
+      mutate(
+        sample_size = samp[f], 
+        county_id = treated_location, 
+        iterations = iterations, 
+        ban_year = ban_year
+      ) %>% 
+      pivot_longer(
+        cols = c(paste0(rep("att", n_att), paste0("_", c(1:n_att)))), 
+        names_to = "yearly_att", 
+        values_to = "att"
+      ) %>% 
+      pivot_longer(
+        cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
+        names_to = "donor_number", 
+        values_to = "chosen_donor"
+      )
+    
+    res <- rbind(res, all)
+    
+    
+  }
+  res %>% 
+    as_tibble 
+}
+
+plot_function <- function (plac_res_alt, r_threshold, mape_threshold)
+{
+  col <- "black"
+    
+  plac_res_alt <-   
+    plac_res_alt%>%
+    filter(
+      r_sq > r_threshold, 
+      mape < mape_threshold
+    )
+  
+  hist_plot<- 
+    plac_res_alt%>%
+    pivot_longer(
+      cols = c("att", "mape", "r_sq"), 
+      names_to = "stat", 
+      values_to = "values"
+    ) %>%
+    mutate (
+      stat = str_replace(stat, "att", "ATT"),
+      stat = str_replace(stat, "mape", "MAPE"),
+      stat = str_replace(stat, "r_sq", "R^2")
+    ) %>% 
+    ggplot()+
+    aes(x =values) +
+    geom_histogram(bins = 200, color=col, fill = col)+
+    facet_grid(
+      rows=vars(sample_size),
+      cols=vars(stat),
+      scales = "free_x"
+    )+
+    labs(x= "", y= "Count")+
+    theme_bw()
+  
+  dt_plac_ci <- 
+    plac_res_alt %>%
+    group_by(sample_size, ban_year) %>% 
+    pivot_longer(
+      cols =c(mape, r_sq, att), 
+      names_to = "stat", 
+      values_to = "val"
+    ) %>%
+    group_by(stat,sample_size, ban_year) %>%
+    summarise(
+      median=median(val),
+      quantiles = quantile(val, c(0.05, 0.95, 0.1, 0.9)), 
+      numbers = n()
+    )%>%
+    mutate (
+      type = rep(c("5%", "95%", "10%", "90%"), n()/4),
+      sample_size = as.factor(sample_size), 
+      stat = str_replace(stat, "att", "Power"),
+      stat = str_replace(stat, "mape", "MAPE"),
+      stat = str_replace(stat, "r_sq", "R^2")
+    ) %>% 
+    pivot_wider (
+      names_from = type, 
+      values_from = quantiles
+    ) 
+  
+  
+  ci_plot <- 
+    dt_plac_ci %>% 
+    ggplot()+
+    aes(x= as.factor(sample_size),y= median)+
+    geom_point(color=col, size=1)+
+    geom_errorbar(aes(ymin=`5%`, ymax=`95%`), color=col, lty="twodash", linewidth=0.5)+
+    geom_errorbar(aes(ymin=`10%`, ymax=`90%`), color=col, linewidth=0.5)+
+    labs(x="Sample Size", y = "Statistics")+
+    facet_grid(
+      rows = vars(stat), 
+      cols = vars(ban_year),
+      scales = "free_y") +
+    theme_bw()+
+    theme(
+      strip.background = element_rect(color = "white", fill = "white"),
+      panel.grid.major.x = element_blank() ,
+      panel.grid.major.y = element_line(color="grey"))
+  
+  
+  ci_plot_power <- 
+    dt_plac_ci %>%
+    filter(stat == "Power") %>%
+    ggplot()+
+    aes(x= as.factor(sample_size),y= median)+
+    geom_point()+
+    geom_line(aes(group = 1))+
+    geom_errorbar(aes(ymin=`5%`, ymax=`95%`), color=col, linewidth=0.5)+
+    geom_ribbon(aes(ymin=`5%`, ymax=`95%`, group=1),alpha = 0.2)+
+    facet_wrap(
+      vars(ban_year))+
+    #scale_y_continuous(breaks = seq(-0.2, 0.2, by = 0.05))+
+    labs (y= "Power", x="Sample Size")+
+    theme_bw()+
+    theme(
+      strip.background = element_rect(color = "white", fill = "white"),
+      panel.grid.major.x = element_blank() ,
+      panel.grid.major.y = element_line(color="grey"))
+  
+  
+  plots <- list(
+    hist_plot = hist_plot, 
+    ci_plot = ci_plot, 
+    ci_plot_power = ci_plot_power
+  )
+  
+  return(plots)
+  
+}
+
+plot_function_detailed <- function (plac_res_alt, r_threshold, mape_threshold)
+{
+  col <- ut_colors[5]
+    
+  plac_res_alt <-   
+    plac_res_alt%>%
+    filter(
+      r_sq > r_threshold, 
+      mape < mape_threshold
+    )
+  
+  dt_plac_ci <- 
+    plac_res_alt %>%
+    group_by(sample_size, ban_year) %>% 
+    pivot_longer(
+      cols =c(mape, r_sq, att), 
+      names_to = "stat", 
+      values_to = "val"
+    ) %>%
+    group_by(stat,sample_size, ban_year) %>%
+    summarise(
+      median=median(val),
+      quantiles = quantile(val, c(0.05, 0.95, 0.1, 0.9)), 
+      numbers = n()
+    )%>%
+    mutate (
+      type = rep(c("5%", "95%", "10%", "90%"), n()/4),
+      sample_size = as.factor(sample_size), 
+      stat = str_replace(stat, "att", "Power"),
+      stat = str_replace(stat, "mape", "MAPE"),
+      stat = str_replace(stat, "r_sq", "R^2")
+    ) %>% 
+    pivot_wider (
+      names_from = type, 
+      values_from = quantiles
+    ) 
+  
+   hist_ci_plot<- 
+    plac_res_alt%>%
+    pivot_longer(
+      cols = c("att", "mape", "r_sq"), 
+      names_to = "stat", 
+      values_to = "values"
+    ) %>%
+    mutate (
+      stat = str_replace(stat, "att", "Power"),
+      stat = str_replace(stat, "mape", "MAPE"),
+      stat = str_replace(stat, "r_sq", "R^2")
+    ) %>% 
+    filter(
+      stat == "Power", 
+      sample_size == 5, 
+      ban_year == 2015
+      ) %>%
+    left_join(
+      dt_plac_ci %>% 
+        mutate(sample_size = sample_size %>% as.integer), 
+      by = c("stat", "sample_size", "ban_year")
+    )%>%
+    group_by(county_id , stat) %>% 
+    summarise(
+      values = mean(values), 
+      `5%` = mean(`5%`),
+      `95%` = mean(`95%`)
+    ) %>%
+    ungroup %>% 
+    mutate(
+      `5%` = mean(`5%`), 
+      `95%` = mean(`95%`),
+    ) %>%
+    ggplot()+
+    aes(x =values) +
+    geom_histogram(bins = 30, color="white", fill = col)+    
+    geom_vline(aes(xintercept = `5%`), color= ut_colors[4], linewidth =1.5)+
+    geom_vline(aes(xintercept = `95%`), color= ut_colors[4], linewidth =1.5)+
+    labs(x= "", y= "")+
+    scale_x_continuous(
+      breaks = c(
+        seq(
+          plac_res_alt %>% ungroup %>% summarise(min(att)) %>% unlist %>% round(1),
+          plac_res_alt %>% ungroup %>% summarise(max(att)) %>% unlist %>% round(1), 
+          by =0.2))
+      )+
+    #theme_classic()+
+    theme(
+      strip.background = element_rect(color = "white", fill = "white"),
+      panel.grid.major.x = element_blank() ,
+      panel.grid.major.y = element_blank(),
+      axis.title.y=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(), 
+      panel.background = element_blank(), 
+      text = element_text(family = "Helvetica",size = 16))
+  
+  
+  plots <- list(
+    hist_ci_plot =  hist_ci_plot)
+  
+  return(plots)
+  
+}
+
+get_plac_res_alt_state_county <- function (dt,r_threshold, mape_threshold )
+{
+  
+  dt <-   
+    dt%>%
+    filter(
+      r_sq > r_threshold, 
+      mape < mape_threshold
+    )
+  
+  plac_res_alt_state_county <- 
+    dt %>% 
+    left_join (
+      pop_plac, 
+      by =c("county_id")
+    ) %>% 
+    mutate(
+      state_id = ifelse(is.na(state_id), county_id, state_id), 
+      weight = ifelse(is.na(mean_pop), 1, mean_pop/ state_pop)
+    ) %>% 
+    group_by(state_id, county_id, sample_size, ban_year)%>% 
+    summarise(
+      att = mean(att), 
+      mape = mean(mape), 
+      r_sq = mean(r_sq), 
+      weight = mean(weight)
+    ) %>% 
+    ungroup() %>% 
+    group_by(state_id, sample_size, ban_year) %>% 
+    summarise(
+      att = sum(att* weight), 
+      r_sq = sum(r_sq * weight),
+      mape = sum(mape * weight)
+    ) %>% 
+    ungroup()
+  
+  plac_res_alt_state_county
+}
+```
+
+# County - Level 
+
+## Pre processing 
+
+```{r}
+dt <- dt_initial
+col <- plotCol[1]
+treated_counties_id <- unique(dt$county_id[dt$state_id%in% all_treated])
+dt <- dt[!(dt$state_id %in% all_treated),] %>% as.data.frame
+donors <- unique(dt$county_id[!(dt$state_id%in% all_treated)])
+```
+
+## Functions
+
+```{r}
+
+N <- length(donors)
+samp <- c(3:10)
+
+tictoc::tic()
+
+plac_res_alt_2015 <- lapply(seq(1:N),in_sample_R2_v2,dt, donors, iterations_scale=1000, option="V2", ban_year=2015, offset=2, samp = samp)
+
+plac_res_alt_2015 <-
+  plac_res_alt_2015 %>%
+  bind_rows%>% 
+  select(r_sq, mape, att, sample_size, county_id, iterations, ban_year, donor_number, chosen_donor)
+
+tictoc::toc()
+
+plac_res_alt_2016 <- lapply(seq(1:N),in_sample_R2,dt, donors, iterations_scale=1000, option="V2", ban_year=2016, offset=3, samp = samp)
+
+plac_res_alt_2016 <- 
+  plac_res_alt_2016 %>% 
+  bind_rows %>% 
+  select(r_sq, mape, att, sample_size, county_id, iterations, ban_year, donor_number, chosen_donor)
+
+plac_res_alt_2014 <- lapply(seq(1:N),in_sample_R2,dt, donors, iterations_scale=1000, option="V2", ban_year=2014, offset=2, samp = samp)
+
+plac_res_alt_2014 <- 
+  plac_res_alt_2014 %>% 
+  bind_rows %>% 
+  select(r_sq, mape, att, sample_size, county_id, iterations, ban_year, donor_number, chosen_donor)
+
+
+plac_res_alt <- rbind(plac_res_alt_2015, plac_res_alt_2016, plac_res_alt_2014)
+
+write.csv(plac_res_alt, "plac_res_alt_bc_composting_log.csv", row.names = FALSE)
+```
+
+
+## Power Calculations
+
+### Specification 1: County-Level
+
+```{r}
+plac_res_alt <- read.csv("plac_res_alt_bc_composting.csv")
+
+spec1 <- 
+  plac_res_alt%>% 
+  filter(sample_size!=0) %>% 
+  group_by(sample_size, county_id, ban_year) %>% 
+  summarise(att=mean(unique(att))) %>% 
+  left_join(
+    dt %>% 
+      ungroup %>% 
+      select(year, state_id, tons, tons_pc, county_id),#, tons_pc_real), 
+    by = c("county_id", "ban_year"= "year")
+  ) %>% 
+  group_by(state_id, ban_year, sample_size) %>% 
+  mutate(
+    state_tons = sum(tons),
+    weight = ifelse(county_id != state_id, tons/state_tons, 1),
+    att_f = att
+    #att_f =((lambda_county_composting*(tons_pc+att)+1)^(1/lambda_county_composting)- (lambda_county_composting*(tons_pc)+1)^(1/lambda_county_composting))/tons_pc_real
+  ) %>%
+  group_by(sample_size, ban_year) %>%  
+  summarise(
+    att_min = quantile(att_f, 0.05),
+    att_max = quantile(att_f, 0.95), 
+    att_median = median(att_f), 
+    att_r_min = quantile(att, 0.05),
+    att_r_max = quantile(att, 0.95), 
+    att_r_median = median(att)
+  )
+spec1
+
+```
+
+### Specification 2: County-Pooled
+
+```{r}
+pool_function <-function(i, data, donors, r_threshold,mape_threshold)
+{
+  donors <- tibble(
+    county_id =donors, 
+    num_id = 1:length(donors)
+  )
+  
+  pooled <- 
+    data %>%
+    left_join(
+      donors, 
+      by = c("county_id")
+    ) %>% 
+    group_by(county_id) %>% 
+    mutate(
+      pools = sample(nrow(donors),4) %>% list()
+    )%>% 
+    ungroup
+  
+  
+  pooled %>%
+    mutate(
+      num_id = num_id %>% as.integer
+    ) %>% 
+    filter(
+      num_id %in% (
+        pooled%>% 
+          filter(num_id==i) %>% 
+          slice(1) %>% 
+          pluck("pools") %>% 
+          unlist
+      )
+    ) %>% 
+    group_by(sample_size, ban_year) %>% 
+    summarise(
+      att = mean(att), 
+      mape = mean(mape), 
+      r_sq = mean(r_sq), 
+      i
+    ) %>% 
+    ungroup
+}
+
+
+options(dplyr.summarise.inform = FALSE)
+
+pool_estimates <- lapply(seq(1:length(donors)), pool_function, data = plac_res_alt, donors, r_threshold = 0, mape_threshold = Inf)
+
+spec2<- 
+  pool_estimates %>% 
+  bind_rows %>%  
+  group_by(sample_size, ban_year) %>% 
+  summarise(
+    att_min = quantile(att, 0.05),
+    att_max = quantile(att, 0.95),
+    att_median = median(att)
+  )
+
+
+```
+
+
+### Specification 3: County-State-Pooled Level
+```{r}
+
+#plac_res_alt <- read.csv("plac_res_alt_bc_composting.csv")
+
+spec3 <-
+  plac_res_alt%>% 
+  filter(sample_size!=0) %>% 
+  group_by(sample_size, county_id, ban_year) %>% 
+  summarise(att=median(att)) %>% 
+  left_join(
+    dt %>% 
+      ungroup %>% 
+      select(year, state_id, tons, tons_pc, county_id),# tons_pc_real), 
+    by = c("county_id", "ban_year"= "year")
+  ) %>% 
+  group_by(state_id, ban_year, sample_size) %>% 
+  mutate(
+    state_tons = sum(tons),
+    weight = ifelse(county_id != state_id, tons/state_tons, 1),
+    #att_f =( (lambda_county*(tons_pc+att)+1)^(1/lambda_county)- (lambda_county*(tons_pc)+1)^(1/lambda_county))/tons_pc_real
+    att_f = att
+  ) %>% 
+  summarise(att_f=sum(att_f*weight, na.rm=TRUE)) %>% 
+  group_by (sample_size, ban_year) %>% 
+  summarise(
+    att_min = quantile(att_f, 0.05),
+    att_max = quantile(att_f, 0.95), 
+    att_median = median(att_f)
+  )
+
+spec3
+
+
+    
+```
+
+
+
+# State - Level 
+
+## Pre processing 
+
+```{r}
+
+power2 <- read.csv("power2_2.csv")
+
+year_start <-2010
+year_cutoff <- 2018
+
+dt_state <- 
+  power2 %>% 
+  filter(
+    year >= year_start, 
+    year <= year_cutoff, 
+    state_id != "OH",
+    state_id != "DE",
+    type %in% c("composting")
+  ) %>% 
+  group_by (year, state_id) %>% 
+  summarise(tons = sum(tons)) %>% 
+  left_join (
+    population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+    by = c("state_id", "year")
+  ) %>%
+  group_by(state_id, year) %>% 
+  mutate(
+    tons_pc = (tons/state_pop), 
+    county_id = state_id
+  ) %>% 
+  group_by(state_id) %>% 
+  mutate(n=n()) %>% 
+  filter(n == year_cutoff - year_start+1) %>% 
+  select(-n) %>% 
+  ungroup() 
+
+
+dt_state_initial <- dt_state
+
+treated_counties_id <- unique(dt_state$county_id[dt_state$state_id%in% all_treated])
+dt_state <- dt_state[!(dt_state$state_id %in% all_treated),] %>% as.data.frame
+donors_state <- unique(dt_state$county_id[!(dt_state$state_id%in% all_treated)])
+```
+
+## Functions
+
+```{r}
+
+samp = c(3:7)
+
+plac_res_alt_2015 <- lapply(seq(1:length(donors_state)),in_sample_R2_v2,dt_state, donors=donors_state, iterations_scale=1000, option="V2", ban_year=2015, offset=4, samp =samp)
+
+
+plac_res_alt_2015 <- 
+  plac_res_alt_2015 %>% 
+  bind_rows %>%  
+  select(r_sq, mape, att, sample_size, county_id, iterations, ban_year, donor_number, chosen_donor)
+
+plac_res_alt_2016 <- lapply(seq(1:length(donors_state)),in_sample_R2,dt_state, donors=donors_state, iterations_scale=1000, option="V2", ban_year=2016, offset=3, samp = samp)
+
+plac_res_alt_2016 <- 
+  plac_res_alt_2016 %>% 
+  bind_rows %>%  
+  select(r_sq, mape, att, sample_size, county_id, iterations, ban_year, donor_number, chosen_donor)
+
+plac_res_alt_2014 <- lapply(seq(1:length(donors_state)),in_sample_R2,dt_state, donors=donors_state, iterations_scale=1000, option="V2", ban_year=2014, offset=3, samp = samp)
+
+plac_res_alt_2014 <- 
+  plac_res_alt_2014 %>% 
+  bind_rows  %>%  
+  select(r_sq, mape, att, sample_size, county_id, iterations, ban_year, donor_number, chosen_donor)
+
+plac_res_alt_state <- rbind(plac_res_alt_2015, plac_res_alt_2016, plac_res_alt_2014)
+#write.csv(plac_res_alt_state,"plac_res_alt_state_composting_log.csv", row.names = FALSE)
+```
+
+## p-values
+
+Calculating p-values form the empirical placebo distribution, county-level specification.
+
+```{r}
+
+plac_res_alt <- read.csv("plac_res_alt_county_composting.csv")
+
+effect_composting_ct <- 
+  rbind(
+  tr_res_multiple %>% 
+    bind_rows %>% 
+    group_by(state_id, ban_year, sample_size) %>% 
+    summarise(
+      att_min = 100*quantile(att_f, 0.05),
+      att_max = 100*quantile(att_f, 0.95),
+      att_median = 100*median(att_f)
+    ) %>% mutate(specification = "County Pooled State" )
+) %>% filter(sample_size==4, specification=="County Pooled State")
+
+effect_composting_vt <- effect_composting_ct %>% filter(state_id=="VT") %>% pluck("att_median")/100
+effect_composting_ct <- effect_composting_ct %>% filter(state_id=="CT") %>% pluck("att_median")/100
+
+
+
+p <- 
+  plac_res_alt%>% 
+  filter(sample_size!=0) %>% 
+  group_by(sample_size, county_id, ban_year) %>% 
+  summarise(att=median(att)) %>% 
+  left_join(
+    dt %>% 
+      ungroup %>% 
+      select(year, state_id, tons, tons_pc, county_id),# tons_pc_real), 
+    by = c("county_id", "ban_year"= "year")
+  ) %>% 
+  group_by(state_id, ban_year, sample_size) %>% 
+  mutate(
+    state_tons = sum(tons),
+    weight = ifelse(county_id != state_id, tons/state_tons, 1),
+    #att_f =( (lambda_county*(tons_pc+att)+1)^(1/lambda_county)- (lambda_county*(tons_pc)+1)^(1/lambda_county))/tons_pc_real
+    att_f = att
+  ) %>% 
+  summarise(att_f=sum(att_f*weight, na.rm=TRUE)) %>% filter(sample_size==4) %>% mutate(att_f = abs(att_f))
+
+
+
+p_ct_comp <-p %>% ungroup %>% 
+  summarise(p=mean(effect_composting_ct< att_f)) %>% pluck("p")
+
+p_vt_comp <- p %>% ungroup %>% 
+  summarise(p=mean(effect_composting_vt <att_f )) %>% pluck("p")
+
+
+figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+
+fileConn<-file(paste0(figure_path, "/p_vt_comp.txt"))
+writeLines(paste0(format(scales::number(p_vt_comp, accuracy = 1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/p_ct_comp.txt"))
+writeLines(paste0(format(scales::number(p_ct_comp, accuracy = 1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+```
+
+
+## Specification 4: State
+
+```{r}
+plac_res_alt_state <- read.csv("plac_res_alt_state_composting_log.csv")
+
+spec4 <-
+  plac_res_alt_state%>% 
+  filter(sample_size!=0) %>% 
+  group_by(sample_size, county_id, ban_year) %>% 
+  summarise(att=mean(unique(att))) %>% 
+  left_join(
+    dt_state %>% 
+      ungroup %>% 
+      select(year, state_id, tons, tons_pc, county_id),#, tons_pc_real),# range), 
+    by = c("county_id", "ban_year"= "year")
+  ) %>% 
+  group_by(state_id, ban_year, sample_size) %>% 
+  mutate(
+    weight = 1,
+    att_f = att,
+    #att_f =( (lambda_state_composting*(tons_pc+att)+1)^(1/lambda_state_composting)- (lambda_state_composting*(tons_pc)+1)^(1/lambda_state_composting))/tons_pc_real,
+    #att_f = att*range/tons_pc_real, 
+    att_r = att
+  ) %>% filter(!is.na(att_f)) %>% 
+  group_by (sample_size, ban_year) %>% 
+  summarise(
+    att_min = quantile(att_f, 0.05),
+    att_max = quantile(att_f, 0.95), 
+    att_median = median(att_f)
+  )
+
+spec4
+
+```
+
+## Specification 5: State-Pooled 
+
+```{r}
+
+pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = plac_res_alt_state, donors = donors_state , r_threshold = 0, mape_threshold = Inf)
+
+spec5<- 
+  pool_estimates %>% 
+  bind_rows %>%  
+  group_by(sample_size, ban_year) %>% 
+  summarise(
+    att_min = quantile(att, 0.05),
+    att_max = quantile(att, 0.95),
+    att_median = median(att)
+  )
+
+```
+
+# Save Composting Spec
+
+```{r}
+
+composting_spec <- 
+  rbind(
+    spec1 %>%  select(sample_size, ban_year, att_min, att_max, att_median) %>%  mutate (specification = "County") ,
+    spec2 %>%  mutate (specification = "County Pooled"),
+    spec3 %>%  mutate (specification = "County Pooled State"),
+    spec4 %>%  mutate (specification = "State"),
+    spec5 %>%  mutate (specification = "State Pooled")
+  )
+
+write.csv(composting_spec, "composting_spec.csv", row.names = FALSE)
+
+```
+
+
+# Treated 
+
+## County-Level
+
+```{r}
+in_sample_R2_tr <- function (k, dt, donors, iterations, option, offset, samp)
+{
+  treated_state <- str_sub(treated_counties_id[k],start=-2)
+  ban_year <- bans[which(all_treated == treated_state)]
+  year_end <- ban_year-offset
+  treated_location <- treated_counties_id[k]
+  don_new <- donors[donors!=treated_location]
+  n_don <- length(don_new)
+  test_ind_end1 <- year_end - year_start+1
+  test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
+  
+  y <- dt[dt$county_id==treated_location, c("tons_pc")] 
+  y_train <- y[1:test_ind_end1]
+  y_test <-  y[(test_ind_end1+1):test_ind_end2]
+  y_att <- y[(test_ind_end2+1):length(y)]
+  
+  x <- dt[!dt$county_id %in% treated_counties_id,]
+  x <- x[x$county_id!=treated_location, c("tons_pc", "county_id")]
+  x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
+  
+  res <- c(0,0,0, 0, 0,0,0,0,0)
+  #Initialize x's so it takes less time
+  for ( f in 1:length(samp))
+  {
+    sample_size <- samp[f]
+    #if (option=="V1")
+    #{
+    #  all <- lapply(seq(1:iterations),do_many_times,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    #}else{
+    all <- lapply(seq(1:iterations),do_many_times_v2,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    #}
+    donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
+    
+    all <- all %>% sapply(c) %>% t
+    
+    colnames(all) <- c(
+      "r_sq",
+      "mape", 
+      "att",
+      paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+    )
+    
+    if(treated_location%in% c("VT", "CA", "MA"))
+    {
+      all <-
+        all %>%
+        as_tibble %>%
+        filter(r_sq > 0)
+    }
+    all <- 
+      all %>% 
+      as_tibble %>% 
+      filter(r_sq > 0) %>% 
+      arrange(mape) %>% 
+      slice(1:50) %>% 
+      mutate(
+        sample_size = samp[f], 
+        county_id = treated_location, 
+        iterations = iterations, 
+        ban_year = ban_year
+      ) %>%  
+      pivot_longer(
+        cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
+        names_to = "donor_number", 
+        values_to = "chosen_donor"
+      )
+    
+    res <- rbind(res, all)
+  }
+  res %>% 
+    as_tibble 
+}
+
+donors <- unique(dt$county_id[!(dt$state_id%in% all_treated)])
+treated_counties_id <- unique(dt$county_id[dt$state_id%in% all_treated])
+
+```
+
+# Plot: County- State Effects
+
+```{r}
+
+tr_res_state_multiple <- read.csv("tr_res_state_multiple_composting.csv")
+tr_res_multiple <- read.csv("tr_res_multiple_composting.csv")
+composting_effect <- read.csv("composting_effect.csv")
+composting_spec <- read.csv("composting_spec.csv")
+ey <- 2018
+
+bt_with_power<- 
+  tr_res_state_multiple %>% 
+  bind_rows %>% 
+  group_by(state_id, ban_year, sample_size) %>% 
+  filter(sample_size <= 7) %>% 
+  summarise(
+    att_min =  100*quantile(att_f, 0.05),
+    att_max =  100*quantile(att_f, 0.95),
+    att_median =  100*median(att_f)
+  ) %>% mutate(specification = "State") %>% 
+  rbind(
+    tr_res_multiple %>% 
+      bind_rows %>% 
+      group_by(state_id, ban_year, sample_size) %>% 
+      summarise(
+        att_min =  100*quantile(att_f2, 0.05),
+        att_max =  100*quantile(att_f2, 0.95),
+        att_median =  100*median(att_f2)
+      ) %>% mutate(specification = "County Pooled State" )
+  ) %>% 
+  left_join(
+    composting_spec %>% 
+      rename(
+        power_low = att_min, 
+        power_high = att_max
+      ) %>% select(-att_median)%>%  mutate (power_low = 100*power_low, power_high=100*power_high),
+    by = c("ban_year", "sample_size", "specification")
+  ) %>% 
+  left_join(
+    composting_effect %>% 
+      filter(
+        year <= ey
+      ) %>% 
+      group_by (state_id) %>% 
+      summarise(mean_effect = mean(composting_effect)) %>% 
+      mutate(mean_effect =  100*mean_effect), 
+    by = c("state_id")
+  ) %>% 
+  ggplot()+
+  aes(x= sample_size, y= att_median)+
+  #geom_line()+
+  geom_point(size=2)+
+  geom_errorbar(aes(ymin=att_min, ymax=att_max), linewidth=0.1, width=0.0)+
+  #geom_ribbon(aes(ymin = att_min, ymax = att_max), alpha = 0.2)+
+  geom_ribbon(aes(ymin = power_low, ymax = power_high), alpha = 0.2, color = ut_colors[5], fill=ut_colors[5])+
+  geom_hline(yintercept = 0, lty = "dotted", color = ut_colors[4])+
+  geom_line(aes(x=sample_size, y=mean_effect), linewidth=1, color = "#417c5b")+
+  facet_grid(
+    cols = vars(state_id), 
+    rows = vars(specification))+
+  labs(x="", y = "Treatment Effect (%)")+
+  #scale_y_continuous(breaks = c(seq(-0.12, 0.12, by = 0.06)), limits = c(-0.14, 0.14))+ 
+  theme(
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    panel.background = element_blank(), 
+    text = element_text(family = "Helvetica",size = 16), 
+  ) 
+# 
+ggsave(bt_with_power, filename = "composting_nco.pdf", device = cairo_pdf,
+       path=  figure_path,
+       width = 5, height = 7, units = "in")
+
+
+```
+
+# Plot: Combined Treatment 
+
+```{r}
+chosen_sample_size <- 5
+col <- ut_colors[4]
+
+
+bt_with_power<- 
+  tr_res_state_multiple %>% 
+  bind_rows %>% 
+  group_by(state_id, ban_year, sample_size) %>% 
+  summarise(
+    att_min = 100*quantile(att_f, 0.05),
+    att_max = 100*quantile(att_f, 0.95),
+    att_median = 100*median(att_f)
+  ) %>% mutate(specification = "State") %>% 
+  rbind(
+    tr_res_multiple %>% 
+      bind_rows %>% 
+      group_by(state_id, ban_year, sample_size) %>% 
+      summarise(
+        att_min = 100*quantile(att_f, 0.05),
+        att_max = 100*quantile(att_f, 0.95),
+        att_median = 100*median(att_f)
+      ) %>% mutate(specification = "County Pooled State" )
+  )  %>% 
+  left_join(
+   composting_spec%>% 
+      rename(
+        power_low = att_min, 
+        power_high = att_max
+      ) %>% select(-att_median) %>%  mutate (power_low = 100*power_low, power_high=100*power_high), 
+    by = c("ban_year", "sample_size", "specification") 
+  ) %>% 
+  left_join(
+    composting_effect %>% 
+      filter(
+        year <= ey
+      ) %>% 
+      group_by (state_id) %>% 
+      summarise(mean_effect = mean(composting_effect)) %>% 
+      mutate(mean_effect = 100*ifelse(state_id == "CT", mean_effect/0.5*0.75, mean_effect)), 
+    by = c("state_id")
+  ) %>% 
+  filter(
+    (state_id == "CT" & specification == "County Pooled State") | 
+      (state_id !="CT" & specification == "State")
+  ) %>% 
+  filter(sample_size == chosen_sample_size) %>% 
+  ggplot()+
+  aes(x= as.factor(state_id), y= att_median, group = 1)+
+  #geom_line(color = col)+
+  geom_point(size=3, color = col)+
+  #geom_crossbar(aes(ymin=att_min, ymax=att_max), width = 0.1,  linetype = 0, alpha=0.2, fill = plotCol[1])+
+  #geom_errorbar(aes(ymin=-mean_effect, ymax=-mean_effect, linetype = effect_type), linewidth=1, width=0.2, color = "goldenrod")+
+  geom_errorbar(aes(ymin=mean_effect, ymax=mean_effect, color = "Expected Regulation Effect"), linewidth=2, width=0.2)+
+  scale_color_manual(breaks = c("Expected Regulation Effect"), values = "goldenrod" )+
+  #geom_crossbar(aes(ymin = power_low, ymax = power_high), width = 0.6,  linetype = 0, alpha=0.2, fill = plotCol[1])+
+  geom_errorbar(aes(ymin = power_low, ymax = power_high), width = 0.2)+
+  geom_hline(yintercept = 0, lty = "dotted", color = ut_colors[4])+
+  labs(x="", y = "", color = "")+
+  #scale_y_continuous(breaks = c(seq(-0.12, 0.12, by = 0.06)), limits = c(-0.13, 0.13))+ 
+  theme(
+    legend.position = "none",
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    panel.background = element_blank(), 
+    text = element_text(family = "Helvetica",size = 16), 
+    strip.text = element_blank()
+  )
+
+ggsave(bt_with_power, filename = "bt_with_power_composting.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 2, height = 2, units = "in")
+```
+
+# Municipal
+
+## Importing Data
+
+```{r}
+
+population_seattle <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/population_seattle.csv"))
+composting <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/composting.csv"))
+disposal <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/disposal.csv"))
+
+
+seattle <- 
+  disposal %>%
+  rename(
+    total = Landfill,
+    year = Year, 
+    month = Month
+  ) %>% 
+  pivot_longer(
+    cols = c("Self_Haul", "Residential", "Commercial"), 
+    names_to = "generator", 
+    values_to = "tons"
+  ) %>%  
+  mutate(
+    type = "disposal", 
+    generator = str_to_lower(generator)
+  ) %>% 
+  select(
+    year, month, generator, tons, type
+  ) %>% 
+  rbind(
+    composting %>%
+      pivot_longer(
+        cols = c("self_haul", "residential", "commercial"), 
+        names_to = "generator", 
+        values_to = "tons"
+      ) %>%  
+      mutate(
+        type = "composting"
+      )
+  ) %>%  
+  group_by(year, type) %>%  
+  summarise(
+    tons = sum(tons, na.rm = TRUE)
+  ) %>% 
+  left_join(
+    population_seattle %>%  
+      rename (pop=population) %>% 
+      select (year, pop), 
+    by = c("year")
+  ) %>%  
+  mutate (
+    tons_pc = tons/pop,
+    state_id = "M1", 
+    county_name = "seattle", 
+    county_id = paste(county_name, state_id, sep = ""), 
+  ) 
+
+
+waste <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/waste.csv"))
+boulder_population <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/boulder_population.csv"))
+
+
+colnames(waste) <- c("year", "sector", "disposal", "recycling", "organics","reuse", "total", "diversion", "notes")
+
+boulder <- 
+  waste %>% 
+  filter(
+    year >= 2006, 
+  ) %>%  
+  pivot_longer(
+    cols = c("disposal", "recycling", "organics", "reuse", "total"), 
+    names_to = "type", 
+    values_to = "tons"
+  ) %>%  
+  select(
+    year, type, tons
+  ) %>% 
+  group_by(year, type) %>% 
+  summarise(
+    tons = sum(tons, na.rm = TRUE)
+  ) %>% 
+  left_join(
+    boulder_population %>%  
+      rename(pop=population),
+    by = c("year")) %>%  
+  mutate (
+    tons_pc = tons/pop, 
+    state_id = "M2", 
+    county_name = "boulder", 
+    county_id = paste(county_name, state_id, sep = ""), 
+    type = ifelse(type == "organics", "composting", type)
+  )
+```
+
+## Transforming data
+```{r}
+dt_municipal <- 
+  dt_initial %>%
+  select(year, state_id, county_id, tons, tons_pc) %>%
+  mutate(tons_pc = exp(tons_pc)) %>% 
+  rbind(
+    seattle %>%  
+      filter(
+        type == "composting", 
+        year >= year_start, 
+        year <= 2018
+      ) %>%  
+      select(year, state_id, county_id, tons_pc, tons), 
+    boulder %>%  
+      filter(
+        type == "composting", 
+        year >= year_start, 
+        year <= 2018
+      ) %>%  
+      select(year, state_id, county_id, tons_pc, tons)
+  ) %>% 
+  filter(
+    !state_id %in% c("WA", "CO")
+  ) %>% 
+  as.data.frame
+
+
+#Transform Box Cox 
+
+
+dt_municipal<- 
+  dt_municipal %>% 
+  #group_by(state_id) %>% 
+  mutate(
+    tons_pc = log(tons_pc)
+    #tons_pc = (tons_pc^lambda_municipal-1)/lambda_municipal, 
+    #tons_pc_real = (lambda_municipal*tons_pc+1)^(1/lambda_municipal)
+    #range = max(tons_pc)-min(tons_pc),
+    #mint = min(tons_pc),
+    #tons_pc = (tons_pc-mint)/range,
+    #tons_pc_real = tons_pc*range + mint
+  )
+
+dt_municipal_initial <- dt_municipal
+```
+
+## Applying on the treated
+
+```{r}
+all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2")# Never changes
+bans <- c(2015, 2015, 2016, 2014, 2016, 2015, 2016)
+
+donors <- unique(dt_municipal$county_id[!(dt_municipal$state_id%in% all_treated)])
+treated_counties_id <- unique(dt_municipal$county_id[dt_municipal$state_id%in% all_treated])
+
+
+
+municipal_treated <- function (i)
+{
+  muni_tr <- rbind (
+    in_sample_R2_tr (length(treated_counties_id)-1, dt=dt_municipal, donors, iterations =10000, option = "V2", offset=3, samp = c(3:10)),
+    in_sample_R2_tr (length(treated_counties_id), dt=dt_municipal, donors, iterations =10000, option = "V2", offset=3, samp = c(3:10))
+  )
+  
+  f <- 
+    muni_tr %>% 
+    bind_rows %>% 
+    filter(sample_size!=0) %>% 
+    group_by (sample_size, county_id, ban_year) %>% 
+    summarise(att=median(unique(att)), rsq = mean(r_sq), mape = mean(mape)) %>% 
+    left_join(
+      dt_municipal %>% 
+        #mutate(year = ifelse(county_id == "seattleM1", year-1, year)) %>% 
+        ungroup %>% 
+        select(year, state_id, tons, tons_pc, county_id), 
+      by = c("county_id", "ban_year"= "year")
+    ) %>% 
+    group_by(state_id, ban_year, sample_size) %>% 
+    mutate(
+      rsq = rsq, 
+      mape = mape,
+      #att_f =( (lambda_municipal*(tons_pc+att)+1)^(1/lambda_municipal)- (lambda_municipal*(tons_pc)+1)^(1/lambda_municipal))/tons_pc_real
+      att_f = att
+    ) %>% 
+    summarise(
+      att_f=sum(att_f), 
+      rsq = mean(rsq), 
+      mape = mean(mape)
+    ) %>% ungroup %>% mutate(attempt =i)
+  
+  return(f)
+}
+
+tr_res_municipal_multiple <- lapply(1:50,municipal_treated)
+
+write.csv(tr_res_municipal_multiple %>% bind_rows, "tr_res_municipal_multiple_composting.csv", row.names = FALSE)
+
+
+```
+
+
+## p values
+
+```{r}
+read.csv("tr_res_municipal_multiple_composting.csv") %>% as_tibble %>%  filter(sample_size==3, attempt==1)
+
+effect_composting_se <-  read.csv("tr_res_municipal_multiple_composting.csv") %>% as_tibble %>%  filter(sample_size==3, attempt==1, state_id=="M1") %>% pluck("att_f")
+effect_composting_bo <- read.csv("tr_res_municipal_multiple_composting.csv") %>% as_tibble %>%  filter(sample_size==3, attempt==1, state_id=="M2") %>% pluck("att_f")
+
+p_se <- plac_res_alt%>% filter(sample_size!=0) %>% group_by(county_id, sample_size, ban_year) %>% filter(mape==min(mape)) %>%
+  group_by(county_id, sample_size, ban_year) %>% summarise(att = unique(att)) %>% 
+  filter(sample_size==3) %>% ungroup %>% 
+  mutate(att=abs(att)) %>% 
+  summarise(p=mean(effect_composting_se<att)) %>% pluck("p")
+
+
+p_bo <- plac_res_alt%>% filter(sample_size!=0) %>% group_by(county_id, sample_size, ban_year) %>% filter(mape==min(mape)) %>%
+  group_by(county_id, sample_size, ban_year) %>% summarise(att = unique(att)) %>% 
+  filter(sample_size==3) %>% ungroup %>% 
+  mutate(att=abs(att)) %>% 
+  summarise(p=mean(effect_composting_bo>att)) %>% pluck("p")
+
+
+fileConn<-file(paste0(figure_path, "/p_bo_comp.txt"))
+writeLines(paste0(format(scales::number(p_bo, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/p_se_comp.txt"))
+writeLines(paste0(format(scales::number(p_se, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+```
+

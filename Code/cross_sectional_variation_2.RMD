@@ -1,0 +1,1078 @@
+---
+title: "cross_sectional_2"
+author: "Fiori Anglou"
+date: "2023-08-03"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(ggpubr)
+library(stringr)
+library(fixest)
+library(knitr)
+library(zoo)
+library(tidyr)
+library(tictoc)
+library(purrr)
+library(extrafont)
+state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
+post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
+```
+
+
+# The functions
+
+
+## County
+```{r, include=FALSE}
+pre_processing_dt <- function(power2, year_start, year_cutoff)
+{
+  dt <- power2
+  
+  dt <- 
+    dt %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      state_id != "OH",
+      type %in% c("disposal", "msw_disposed")
+    ) %>% 
+     mutate(
+      tons = ifelse(county_name=="butte" & state_id == "CA" & year == 2019, 181914, tons), #I think one digit was wron original is: 1819143
+      tons = ifelse(county_name=="colusa" & state_id == "CA" & year == 1995, 13375, tons), # Use next year's tonnage 13375
+      tons = ifelse(county_name=="glenn" & state_id == "CA" & year == 2019, 27394, tons), # First quarter tonnage is 60,200 --> i think it should have been 6,020 
+      tons = ifelse(county_name=="tehama" & state_id == "CA" & year == 2011, (67376+41921)/2, tons), # Linear extrapolation between 2010 and 2012. The original is more than 3 times as high. 
+      tons = ifelse(county_name=="trinity" & state_id == "CA" & year == 2017, 8669, tons), # Fourth quarter tonnage is 21,493 which is unusually high=> I think it should have been 2,149
+      tons = ifelse(county_name=="modoc" & state_id == "CA" & year == 2019, tons-11537, tons), # Unusally high 
+      tons = ifelse(county_name=="mariposa" & state_id == "CA" & year == 2017, 14559, tons), #3rd quarter is extremely high
+      tons = ifelse(county_name=="mariposa" & state_id == "CA" & year == 2019, 13500, tons), #2nd quarter is extremely high
+      tons = ifelse(county_name=="del norte" & state_id == "CA" & year == 2019, tons+ 4883*2, tons), #missing 3rd and 4th quarter
+      tons = ifelse(county_name=="mono" & state_id == "CA" & year == 1995, 22024, tons), #linear interpolation from years 1996 1997
+      tons = ifelse(county_name=="sonoma" & state_id == "CA" & year == 2017, tons-495370, tons), #4th quarter is 4times as much as the previous- use the third
+      tons = ifelse(county_name=="sonoma" & state_id == "CA" & year == 2018, tons-662089, tons), #1st quarter is 5times as much as the next- use the second
+      tons = ifelse(county_name=="shasta" & state_id == "CA" & year == 2018, 198899, tons), #use the average between the previous and the next year
+      tons = ifelse(county_name=="sierra" & state_id == "CA" & year == 2019, tons+1371, tons), #3rd and 4th quarter missing (adding the 2018 ones)
+      tons = ifelse(county_name=="nevada" & state_id == "CA" & year == 2012, 68165, tons), #2012 has unusually low tonnage
+      tons = ifelse(county_name=="calaveras" & state_id == "CA" & year == 2015, (31741.23+42755.94)/2, tons), #use the average between the previous and the next year
+      tons = ifelse(county_name=="san benito" & state_id == "CA" & year %in% c(1995, 1996, 1997), 56821.52, tons), #use the 1998 for all the years between 95 and 98 because its like half
+      tons = ifelse(county_name=="siskiyou" & state_id == "CA" & year == 2014, (27811.48+35305.71)/2, tons) #use the average between the previous and the next year
+    )%>%  
+    group_by (year, state_id, county_name) %>% 
+    summarise(tons = sum(tons)) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    left_join (
+      population,
+      by = c("state_id", "county_name", "year")
+    ) %>% 
+    mutate(
+      tons_pc = ifelse(is.na(county_name),tons/state_pop, tons/pop), 
+      county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id) )
+    ) %>% 
+    filter(
+      tons_pc > 0.2
+    )
+
+  #Exclude missing values and small values
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        #filter(state_id != "CT", state_id != "RI") %>% 
+        summarize(
+          m = mean(tons_pc), 
+          min_year = min(year), 
+          min_tons = min(tons_pc), 
+          max_tons = max(tons_pc)) %>%
+        filter(
+          m < 0.3 | min_year > year_start | max_tons > 2.5)
+    )
+  
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  dt <- dt[dt$year >=year_start  & dt$year <=year_cutoff,]
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        summarize(n=  n()) %>% 
+        filter(
+          n < (year_cutoff- year_start-1)
+        )
+    )
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  # Percentage change in disposal tons
+  f <- 
+    as.data.frame(
+      dt %>% 
+        #filter(state_id != "RI") %>% 
+        group_by(county_id) %>% 
+        mutate(
+          percentage = (tons-dplyr::lag(tons, n = 1, default = NA))/dplyr::lag(tons, n = 1, default = NA),
+          percentage_1 = (tons-dplyr::lead(tons, n = 1, default = NA))/dplyr::lead(tons, n = 1, default = NA)
+        )
+    )
+  
+  f <- f[!is.na(f$percentage),]
+  threshold <- 0.6
+  exclude2 <- unique(f$county_id[f$percentage > threshold | f$percentage < -threshold | f$percentage_1 > threshold | f$percentage_1 < -threshold])
+  dt <- dt[!dt$county_id %in% exclude2,]
+  
+  rm(f, exc, exclude2)
+  
+  dt_initial <- dt
+  return(dt_initial)
+}
+
+```
+
+## State
+
+```{r}
+pre_processing_dt_state_gen <- function (power2, year_start, year_cutoff)
+{
+  dt_state <- 
+    power2 %>% 
+    group_by (year, state_id, type) %>% 
+    summarise(tons = sum(tons))%>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      #state_id != "OH",
+      #state_id != "DE",
+      type %in% c("generation", "msw_generated")
+    ) %>%
+    group_by(state_id) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    group_by(state_id, year) %>% 
+    mutate(
+      tons_pc = (tons/state_pop), 
+      county_id = state_id
+    ) %>%
+    select(-type) %>% 
+    ungroup() 
+  
+  
+  only_disp <- 
+    power2 %>% 
+    group_by (year, state_id, type) %>% 
+    summarise(tons = sum(tons))%>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed", "recycling", "msw_recycled", "composting"), 
+      !state_id %in% c(dt_state %>% summarise(state_id=unique(state_id)) %>% pluck("state_id"))
+    ) %>%
+    group_by(state_id, year) %>%
+    summarise(n=n()) %>% filter(n==1) %>% summarise(state_id=unique(state_id)) %>% pluck("state_id")
+  
+  
+  
+  dt_state_initial <- 
+    dt_state %>% 
+    rbind(
+      power2 %>% 
+        group_by (year, state_id, type) %>% 
+        summarise(tons = sum(tons))%>% 
+        filter(
+          year >= year_start, 
+          year <= year_cutoff, 
+          type %in% c("disposal", "msw_disposed", "recycling", "msw_recycled", "composting"), 
+          !state_id %in% c(dt_state %>% summarise(state_id=unique(state_id)) %>% pluck("state_id")), 
+          !state_id %in% c(only_disp)
+        ) %>%
+        group_by(state_id, year) %>% 
+        summarise(tons =sum(tons, na.rm=TRUE)) %>% 
+        group_by(state_id) %>% 
+        left_join (
+          population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+          by = c("state_id", "year")
+        ) %>%
+        group_by(state_id, year) %>% 
+        mutate(
+          tons_pc = (tons/state_pop), 
+          county_id = state_id
+        ) %>% ungroup 
+    )
+  
+  
+  return(dt_state_initial)
+  
+}
+
+
+pre_processing_dt_state_disp <- function (power2, year_start, year_cutoff)
+{
+  dt_state <- 
+    power2 %>% 
+    group_by (year, state_id, type) %>% 
+    summarise(tons = sum(tons))%>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      #state_id != "OH",
+      #state_id != "DE",
+      state_id != "NV",
+      type %in% c("disposal", "msw_dipsosed")
+    ) %>%
+    group_by(state_id) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    group_by(state_id, year) %>% 
+    mutate(
+      tons_pc = (tons/state_pop), 
+      county_id = state_id
+    ) %>%
+    select(-type) %>% 
+    ungroup() %>% 
+    group_by(state_id) %>%
+    mutate(n=n()) %>%
+    #filter(n == year_cutoff - year_start+1) %>%
+    filter(n >=9) %>%
+    select(-n) %>%
+    ungroup()
+  
+  dt_state_initial<- dt_state
+  
+  
+  return(dt_state_initial)
+  
+}
+```
+
+
+# Controls
+
+## County-Level
+
+### Income
+
+```{r}
+
+all_inc <-  read.csv("C:/Users/fa24575/Box/My files/Research/Food Waste Policy/Data/04. Replicating/all_income_info.csv")
+
+# all_inc <- cbind(all_inc[1:3], stack(all_inc[5:33]))
+# colnames(all_inc)<- c("county_name", "state_id", "desc", "value", "year")
+# all_inc$year <- substring(all_inc$year, 2)
+# 
+# all_inc <- all_inc[all_inc$desc=="Personal income (thousands of dollars)" |all_inc$desc=="Personal current transfer receipts"
+#                    |all_inc$desc=="Dividends, interest, and rent 2/"|all_inc$desc== "Per capita personal income 4/", ]
+# 
+# all_inc <- maditr::dcast(all_inc, county_name + state_id+year ~ desc)
+# colnames(all_inc) <- c("county_name", "state_id", "year", "dividends", "pc_income", "transfers", "income")
+# all_inc$year <- as.numeric(all_inc$year)
+# 
+# us <- all_inc[all_inc$state_id==0,c("year", "dividends", "pc_income", "transfers", "income")]
+# colnames(us) <- c("year","dividends_us","pc_income_us", "transfers_us", "income_us")
+# all_inc <- merge(x=all_inc, y=us, by=c("year"), all.x = TRUE)
+# 
+# all_inc$wealth_index <- 0.8*all_inc$pc_income/ all_inc$pc_income_us +0.1* (all_inc$dividends/all_inc$income)/ (all_inc$dividends_us/all_inc$income_us) + 0.1*(all_inc$transfers_us/all_inc$income_us)/ (all_inc$transfers/all_inc$income)
+# 
+# all_inc$wealth_index <- all_inc$wealth_index*100
+```
+
+### County Classification
+
+```{r}
+county_classification <- read.csv(paste0(state_data_path,"/00. Controls/Urban Index/county_classification.csv"))
+county_classification <- 
+  county_classification %>% 
+  as_tibble() %>% 
+  mutate(County_name = str_to_lower(County_name)) %>% 
+  rename(county_name = County_name, state_id=State)
+
+```
+
+### Rural-Urban Code
+
+```{r}
+rural_urban_pop <- 
+  read.csv(paste0(state_data_path,"/00. Controls/Urban Index/rural_urban_pop.csv")) %>% as_tibble %>% 
+  mutate(county_name = str_to_lower(county_name)) %>% 
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id=state.abb
+    ), by = c("state_name")
+  ) %>% select(-state_name) %>% select(-rural) %>% 
+  pivot_wider(
+    names_from="census_year", 
+    values_from = "urban", 
+    names_prefix = "census_"
+  ) %>% 
+  expand_grid(year = seq(1995, 2020)) %>% 
+  mutate(
+    urban = ifelse(year < 2000, census_2000-(census_2010 -census_2000)/10*(2000-year), 0), 
+    urban = ifelse(year >=2000 & year <=2010, census_2000 + (census_2010 -census_2000)/10*(year-2000), urban), 
+    urban = ifelse(year >=2010, census_2010  + (census_2020 -census_2010 )/10*(year-2010), urban)
+  ) %>% select(year, state_id, county_name, urban) 
+
+```
+
+### Internet connectivity
+
+```{r}
+broadband <- read.csv("C:/Users/fa24575/Box/My files/Research/Food Waste Policy/Data/04. Replicating/broadband 1999-2008.csv")
+uszips <- read.csv("C:/Users/fa24575/Box/My files/Research/Food Waste Policy/Data/04. Replicating/uszips.csv")
+
+uszips_c <- uszips[c("zip","county_name", "state_id")]
+rm(uszips)
+
+colnames(broadband) <- c("year", "state_id", "zip", "providers")
+broadband$year <- as.numeric(broadband$year)
+broadband[broadband$providers == "*" & broadband$year >1998,]$providers <- 3
+broadband[broadband$providers == "*" & broadband$year ==1998,]$providers <- 2
+broadband[broadband$providers == "*" & broadband$year ==1997,]$providers <- 1
+broadband$providers <- as.numeric(broadband$providers)
+df = merge(x=broadband,y=uszips_c,by=c("zip", "state_id"),all.y=TRUE)
+broadband_c <- df %>% group_by(year, county_name, state_id) %>% summarize(providers=mean(providers))
+broadband_c <- as.data.frame(broadband_c)
+rm(broadband, df)
+
+```
+
+
+### Votes
+```{r}
+votes <- 
+  read.csv(paste0(state_data_path,"/00. Controls/Votes/countypres_2000-2020.csv")) %>%  as_tibble %>% 
+  mutate(
+    county_name = str_to_lower(county_name),
+    percentage = candidatevotes/totalvotes) %>% 
+  rename(state_id = state_po)  %>% 
+  filter(party %in% c("DEMOCRAT", "REPUBLICAN"), year>=2000) %>% 
+  select(year, state_id, party,percentage, county_name) %>% 
+  group_by(year, state_id, party, county_name) %>% 
+  summarise(percentage = sum(percentage)) %>% 
+  pivot_wider(names_from = party, values_from = percentage) %>% 
+  rename(election_year=year) %>% 
+  expand_grid(year=c(2000:2020)) %>% 
+  filter(year >=election_year-2, year < election_year+2) %>% 
+  select(-election_year)
+
+```
+
+### Housing Prices 
+
+
+Does not include all counties, includes data for around 1,000 counties
+```{r}
+
+houses <-read.csv(paste0(state_data_path,"/00. Controls/Median Housing Prices/house_prices_zillow.csv")) %>%  as_tibble 
+
+houses <- cbind(houses[1:9], stack(houses[10:289]))
+
+houses <-
+  houses %>% 
+  rename(
+    county_name = RegionName,
+    state_id = State
+    ) %>% as_tibble %>% 
+  select(county_name, state_id, values, ind) %>% 
+  mutate(
+    ind= as.character(ind),
+    length_ind = nchar(ind), 
+    ind = ind %>% str_sub(start = -4), 
+    county_name = str_to_lower(county_name), 
+    ind = as.integer(ind)) %>% 
+  rename(
+    year = ind
+  ) %>% 
+  group_by(year, state_id, county_name) %>% 
+  summarise(
+    values = mean(values, na.rm=TRUE)
+  ) %>% filter(!is.na(values))
+
+```
+
+### Craigslist
+
+
+```{r}
+craig <- read.csv("C:/Users/fa24575/Box/My files/Research/Food Waste Policy/Data/04. Replicating/craigslist_treatment.csv")
+craig <- craig[craig$county_name!="-",]
+#Here, I will remove the observations that are not mentioned in his table
+craig <- craig[craig$county_name!="butte" & craig$county_name!="san joaquin" & craig$county_name!="shasta" & craig$county_name!="alachua" & craig$county_name!="escambia" & craig$county_name!="cumberland",]
+
+```
+
+
+### Median Age
+
+```{r}
+
+median_age <- 
+  read.csv(paste0(state_data_path,"/00. Controls/Median_age/2000_median_age.csv")) %>% select(county_name, state_name, median_00) %>% 
+  left_join(read.csv(paste0(state_data_path,"/00. Controls/Median_age/2010_median_age.csv")) %>% select(county_name, state_name, median_10), by = c("county_name", "state_name")) %>% 
+  left_join(read.csv(paste0(state_data_path,"/00. Controls/Median_age/2020_median_age.csv")) %>% select(county_name, state_name, median_20), by = c("county_name", "state_name")) %>% 
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id= state.abb
+    ),
+    by= c("state_name") 
+  ) %>% as_tibble %>% select(-state_name) %>% 
+  expand_grid(year=seq(1995, 2018)) %>% 
+  mutate(
+    median_age = ifelse(year< 2000, median_00 + (median_00-median_10)/10*(2000-year), 0), 
+    median_age = ifelse(year >= 2000 & year<=2010,median_00 - (median_00-median_10)/10*(year-2000), median_age), 
+    median_age = ifelse(year >= 2010 & year<=2020,median_10 - (median_10-median_20)/10*(year-2010), median_age), 
+    county_name = str_to_lower(county_name)
+  ) %>% 
+  select(year, state_id, county_name, median_age)
+
+
+```
+
+
+### Houshold Size
+
+```{r}
+household_00 <- read.csv(paste0(state_data_path,"/00. Controls/Household_Size/household_00.csv"))
+household_10 <- read.csv(paste0(state_data_path,"/00. Controls/Household_Size/household_10.csv"))
+household_20 <- read.csv(paste0(state_data_path,"/00. Controls/Household_Size/household_20.csv")) %>% 
+  left_join(
+    tibble(state_name=state.name, state_id= state.abb), 
+    by = c("state_name")
+  ) %>% select(-state_name) %>% 
+  mutate(
+    county_name = str_to_lower(county_name)
+  ) %>% 
+  rename(size_20=size)
+
+
+household_size_county <- 
+  household_00 %>% as_tibble %>% 
+  left_join(household_10, by =c ("state_id", "county_name")) %>% 
+  left_join(household_20, by =c ("state_id", "county_name")) %>% 
+  expand_grid(year = seq(1995, 2020)) %>% 
+  mutate(
+    household_size = ifelse(year < 2000, size_00-(size_10-size_00)/10*(2000-year), 0), 
+    household_size = ifelse(year >=2000 & year <=2010, size_00 + (size_10-size_00)/10*(year-2000), household_size), 
+    household_size = ifelse(year >=2010, size_10 + (size_20-size_10)/10*(year-2010), household_size)
+  ) %>% select(year, state_id, county_name, household_size) 
+```
+
+
+### Education
+
+
+```{r}
+
+education <- read.csv(paste0(state_data_path,"/00. Controls/Education/2000_education.csv")) %>% select(county_name, state_name, educ_00) %>% 
+  left_join(read.csv(paste0(state_data_path,"/00. Controls/Education/2010_education.csv")) %>% select(county_name, state_name, educ_10), by = c("county_name", "state_name")) %>% 
+  left_join(read.csv(paste0(state_data_path,"/00. Controls/Education/2020_education.csv")) %>% select(county_name, state_name, educ_20), by = c("county_name", "state_name")) %>% 
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id= state.abb
+    ),
+    by= c("state_name") 
+  ) %>% as_tibble %>% select(-state_name) %>% 
+  expand_grid(year=seq(1997, 2018)) %>% 
+  mutate(
+    educ_00 = educ_00 %>%  as.numeric,
+    educ_10 = educ_10 %>%  as.numeric,
+    educ_20 = educ_20 %>%  as.numeric,
+    educ = ifelse(year< 2000, educ_00 + (educ_00-educ_10)/10*(2000-year), 0), 
+    educ = ifelse(year >= 2000 & year<=2010,educ_00 - (educ_00-educ_10)/10*(year-2000), educ), 
+    educ = ifelse(year >= 2010 & year<=2020,educ_10 - (educ_10-educ_10)/10*(year-2010), educ), 
+    county_name = str_to_lower(county_name)
+  ) %>% 
+  select(year, state_id, county_name, educ)
+
+```
+
+### Establishments
+
+```{r}
+
+
+establishments <-
+  read.csv(paste0(state_data_path,"/00. Controls/Establishments/estab.csv")) %>% select(county_name, state_name, estab) %>% 
+  mutate(county_name = str_to_lower(county_name)) %>% 
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id= state.abb
+    ),
+    by= c("state_name") 
+  ) %>% as_tibble %>% select(-state_name)
+
+```
+
+### Area
+
+```{r}
+area_county <- 
+  read.csv(paste0(state_data_path,"/00. Controls/Area/areas_counties.csv")) %>% 
+  mutate(
+    county_name = str_to_lower(county_name)
+  ) %>% as_tibble()
+
+```
+
+
+## State-Level
+
+### GDP
+
+```{r}
+
+make_into_2012_usd <- 
+  read.csv(paste0(state_data_path,"/00. Controls/State_GDP/annual_gdp.csv")) %>% 
+  as_tibble %>% 
+  mutate_at(vars(paste0("X", seq(1998, 2021))), as.numeric) %>% 
+  pivot_longer(cols=paste0("X", seq(1998, 2021)), names_to = "year") %>% 
+  filter(LineCode %in% c("4","1")) %>% 
+  mutate(year = str_remove_all(year, "X")) %>% 
+  select(-Description) %>% 
+  pivot_wider(names_from = "LineCode", values_from = "value") %>% 
+  mutate(
+    rate = `1`/`4`, 
+    year = year %>%  as.numeric
+  ) %>% select(state_id, year, rate)
+  
+
+
+gdp <- 
+  read.csv(paste0(state_data_path,"/00. Controls/State_GDP/annual_gdp.csv")) %>% 
+  as_tibble %>% 
+  mutate_at(vars(paste0("X", seq(1998, 2021))), as.numeric) %>% 
+  pivot_longer(cols=paste0("X", seq(1998, 2021)), names_to = "year") %>% 
+  filter(LineCode%in%c("4", "10", "11", "12", "15")) %>% 
+  mutate(
+    year = str_remove_all(year, "X"), 
+    year = year %>% as.numeric
+  ) %>% select(state_id, LineCode, Description, year, value) %>% 
+  left_join(
+    make_into_2012_usd, by = c("state_id", "year")
+  ) %>% 
+  mutate(
+    value=ifelse(LineCode!=15, value*rate, value)
+  ) %>% 
+  select(-rate)
+```
+
+
+### Urban Index
+
+```{r}
+urban_index <- read.csv(paste0(state_data_path,"/00. Controls/Urban Index/urban_index.csv"))
+```
+
+### Unemployement Rate 
+
+```{r}
+employment <- read.csv(paste0(state_data_path,"/00. Controls/Employment/emp_state.csv")) %>%  as_tibble
+employment <- 
+  cbind(employment[2:3], stack(employment[4:42])) %>% 
+  rename(year= ind, unemployment_rate = values) %>%  
+  mutate(year = year %>% substring(2) %>% as.integer()) %>% 
+  select(-state_name)
+```
+
+
+### Votes
+
+```{r}
+votes_state <- 
+  read.csv(paste0(state_data_path,"/00. Controls/Votes/state_pres_vote.csv")) %>%  as_tibble %>% 
+  mutate(
+    percentage = candidatevotes/totalvotes) %>% 
+  rename(state_id = state_po, party=party_simplified)  %>% 
+  filter(party %in% c("DEMOCRAT", "REPUBLICAN"), year>=2000) %>% 
+  select(year, state_id, party,percentage) %>% 
+  group_by(year, state_id, party) %>% 
+  summarise(percentage = sum(percentage)) %>% 
+  pivot_wider(names_from = party, values_from = percentage) %>% 
+  rename(election_year=year) %>% 
+  expand_grid(year=c(2000:2020)) %>% 
+  filter(year >=election_year-2, year < election_year+2) %>% 
+  select(-election_year)
+
+```
+
+### Spending
+
+```{r}
+spending <- 
+  read.csv(paste0(state_data_path,"/00. Controls/State_Spending/state_spending.csv"))%>% 
+  as_tibble %>% 
+  mutate_at(vars(paste0("X", seq(1997, 2021))), as.numeric) %>% 
+  pivot_longer(cols=paste0("X", seq(1997, 2021)), names_to = "year") %>% 
+  filter(
+    GeoName!="United States",
+    LineCode%in%c("9", "10", "13", "19")) %>% 
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id=state.abb
+    ), 
+    by = c("GeoName"="state_name")
+  ) %>% 
+  mutate(
+    year = str_remove_all(year, "X"), 
+    year = year %>% as.numeric
+  ) %>% select(state_id, LineCode, Description, year, value) %>% 
+  left_join(
+    make_into_2012_usd, by = c("state_id", "year")
+  ) %>% 
+  mutate(
+    value=value*rate
+  ) %>% 
+  select(-rate)
+```
+
+
+### Area
+
+```{r}
+area <- read.csv(paste0(state_data_path,"/00. Controls/Area/areas.csv")) %>% select(state_id, sq_miles)
+```
+
+### Household_Size
+
+```{r}
+household_size <- 
+  read.csv(paste0(state_data_path,"/00. Controls/Household_Size/household_size_state.csv")) %>% as_tibble %>% 
+  pivot_wider(names_from=year, values_from=household_size) %>% select(-X) %>% 
+  expand_grid(year=seq(1998, 2020)) %>% 
+  mutate(
+    household_size=ifelse(year<2000, `2000`+ (`2010`-`2000`)/10*(2000-year), 0), 
+    household_size=ifelse(year>=2000& year <=2010, `2000`+ (`2010`-`2000`)/10*(year-2000), household_size), 
+    household_size = ifelse(year>=2010, `2010`+(`2023`-`2010`)/13*(year-2010), household_size)
+  ) %>% 
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id = state.abb
+    ),by = c("state_name")
+  ) %>% 
+  select(state_id, year, household_size)
+```
+
+### Percipitation Level 
+```{r}
+rain <- read.csv(paste0(state_data_path,"/00. Controls/Climate/percipitation_level.csv")) %>% 
+  as_tibble %>%
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id= state.abb
+    )
+  ) %>% select(state_id, inches) %>% 
+  rename(rain_inches = inches)
+
+```
+
+### Carbon Emissions
+
+```{r}
+carbon<- 
+  read.csv(paste0(state_data_path,"/00. Controls/Carbon_Emissions/energy.csv")) %>% as_tibble %>%
+  mutate_at(vars(paste0("X", seq(1970, 2021))), as.numeric) %>% 
+  pivot_longer(cols=paste0("X", seq(1970, 2021)), names_to = "year") %>% 
+  select(State, year, value) %>% 
+   mutate(
+    year = str_remove_all(year, "X"), 
+    year = year %>% as.numeric
+  ) %>% 
+  filter(year>=2000) %>% 
+  left_join(
+    tibble(
+      state_name = state.name, 
+      state_id = state.abb
+    ), 
+    by = c("State"="state_name")
+  ) %>% 
+  select(-State) %>% 
+  rename(energy=value) %>% 
+  left_join(
+    read.csv(paste0(state_data_path,"/00. Controls/Carbon_Emissions/residential.csv")) %>% as_tibble %>%
+      mutate_at(vars(paste0("X", seq(1970, 2021))), as.numeric) %>% 
+      pivot_longer(cols=paste0("X", seq(1970, 2021)), names_to = "year") %>% 
+      select(State, year, value) %>% 
+      mutate(
+        year = str_remove_all(year, "X"), 
+        year = year %>% as.numeric
+      ) %>% 
+      filter(year>=2000) %>% 
+      left_join(
+        tibble(
+          state_name = state.name, 
+          state_id = state.abb
+        ), 
+        by = c("State"="state_name")
+      ) %>% 
+      select(-State) %>% 
+      rename(residential=value), 
+    by = c("state_id", "year")
+  ) %>% 
+  select(year, state_id, energy, residential)
+```
+
+# Cross-sectional variation
+## State-Level
+
+```{r}
+
+regions <-
+  tibble(
+    state_id = c("CT" ,"IN" ,"MN" ,"UT" ,"WI" ,"OR", "TX" ,"VT" ,"WA" ,"CA", "MI" ,"PA" ,"NJ", "FL" ,"MS" ,"NC" ,"OH" ,"SC", "IL", "MA", "GA", "IA", "KY", "TN" ,"MO" ,"CO" ,"DE","RI" ,"MD", "NM" ,"NV" ,"ME", "OK" ,"AZ", "NY", "AL") ,
+    region = c("Northeast", "Midwest", "Midwest", "West","Midwest","West", "Southwest", "Northeast", "West", "West","Midwest", "Northeast", "Northeast", "Southeast", "Southeast", "Southeast", "Midwest", "Southeast", "Midwest", "Northeast", "Southeast", "Midwest", "Southeast", "Southeast", "Midwest", "West", "Northeast", "Northeast", "Northeast", "Southwest", "West", "Northeast","Southwest", "Southwest", "Northeast", "Southeast")
+  )
+
+
+dt_f <- 
+  pre_processing_dt_state_disp(power2, 2006, 2018) %>%
+  left_join(
+    gdp %>% 
+      mutate(
+        desc=ifelse(LineCode==4, "gdp", NA), 
+        desc=ifelse(LineCode==10, "personal_income", desc), 
+        desc=ifelse(LineCode==11, "disposable_income", desc), 
+        desc=ifelse(LineCode==12, "consumption_exp", desc),
+        desc=ifelse(LineCode==15, "jobs", desc)
+      ) %>% 
+      select(state_id, year, value, desc) %>% 
+      pivot_wider(
+        values_from = value, 
+        names_from = desc
+      ), 
+    by = c("year", "state_id")
+  ) %>% 
+  left_join(
+    employment, by =c("year", "state_id")
+  ) %>% 
+  left_join(
+      spending %>% 
+        filter(!is.na(state_id)) %>% 
+        mutate(
+          desc=ifelse(LineCode==9, "food_off", NA), 
+          desc=ifelse(LineCode==10, "clothes", desc), 
+          desc=ifelse(LineCode==13, "services", desc), 
+          desc=ifelse(LineCode==19, "food_serv", desc)
+        ) %>% 
+        select(state_id, year, value, desc) %>% 
+        pivot_wider(
+          values_from = value, 
+          names_from = desc
+        ) %>% 
+        mutate(
+          food=food_off+food_serv
+        ) %>% 
+        select(state_id, year, food, services, clothes), 
+      by = c("year", "state_id")
+  ) %>% 
+  left_join(
+    area, by = c("state_id")
+  ) %>% 
+  left_join(
+    household_size, by =c("year", "state_id")
+  ) %>% 
+  left_join(
+    education %>% 
+      left_join(
+        population, 
+        by = c("state_id", "county_name", "year")
+        ) %>% 
+      group_by(year, state_id) %>% 
+      summarise(educ = sum(educ*pop, na.rm=TRUE)/sum(pop, na.rm=TRUE)), 
+    by = c("state_id", "year")
+  ) %>% 
+  left_join(
+    median_age %>% 
+      left_join(
+        population, 
+        by = c("state_id", "county_name", "year")
+        ) %>% 
+      group_by(year, state_id) %>% 
+      summarise(median_age = sum(median_age*pop)/sum(pop)), 
+    by = c("state_id", "year")
+  ) %>% 
+  left_join(
+    votes_state %>% rename(democrat = DEMOCRAT),
+    by = c("state_id", "year")
+  ) %>% 
+  left_join(
+    carbon, 
+    by = c("state_id", "year")
+  ) %>% 
+  left_join(
+    regions, by="state_id"
+  ) %>% 
+  left_join(
+    rural_urban_pop %>% group_by(state_id, year) %>% summarise(urban_pop=sum(urban, na.rm=TRUE)), 
+    by = c("state_id", "year")
+  ) %>% 
+  mutate(
+    urban_share = urban_pop/state_pop,
+    urban_share = ifelse(urban_share==0,0.163, urban_share),
+    energy = energy/state_pop*10^6,
+    residential = residential/state_pop*10^6,
+    jobs = jobs/state_pop,
+    pop_density=state_pop/sq_miles/10^6,
+    gdp= gdp %>% {.*10^6/state_pop}%>% {./10^4},
+    food= food %>% {.*10^6/state_pop}%>% {./10^4},
+    clothes= clothes %>% {.*10^6/state_pop}%>% {./10^4},
+    services= services %>% {.*10^6/state_pop}%>% {./10^4},
+    personal_income = personal_income %>% {./10^4},
+    disposable_income = disposable_income %>% {./10^4}, 
+    consumption_exp = consumption_exp %>% {./10^4}, 
+    fin_crisis = ifelse(year>=2007 & year<=2009, 1, 0), 
+    inco = personal_income-consumption_exp, 
+    services = services/consumption_exp, 
+    food=food/gdp 
+  ) %>% 
+  group_by(state_id) %>% 
+  mutate(
+    growth = ifelse((gdp -lag(gdp, n=1))/ lag(gdp, n=1)>0, exp(1), 1),
+    #growth = (gdp -lag(gdp, n=1))/ lag(gdp, n=1),
+    democrat = ifelse(democrat>REPUBLICAN, exp(1), 1)
+    ) %>% ungroup()
+#%>% 
+  # mutate(
+  #   gdp = gdp %>% log,
+  #   personal_income = personal_income %>% log,
+  #   disposable_income = disposable_income %>% log,
+  #   consumption_exp = consumption_exp %>% log,
+  #   food = food %>% log,
+  #   services = services %>% log,
+  #   pop_density = pop_density %>% log,
+  #   household_size = household_size %>% log,
+  #   educ = educ %>% log
+  # )
+
+
+#dt_f %>% select(disposable_income,gdp,unemployment_rate,food,services,pop_density,household_size,educ) %>% filter(!is.na(educ)) %>% cor
+```
+
+## Results
+```{r}
+
+#cross sectional
+cbind(
+  dt_f %>% 
+    select(year, state_id), 
+  resid1 = lm(log(tons_pc) ~ log(pop_density)+ log(energy)+ as.factor(year)+ as.factor(region),dt_f ) %>% resid(),
+  
+  resid2 = lm(log(gdp) ~ log(pop_density)+ log(energy)+ as.factor(year)+ as.factor(region),dt_f ) %>% resid()
+) %>% 
+  group_by(state_id) %>% 
+  mutate(mean_resid1=mean(resid1), mean_resid2=mean(resid2)) %>% 
+  as_tibble %>% 
+  ungroup %>% 
+  mutate(
+    coef_value = (lm(resid1 ~ resid2, data = .) %>% coef() %>% pluck("resid2"))
+  ) %>% 
+  ggplot(aes(x=resid1, y=resid2))+geom_point(aes(color=state_id))+
+  geom_smooth(method = "lm", se=FALSE)+
+  geom_label(aes(x=mean_resid1, y = mean_resid2, label=state_id))
+
+#inter temporal
+cbind(
+  dt_f %>% 
+    select(year, state_id, tons_pc, pop_density, gdp, energy), 
+  resid1 = lm(log(tons_pc) ~log(gdp)+log(energy)+ as.factor(state_id),dt_f ) %>% resid(),
+  
+  resid2 = lm(log(urban_share) ~ log(gdp)+log(energy)+ as.factor(state_id),dt_f ) %>% resid()
+) %>%
+  group_by(state_id) %>% 
+  mutate(mean_resid1=mean(resid1), mean_resid2=mean(resid2)) %>% 
+  as_tibble %>% 
+  ungroup %>% 
+  ggplot(aes(x=resid1, y=resid2))+geom_point(aes(color = as.factor(year)), size=2)+
+  geom_smooth(method = "lm", se=FALSE)+
+  geom_hline(yintercept = 0.06)+
+  geom_hline(yintercept = -0.06)
+
+#inter temporal
+cbind(
+  dt_f %>% 
+    select(year, state_id, tons_pc, pop_density, gdp, energy, urban_share), 
+  resid1 = lm(log(tons_pc) ~log(gdp)+ log(energy)+ as.factor(state_id),dt_f ) %>% resid(),
+  
+  resid2 = lm(log(urban_share) ~ log(gdp)+ log(energy)+ as.factor(state_id),dt_f ) %>% resid()
+) %>%
+  group_by(state_id) %>% 
+  mutate(mean_resid1=mean(resid1), mean_resid2=mean(resid2)) %>% 
+  as_tibble %>% 
+  ungroup %>% 
+ # filter(resid2>-0.06, resid2 < 0.06) %>%
+  #filter(resid1<=-0.25| resid2< -0.045| resid1 >= 0.25)
+  #feols(log(tons_pc) ~log(gdp)+ log(pop_density)+ log(energy)|state_id, data=.) %>% etable
+  ggplot(aes(x=resid1, y=resid2))+geom_point(aes(color = as.factor(year)), size=2)+
+  geom_smooth(method = "lm", se=FALSE)+
+  geom_hline(yintercept = 0.06)+
+  geom_hline(yintercept = -0.06)
+
+```
+
+```{r}
+feols(tons_pc ~gdp+ pop_density+energy|year+region,dt_f)
+```
+
+
+```{r}
+
+m1 <- feols(log(tons_pc) ~log(gdp)+ log(pop_density)+log(energy)|year+region,dt_f, vcov_cluster(~year))
+
+
+m2 <- feols(log(tons_pc) ~log(gdp)+ log(pop_density)+log(energy)|state_id,dt_f, vcov_cluster(~state_id))
+
+
+etable(m1, m2)
+```
+
+#  Within state variation
+## County-Level
+
+
+```{r}
+
+dt_c <- 
+  pre_processing_dt(power2, 2006, 2018) %>%
+  filter(!is.na(county_name)) %>% 
+  group_by(state_id, county_name) %>% 
+  mutate(n=n()) %>% 
+  filter(
+    n>=7, 
+    tons_pc > 0.2
+    #!county_id %in% c("yorkSC", "berkeleySC", "johnstonNC", "harnettNC", "durhamNC", "hokeNC", "wakeNC", "franklinWA", "kingWA", "adamsCO")
+    ) %>% 
+  select(-n) %>% 
+  left_join(
+    all_inc %>% 
+      as_tibble() %>% 
+      filter(Description=="Per capita personal income 4/", state_id!=0) %>% 
+      mutate_at(vars(paste0("X", seq(1991, 2019))), as.numeric) %>% 
+      pivot_longer(cols=paste0("X", seq(1991, 2019)), names_to = "year") %>% 
+      mutate(
+        year = str_remove_all(year, "X"), 
+        year = year %>% as.numeric
+      ) %>% 
+      select(state_id, county_name, year, value) %>% 
+      rename(personal_income = value), 
+    by = c("state_id", "year", "county_name")) %>% 
+  left_join(
+    make_into_2012_usd, 
+    by = c("state_id", "year")
+  ) %>% 
+  left_join(
+    regions, by="state_id"
+  ) %>% 
+  left_join(
+    household_size_county, 
+    by = c("state_id", "county_name", "year")
+  ) %>% 
+  left_join(
+    area_county, by = c("state_id", "county_name")
+  ) %>% 
+  left_join(
+    votes %>% rename(democrat=DEMOCRAT, republican = REPUBLICAN), 
+    by = c("state_id", "county_name", "year")
+  ) %>% 
+  left_join(
+    median_age, 
+    by = c("state_id", "county_name", "year")
+  ) %>% 
+  left_join(
+    education, 
+    by = c("state_id", "county_name", "year")
+  ) %>% 
+  left_join(
+    rural_urban_pop, 
+    by = c("state_id", "county_name", "year")
+  ) %>% 
+  mutate(
+    personal_income = personal_income*rate, 
+    county_id = paste0(county_name, state_id), 
+    pop_density = pop/sq_miles, 
+    fin_crisis=ifelse(year==2007, 1, 0), 
+    urban_share = urban/pop,
+    urban_share = ifelse(urban_share==0, 0.000294, urban_share)
+  ) %>% 
+  select(-rate) %>% 
+  ungroup %>% 
+  filter(
+    #tons_pc < quantile(tons_pc, 0.975), tons_pc > quantile(tons_pc, 0.025),
+    #personal_income < quantile(personal_income, 0.975), personal_income > quantile(personal_income, 0.025)
+  ) #%>% group_by(state_id, county_name) %>%
+  #mutate(n=n()) %>%
+  #filter(n==13)
+
+# m1 <- feols(log(tons_pc)~log(personal_income)+log(household_size)+log(pop_density)|state_id,dt_c, vcov_cluster(~state_id))
+# m2 <- feols(log(tons_pc)~log(personal_income)+log(household_size)+log(pop_density)|year,dt_c, vcov_cluster(~year))
+m3 <- feols(log(tons_pc)~log(personal_income)+log(urban_share)|state_id+year,dt_c, vcov_cluster(~state_id^year))
+m4 <- feols(log(tons_pc)~log(personal_income)+log(urban_share)|county_id,dt_c, vcov_cluster(~county_id))
+
+#etable(m1, m2, m3, m4, dict=dict, tex= FALSE)
+etable(m3, m4, tex= FALSE)      
+
+```
+
+
+
+
+```{r}
+#inter temporal
+resid_data <-
+  cbind(
+  dt_c,
+  resid1 = lm(log(tons_pc) ~log(personal_income)+as.factor(county_id),dt_c ) %>% resid(),
+
+  resid2 = lm(log(urban_share) ~ log(personal_income)+ as.factor(county_id),dt_c ) %>% resid()
+) %>%
+  group_by(year) %>%
+  mutate(mean_resid1=mean(resid1), mean_resid2=mean(resid2)) %>%
+  as_tibble %>%
+  ungroup
+#
+resid_data %>% 
+  ggplot(aes(x=resid1, y=resid2))+geom_point(aes(color = as.factor(year)), size=2)+
+  geom_smooth(method = "lm", se=FALSE)
+
+
+
+resid_data %>%
+  filter(abs(resid1)<0.2, abs(resid2)< 0.1) %>%
+  #feols(log(tons_pc) ~log(personal_income)+ log(pop_density)+log(median_age)|county_id, data=.) %>% etable
+  ggplot(aes(x=resid1, y=resid2))+geom_point(aes(color = as.factor(year)), size=2)+
+  geom_smooth(method = "lm", se=FALSE)
+```
+
+
+# Results
+```{r}
+dict=c(
+  "log(tons_pc)"="$log$(Disposal)",
+  "log(gdp)" = "$log$(GDP per capita)", 
+  "log(personal_income)" = "$log$(Personal income)",
+  "log(unemployment_rate)" = "$log$(Unemployment rate)",
+  "log(pop_density)"="$log$(Population density)",
+  "log(energy)" = "$log$(Energy-related CO$_2$ emissions)",
+  "log(urban_share)"="$log$(Share of urban population)",
+  "log(median_age)"="Median age",
+  year= "Year", region = "Region", state_id = "State", county_id = "County")
+
+
+etable(m1, m2, m3, m4, dict=dict, tex= TRUE, digits = "r3", digits.stats = "r2")      
+ETABLE
+
+```
+

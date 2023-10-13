@@ -1,0 +1,893 @@
+---
+title: "Diff-in-Diff"
+author: "Fiori Anglou"
+date: "2023-05-20"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Pre-Processing
+
+## County
+```{r, include=FALSE}
+pre_processing_dt <- function(power2, year_start, year_cutoff)
+{
+  year_start <- year_start
+  year_cutoff <- year_cutoff
+  year_end <- 2011
+  
+  dt <- power2
+  
+  dt <- 
+    dt %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      state_id != "OH",
+      type %in% c("disposal", "msw_disposed")
+    ) %>% 
+    mutate(
+      tons = ifelse(county_name=="butte" & state_id == "CA" & year == 2019, 181914, tons), #I think one digit was wron original is: 1819143
+      tons = ifelse(county_name=="colusa" & state_id == "CA" & year == 1995, 13375, tons), # Use next year's tonnage 13375
+      tons = ifelse(county_name=="glenn" & state_id == "CA" & year == 2019, 27394, tons), # First quarter tonnage is 60,200 --> i think it should have been 6,020 
+      tons = ifelse(county_name=="tehama" & state_id == "CA" & year == 2011, (67376+41921)/2, tons), # Linear extrapolation between 2010 and 2012. The original is more than 3 times as high. 
+      tons = ifelse(county_name=="trinity" & state_id == "CA" & year == 2017, 8669, tons), # Fourth quarter tonnage is 21,493 which is unusually high=> I think it should have been 2,149
+      tons = ifelse(county_name=="modoc" & state_id == "CA" & year == 2019, tons-11537, tons), # Unusally high 
+      tons = ifelse(county_name=="mariposa" & state_id == "CA" & year == 2017, 14559, tons), #3rd quarter is extremely high
+      tons = ifelse(county_name=="mariposa" & state_id == "CA" & year == 2019, 13500, tons), #2nd quarter is extremely high
+      tons = ifelse(county_name=="del norte" & state_id == "CA" & year == 2019, tons+ 4883*2, tons), #missing 3rd and 4th quarter
+      tons = ifelse(county_name=="mono" & state_id == "CA" & year == 1995, 22024, tons), #linear interpolation from years 1996 1997
+      tons = ifelse(county_name=="sonoma" & state_id == "CA" & year == 2017, tons-495370, tons), #4th quarter is 4times as much as the previous- use the third
+      tons = ifelse(county_name=="sonoma" & state_id == "CA" & year == 2018, tons-662089, tons), #1st quarter is 5times as much as the next- use the second
+      tons = ifelse(county_name=="shasta" & state_id == "CA" & year == 2018, 198899, tons), #use the average between the previous and the next year
+      tons = ifelse(county_name=="sierra" & state_id == "CA" & year == 2019, tons+1371, tons), #3rd and 4th quarter missing (adding the 2018 ones)
+      tons = ifelse(county_name=="nevada" & state_id == "CA" & year == 2012, 68165, tons), #2012 has unusually low tonnage
+      tons = ifelse(county_name=="calaveras" & state_id == "CA" & year == 2015, (31741.23+42755.94)/2, tons), #use the average between the previous and the next year
+      tons = ifelse(county_name=="san benito" & state_id == "CA" & year %in% c(1995, 1996, 1997), 56821.52, tons), #use the 1998 for all the years between 95 and 98 because its like half
+      tons = ifelse(county_name=="siskiyou" & state_id == "CA" & year == 2014, (27811.48+35305.71)/2, tons) #use the average between the previous and the next year
+    )%>%  
+    group_by (year, state_id, county_name) %>% 
+    summarise(tons = sum(tons)) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    left_join (
+      population,
+      by = c("state_id", "county_name", "year")
+    ) %>% 
+    mutate(
+      tons_pc = ifelse(is.na(county_name),tons/state_pop, tons/pop), 
+      county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id) )
+    )# %>%
+    # filter(
+    #   tons_pc > 0.2,
+    #   !county_id %in% c("lakeCA", "mendocinoCA") #don't know what to do with it.
+    # )
+
+  #Exclude missing values and small values
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        filter(state_id != "CT", state_id != "RI") %>% 
+        summarize(
+          m = mean(tons_pc), 
+          min_year = min(year), 
+          min_tons = min(tons_pc), 
+          max_tons = max(tons_pc)) %>%
+        filter(
+          m < 0.3 | min_year > year_start | max_tons > 3.5)
+    )
+  
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  dt <- dt[dt$year >=year_start  & dt$year <=year_cutoff,]
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        summarize(n=  n()) %>% 
+        filter(
+          n < (year_cutoff- year_start+1)
+        )
+    )
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  # Percentage change in disposal tons
+  f <- 
+    as.data.frame(
+      dt %>% 
+        filter(state_id != "RI") %>% 
+        group_by(county_id) %>% 
+        mutate(
+          percentage = (tons-dplyr::lag(tons, n = 1, default = NA))/dplyr::lag(tons, n = 1, default = NA),
+          percentage_1 = (tons-dplyr::lead(tons, n = 1, default = NA))/dplyr::lead(tons, n = 1, default = NA)
+        )
+    )
+  
+  f <- f[!is.na(f$percentage),]
+  threshold <- 2.5
+  exclude2 <- unique(f$county_id[f$percentage > threshold | f$percentage < -threshold | f$percentage_1 > threshold | f$percentage_1 < -threshold])
+  dt <- dt[!dt$county_id %in% exclude2,]
+  
+  donors <- unique(dt$county_id)
+  rm(f, exc,exclude2)
+  
+  dt_initial <- dt
+  return(dt_initial)
+}
+```
+
+## State
+
+```{r}
+pre_processing_dt_state <- function (power2, year_start, year_cutoff)
+{
+  year_start <- year_start
+  year_cutoff <- year_cutoff
+  dt_state <- 
+    power2 %>% 
+    group_by (year, state_id, type) %>% 
+    summarise(tons = sum(tons))%>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      state_id != "OH",
+      #state_id != "DE",
+      type %in% c("disposal", "msw_disposed")
+    ) %>%
+    group_by(state_id) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    group_by(state_id, year) %>% 
+    mutate(
+      tons_pc = (tons/state_pop), 
+      county_id = state_id
+    ) %>% 
+    group_by(state_id) %>% 
+    mutate(n=n()) %>% 
+    filter(n == year_cutoff - year_start+1) %>% 
+    select(-n) %>% 
+    ungroup() 
+  
+  # dt_state <- 
+  #   dt_state %>% 
+  #   group_by(state_id) %>% 
+  #   mutate(
+  #     lag = ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)), 
+  #     tons_pc = 100*(tons_pc - lag)/lag
+  #   ) 
+  
+  dt_state_initial <- dt_state
+  return(dt_state_initial)
+  
+}
+```
+
+
+```{r}
+
+
+lm_log <- fixest::feols(log(tons_pc) ~ ban_ind|county_id+year, dt_did %>% filter(!is.na(county_name)))
+
+lm_log_state <- fixest::feols(log(tons_pc) ~ ban_ind|state_id + year, dt_did_state)
+
+lm <- fixest::feols(tons_pc ~ ban_ind|county_id+year, dt_did %>% filter(!is.na(county_name)))
+lm_state <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state)
+
+fixest::etable(lm_log, lm_log_state, lm, lm_state, tex= FALSE)
+
+lm_ca <- fixest::feols(tons_pc ~ ban_ind|year+county_id, dt_did %>% filter(state_id== "CA") %>%  mutate(pop_ind = ifelse(pop>=70000, 1, 0), ban_ind= pop_ind*ban_ind))
+
+lm_ca_all <- fixest::feols(tons_pc ~ ban_ind|year+county_id, dt_did %>%  mutate(pop_ind = ifelse(state_id=="CA"& pop<70000, 0, 1), ban_ind= pop_ind*ban_ind))
+
+fixest::etable(lm_log, lm_log_state, lm, lm_state,lm_ca,lm_ca_all,  tex= FALSE,  vcov = "twoway")
+
+
+
+
+
+dt_did <- pre_processing_dt(power2, 2006, 2018)
+dt_did <- 
+  dt_did %>% left_join(dates, by = c("state_id")) %>% 
+  mutate(
+    ban_ind = ifelse(year>=ban_year, 1, 0), 
+    pass_ind = ifelse(year >= passage_year, 1, 0), 
+    ban_ind = ifelse(is.na(ban_ind), 0, ban_ind), 
+    pass_ind = ifelse(is.na(pass_ind), 0, ban_ind)
+  ) %>% ungroup %>% 
+  filter(
+    county_name != "san francisco"
+  )
+
+
+
+
+
+
+
+
+
+
+dt_did_state <- pre_processing_dt_state(power2, 2006, 2018)
+
+dt_did_state <- 
+  dt_did_state %>% left_join(dates, by = c("state_id")) %>% 
+  mutate(
+    ban_ind = ifelse(year>=ban_year, 1, 0), 
+    pass_ind = ifelse(year >= passage_year, 1, 0), 
+    ban_ind = ifelse(is.na(ban_ind), 0, ban_ind), 
+    pass_ind = ifelse(is.na(pass_ind), 0, ban_ind), 
+    ban_ind_ca = ifelse(state_id=="CA", ban_ind, 0), 
+    ban_ind_ct = ifelse(state_id=="CT", ban_ind, 0), 
+    ban_ind_ma = ifelse(state_id=="MA", ban_ind, 0), 
+    ban_ind_ri = ifelse(state_id=="RI", ban_ind, 0), 
+    ban_ind_vt = ifelse(state_id=="VT", ban_ind, 0)
+  ) %>% ungroup %>% 
+  group_by(state_id) %>% 
+  mutate(
+    group = max(ban_ind), 
+    cluster = ifelse(group==1 & year <= ban_year, 1, ifelse(group==1, 2, 3))
+  )
+
+lm_state <- feols(tons_pc ~ ban_ind|state_id+ year, dt_did_state)
+lm_counties <- feols(tons_pc ~ ban_ind|state_id+ year, dt_did)
+lm_state_ca <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(!state_id %in% c("CT", "MA", "RI", "VT")))
+lm_state_ct <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(!state_id %in% c("CA", "MA", "RI", "VT")))
+lm_state_ma <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "RI", "VT")))
+lm_state_ri <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "MA", "VT")))
+lm_state_vt <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "MA", "RI")))
+
+fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,  tex= TRUE, digits = "r3", digits.stats = "r2")
+
+fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,vcov="hetero",  tex= TRUE, digits = "r3", digits.stats = "r2")
+
+
+
+dt_did_state <- 
+  dt_did_state %>% 
+  group_by(state_id) %>% 
+  mutate(
+    cat = max(ban_ind), 
+    seq = 1:n(), 
+    cat = seq*cat
+  )
+
+feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2014, !state_id %in% c("CA", "RI"))) %>% etable(vcov="cluster")
+feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2016, !state_id %in% c("CT", "MA", "VT"))) %>% etable(vcov="cluster")
+
+pa_trend_ca <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CT", "MA", "RI", "VT"), year < 2016))
+pa_trend_ct <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CA", "MA", "RI", "VT"), year < 2014))
+pa_trend_ma <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "RI", "VT"), year < 2014))
+pa_trend_ri <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "MA", "VT"), year < 2016))
+pa_trend_vt <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "MA", "RI"), year < 2014))
+
+etable(pa_trend_ca,pa_trend_ct, pa_trend_ma, pa_trend_ri, pa_trend_vt) #parallel trends assumption really holds only for MA
+
+```
+
+
+## Block Bootstrap
+
+
+```{r}
+
+
+block_bootstrap <- function (i)
+{
+  
+  donors <- dt_did_state %>% filter(is.na(ban_year)) 
+  sampled_states <- sample(unique(donors$state_id), size = 22, replace = TRUE)
+  
+  # Create a new dataset with the selected states using dplyr
+  dt_did_state_new <- 
+    donors %>%
+    filter(state_id %in% sampled_states)
+  
+  # Initialize an empty dataframe to store the replicated data
+  replicated_data <- data.frame()
+  
+  # Loop through each selected state using dplyr
+  for (state in sampled_states) {
+    # Extract the data for the current state
+    state_data <- dt_did_state %>%
+      filter(state_id == state)
+    
+    # Append the data to the replicated_data dataframe
+    replicated_data <- bind_rows(replicated_data, state_data)
+  }
+  
+  # Reset row names of the new dataset
+  rownames(replicated_data) <- NULL
+  
+  # dt_did_state_new will now contain the desired data
+  dt_did_state_new <- replicated_data %>% rbind(dt_did_state %>% filter(!is.na(ban_year)))
+  
+  
+  lm_state_ca <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state_new %>% filter(!state_id %in% c("CT", "MA", "RI", "VT")))
+  lm_state_ct <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state_new %>% filter(!state_id %in% c("CA", "MA", "RI", "VT")))
+  lm_state_ma <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state_new %>% filter(!state_id %in% c("CA", "CT", "RI", "VT")))
+  lm_state_ri <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state_new %>% filter(!state_id %in% c("CA", "CT", "MA", "VT")))
+  lm_state_vt <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state_new %>% filter(!state_id %in% c("CA", "CT", "MA", "RI")))
+  
+  
+  
+  
+  rm(donors, replicated_data, state, sampled_states)
+  return(
+    tibble(
+      ca=lm_state_ca$coeftable[1,1], 
+      ct=lm_state_ct$coeftable[1,1], 
+      ma=lm_state_ma$coeftable[1,1], 
+      ri=lm_state_ri$coeftable[1,1], 
+      vt=lm_state_vt$coeftable[1,1]
+    ) 
+  )
+}
+
+
+bt_se <- lapply(1:2500, block_bootstrap)
+
+bt_se %>% 
+  bind_rows() %>% 
+  pivot_longer(
+    cols = c("ca", "ct", "ma", "ri", "vt"), 
+    names_to = "state_id", 
+    values_to = "estimates"
+  ) %>% 
+  group_by(state_id) %>% 
+  summarise(
+    min = quantile (estimates, 0.025), 
+    max = quantile (estimates, 0.975), 
+    stdev = sd(estimates)
+  )
+
+
+```
+
+
+
+# CA- County
+
+```{r}
+dt_initial <- pre_processing_dt(power2, 1996, 2019)
+
+dt_ca <- dt_initial %>%
+  group_by(county_id) %>% 
+  # mutate(
+  #   tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+  # ) %>% 
+  filter(state_id== "CA", county_name != "san francisco") %>%  
+  mutate(ban_ind = ifelse(year >= 2016, 1, 0), pop_ind = ifelse(pop>=70000, 1, 0), ban= pop_ind*ban_ind)
+
+lm_m <- fixest::feols(tons_pc~ ban | year + county_id, dt_ca)
+
+actual = lm_m$coefficients
+actual
+
+m <- dt_ca %>% filter(ban==0, year == 2016)%>% ungroup %>%  summarise(n=n_distinct(county_name)) %>% pluck("n")
+n <- dt_ca %>% filter(ban==1, year == 2016)%>% ungroup %>%  summarise(n=n_distinct(county_name)) %>% pluck("n")
+
+dt_initial <- 
+  dt_initial %>%
+  group_by(county_id) %>% 
+  # mutate(
+  #   tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+  # ) %>% 
+  filter(state_id== "CA", !county_name %in% c("san francisco")) 
+
+
+all <- dt_initial %>% ungroup %>%  summarise(county_name=unique(county_name)) %>% pluck("county_name")
+ 
+placebo_ca_counties <- function(i, dt_initial, m,n)
+{
+  tr <- all[sample(n+m, m)]
+  dt_ca <- dt_initial %>% filter(state_id=="CA",  county_name != "san francisco") %>% mutate(ban = ifelse(county_name %in% tr & year >= 2016, 0, 1))
+  #lm(tons_pc ~ ban +as.factor(year), dt_ca)$coefficients[2]
+  m <- fixest::feols(tons_pc~ ban | year + county_id, dt_ca)
+  m$coefficients
+}
+
+
+placebo_ca_counties_res_unmatched <- lapply(1:5000, placebo_ca_counties, dt_initial, m,n)
+
+mean_effect = disposal_effect %>% filter(effect_type=="lower_bound", state_id=="CA", year <=2019) %>% summarise(mean_effect=mean(effect)) %>% pluck("mean_effect")
+
+plac_ca_unmatched  <- 
+  placebo_ca_counties_res_unmatched %>%  
+    bind_rows() %>% 
+  mutate(
+    Estimate = actual, 
+    lower = placebo_ca_counties_res_unmatched %>%  bind_rows() %>% summarise(q = quantile(ban, 0.05)) %>% pluck("q"),
+    upper = placebo_ca_counties_res_unmatched %>%  bind_rows() %>% summarise(q = quantile(ban, 0.95)) %>% pluck("q"), 
+    Expected = -mean_effect) %>% 
+  pivot_longer(
+    cols = c("Estimate", "lower", "upper", "Expected"), 
+    names_to = "type", 
+    values_to = "xintercept"
+  ) %>% 
+  mutate(
+    type = ifelse(type %in% c("lower", "upper"), "95% Confidence Interval", type)
+  ) %>% 
+  ggplot(aes(x=100*ban))+
+  geom_histogram(bins=100, fill=ut_colors[5], color= "white")+
+  geom_vline(aes(xintercept=100*xintercept, color = type, linetype = type), linewidth =1)+
+  scale_x_continuous(breaks = c(seq(-15, 15, by =5)), limits=c(-18, 18))+
+  scale_color_manual(values = c(ut_colors[5], ut_colors[4], "#417c5b"))+
+  scale_linetype_manual(breaks = c("95% Confidence Interval", "Estimate", "Expected"), values = c("dotted", "solid","solid"), name="")+
+  labs(x="Treatment Effect (%)", color = "")+
+  theme(
+    #legend.position = "right",
+    #legend.justification = c(1, 0.5), # Adjust the justification
+    #legend.position = c(1, 0.5),
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    axis.title.y=element_blank(),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(), 
+    panel.background = element_blank(), 
+    text = element_text(family = "Helvetica",size = 12), 
+    strip.text = element_blank())
+  
+plac_ca_unmatched 
+
+# ggsave(plac_ca_unmatched , filename = "plac_ca_unmatched.pdf", device = cairo_pdf,
+#        path= figure_path,
+#        width = 7, height = 3, units = "in")
+
+
+ca_pt_unmatched <- 
+  dt_ca_unmatched %>%
+  group_by(county_id) %>% 
+  mutate(cat = max(ban)) %>%
+  group_by(cat, year) %>%
+  summarise(tons_pc1 = mean(tons_pc), tons_pc = sum(tons)/sum(pop)) %>%
+  mutate(cat = ifelse(cat==0, "Ban Never Applied", "Ban applied after 2016")) %>% 
+  ggplot(aes(x=year, y  = tons_pc, color = cat))+ 
+  geom_line()+
+  geom_vline(xintercept = 2016, color= ut_colors[4], linetype="dotted")+
+  scale_color_manual(values=c(ut_colors[4], ut_colors[5]))+
+  labs(x="Year", color ="", y = "MSW Tons Per Capita")+
+  scale_x_continuous(breaks=seq(1995,2020, by =3))+
+  theme(
+    legend.position = "top",
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    panel.background = element_blank(), 
+    text = element_text(family = "Helvetica",size = 12), 
+    strip.text = element_blank())
+
+ca_pt
+
+# ggsave(ca_pt, filename = "ca_pt.pdf", device = cairo_pdf,
+#        path= figure_path,
+#        width = 7, height = 3, units = "in")
+
+
+# Regression Checking for Parallel Trends
+
+
+dt_ca_unmatched <- dt_ca
+trend_unmatched <- feols(
+  tons_pc ~ trend+trend_interaction|county_id, 
+  dt_ca_unmatched %>% 
+    group_by(county_id) %>% 
+    mutate(
+      cat=max(ban), 
+      trend=1:n(), 
+      trend_interaction = trend*cat) %>%
+    ungroup)
+
+
+```
+# CA- County-Matching
+
+Here I am matching the parallel trends
+
+```{r}
+dt_initial <- pre_processing_dt(power2, 1996, 2019)
+
+dt_ca <- dt_initial %>%
+  group_by(county_id) %>% 
+  filter(state_id== "CA", county_name != "san francisco", county_name != "mono") %>%  
+  mutate(ban_ind = ifelse(year >= 2016, 1, 0), pop_ind = ifelse(pop>=70000, 1, 0), ban= pop_ind*ban_ind)
+
+non_treated_counties <- dt_ca %>% filter(ban==0, year == 2016)%>% ungroup %>%  summarise(county_name=unique(county_name)) %>% pluck("county_name")
+m <- dt_ca %>% filter(ban==0, year == 2016)%>% ungroup %>%  summarise(n=n_distinct(county_name)) %>% pluck("n")
+treated_counties <- dt_ca %>% filter(ban==1, year == 2016)%>% ungroup %>%  summarise(county_name=unique(county_name)) %>% pluck("county_name")
+n <- length(treated_counties)
+
+y <- dt_ca %>% 
+  filter(county_name %in% non_treated_counties) %>% 
+  filter(year <2016) %>% 
+  group_by(year) %>% 
+  summarise(tons_pc = sum(tons)/sum(pop)) %>%  
+  pluck("tons_pc")
+
+  
+pt_ca <- function (i)
+{
+  a <- treated_counties[sample(n, m)]
+  y_tr <- dt_ca %>% 
+    filter(county_name %in% a) %>% 
+    filter(year <2016) %>% 
+    group_by(year) %>% 
+    summarise(tons_pc = sum(tons)/sum(pop)) %>%  
+    pluck("tons_pc")
+  
+ # y_tr <- (y_tr - first(y_tr))/first(y_tr)
+  first_distance = first(y_tr) - first(y)
+  #error <- ((y_tr-y)) %>% sd #%>%{.^2} %>% sum
+  error <- (y-y_tr) %>% sd
+  #error <- (error < 0.015) %>% sum
+  c(error,i, a)
+}
+  
+pt_ca_res <- lapply(1:1000, pt_ca) 
+chosen_counties <- t(sapply(pt_ca_res,c) ) %>%  as_tibble %>% filter(V1==min(V1)) %>%  rename(error=V1, attempt=V2) %>% pivot_longer(cols = starts_with("V"), names_to = "Variable", values_to = "Value")
+
+dt_ca %>% filter(
+  county_name %in% non_treated_counties  | 
+    county_name %in% (chosen_counties %>% pluck("Value"))
+) %>% 
+  group_by(county_name) %>% 
+  mutate(cat=max(ban)) %>% 
+  group_by(county_name) %>% 
+  mutate(cat=max(ban)) %>% 
+  group_by(cat, year) %>% 
+  mutate(tons_pc= tons/pop) %>% 
+  summarise(tons_pc = mean(tons_pc)) %>% 
+  ggplot(aes(x=year, y=tons_pc, color = as.factor(cat)))+geom_line()
+
+# now do the same but from the other side
+y <- 
+  dt_ca %>% 
+  filter(county_name %in% (chosen_counties %>% pluck("Value"))) %>% 
+  filter(year <2016) %>% 
+  group_by(year) %>% 
+  mutate(tons_pc= tons/pop) %>% 
+  summarise(tons_pc = mean(tons_pc)) %>%  
+  pluck("tons_pc")
+y <- (y-first(y))/first(y)
+
+pt_ca <- function (i)
+{
+  a <- non_treated_counties[sample(m, 14)]
+  y_tr <- dt_ca %>% ungroup %>%  filter(county_name %in% a) %>% filter(year <2016) %>% group_by(year) %>% mutate(tons_pc= tons/pop) %>% summarise(tons_pc = mean(tons_pc)) %>%  pluck("tons_pc")
+  y_tr <- (y_tr - first(y_tr))/first(y_tr)
+  
+  error <- (y-y_tr) %>% sd
+  c(error, a)
+}
+pt_ca_res2 <- lapply(1:1000, pt_ca) 
+
+chosen_counties2 <- c(t(sapply(pt_ca_res2,c) ) %>%  as_tibble %>% filter(V1==min(V1)) %>%  rename(error=V1) %>% pivot_longer(cols = starts_with("V"), names_to = "Variable", values_to = "Value") %>%  pluck("Value"))
+
+dt_ca %>% filter(
+  county_name %in% (chosen_counties %>% pluck("Value"))| 
+    county_name %in% chosen_counties2
+) %>% 
+  group_by(county_name) %>% 
+  mutate(cat=max(ban)) %>% 
+  group_by(county_name) %>% 
+  mutate(cat=max(ban)) %>% 
+  group_by(cat, year) %>% 
+  mutate(tons_pc= tons/pop) %>% 
+  summarise(tons_pc = mean(tons_pc)) %>% 
+  ggplot(aes(x=year, y=tons_pc, color = as.factor(cat)))+geom_line()
+
+# Results
+chosen_counties_all <- c(
+  "amador", "butte", "calaveras", "colusa", "del norte", "el dorado", "glenn", "humboldt", "kern", "lassen", "madera", "mariposa", "merced", "modoc",   "monterey", "nevada", "plumas", "san benito", "san bernadino", "san joaquin", "san luis obispo", "shasta", "sierra", "solano", "stanislaus", "tehama", "trinity", "tulare", "tuolumne", "yolo", "yuba", "ventura")
+
+dt_ca <- dt_initial %>%
+  filter(state_id== "CA", county_name != "san francisco", county_name != "mono") %>%  
+  group_by(county_id) %>% 
+  mutate(ban_ind = ifelse(year >= 2016, 1, 0), pop_ind = ifelse(pop>=70000, 1, 0), ban= pop_ind*ban_ind)
+
+dt_ca <- dt_ca %>% filter(county_name %in% chosen_counties_all)
+
+lm_m <- fixest::feols(tons_pc~ ban | year + county_id, dt_ca)#dt_ca %>% mutate(ban_ind=ban))
+lm_m
+actual = lm_m$coefficients
+actual
+
+m <- dt_ca %>% filter(ban==0, year == 2016)%>% ungroup %>%  summarise(n=n_distinct(county_name)) %>% pluck("n")
+n <- dt_ca %>% filter(ban==1, year == 2016)%>% ungroup %>%  summarise(n=n_distinct(county_name)) %>% pluck("n")
+
+all <- dt_ca %>% ungroup %>%  summarise(county_name=unique(county_name)) %>% pluck("county_name")
+dt_initial <- dt_ca 
+
+placebo_ca_counties <- function(i, dt_initial, m,n)
+{
+  tr <- all[sample(n+m, m)]
+  dt_ca <- dt_initial %>% filter(state_id=="CA",  county_name != "san francisco") %>% mutate(ban = ifelse(county_name %in% tr & year >= 2016, 0, 1))
+  #lm(tons_pc ~ ban +as.factor(year), dt_ca)$coefficients[2]
+  m <- fixest::feols(tons_pc~ ban | year + county_id, dt_ca)
+  m$coefficients
+}
+
+placebo_ca_counties_res <- lapply(1:5000, placebo_ca_counties, dt_initial, m,n)
+
+mean_effect = disposal_effect %>% filter(effect_type=="lower_bound", state_id=="CA", year <=2019) %>% summarise(mean_effect=mean(effect)) %>% pluck("mean_effect")
+
+plac_ca <-
+  placebo_ca_counties_res %>%  
+  bind_rows() %>% 
+  mutate(
+    Estimate = actual, 
+    lower = placebo_ca_counties_res %>%  bind_rows() %>% summarise(q = quantile(ban, 0.05)) %>% pluck("q"),
+    upper = placebo_ca_counties_res %>%  bind_rows() %>% summarise(q = quantile(ban, 0.95)) %>% pluck("q"), 
+    Expected = -mean_effect) %>% 
+  pivot_longer(
+    cols = c("Estimate", "lower", "upper", "Expected"), 
+    names_to = "type", 
+    values_to = "xintercept"
+  ) %>% 
+  mutate(
+    type = ifelse(type %in% c("lower", "upper"), "95% Confidence Interval", type)
+  ) %>% 
+  ggplot(aes(x=100*ban))+
+  geom_histogram(bins=100, fill=ut_colors[5], color= "white")+
+  geom_vline(aes(xintercept=100*xintercept, color = type, linetype=type), linewidth =1)+
+  scale_x_continuous(breaks = c(seq(-15, 15, by =5)), limits=c(-18, 18))+  scale_color_manual(values = c(ut_colors[5], ut_colors[4], "#417c5b"))+
+  scale_linetype_manual(breaks = c("95% Confidence Interval", "Estimate", "Expected"), values = c("dotted", "solid","solid"), name="")+
+  labs(x="Treatment Effect (%)", color = "")+
+  theme(
+    #legend.position = "right",
+    #legend.justification = c(1, 0.5), # Adjust the justification
+    #legend.position = c(1, 0.5),
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    axis.title.y=element_blank(),
+    axis.text.y=element_blank(),
+    axis.ticks.y=element_blank(), 
+    panel.background = element_blank(), 
+    text = element_text(family = "Helvetica",size = 12), 
+    strip.text = element_blank())
+
+plac_ca
+
+plac_ca <- 
+  ggarrange(plac_ca_unmatched + labs(title = "Unmatched")+  theme(legend.justification = c(0.5,0), legend.position = "none",plot.title = element_text(hjust = 0.5)), plac_ca + labs(title = "Matched")+  theme(legend.justification = c(0.5,0), legend.position = "none", plot.title = element_text(hjust = 0.5)), common.legend = TRUE, legend = "bottom")
+
+
+# ggsave(plac_ca, filename = "plac_ca.pdf", device = cairo_pdf, # for presentation turn the linewidths back to 2
+#        path= figure_path,
+#        width = 14, height = 5, units = "in")
+
+ggsave(plac_ca, filename = "plac_ca_MT.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 8, height = 3, units = "in")
+
+ca_pt <- 
+  dt_ca %>%
+  group_by(county_id) %>% 
+  mutate(cat = max(ban)) %>%
+  group_by(cat, year) %>%
+  summarise(tons_pc1 = mean(tons_pc), tons_pc = sum(tons)/sum(pop)) %>%
+  mutate(cat = ifelse(cat==0, "Ban Never Applied", "Ban applied after 2016")) %>% 
+  ggplot(aes(x=year, y  = tons_pc1, color = cat))+ 
+  geom_line()+
+  geom_vline(xintercept = 2016, color= ut_colors[4], linetype="dotted")+
+  scale_color_manual(values=c(ut_colors[4], ut_colors[5]))+
+  labs(x="Year", color ="", y = "Disposal (tons per capita)")+
+  scale_x_continuous(breaks=seq(1995,2020, by =3))+
+  theme(
+    legend.position = "top",
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    panel.background = element_blank(), 
+    text = element_text(family = "Helvetica",size = 12), 
+    strip.text = element_blank())
+
+
+ggsave(ca_pt, filename = "ca_pt.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 9, height = 3, units = "in")
+
+
+#Both together
+
+ca_pt_both <- 
+  rbind(
+  dt_ca_unmatched %>% mutate(type="Unmatched"),
+  dt_ca %>% mutate(type="Matched")) %>%
+  mutate(type = factor(type, levels=c("Unmatched", "Matched"))) %>% 
+  group_by(county_id) %>% 
+  mutate(cat = max(ban)) %>%
+  group_by(cat, year, type) %>%
+  summarise(tons_pc1 = mean(tons_pc), tons_pc = sum(tons)/sum(pop)) %>%
+  mutate(cat = ifelse(cat==0, "Exempt Counties", "Non-Exempt Counties")) %>% 
+  ggplot(aes(x=year, y  = tons_pc1, color = cat))+ 
+  geom_line()+
+  geom_vline(xintercept = 2016, color= ut_colors[4], linetype="dotted")+ facet_wrap(vars(type))+
+  scale_color_manual(values=c(ut_colors[5], ut_colors[4]))+
+  labs(x="Year", color ="", y = "Disposal (tons per capita)")+
+  scale_x_continuous(breaks=seq(1998,2019, by =3))+
+  theme_classic()+
+  theme(
+    legend.position = "top",
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    panel.background = element_blank(), 
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank(),
+    text = element_text(family = "Helvetica",size = 12)
+  )
+
+ggsave(ca_pt_both, filename = "ca_pt_both.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 9, height = 3, units = "in")
+
+## Trend Regression
+
+
+trend_matched <- feols(
+  tons_pc ~ trend+trend_interaction|county_id, 
+  dt_ca %>% 
+    group_by(county_id) %>% 
+    mutate(
+      cat=max(ban) , 
+      trend=1:n(), 
+      trend_interaction = trend*cat) %>%
+    ungroup
+  )
+
+etable(trend_matched, trend_unmatched, vcov = c("twoway"))
+
+
+
+
+t_test_growth_rates <- 
+  dt_ca %>%  #filter(!state_id %in% c("CA", "RI")) %>% 
+  group_by(county_id) %>% 
+  mutate(
+    cat=max(ban)
+  ) %>% group_by(county_id) %>% 
+  mutate(
+    lead = lead(tons_pc, n=1, default= NA), 
+    #growth_rate = (tons_pc-lead)/tons_pc, 
+    growth_rate =( tons_pc - first(tons_pc))/first(tons_pc)) %>% 
+  filter(year < 2014) %>% 
+  group_by(cat) %>% 
+  summarise(m_growth_rate = mean(growth_rate, na.rm = TRUE), sd = sd(growth_rate, na.rm = TRUE)) %>% 
+  rowwise() %>% 
+  mutate(
+    samples = rnorm(500, mean =m_growth_rate, sd = sd) %>% list()
+  ) %>% 
+  pivot_wider(
+    names_from=cat,
+    values_from = c(samples, m_growth_rate, sd)
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    test = t.test(samples_0 %>% unlist, samples_1 %>% unlist, var.equal = TRUE) %>%  list
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    p.value = test %>% pluck("p.value")
+  )
+
+```
+
+
+# Parallel Trends
+
+```{r}
+dt_state_initial <- pre_processing_dt_state(power2, 2006, 2018)
+
+t_test_growth_rates <- 
+  dt_state_initial %>%  #filter(!state_id %in% c("CA", "RI")) %>% 
+  mutate(
+    ban=ifelse(state_id %in% all_treated & year >=2014, 1, 0)
+    ) %>%
+  group_by(state_id) %>% 
+  mutate(
+    cat=max(ban)
+  ) %>% group_by(state_id) %>% 
+  mutate(
+    lead = lead(tons_pc, n=1, default= NA), 
+    growth_rate = (tons_pc-lead)/tons_pc) %>% 
+  filter(year < 2014) %>% 
+  group_by(cat, year) %>% 
+  summarise(m_growth_rate = mean(growth_rate), sd = sd(growth_rate)) %>% 
+  rowwise() %>% 
+  mutate(
+    samples = rnorm(500, mean =m_growth_rate, sd = sd) %>% list()
+  ) %>% 
+  pivot_wider(
+    names_from=cat,
+    values_from = c(samples, m_growth_rate, sd)
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    test = t.test(samples_0 %>% unlist, samples_1 %>% unlist, var.equal = TRUE) %>%  list
+  ) %>% 
+  rowwise() %>% 
+  mutate(
+    p.value =test %>% pluck("p.value")
+  )
+  
+t_test_growth_rates %>% pluck("p.value")
+
+
+
+f<- 
+  dt_state_initial %>%  #filter(!state_id %in% c("CA", "RI")) %>% 
+  mutate(
+    ban=ifelse(state_id %in% all_treated & year >=2014, 1, 0)
+    ) %>%
+  group_by(state_id) %>% 
+  mutate(
+    cat=max(ban)
+  ) %>% 
+  filter(year < 2014) %>% 
+  group_by(state_id) %>% 
+  mutate(
+    tons_pc = tons_pc-mean(tons_pc),
+    trend = 1:n(), 
+    trend_interaction = trend*cat,
+    trend = trend-mean(trend),
+    trend_interaction= trend_interaction-mean(trend_interaction)
+  ) %>% 
+  ungroup 
+
+lm(tons_pc ~ trend+trend_interaction+as.factor(state_id), f %>% filter(year < 2014)) %>% summary
+enactment_fe <- feols(tons_pc ~ trend+trend_interaction|state_id, f)
+enactment_dm <- feols(tons_pc ~ trend+trend_interaction, f)
+
+etable(enactment_fe, tex=TRUE, digits = "r3", digits.stats = "r2")
+
+all_pt <- 
+  dt_state_initial %>%
+  mutate(
+    ban=ifelse(state_id %in% all_treated & year >=2014, 1, 0)
+  ) %>%
+  group_by(state_id) %>% 
+  mutate(
+    cat=max(ban)
+  ) %>% 
+  group_by(state_id) %>% 
+  mutate(
+    tons_pc_dm = tons_pc-mean(tons_pc),
+    trend = 1:n(), 
+    trend_interaction = trend*cat,
+    trend_dm = trend-mean(trend),
+    trend_interaction_dm= trend_interaction-mean(trend_interaction)
+  ) %>% group_by(state_id) %>% mutate(cat=max(ban)) %>% group_by(year, cat) %>% 
+  summarise(tons_pc = mean(tons_pc)) %>% 
+  mutate(cat = ifelse(cat==0, "Ban Never Applied", "Ban applied")) %>% 
+  ggplot(aes(x=year, y  = tons_pc, color = cat))+ 
+  geom_line()+
+  scale_color_manual(values=c(ut_colors[4], ut_colors[5]))+
+  scale_x_continuous(breaks=c(seq(2006, 2018, by = 2)))+
+  geom_vline(xintercept = 2014, color = ut_colors[4], linetype="dotted")+
+  labs(x="Year", color ="", y = "Disposal (tons per capita)")+
+  theme(
+    legend.position = "top",
+    strip.background = element_rect(color = "white", fill = "white"),
+    panel.grid.major.x = element_blank() ,
+    panel.grid.major.y = element_blank(),
+    panel.background = element_blank(), 
+    text = element_text(family = "Helvetica",size = 12), 
+    strip.text = element_blank())
+
+ggsave(all_pt, filename = "all_pt.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 5, height = 5, units = "in")
+
+ggsave(all_pt, filename = "all_pt_MT.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 7, height = 3, units = "in")
+
+```
+
+
