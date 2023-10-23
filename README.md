@@ -5,7 +5,8 @@
 
 ## Raw Data 
 
-Includes all the data that we have used to estimate the treatment effects of organic waste bans (power2_impexp)
+Includes all the data that we have used to estimate the treatment effects of organic waste bans: 
+1. All data: power2_impexp: includes all the data we use for our analysis. These are not the "raw" data received from states. These are the "cleaned" and adjusted data according to the data_section file. 
 
 ## Data from Code
 
