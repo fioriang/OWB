@@ -5,7 +5,7 @@
 
 ## Raw Data 
 
-Includes all the data that we have used to estimate the treatment effects of organic waste bans: 
+Includes all the data we used to estimate the treatment effects of organic waste bans: 
 1. Waste data: power2_impexp: includes all the data we use for our analysis. These are not the "raw" data received from states. These are the "cleaned" and adjusted data according to the data_section file. Data received from state agencies are available upon request. 
 2. Waste characterizations data: all_WCS.csv
 3. Data required to estimate the bans' coverage: a. food_generators_MA & food_generators_VT, b. food_processors_list_MA & food_processors_list_VT, c. towns_coordinates_VT
