@@ -13,14 +13,17 @@ Includes all the data we used to estimate the treatment effects of organic waste
 
 Here are all the data that are results of the code. 
 
-1. Expected effects
-   a. composting_effect: what is the expected effect on composting at each of the different phases of the bans for CT and VT \\
+1. All State Level Results: (Fig. 2)
+   a. xy_plot_data
+
+2. Expected effects (Fig. 2)
+   a. composting_effect: \\
    b. disposal_effect: \\
    c. disposal_effect_size:\\
    d. municipal_effect
    
-2. Power results
-   a. composting_spec: results of the power for each specification and passage year for composting (sample_size, ban_year, specification)
+3. Power results (Fig. 2)
+   a. composting_spec:
    b. disposal_spec:
    c. plac_for_histogram_composting
    d. plac_sf
@@ -32,7 +35,7 @@ Here are all the data that are results of the code.
    i. power_state_passage
    j. power_state_plac
 
-3. Alternative methods
+4. Alternative methods
    a. lasso_att_res
    b. lasso_att_res_state
    c. lasso_pool_estimates
@@ -42,11 +45,11 @@ Here are all the data that are results of the code.
    g. ridge_pool_estimates
    h. ridge_pool_estimates_state
 
-4. MAPE/MAE of placebo
+5. MAPE/MAE of placebo
    a. mae_placebo
    b. mape_state
 
-5. Treatment effects results 
+6. Treatment effects results 
    a. tr_res_multiple_composting
    b. tr_res_municipal_multiple
    c. tr_res_municipal_multiple_composting
@@ -67,9 +70,6 @@ Here are all the data that are results of the code.
 7. Year Placebo
   a. year_placebo
 
-8. All State Level Results:
-   a. xy_plot_data
-   
 # Code
 
 ## Primary analysis
