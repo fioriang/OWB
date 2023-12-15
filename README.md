@@ -17,27 +17,27 @@ Here are all the data that are results of the code.
 
 2. Expected effects [found in xy.R] (composting_effect.csv, disposal_effect.csv, disposal_effect_size.csv, municipal_effect.csv)
    
-3. Power results [found in placebo_all.RMD] (power_county.csv, power_state.csv, sf_power.csv);;
-   a. County-level power results: (plac_for_histogram1--6.csv);
-   b. State-level power results: (power_state_plac.csv, pool_estimates_All.csv);
-   c. Composting power results: (plac_for_histogram_composting.csv);
+3. Power results [found in placebo_all.RMD] (power_county.csv, power_state.csv, sf_power.csv);
+   County-level power results: (plac_for_histogram1--6.csv);
+   State-level power results: (power_state_plac.csv, pool_estimates_All.csv);
+   Composting power results: (plac_for_histogram_composting.csv);
    
 
 5. MAPE/MAE of placebo [found in placebo_all.RMD] 
-   a. mae_placebo
-   b. mape_state
+   mae_placebo;
+   mape_state;
    
 6. Alternative methods [found in lasso_disposal.RMD & ridge_disposal.RMD] (all files starting with lasso_ or ridge_)
 
 7. Average Treatment effects results [found in placebo_all.RMD] 
-   a. County-level (treat_county.csv, treat_pool_county.csv,);
-   b. State-level (treat_state.csv,);
-   c. Composting (tr_res_state_multiple_composting.csv, tr_res_multiple_composting.csv
-   d. Backdated treatment(treat_state_passage.csv, treat_county_passage.csv);
-   e. City-level (sf_power.csv, plac_sf.csv, tr_res_municipal_multiple.csv)
+   County-level (treat_county.csv, treat_pool_county.csv);
+   State-level (treat_state.csv);
+   Composting (tr_res_state_multiple_composting.csv, tr_res_multiple_composting.csv);
+   Backdated treatment(treat_state_passage.csv, treat_county_passage.csv);
+   City-level (sf_power.csv, plac_sf.csv, tr_res_municipal_multiple.csv)
 
 8. Year Placebo [found in year_placebo.R] 
-  a. year_placebo
+   year_placebo
 
 ## Other data 
 1. Population (population.csv)
@@ -46,8 +46,8 @@ Here are all the data that are results of the code.
 # Code
 
 ## Primary analysis
-1. placebo_all: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated") (Fig. S4, Fig. 2
-2. xy (and ): main results and plots for Fig. 2, Fig. S5
+1. placebo_all.RMD: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated") (Fig. S4, Fig. 2
+2. xy.R: main results and plots for Fig. 2, Fig. S5
 ## Robustness checks
 1. year_placebo: produces results for California-specific provision (Fig. S6)
 2. composting: all analyses regarding bans's effects on composting (Fig. S8)
