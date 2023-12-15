@@ -74,4 +74,6 @@ Here are all the data that are results of the code.
 
 ## Primary analysis
 1. placebo_all: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated")
+2. xy (and xy_passage): main results and plots for Fig. 2, Fig. S5, Fig. S7
+3. year_placebo: produces results for California-specific provision (Fig. S6)
 ## Supporting analysis
