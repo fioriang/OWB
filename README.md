@@ -73,8 +73,16 @@ Here are all the data that are results of the code.
 # Codes
 
 ## Primary analysis
-1. placebo_all: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated")
-2. xy (and xy_passage): main results and plots for Fig. 2, Fig. S5, Fig. S7
-3. year_placebo: produces results for California-specific provision (Fig. S6)
-## Supporting analysis
-1. data_section: all data manipulations can be found there. Additionally imports/exports (Fig. 1, 
+1. placebo_all: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated") (Fig. S4, Fig. 2
+2. xy (and ): main results and plots for Fig. 2, Fig. S5
+## Robustness checks
+1. year_placebo: produces results for California-specific provision (Fig. S6)
+2. composting: all analyses regarding bans's effects on composting (Fig. S8)
+3. ghg: all analyses regarding emissions (Section B.1.6, Fig. S9, Table S7, Fig. S10)
+4. xy_passage: all analyses regarding bans's anticipation effects (Fig. S7)
+5. diff_in_diff: all analyses for difference in differences specification (Table S6)
+## Data section
+1. data_section: all data manipulations can be found there. Additionally imports/exports (Fig. 1, Table S1, Fig. S1,
+2. WCS: contains all information regarding waste composition (Fig. S2, Fig. S3, )
+3. cross_sectional_variation: all analyses regarding determinants of waste (Section A.1.1, Table S3)
+
