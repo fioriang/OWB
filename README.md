@@ -70,7 +70,7 @@ Here are all the data that are results of the code.
 8. All State Level Results:
    a. xy_plot_data
    
-# Codes
+# Code
 
 ## Primary analysis
 1. placebo_all: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated") (Fig. S4, Fig. 2
