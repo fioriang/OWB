@@ -49,7 +49,7 @@ disposal_effect_size <- read.csv("disposal_effect_size.csv")
 year_start = 2006
 year_cutoff = 2018
 pooled_ban_year = 2015
-
+reg_effect <- c(0.098, 0.185, 0.101834)
 
 dt_state_initial <- pre_processing_dt_state(power2)
 #dt_state_initial<- dt_state_initial %>% mutate(tons_pc = ifelse(state_id=="CT", tons_pc+0.15, tons_pc))
@@ -534,7 +534,7 @@ xy_plot_fun <- function (i)
   reg_expect <- 
     tibble(
       state_id=c("MA", "CA", "VT"), 
-      reg_effect = c(0.098, 0.185, 0.1752)
+      reg_effect = reg_effect
     )
   
   all <-  
@@ -569,14 +569,14 @@ xy_plot_fun <- function (i)
     rename(
       Synthetic = y_0, 
       Actual = tons_pc, 
-      Expected = y_0_effect
+      `Our Exp.` = y_0_effect
     ) %>% 
     left_join(reg_expect, by = c("county_id"="state_id")) %>% 
     mutate(
       `Regulators' Exp.` = ifelse(!is.na(effect_size), Synthetic*(1-reg_effect), NA)
     ) %>% 
     pivot_longer(
-      cols = c("Synthetic", "Actual", "Expected", `Regulators' Exp.`), 
+      cols = c("Synthetic", "Actual", "Our Exp.", `Regulators' Exp.`), 
       names_to = "location", 
       values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year) %>% 
     rbind(
@@ -584,10 +584,10 @@ xy_plot_fun <- function (i)
         rename(
           Synthetic = y_0, 
           Actual = tons_pc, 
-          Expected = y_0_effect
+          `Our Exp.` = y_0_effect
         ) %>% 
         pivot_longer(
-          cols = c("Synthetic", "Actual", "Expected"), 
+          cols = c("Synthetic", "Actual", "Our Exp."), 
           names_to = "location", 
           values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year)
     ) %>% 
@@ -705,6 +705,7 @@ xy_plot_fun <- function (i)
       rows=vars(factor(treated_state, levels = c("All", "CA", "CT", "MA", "RI", "VT", "Seattle, WA", "Boulder, CO", "San Francisco, CA"))),
       scales="free_y"
     )+
+    
     geom_text(aes(x=xlab, y=ylab-0.01, label = label), color=ut_colors[5], size=3, family="Helvetica")+
     geom_text(aes(x=2005.5, y = y_first, label=y_first ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
     geom_text(aes(x=2018.5, y = y_last %>% as.numeric, label=scales::number(y_last, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
@@ -712,9 +713,9 @@ xy_plot_fun <- function (i)
     #geom_text(aes(x=xlab_mae,y=ylab_mae, label = MAE), color ="#857d95", size=3, family="Helvetica")+
     geom_text(aes(x=xlab_mae,y=ylab_mae, label = MAE), color =ut_colors[5], size=3, family="Helvetica")+
     
-    scale_color_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
-    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
-    scale_size_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
+    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
+    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
+    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
     scale_x_continuous(breaks=c(seq(2006, 2018, 2)), limits=c(2005, 2019), expand = c(0,0))+
     scale_y_continuous(expand = c(0.05,0.05))+
     
@@ -745,7 +746,7 @@ xy_plot_fun_sf <- function (i)
   reg_expect <- 
     tibble(
       state_id=c("MA", "CA", "VT"), 
-      reg_effect = c(0.098, 0.185, 0.1752)
+      reg_effect = reg_effect
     )
   
   all <-  
@@ -779,14 +780,14 @@ xy_plot_fun_sf <- function (i)
     rename(
       Synthetic = y_0, 
       Actual = tons_pc, 
-      Expected = y_0_effect
+      `Our Exp.` = y_0_effect
     ) %>%
     left_join(reg_expect, by = c("county_id"="state_id")) %>% 
     mutate(
       `Regulators' Exp.` = ifelse(!is.na(effect_size), Synthetic*(1-reg_effect), NA)
     ) %>% 
     pivot_longer(
-      cols = c("Synthetic", "Actual", "Expected", `Regulators' Exp.`), 
+      cols = c("Synthetic", "Actual", "Our Exp.", `Regulators' Exp.`), 
       names_to = "location", 
       values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year) %>% 
     rbind(
@@ -794,10 +795,10 @@ xy_plot_fun_sf <- function (i)
         rename(
           Synthetic = y_0, 
           Actual = tons_pc, 
-          Expected = y_0_effect
+          `Our Exp.` = y_0_effect
         ) %>% 
         pivot_longer(
-          cols = c("Synthetic", "Actual", "Expected"), 
+          cols = c("Synthetic", "Actual", "Our Exp."), 
           names_to = "location", 
           values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year)
     ) %>%
@@ -915,9 +916,9 @@ xy_plot_fun_sf <- function (i)
     geom_text(aes(x=2014.8, y = y_last %>% as.numeric, label=scales::number(y_last, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
     
     geom_text(aes(x=xlab_mae,y=ylab_mae, label = MAE), color =ut_colors[5], size=3, family="Helvetica")+
-    scale_color_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
-    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
-    scale_size_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
+    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
+    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
+    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
     scale_x_continuous(breaks=c(seq(1996, 2014, 2)), limits=c(1994.7, 2015.3), expand = c(0,0))+
     labs(y="", x= "")+
     theme_classic()+
@@ -957,7 +958,7 @@ xy_plot_data <-
 #     rbind(
 #     xy_plot_data_function_cities(66, 1) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
 #   )
-# 
+
 
 # xy_plot_data <- xy_plot_data %>% filter(treated_state!="MA")
 # 
@@ -966,6 +967,9 @@ xy_plot_data <-
 #   rbind(
 #     xy_plot_data_function("MA",5,19)
 #   )
+
+xy_plot_data <- write.csv(xy_plot_data, "xy_plot_data.csv", row.names = FALSE)
+xy_plot_data <- read.csv("xy_plot_data.csv")
 
 xy_plot_fun(1)
 
@@ -1099,7 +1103,8 @@ bt_with_power_data <-
   left_join(
     tibble(
       state_id=c("MA", "CA", "VT"), 
-      reg_effect = c(0.098, 0.185, 0.1752)
+      reg_effect = reg_effect # Vermont's reg expect comes from: Regulators expectations are 17.52% to 21.78% by 2022. 
+      #Using our coverage we find that by 2022 exp effect is 15.9%. Then using simple linear approximation and taking the mean (0.0824*21.78/15.9+0.0824*17.52/15.9)/2 we get this number
     ), 
     by = c("treated_state"="state_id")
   ) %>% 
@@ -1148,8 +1153,8 @@ bt_with_power_2 <-
   labs(y="", x = "", color = "")+
   ggnewscale::new_scale_color()+
 
-  geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Expected"), linewidth=1, width=0.2)+
-  scale_color_manual(breaks = c("Expected"), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+  geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
+  scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
   labs(y="", x = "", color = "")+
   ggnewscale::new_scale_color()+
   
@@ -1192,7 +1197,8 @@ bt_with_power_2 <-
 xy_and_power_2 <-
   ggpubr::ggarrange(
     xy_plot %+% 
-      subset(xy_plot$data, !treated_state %in% c("Boulder, CO", "Seattle, WA")), 
+      subset(xy_plot$data, !treated_state %in% c("Boulder, CO", "Seattle, WA"))+
+      geom_point(data = subset(xy_plot$data %>% filter(!treated_state %in%  c("Boulder, CO", "Seattle, WA")), location %in% c("Actual", "Synthetic"))), 
     bt_with_power_2 %+% subset(bt_with_power_2$data, !state_id %in% c("San Francisco, CA", "Boulder, CO", "Seattle, WA")) +
       labs(x="", title = "Average treatment effect (%)")+
       scale_x_continuous(limits=c(-20, 20), breaks = c(seq(-15, 15, by =5)))+
@@ -1258,6 +1264,8 @@ mae_ct <- xy_plot$data %>% filter(treated_state=="CT", location == "Actual") %>%
 mae_ma <- xy_plot$data %>% filter(treated_state=="MA", location == "Actual") %>% select(MAE) %>% mutate(MAE = str_extract(MAE, "\\d+\\.\\d+")) %>% filter(!is.na(MAE)) %>% pluck("MAE") %>% as.numeric
 mae_ri <- xy_plot$data %>% filter(treated_state=="RI", location == "Actual") %>% select(MAE) %>% mutate(MAE = str_extract(MAE, "\\d+\\.\\d+")) %>% filter(!is.na(MAE)) %>% pluck("MAE") %>% as.numeric
 mae_vt <- xy_plot$data %>% filter(treated_state=="VT", location == "Actual") %>% select(MAE) %>% mutate(MAE = str_extract(MAE, "\\d+\\.\\d+")) %>% filter(!is.na(MAE)) %>% pluck("MAE") %>% as.numeric
+
+last_year_effect <- xy_plot_data %>% filter(treated_state=="MA", year==2018, attempt==1) %>% summarise(last_year_effect=100*(y_0-tons_pc)/y_0) %>% pluck("last_year_effect")
 
 
 figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
@@ -1379,8 +1387,14 @@ writeLines(paste0(format(round(mae_vt,2),big.mark=",",scientific=FALSE),'%'), fi
 close(fileConn)
 
 
+fileConn<-file(paste0(figure_path, "/last_year_effect.txt"))
+writeLines(paste0(format(round(last_year_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+
+
 rm(mae_all, mae_ca, mae_ct, mae_ma, mae_ri, mae_vt, reject_all, reject_ca, reject_ct, reject_ri, reject_vt)
-rm(power_all, power_all_upper, power_ca, power_ct, power_vt, power_ma, power_ri, power_vt, power_vt_upper, power_se, power_sf, power_bo, power_ri_upper, power_vt_upper)
+rm(power_all, power_all_upper, power_ca, power_ct, power_vt, power_ma, power_ri, power_vt, power_vt_upper, power_se, power_sf, power_bo, power_ri_upper, power_vt_upper, last_year_effect)
 #rm(ma_effect, ca_effect, vt_effect, all_effect)
 ##### ONLY STATE LEVEL #####
 
@@ -1388,7 +1402,7 @@ rm(power_all, power_all_upper, power_ca, power_ct, power_vt, power_ma, power_ri,
 xy_and_power_2_pres <- 
   ggpubr::ggarrange(
   xy_plot %+% 
-    subset(xy_plot$data %>% mutate(MAE= NA), !treated_state %in% c("Boulder, CO", "Seattle, WA") & !location %in% c("Expected", "Regulators' Exp.") )+
+    subset(xy_plot$data %>% mutate(MAE= NA), !treated_state %in% c("Boulder, CO", "Seattle, WA") & !location %in% c("Our Exp.", "Regulators' Exp.") )+
     scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
     theme(
       panel.spacing = unit(1.0, "cm"), strip.text = element_blank()
@@ -1452,7 +1466,7 @@ ggsave(xy_and_power_2_pres, filename = "xy_and_power_2_pres.pdf", device = cairo
 
 
 
-#With expected effect, no placebo
+#With Our Exp. effect, no placebo
 xy_and_power_2_pres <- 
   ggpubr::ggarrange(
     xy_plot %+% 
@@ -1487,8 +1501,8 @@ xy_and_power_2_pres <-
       labs(y="", x = "", color = "")+
       ggnewscale::new_scale_color()+
       
-      geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Expected"), linewidth=1, width=0.2)+
-      scale_color_manual(breaks = c("Expected"), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+      geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
+      scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
       labs(y="", x = "", color = "")+
       ggnewscale::new_scale_color()+
       
@@ -1528,7 +1542,7 @@ ggsave(xy_and_power_2_pres, filename = "xy_and_power_2_pres_exp_no_est.pdf", dev
        width = 9, height = 7, units = "in")
 
 
-## With Expected Effect but not regulators'
+## With Our Exp. Effect but not regulators'
 
 xy_and_power_2_pres <- 
   ggpubr::ggarrange(
@@ -1569,8 +1583,8 @@ xy_and_power_2_pres <-
       labs(y="", x = "", color = "")+
       ggnewscale::new_scale_color()+
       
-      geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Expected"), linewidth=1, width=0.2)+
-      scale_color_manual(breaks = c("Expected"), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+      geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
+      scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
       labs(y="", x = "", color = "")+
       ggnewscale::new_scale_color()+
       
@@ -1609,7 +1623,7 @@ ggsave(xy_and_power_2_pres, filename = "xy_and_power_2_pres_exp_no_reg.pdf", dev
        path= figure_path,
        width = 9, height = 7, units = "in")
 
-## With Expected Effect
+## With Our Exp. Effect
 
 
 xy_and_power_2_pres <- 
@@ -1639,7 +1653,7 @@ ggsave(xy_and_power_2_pres, filename = "xy_and_power_2_pres_exp.pdf", device = c
 xy_and_power_2_pres <- 
   ggpubr::ggarrange(
     xy_plot %+% 
-      subset(xy_plot$data %>% mutate(MAE=NA, label=NA, ban_year=0), !treated_state %in% c("Boulder, CO", "Seattle, WA") & !location %in% c("Expected", "Regulators' Exp.", "Synthetic") )+
+      subset(xy_plot$data %>% mutate(MAE=NA, label=NA, ban_year=0), !treated_state %in% c("Boulder, CO", "Seattle, WA") & !location %in% c("Our Exp.", "Regulators' Exp.", "Synthetic") )+
       scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
       theme(
         panel.spacing = unit(1.0, "cm"), strip.text = element_blank()
@@ -1706,11 +1720,12 @@ xy_and_power_2_cities <-
     ggpubr::ggarrange(
       xy_plot %+% 
         subset(xy_plot$data, treated_state %in% c("Boulder, CO", "Seattle, WA"))+
+        geom_point(data = subset(xy_plot$data %>% filter(treated_state %in%  c("Boulder, CO", "Seattle, WA")), location %in% c("Actual", "Synthetic")))+
         scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
         theme(
           panel.spacing = unit(1.0, "cm")
         ), 
-      xy_plot_sf, 
+      xy_plot_sf+ geom_point(data = subset(xy_plot_sf$data, location %in% c("Actual", "Synthetic"))), 
       nrow=2, 
       heights = c(2, 1)), 
     bt_with_power_2 %+% subset(bt_with_power_2$data, state_id %in% c("Boulder, CO", "Seattle, WA", "San Francisco, CA")) +
@@ -1723,7 +1738,7 @@ xy_and_power_2_cities <-
 
 ggsave(xy_and_power_2_cities, filename = "xy_and_power_2_cities.pdf", device = cairo_pdf,
        path= figure_path,
-       width = 11, height = 5, units = "in")
+       width = 11, height = 6, units = "in")
 
 
 
@@ -1762,7 +1777,7 @@ xy_plot_fun_pres <- function (i)
   reg_expect <- 
     tibble(
       state_id=c("MA", "CA", "VT"), 
-      reg_effect = c(0.098, 0.185, 0.1752)
+      reg_effect = reg_effect
     )
   
   all <-  
@@ -1797,14 +1812,14 @@ xy_plot_fun_pres <- function (i)
     rename(
       Synthetic = y_0, 
       Actual = tons_pc, 
-      Expected = y_0_effect
+      `Our Exp.` = y_0_effect
     ) %>% 
     left_join(reg_expect, by = c("county_id"="state_id")) %>% 
     mutate(
       `Regulators' Exp.` = ifelse(!is.na(effect_size), Synthetic*(1-reg_effect), NA)
     ) %>% 
     pivot_longer(
-      cols = c("Synthetic", "Actual", "Expected", `Regulators' Exp.`), 
+      cols = c("Synthetic", "Actual", "Our Exp.", `Regulators' Exp.`), 
       names_to = "location", 
       values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year) %>% 
     rbind(
@@ -1812,10 +1827,10 @@ xy_plot_fun_pres <- function (i)
         rename(
           Synthetic = y_0, 
           Actual = tons_pc, 
-          Expected = y_0_effect
+          `Our Exp.` = y_0_effect
         ) %>% 
         pivot_longer(
-          cols = c("Synthetic", "Actual", "Expected"), 
+          cols = c("Synthetic", "Actual", "Our Exp."), 
           names_to = "location", 
           values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year)
     ) %>% 
@@ -1926,9 +1941,9 @@ xy_plot_fun_pres <- function (i)
       scales="free_y"
     )+
     #geom_text(aes(x=xlab_mae,y=ylab_mae, label = MAE), color ="#857d95", size=4, family="Helvetica")+
-    scale_color_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
-    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
-    scale_size_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
+    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"#48a36d", "#bad9c6"), name = "")+
+    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c("solid", "solid", "dotted", "solid"), name = "")+
+    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
     scale_x_continuous(breaks=c(seq(2006, 2018, 2)), limits=c(2005, 2019), expand = c(0,0))+
     scale_y_continuous(breaks=c(seq(0.5, 1.2, 0.2)), limits = c(0.45, 1.25))+
     labs(y="", x= "")+
@@ -1938,13 +1953,13 @@ xy_plot_fun_pres <- function (i)
       strip.background = element_rect(color = "white", fill = "white"),
       panel.grid.major.x = element_blank() ,
       panel.grid.major.y = element_blank(), 
-      text = element_text(family = "Helvetica",size = 15, color= ut_colors[4]), 
+      text = element_text(family = "Helvetica",size = 25, color= ut_colors[4]), 
       axis.line.x = element_blank(),
       #axis.ticks.y = element_blank(), 
       #axis.text.y= element_blank(),
       axis.line.y = element_blank(),
       axis.ticks.x = element_line(size = 0.1), 
-      legend.text = element_text(family = "Helvetica", color = ut_colors[4],size = 15),
+      legend.text = element_text(family = "Helvetica", color = ut_colors[4],size = 25),
       panel.spacing = unit(1.1, "cm")
     )
   
@@ -1963,12 +1978,12 @@ p <-
   labs(x="", y = "", title = "Disposal (tons per capita)") + 
   theme(
     strip.text = element_blank(),
-    plot.title = element_text(family = "Helvetica", color = ut_colors[4],size = 15, hjust=0.5))
+    plot.title = element_text(family = "Helvetica", color = ut_colors[4],size = 25, hjust=0.5))
 
 
 xy_pres_5min <-
   p%+% 
-  subset(p$data %>% mutate(MAE=NA,tons_pc = ifelse(location %in% c("Synthetic", "Actual")& year>ban_year, NA, tons_pc)), treated_state %in% c("CA") & !location %in% c("Synthetic","Expected", "Regulators' Exp.") )+
+  subset(p$data %>% mutate(MAE=NA,tons_pc = ifelse(location %in% c("Synthetic", "Actual")& year>ban_year, NA, tons_pc)), treated_state %in% c("CA") & !location %in% c("Synthetic","Our Exp.", "Regulators' Exp.") )+
   scale_y_continuous(breaks = c(seq(0.6, 1.2, by = 0.1)), limits=c(0.58, 1.22))+
   theme(
     panel.spacing = unit(1.0, "cm"), strip.text = element_blank()
@@ -1980,7 +1995,7 @@ ggsave(xy_pres_5min, filename = "xy_pres_5min_1.pdf", device = cairo_pdf,
 
 xy_pres_5min <-
   p%+% 
-  subset(p$data %>% mutate(tons_pc = ifelse(location %in% c("Synthetic", "Actual")& year>ban_year, NA, tons_pc)), treated_state %in% c("CA")& !location %in% c("Expected", "Regulators' Exp.") )+
+  subset(p$data %>% mutate(tons_pc = ifelse(location %in% c("Synthetic", "Actual")& year>ban_year, NA, tons_pc)), treated_state %in% c("CA")& !location %in% c("Our Exp.", "Regulators' Exp.") )+
   scale_y_continuous(breaks = c(seq(0.6, 1.2, by = 0.1)), limits=c(0.58, 1.22))+
   theme(
     panel.spacing = unit(1.0, "cm"), strip.text = element_blank()
@@ -2134,8 +2149,8 @@ xy_and_power_2_pres <-
       labs(y="", x = "", color = "")+
       ggnewscale::new_scale_color()+
       
-      geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Expected"), linewidth=1, width=0.2)+
-      scale_color_manual(breaks = c("Expected"), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+      geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
+      scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
       labs(y="", x = "", color = "")+
       
       #scale_x_continuous(breaks = c(seq(-25, 25, by = 5)), limits = c(-30, 25))+ 
@@ -2190,14 +2205,16 @@ syn_example <-
   mutate(
     state_id = factor(state_id, levels = c("CT", "WA", "TX", "SC", "MN", "OH", "Synthetic")),
     
-    label_x = ifelse(year== max(year), year+1, NA),
-    label_y = ifelse(year== max(year), tons_pc, NA), 
+    label_x = ifelse(year== ban_year, year+0.5, NA),
+    label_y = ifelse(year== ban_year, tons_pc, NA), 
     label_y = ifelse(state_id=="SC", label_y-0.01, label_y), 
+    label_y = ifelse(state_id=="CT", label_y+0.01, label_y), 
     label_y = ifelse(state_id=="Synthetic", label_y+0.01, label_y)
     
   ) %>% 
   ggplot(aes(x=year, y=tons_pc, color = state_id, linetype = state_id, size=state_id))+
-  geom_line() +  geom_text(aes(x=label_x, y = label_y, label = state_id), size=5) +
+  geom_line() +  
+  geom_text(aes(x=label_x, y = label_y, label = state_id), size=6) +
   scale_color_manual(values = c(ut_colors[4], rep(ut_colors[5],6))) +
   scale_linetype_manual(values= c("solid", rep("dotted", 5), "solid"))+ 
   scale_size_manual (values = c(1.5, rep(1, 5), 1.5))+
@@ -2211,32 +2228,61 @@ syn_example <-
     panel.grid.major.x = element_blank() ,
     panel.grid.major.y = element_blank(),
     panel.background = element_blank(), 
-    text = element_text(family = "Helvetica",size = 14, color= ut_colors[4]), 
+    text = element_text(family = "Helvetica",size = 25, color= ut_colors[4]), 
     strip.text = element_text(angle = 0, hjust = 1), 
     strip.placement = "outside",
     axis.ticks.y = element_blank(), 
     legend.key = element_rect(colour = NA, fill = NA, size = 5),
     legend.spacing.x = unit(-1, "pt"),
     axis.ticks.x = element_line(size = 0.1), 
-    legend.text = element_text(family = "Helvetica",size = 14, color= ut_colors[4]), 
+    legend.text = element_text(family = "Helvetica",size = 25, color= ut_colors[4]), 
     axis.title.x = element_text(margin = margin(t = 20)),
     axis.title.y = element_text(margin = margin(r = 20))
     )
 
 syn_example1 <- 
   syn_example%+% 
-  subset(syn_example$data, !state_id %in% c("Synthetic"))+
+  subset(syn_example$data %>% mutate(tons_pc = ifelse(year> 2014, NA, tons_pc)), !state_id %in% c("Synthetic"))+
   scale_linetype_manual(values= c("solid", rep("solid", 5))) 
 
 ggsave(syn_example1, filename = "syn_example1.pdf", device = cairo_pdf,
        path= figure_path,
        width = 15, height = 6, units = "in") 
 
-ggsave(syn_example, filename = "syn_example2.pdf", device = cairo_pdf,
+syn_example2 <-
+  syn_example%+% 
+  subset(
+    syn_example$data %>%  
+      mutate(
+        label_x = ifelse(state_id %in% c("WA", "TX", "SC", "MN", "OH"), NA, label_x), 
+        label_y = ifelse(state_id %in% c("WA", "TX", "SC", "MN", "OH"), NA, label_y), 
+        tons_pc = ifelse(year> 2014, NA, tons_pc)
+        ))
+
+ggsave(syn_example2, filename = "syn_example2.pdf", device = cairo_pdf,
        path= figure_path,
        width = 15, height = 6, units = "in") 
 
+
+
 syn_example3 <- 
+  syn_example%+% 
+  subset(
+    syn_example$data%>% 
+      mutate(
+        tons_pc = ifelse(state_id=="Synthetic", tons_pc - 0.0749, tons_pc), 
+        label_x = ifelse(state_id %in% c("CT", "Synthetic") & year== ban_year, year+0.5, NA),
+        label_y = ifelse(state_id %in% c("CT", "Synthetic") &year== ban_year, tons_pc, NA), 
+        label_y = ifelse(state_id=="Synthetic", tons_pc+0.015, label_y), 
+        label_y = ifelse(state_id=="CT", tons_pc+0.01, label_y) , 
+        tons_pc = ifelse(year> 2014, NA, tons_pc)
+  ))
+
+ggsave(syn_example3, filename = "syn_example3.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 15, height = 6, units = "in")
+
+syn_example4 <- 
   syn_example%+% 
   subset(
     syn_example$data%>% 
@@ -2246,12 +2292,11 @@ syn_example3 <-
         label_y = ifelse(state_id %in% c("CT", "Synthetic") &year== max(year), tons_pc, NA), 
         label_y = ifelse(state_id=="Synthetic", tons_pc-0.01, label_y), 
         label_y = ifelse(state_id=="CT", tons_pc+0.01, label_y) 
-  ))
+      ))
 
-ggsave(syn_example3, filename = "syn_example3.pdf", device = cairo_pdf,
+ggsave(syn_example4, filename = "syn_example4.pdf", device = cairo_pdf,
        path= figure_path,
        width = 15, height = 6, units = "in")
-
 
 # MAPE during evaluation period
 
@@ -2306,17 +2351,6 @@ plac_plot <-
   scale_color_manual(breaks = c("Placebo"), values = c(ut_colors[5]), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), byrow=TRUE ))+
   geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+
   labs(y="", x = "", color = "")+
-  # ggnewscale::new_scale_color()+
-  # geom_point(aes(color = "Estimate"),size=1.5)+
-  # scale_color_manual(breaks = c("Estimate"), values = c(ut_colors[4]),guide = guide_legend(order = 1,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
-  # labs(y="", x = "", color = "")+
-  # ggnewscale::new_scale_color()+
-  # 
-  # geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Expected"), linewidth=1, width=0.2)+
-  # scale_color_manual(breaks = c("Expected"), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
-  # labs(y="", x = "", color = "")+
-  # ggnewscale::new_scale_color()+
-
   scale_x_continuous(breaks = c(seq(-15, 15, by = 5)), limits = c(-20, 20))+ 
   scale_y_discrete(position= "right", expand=c(0.02,0.15))+
   theme(
@@ -2344,15 +2378,29 @@ ggsave(plac_plot, filename = "plac_plot_plac.pdf", device = cairo_pdf,
 plac_plot <- 
   plac_plot+
   ggnewscale::new_scale_color()+
-  geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Expected"), linewidth=1, width=0.2)+
-  scale_color_manual(breaks = c("Expected"), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+  geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
+  scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
   labs(y="", x = "", color = "")
 
 
 
-  ggsave(plac_plot, filename = "plac_plot_exp.pdf", device = cairo_pdf,
-         path= figure_path,
-         width = 9, height = 7, units = "in")
+ggsave(plac_plot, filename = "plac_plot_exp.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 9, height = 7, units = "in")
+
+plac_plot <- 
+  plac_plot+
+  ggnewscale::new_scale_color()+
+  geom_errorbar(aes(xmin=-100*reg_effect, xmax=-100*reg_effect, color = "Regulators' Exp."), linewidth=1, width=0.2)+
+  scale_color_manual(breaks = c("Regulators' Exp."), values = c("#bad9c6" ),guide = guide_legend(order = 4,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+  labs(y="", x = "", color = "")
+
+
+
+ggsave(plac_plot, filename = "plac_plot_policy_exp.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 9, height = 7, units = "in")
+  
 
 plac_plot <- 
   plac_plot+

@@ -1076,3 +1076,8 @@ ETABLE
 
 ```
 
+
+```{r}
+rm(all_inc, county_classification, rural_urban_codes, rural_urban_pop,broadband_c, us_rent_income, uszips_c, uszips,votes,houses,craig, median_age, household, household_00, household_10, household_20, household_size, household_size_county, education, establishments, area, area_county, make_into_2012_usd, gdp, urban_index, employment, votes_state, spending, area, household_size, rain,carbon)
+```
+

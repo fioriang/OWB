@@ -182,7 +182,7 @@ Some states do not report the breakdown between commercial and residential. Here
 
 ```{r}
 
-wcs <- wcs %>% filter (jurisdiction != "Palm Beach County") # use the Orange County)
+#wcs <- wcs %>% filter (jurisdiction != "Palm Beach County") # use the Orange County)
 
 wcs_per <- 
   wcs %>%
@@ -314,7 +314,7 @@ wcs <-
   )
 
 wcs_plot <- 
-  wcs %>% 
+  wcs %>% as_tibble() %>% 
   #filter(state_id %in% c("VT", "CA")) %>% 
   pivot_longer(
     cols = c("total_share", "organic_share", "food_share", "comp_paper_share"), 
@@ -328,9 +328,9 @@ wcs_plot <-
     ),
     share = share %>% 
       fct_recode(
-        Other = "total_share", 
+        `Other Commercial` = "total_share", 
         Food = "food_share", 
-        Organic = "organic_share", 
+        `Organic (non-food)` = "organic_share", 
         `Compostable Paper` = "comp_paper_share"
       )
   ) %>% 
@@ -338,11 +338,12 @@ wcs_plot <-
     generator_category =="commercial", 
     !state_id %in% c("M1", "M2")
   ) %>%
-  group_by (state_id) %>% 
-  filter(
-    case_when (state_id =="CA" ~ year==2014, T ~ year == max(year))
-    #year == max(year)
-  ) %>% 
+  group_by (state_id, generator_category, share) %>% summarise(percentage= mean(percentage, na.rm=TRUE)) %>% 
+  # filter(
+  #   case_when (state_id =="CA" ~ year==2014, T ~ year == max(year))
+  #   #year == max(year)
+  # ) %>% 
+  #mutate()
   ungroup %>% 
   mutate(year = 1) %>%
   ggplot()+
@@ -350,9 +351,9 @@ wcs_plot <-
   geom_bar(position="stack", stat="identity") +
   facet_grid(cols = vars(state_id))+
   #scale_fill_grey(start = 0.9, end = .1)+
-  scale_fill_manual(values = c("#E5E5E5","#B5BBCE", "#8692B8", "#27408B"))+
+  scale_fill_grey(start = 0.9, end =0.3, guide = guide_legend(reverse = TRUE))+
   scale_y_continuous(breaks=c(seq(0,60, by =10)))+
-  labs (x="", y="Percentage(%)", fill = "Category")+
+  labs (x="", y="Fraction of total waste (%)", fill = "Category")+
   theme(
     panel.border = element_blank(),
     legend.position = "bottom", 

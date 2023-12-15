@@ -200,14 +200,7 @@ dt_did <-
   ) %>% ungroup %>% 
   filter(
     county_name != "san francisco"
-  )
-
-
-
-
-
-
-
+  ) 
 
 
 
@@ -229,7 +222,7 @@ dt_did_state <-
   group_by(state_id) %>% 
   mutate(
     group = max(ban_ind), 
-    cluster = ifelse(group==1 & year <= ban_year, 1, ifelse(group==1, 2, 3))
+    cluster = ifelse(group==1 & year <= ban_year, 1, ifelse(group==1, 2, 3)) 
   )
 
 lm_state <- feols(tons_pc ~ ban_ind|state_id+ year, dt_did_state)

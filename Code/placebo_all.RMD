@@ -78,6 +78,7 @@ do_many_times_v3 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test
   #Approach 2- Only Intercept
   samples <- sample(n_don, sample_size)
   x <- rowMeans(x[, samples])
+  #x=x[, samples]
   n <- length(y_train)+ length(y_test) + length(y_att)
 
   intercept <- mean(y_train-x[1:test_ind_end1])
@@ -564,7 +565,7 @@ power_state_plac <- function(treated_state, dt_state_initial)
   
   ban_year <- bans[which(all_treated == treated_state)]
   
-  plac <- lapply(seq(1:length(donors_state)),in_sample_R2_v2,dt_state, donors=donors_state, iterations_scale=1000, option="V2", ban_year=ban_year, offset=4, samp =c(3:10))
+  plac <- lapply(seq(1:length(donors_state)),in_sample_R2_v2,dt_state, donors=donors_state, iterations_scale=1000, option="V2", ban_year=ban_year, offset=4, samp =samp)
 
   return(plac)
   
@@ -613,7 +614,6 @@ power_state_fun2 <- function(plac, treated_state)
   return(specs)
   
 }
-
 
 power_state_passage <- function(treated_state, dt_state_initial)
 {
@@ -696,7 +696,8 @@ power_county <- function(plac, treated_state)
     bind_rows() %>%
     filter(sample_size!=0) %>%
     group_by(sample_size, county_id, ban_year) %>%
-    summarise(att=mean(att)) %>%
+    #filter(mape==min(mape)) %>% 
+    summarise(att = median(att)) %>% 
     group_by(sample_size, ban_year) %>%
     summarise(
       att_min = quantile(att, 0.025),
@@ -704,24 +705,25 @@ power_county <- function(plac, treated_state)
       att_median = median(att)
     )
 
-  pool_estimates <- lapply(seq(1:length(donors)), pool_function, data = plac %>% bind_rows, donors, r_threshold = 0, mape_threshold = Inf, n = (length(treated_counties_id)-3))
-
-  spec2<-
-    pool_estimates %>%
-    bind_rows %>%
-    group_by(sample_size, ban_year) %>%
-    summarise(
-      att_min = quantile(att, 0.025),
-      att_max = quantile(att, 0.975),
-      att_median = median(att)
-    )
+  # pool_estimates <- lapply(seq(1:length(donors)), pool_function, data = plac %>% bind_rows, donors, r_threshold = 0, mape_threshold = Inf, n = (length(treated_counties_id)-3))
+  # 
+  # spec2<-
+  #   pool_estimates %>%
+  #   bind_rows %>%
+  #   group_by(sample_size, ban_year) %>%
+  #   summarise(
+  #     att_min = quantile(att, 0.025),
+  #     att_max = quantile(att, 0.975),
+  #     att_median = median(att)
+  #   )
 
   spec3 <-
     plac%>%
     bind_rows() %>%
     filter(sample_size!=0) %>%
     group_by(sample_size, county_id, ban_year) %>%
-    summarise(att=median(att)) %>%
+    #filter(mape==min(mape)) %>% 
+    summarise(att = median(att)) %>% 
     left_join(
       dt %>%
         ungroup %>%
@@ -744,7 +746,7 @@ power_county <- function(plac, treated_state)
   specs <-
     rbind(
       spec1 %>%  mutate (specification = "County") ,
-      spec2 %>%  mutate (specification = "County Pooled"),
+      #spec2 %>%  mutate (specification = "County Pooled"),
       spec3 %>%  mutate (specification = "County Pooled State")
     ) %>% mutate(
       year = ban_year,
@@ -898,7 +900,7 @@ treat_state <- function (i, treated_state, dt_state_initial)
   
   
   k <- which(treated_counties_id== treated_state)
-  tr <- lapply(k,in_sample_R2_tr,dt_state, donors = donors_state, iterations=5000, option="V2", offset=3, samp = c(3:10))
+  tr <- lapply(k,in_sample_R2_tr,dt_state, donors = donors_state, iterations=5000, option="V2", offset=3, samp = samp)
   
   tr <- 
     tr %>% 
@@ -942,14 +944,15 @@ treat_county <- function (i, treated_state, dt_initial)
   
   k <- treated_counties_id[str_detect(treated_counties_id, treated_state)]
   
-  tr <- lapply(which(treated_counties_id %in% k),in_sample_R2_tr,dt, donors, iterations=3000, option="V2", offset=3, samp = c(3:10))
+  tr <- lapply(which(treated_counties_id %in% k),in_sample_R2_tr,dt, donors, iterations=3000, option="V2", offset=3, samp = samp)
   
   tr <- 
     tr%>% 
     bind_rows %>% 
     filter(sample_size!=0) %>% 
     group_by(sample_size, county_id, ban_year) %>% 
-    summarise(att=median(att)) %>% 
+    #filter(mape==min(mape)) %>% 
+    summarise(att = mean(att)) %>% 
     left_join(
       dt %>% 
         ungroup %>% 
@@ -1264,7 +1267,7 @@ pre_processing_dt_state <- function (power2)
 ```{r}
 
 # nake sure that in_sample_r2_v2 function is correct
-samp = c(3:10)
+samp = c(2)
 dt_initial <- pre_processing_dt (power2)
 donors <- unique(dt_initial$county_id[!(dt_initial$state_id%in% all_treated)])
 treated_counties_id <- unique(dt_initial$county_id[dt_initial$state_id%in% all_treated])
@@ -1275,7 +1278,6 @@ plac_for_histogram2 <- power_county_for_hist("MA", dt_initial)
 plac_for_histogram3 <- power_county_for_hist("RI", dt_initial)
 plac_for_histogram4 <- power_county_for_hist("CA", dt_initial)
 plac_for_histogram5 <- power_county_for_hist("CT", dt_initial)
-
 
 
 all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2")# Never changes
@@ -1298,12 +1300,19 @@ rm(plac_for_histogram1, plac_for_histogram2, plac_for_histogram3, plac_for_histo
 ### Analysis of out-of-sample fit
 
 ```{r}
-plac_for_histogram1 <- read.csv("plac_for_histogram1.csv")
-plac_for_histogram2 <- read.csv("plac_for_histogram2.csv")
-plac_for_histogram3 <- read.csv("plac_for_histogram3.csv")
-plac_for_histogram4 <- read.csv("plac_for_histogram4.csv")
-plac_for_histogram5 <- read.csv("plac_for_histogram5.csv")
+plac_for_histogram1 <- rbind(read.csv("plac_for_histogram1.csv"), read.csv("plac_for_histogram1_1.csv"), read.csv("plac_for_histogram1_2.csv"))
+plac_for_histogram2 <- rbind(read.csv("plac_for_histogram2.csv"), read.csv("plac_for_histogram2_1.csv"), read.csv("plac_for_histogram2_2.csv"))
+plac_for_histogram3 <- rbind(read.csv("plac_for_histogram3.csv"), read.csv("plac_for_histogram3_1.csv"), read.csv("plac_for_histogram3_2.csv"))
+plac_for_histogram4 <- rbind(read.csv("plac_for_histogram4.csv"), read.csv("plac_for_histogram4_1.csv"), read.csv("plac_for_histogram4_2.csv"))
+plac_for_histogram5 <- rbind(read.csv("plac_for_histogram5.csv"), read.csv("plac_for_histogram5_1.csv"), read.csv("plac_for_histogram5_2.csv"))
 plac_for_histogram6 <- read.csv("plac_for_histogram6.csv")
+
+
+# write.csv(plac_for_histogram1 %>% bind_rows(), "plac_for_histogram1_2.csv", row.names = FALSE)
+# write.csv(plac_for_histogram2 %>% bind_rows(), "plac_for_histogram2_2.csv", row.names = FALSE)
+# write.csv(plac_for_histogram3 %>% bind_rows(), "plac_for_histogram3_2.csv", row.names = FALSE)
+# write.csv(plac_for_histogram4 %>% bind_rows(), "plac_for_histogram4_2.csv", row.names = FALSE)
+# write.csv(plac_for_histogram5 %>% bind_rows(), "plac_for_histogram5_2.csv", row.names = FALSE)
 
 
 # plac_for_histogram2 %>% as_tibble %>% filter(donor_number == "donor_1") %>% filter(mape > 0.1, abs(att) < 0.1) %>% 
@@ -1433,6 +1442,7 @@ power_state3 <- power_state("VT", dt_state_initial)
 power_state4 <- power_state("RI", dt_state_initial)
 power_state5 <- power_state("CT", dt_state_initial)
 
+
 rbind(
   power_state1%>%  bind_rows(), 
   power_state2%>%  bind_rows(), 
@@ -1467,8 +1477,7 @@ power_state_plac2 <- power_state_plac("CA", dt_state_initial)
 power_state_plac3 <- power_state_plac("CT", dt_state_initial)
 power_state_plac4 <- power_state_plac("RI", dt_state_initial)
 power_state_plac5 <- power_state_plac("VT", dt_state_initial)
-power_state_plac6 <- power_state_plac("All", dt_state_initial)
-
+#power_state_plac6 <- power_state_plac("All", dt_state_initial)
 
 write.csv(
   rbind(
@@ -1967,6 +1976,60 @@ write.csv(
 
 
 
+### State-REDO
+
+```{r}
+
+dt_state_initial <- pre_processing_dt_state(power2)
+treated_counties_id <- unique(dt_state_initial$county_id[dt_state_initial$state_id%in% all_treated])
+donors_state <- unique(dt_state_initial$county_id[!(dt_state_initial$state_id%in% all_treated)])
+all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
+bans <- c(2012, 2013, 2014, 2011, 2014)
+
+power_state_pass1 <- power_state_plac("MA", dt_state_initial)
+power_state_pass2 <- power_state_plac("CA", dt_state_initial)
+power_state_pass3 <- power_state_plac("CT", dt_state_initial)
+power_state_pass4 <- power_state_plac("RI", dt_state_initial)
+power_state_pass5 <- power_state_plac("VT", dt_state_initial)
+
+
+
+write.csv(
+  rbind(
+    power_state_pass1 %>% bind_rows %>% mutate(treated_state="MA"),
+    power_state_pass2 %>% bind_rows %>% mutate(treated_state="CA"),
+    power_state_pass3 %>% bind_rows %>% mutate(treated_state="CT"),
+    power_state_pass4 %>% bind_rows %>% mutate(treated_state="RI"),
+    power_state_pass5 %>% bind_rows %>% mutate(treated_state="VT")
+
+  ), 
+  "power_state_pass_data.csv", row.names=FALSE
+)
+
+power_state_pass_data <- read.csv("power_state_pass_data.csv")
+
+
+
+power_state_p1 <- power_state_fun2(power_state_pass_data %>% filter(treated_state=="MA"), "MA")
+power_state_p2 <- power_state_fun2(power_state_pass_data %>% filter(treated_state=="CA"), "CA")
+power_state_p3 <- power_state_fun2(power_state_pass_data %>% filter(treated_state=="CT"), "CT")
+power_state_p4 <- power_state_fun2(power_state_pass_data %>% filter(treated_state=="RI"), "RI")
+power_state_p5 <- power_state_fun2(power_state_pass_data %>% filter(treated_state=="VT"), "VT")
+
+
+
+write.csv(
+  rbind(
+    power_state_p1%>%  bind_rows(), 
+    power_state_p2%>%  bind_rows(), 
+    power_state_p3%>%  bind_rows(), 
+    power_state_p4%>%  bind_rows(), 
+    power_state_p5%>%  bind_rows()
+  ),
+  "power_state_p.csv", row.names = FALSE)
+```
+
+
 
 #Treated 
 
@@ -2024,7 +2087,7 @@ treat_pool_county %>% bind_rows() %>%
 ## State
 
 ```{r}
-samp <- c(3:10)
+samp <- c(1)
 
 dt_state_initial <- pre_processing_dt_state(power2)
 #dt_state_initial<- dt_state_initial %>% mutate(tons_pc = ifelse(state_id=="CT", tons_pc+0.15, tons_pc))
@@ -2178,7 +2241,8 @@ bt_with_power<-
   geom_hline(yintercept = 0, lty = "dotted", color = ut_colors[4])+
   geom_line(aes(x=sample_size, y=-mean_effect), linewidth=1, color = "seagreen")+
   geom_line(aes(x=sample_size, y=-100*reg_effect), linewidth=1, color = "#bad9c6")+
-  scale_y_continuous(breaks = seq(-20, 10, by=10), limits = c(-20, 12))+
+  #scale_y_continuous(breaks = seq(-20, 10, by=10), limits = c(-20, 12))+
+  scale_x_continuous(breaks = seq(2,10, by =2))+
   facet_grid(
     cols = vars(state_id), 
     rows = vars(specification))+
