@@ -13,62 +13,35 @@ Includes all the data we used to estimate the treatment effects of organic waste
 
 Here are all the data that are results of the code. 
 
-1. All State Level Results: (Fig. 2)
-   a. xy_plot_data
+1. All State Level Results [found in xy.R] (xy_plot_data.csv)
 
-2. Expected effects (Fig. 2)
-   a. composting_effect: \\
-   b. disposal_effect: \\
-   c. disposal_effect_size:\\
-   d. municipal_effect
+2. Expected effects [found in xy.R] (composting_effect.csv, disposal_effect.csv, disposal_effect_size.csv, municipal_effect.csv)
    
-3. Power results (Fig. 2)
-   a. composting_spec:
-   b. disposal_spec:
-   c. plac_for_histogram_composting
-   d. plac_sf
-   e. pool_estimates_All
-   d. pool_estimates_CA
-   f. power_county
-   g. power_county_passage
-   h. power_state
-   i. power_state_passage
-   j. power_state_plac
+3. Power results [found in placebo_all.RMD] (power_county.csv, power_state.csv, sf_power.csv);;
+   a. County-level power results: (plac_for_histogram1--6.csv);
+   b. State-level power results: (power_state_plac.csv, pool_estimates_All.csv);
+   c. Composting power results: (plac_for_histogram_composting.csv);
+   
 
-4. Alternative methods
-   a. lasso_att_res
-   b. lasso_att_res_state
-   c. lasso_pool_estimates
-   d. lasso_pool_estimates_state
-   e. ridge_att_res
-   f. ridge_att_res_state
-   g. ridge_pool_estimates
-   h. ridge_pool_estimates_state
-
-5. MAPE/MAE of placebo
+5. MAPE/MAE of placebo [found in placebo_all.RMD] 
    a. mae_placebo
    b. mape_state
+   
+6. Alternative methods [found in lasso_disposal.RMD & ridge_disposal.RMD] (all files starting with lasso_ or ridge_)
 
-6. Treatment effects results 
-   a. tr_res_multiple_composting
-   b. tr_res_municipal_multiple
-   c. tr_res_municipal_multiple_composting
-   d. tr_res_state_multiple_composting
-   e. treat_ca_all
-   f. treat_ca_ca
-   g. treat_county
-   h. treat_county_composting
-   i. treat_county_good
-   j. treat_county_passage
-   k. treat_pool_county
-   l. treat_pool_county_good
-   m. treat_pool_county_passage
-   n. treat_state
-   o. treat_state_good
-   p. treat_state_passage
+7. Average Treatment effects results [found in placebo_all.RMD] 
+   a. County-level (treat_county.csv, treat_pool_county.csv,);
+   b. State-level (treat_state.csv,);
+   c. Composting (tr_res_state_multiple_composting.csv, tr_res_multiple_composting.csv
+   d. Backdated treatment(treat_state_passage.csv, treat_county_passage.csv);
+   e. City-level (sf_power.csv, plac_sf.csv, tr_res_municipal_multiple.csv)
 
-7. Year Placebo
+8. Year Placebo [found in year_placebo.R] 
   a. year_placebo
+
+## Other data 
+1. Population (population.csv)
+2. Other controls for determining correlates of waste disposal [cross_sectional_variation_2.RMD]
 
 # Code
 
