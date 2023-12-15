@@ -1,0 +1,7 @@
+WOODS & POOLE ECONOMICS WEALTH INDEX
+
+is a measure of relative total personal income per capita weighted by the source of income. The WI is the weighted average of regional income per capita divided by US
+income per capita (80% of the index); plus the regional proportion of income from dividends/ interest/rent divided by the U.S proportion (10% of the index); plus the US 
+proportion of income from transfers divided by the regional proportion (10% of the index). Thus relative income per capita is weighted positevely for a relatively high proportion 
+of income from dividends, interest, and rent, and negatively for a relative high proportion of income from transfer payments. Because the imputed rent of owner-occupied homes is included in renal income
+Since dividends, interest and rent income are a good indicator of assets the Woods and Poole Wealth Index attempts to measure relative wealth. 

@@ -1,0 +1,483 @@
+county_name,municipality_name,sq_kms
+san bernardino,adelanto,136.9
+los angeles,agoura hills,20.2
+alameda,alameda,27.1
+alameda,albany,4.6
+los angeles,alhambra,19.8
+orange,aliso viejo,17.9
+modoc,alturas,7.4
+amador,amador city,0.8
+napa,american canyon,15.8
+orange,anaheim,130.2
+shasta,anderson,18.2
+calaveras,angels camp,9.4
+contra costa,antioch,75.5
+san bernardino,apple valley,199.5
+los angeles,arcadia,28.3
+humboldt,arcata,24.4
+san luis obispo,arroyo grande,15.4
+los angeles,artesia,4.2
+kern,arvin,12.5
+san luis obispo,atascadero,67.5
+san mateo,atherton,13
+merced,atwater,17
+placer,auburn,18.6
+los angeles,avalon,7.5
+kings,avenal,50.5
+los angeles,azusa,25
+kern,bakersfield,387.9
+los angeles,baldwin park,17.2
+riverside,banning,60.2
+san bernardino,barstow,107
+riverside,beaumont,78.5
+los angeles,bell,6.5
+los angeles,bell gardens,6.4
+los angeles,bellflower,15.9
+san mateo,belmont,12
+marin,belvedere,1.3
+solano,benicia,33.2
+alameda,berkeley,27
+los angeles,beverly hills,14.8
+san bernardino,big bear lake,16.2
+butte,biggs,2.3
+inyo,bishop,4.8
+humboldt,blue lake,1.5
+riverside,blythe,68.8
+los angeles,bradbury,5.1
+imperial,brawley,21
+orange,brea,31.5
+contra costa,brentwood,38.5
+san mateo,brisbane,7.7
+santa barbara,buellton,4.1
+orange,buena park,27.3
+los angeles,burbank,44.9
+san mateo,burlingame,11.4
+los angeles,calabasas,35.5
+imperial,calexico,22.3
+kern,california city,527.3
+riverside,calimesa,38.5
+imperial,calipatria,9.6
+napa,calistoga,6.7
+ventura,camarillo,51
+santa clara,campbell,15.7
+riverside,canyon lake,10.2
+santa cruz,capitola,4.1
+san diego,carlsbad,97.8
+monterey,carmel-by-the-sea,2.7
+santa barbara,carpinteria,6.7
+los angeles,carson,48.5
+riverside,cathedral city,58.2
+stanislaus,ceres,24.6
+los angeles,cerritos,22.6
+butte,chico,88.4
+san bernardino,chino,76.7
+san bernardino,chino hills,115.6
+madera,chowchilla,28.7
+san diego,chula vista,128.6
+sacramento,citrus heights,36.8
+los angeles,claremont,34.6
+contra costa,clayton,9.9
+lake,clearlake,26.2
+sonoma,cloverdale,8.1
+fresno,clovis,65.8
+riverside,coachella,77.9
+fresno,coalinga,17.7
+placer,colfax,3.7
+san mateo,colma,4.9
+san bernardino,colton,40.3
+colusa,colusa,8.9
+los angeles,commerce,16.9
+los angeles,compton,26
+contra costa,concord,79.1
+kings,corcoran,19.3
+tehama,corning,9.2
+riverside,corona,103.4
+san diego,coronado,20.2
+marin,corte madera,8.2
+orange,costa mesa,40.9
+sonoma,cotati,4.8
+los angeles,covina,18.2
+del norte,crescent city,5.1
+los angeles,cudahy,3.1
+los angeles,culver city,13.2
+santa clara,cupertino,29.3
+orange,cypress,17.1
+san mateo,daly city,19.8
+orange,dana point,16.8
+contra costa,danville,46.8
+yolo,davis,25.8
+san diego,del mar,4.5
+monterey,del rey oaks,2.7
+kern,delano,38.1
+riverside,desert hot springs,78.4
+los angeles,diamond bar,38.5
+tulare,dinuba,16.9
+solano,dixon,18.4
+siskiyou,dorris,1.8
+merced,dos palos,3.5
+los angeles,downey,32.1
+los angeles,duarte,17.4
+alameda,dublin,39.4
+siskiyou,dunsmuir,4.1
+san mateo,east palo alto,6.6
+riverside,eastvale,32.8
+san diego,el cajon,37.6
+imperial,el centro,30.7
+contra costa,el cerrito,9.5
+los angeles,el monte,24.8
+los angeles,el segundo,14.1
+sacramento,elk grove,108.8
+alameda,emeryville,3.3
+san diego,encinitas,49.4
+san joaquin,escalon,5.9
+san diego,escondido,96.7
+siskiyou,etna,2
+humboldt,eureka,24.7
+tulare,exeter,6.4
+marin,fairfax,5.8
+solano,fairfield,107.7
+tulare,farmersville,5.7
+humboldt,ferndale,3.1
+ventura,fillmore,8.5
+fresno,firebaugh,9.1
+sacramento,folsom,72.2
+san bernardino,fontana,111.6
+mendocino,fort bragg,7.5
+siskiyou,fort jones,1.6
+humboldt,fortuna,13.6
+san mateo,foster city,9.8
+orange,fountain valley,23.5
+fresno,fowler,6.6
+alameda,fremont,202.8
+fresno,fresno,298.3
+orange,fullerton,58.1
+sacramento,galt,18.5
+orange,garden grove,46.5
+los angeles,gardena,15.1
+santa clara,gilroy,42.8
+los angeles,glendale,78.9
+los angeles,glendora,50.5
+santa barbara,goleta,20.3
+monterey,gonzales,4.9
+san bernardino,grand terrace,9.1
+nevada,grass valley,13.6
+monterey,greenfield,7.5
+butte,gridley,5.4
+san luis obispo,grover beach,6
+santa barbara,guadalupe,3.4
+merced,gustine,4
+san mateo,half moon bay,16.2
+kings,hanford,45.1
+los angeles,hawaiian gardens,2.5
+los angeles,hawthorne,15.8
+alameda,hayward,118.7
+sonoma,healdsburg,11.4
+riverside,hemet,75.8
+contra costa,hercules,16.6
+los angeles,hermosa beach,3.7
+san bernardino,hesperia,188.2
+los angeles,hidden hills,4.4
+san bernardino,highland,48.1
+san mateo,hillsborough,16
+san benito,hollister,20.6
+imperial,holtville,3
+stanislaus,hughson,4.9
+orange,huntington beach,69.9
+los angeles,huntington park,7.8
+fresno,huron,4.1
+imperial,imperial,16.3
+san diego,imperial beach,11.1
+riverside,indian wells,37.1
+riverside,indio,86.1
+los angeles,city of industry,30.5
+los angeles,inglewood,23.5
+amador,ione,11.9
+orange,irvine,169.9
+los angeles,irwindale,22.9
+sacramento,isleton,1.1
+amador,jackson,9.3
+riverside,jurupa valley,111.2
+fresno,kerman,8.5
+monterey,king city,9.8
+fresno,kingsburg,9.6
+los angeles,la cañada flintridge,22.4
+orange,la habra,19.6
+los angeles,la habra heights,16
+san diego,la mesa,23.5
+los angeles,la mirada,20.3
+orange,la palma,4.6
+los angeles,la puente,9
+riverside,la quinta,91.3
+los angeles,la verne,21.8
+contra costa,lafayette,38.9
+orange,laguna beach,23
+orange,laguna hills,17
+orange,laguna niguel,38.2
+orange,laguna woods,8.7
+riverside,lake elsinore,99
+orange,lake forest,43.3
+lake,lakeport,7.9
+los angeles,lakewood,24.3
+los angeles,lancaster,244.2
+marin,larkspur,7.8
+san joaquin,lathrop,51.4
+los angeles,lawndale,5.1
+san diego,lemon grove,10
+kings,lemoore,22.8
+placer,lincoln,62.6
+tulare,lindsay,7
+sutter,live oak,8.1
+alameda,livermore,68.5
+merced,livingston,9.5
+san joaquin,lodi,35.3
+san bernardino,loma linda,19.8
+los angeles,lomita,4.9
+santa barbara,lompoc,30.1
+los angeles,long beach,131.3
+placer,loomis,18.8
+orange,los alamitos,10.4
+santa clara,los altos,16.9
+santa clara,los altos hills,23.4
+los angeles,los angeles,1216
+merced,los banos,25.9
+santa clara,los gatos,29.9
+sierra,loyalton,0.93
+los angeles,lynwood,12.5
+madera,madera,42.7
+los angeles,malibu,51.4
+mono,mammoth lakes,64.4
+los angeles,manhattan beach,10.2
+san joaquin,manteca,55.4
+kern,maricopa,4.1
+monterey,marina,23.1
+contra costa,martinez,32.7
+yuba,marysville,9
+los angeles,maywood,3
+kern,mcfarland,6.9
+fresno,mendota,8.8
+riverside,menifee,120.4
+san mateo,menlo park,25.9
+merced,merced,60.2
+marin,mill valley,12.4
+san mateo,millbrae,8.5
+santa clara,milpitas,34.9
+orange,mission viejo,45.7
+stanislaus,modesto,111.5
+los angeles,monrovia,35.3
+siskiyou,montague,4.6
+san bernardino,montclair,14.3
+santa clara,monte sereno,4.2
+los angeles,montebello,21.6
+monterey,monterey,22.4
+los angeles,monterey park,19.9
+ventura,moorpark,31.8
+contra costa,moraga,24.5
+riverside,moreno valley,132.9
+santa clara,morgan hill,33.5
+san luis obispo,morro bay,13.8
+siskiyou,mount shasta,9.8
+santa clara,mountain view,31
+riverside,murrieta,87
+napa,napa,46.7
+san diego,national city,18.9
+san bernardino,needles,79.2
+nevada,nevada city,5.7
+alameda,newark,36.1
+stanislaus,newman,5.3
+orange,newport beach,61.6
+riverside,norco,35.9
+los angeles,norwalk,25.1
+marin,novato,71.2
+stanislaus,oakdale,16.1
+alameda,oakland,144.9
+contra costa,oakley,41.1
+san diego,oceanside,106.9
+ventura,ojai,11.3
+san bernardino,ontario,129.4
+orange,orange,66.5
+fresno,orange cove,4.6
+contra costa,orinda,33.3
+glenn,orland,7.7
+butte,oroville,35.8
+ventura,oxnard,68.7
+monterey,pacific grove,7.4
+san mateo,pacifica,32.6
+riverside,palm desert,69.4
+riverside,palm springs,244.9
+los angeles,palmdale,274.7
+santa clara,palo alto,62.4
+los angeles,palos verdes estates,12.4
+butte,paradise,47.4
+los angeles,paramount,12.3
+fresno,parlier,6.2
+los angeles,pasadena,59.5
+san luis obispo,paso robles,50.9
+stanislaus,patterson,20.2
+riverside,perris,81.7
+sonoma,petaluma,37.3
+los angeles,pico rivera,21.5
+alameda,piedmont,4.4
+contra costa,pinole,13.2
+san luis obispo,pismo beach,9.1
+contra costa,pittsburg,45.8
+orange,placentia,17.1
+el dorado,placerville,15.1
+contra costa,pleasant hill,18.3
+alameda,pleasanton,62.5
+amador,plymouth,6.9
+mendocino,point arena,3.5
+los angeles,pomona,59.5
+ventura,port hueneme,11.4
+tulare,porterville,48.3
+plumas,portola,14
+san mateo,portola valley,23.5
+san diego,poway,101.2
+sacramento,rancho cordova,89.5
+san bernardino,rancho cucamonga,103.9
+riverside,rancho mirage,65.7
+los angeles,rancho palos verdes,34.9
+orange,rancho santa margarita,33.4
+tehama,red bluff,19.6
+shasta,redding,154.5
+san bernardino,redlands,93.2
+los angeles,redondo beach,16.1
+san mateo,redwood city,50.1
+fresno,reedley,14.3
+san bernardino,rialto,62.4
+contra costa,richmond,77.8
+kern,ridgecrest,54
+humboldt,rio dell,5.9
+solano,rio vista,17.1
+san joaquin,ripon,13.8
+stanislaus,riverbank,12.2
+riverside,riverside,210.4
+placer,rocklin,51.3
+sonoma,rohnert park,18.9
+los angeles,rolling hills,7.7
+los angeles,rolling hills estates,9.3
+los angeles,rosemead,13.4
+placer,roseville,114.2
+marin,ross,4
+sacramento,sacramento,255.4
+napa,st. helena,12.8
+monterey,salinas,60.9
+marin,san anselmo,6.9
+san bernardino,san bernardino,160.9
+san mateo,san bruno,14.2
+san mateo,san carlos,14
+orange,san clemente,47.6
+san diego,san diego,844
+los angeles,san dimas,38.9
+los angeles,san fernando,6.1
+san francisco,san francisco,121.5
+los angeles,san gabriel,10.7
+riverside,san jacinto,67.2
+fresno,san joaquin,3.1
+santa clara,san jose,461.7
+san benito,san juan bautista,2
+orange,san juan capistrano,37.4
+alameda,san leandro,34.5
+san luis obispo,san luis obispo,34.5
+san diego,san marcos,63.1
+los angeles,san marino,9.8
+san mateo,san mateo,31.4
+contra costa,san pablo,6.8
+marin,san rafael,43
+contra costa,san ramon,48.4
+monterey,sand city,1.4
+fresno,sanger,14.9
+orange,santa ana,70.8
+santa barbara,santa barbara,50.5
+santa clara,santa clara,47.3
+los angeles,santa clarita,183.2
+santa cruz,santa cruz,33
+los angeles,santa fe springs,22.9
+santa barbara,santa maria,59.1
+los angeles,santa monica,21.8
+ventura,santa paula,14.3
+sonoma,santa rosa,110.2
+san diego,santee,42.8
+santa clara,saratoga,33.1
+marin,sausalito,4.6
+santa cruz,scotts valley,12
+orange,seal beach,29.2
+monterey,seaside,23.1
+sonoma,sebastopol,4.9
+fresno,selma,15
+kern,shafter,100.2
+shasta,shasta lake,28.3
+los angeles,sierra madre,7.6
+los angeles,signal hill,5.7
+ventura,simi valley,107.6
+san diego,solana beach,8.8
+monterey,soledad,11.6
+santa barbara,solvang,6.3
+sonoma,sonoma,7.1
+tuolumne,sonora,8.2
+los angeles,south el monte,7.4
+los angeles,south gate,18.8
+el dorado,south lake tahoe,26.4
+los angeles,south pasadena,8.8
+san mateo,south san francisco,23.8
+orange,stanton,8
+san joaquin,stockton,161.1
+solano,suisun city,10.4
+santa clara,sunnyvale,57.1
+lassen,susanville,20.5
+amador,sutter creek,7
+kern,taft,39.5
+kern,tehachapi,26.6
+tehama,tehama,2
+riverside,temecula,96.5
+los angeles,temple city,10.4
+ventura,thousand oaks,143.1
+marin,tiburon,11.6
+los angeles,torrance,53.1
+san joaquin,tracy,67.1
+humboldt,trinidad,1.3
+nevada,truckee,83.7
+tulare,tulare,52.8
+siskiyou,tulelake,1.1
+stanislaus,turlock,43.8
+orange,tustin,28.9
+san bernardino,twentynine palms,152.2
+mendocino,ukiah,12.4
+alameda,union city,49.7
+san bernardino,upland,40.4
+solano,vacaville,77.4
+solano,vallejo,78.8
+ventura,san buenaventura,56.7
+los angeles,vernon,12.9
+san bernardino,victorville,190.9
+orange,villa park,5.4
+tulare,visalia,98.3
+san diego,vista,48.6
+los angeles,walnut,23.3
+contra costa,walnut creek,51.2
+kern,wasco,24.3
+stanislaus,waterford,6.1
+santa cruz,watsonville,17.4
+siskiyou,weed,12.5
+los angeles,west covina,41.5
+los angeles,west hollywood,4.9
+yolo,west sacramento,55.6
+los angeles,westlake village,13.4
+orange,westminster,26
+imperial,westmorland,1.5
+yuba,wheatland,21
+los angeles,whittier,37.9
+riverside,wildomar,61.4
+colusa,williams,12.8
+mendocino,willits,7.3
+glenn,willows,7.4
+sonoma,windsor,19.3
+yolo,winters,7.6
+tulare,woodlake,6.8
+yolo,woodland,39.7
+san mateo,woodside,29.7
+orange,yorba linda,51.7
+napa,yountville,3.9
+siskiyou,yreka,25.9
+sutter,yuba city,38.8
+san bernardino,yucaipa,73.2
+san bernardino,yucca valley,103.2

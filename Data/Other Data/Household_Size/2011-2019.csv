@@ -1,0 +1,6643 @@
+state_id,year,county_name,house_size
+AL,2011,baldwin,2.48
+AL,2011,calhoun,2.58
+AL,2011,cullman,2.49
+AL,2011,dekalb,2.6
+AL,2011,elmore,2.62
+AL,2011,etowah,2.54
+AL,2011,houston,2.59
+AL,2011,jefferson,2.52
+AL,2011,lauderdale,2.31
+AL,2011,lee,2.46
+AL,2011,limestone,2.41
+AL,2011,madison,2.5
+AL,2011,marshall,2.76
+AL,2011,mobile,2.56
+AL,2011,montgomery,2.59
+AL,2011,morgan,2.62
+AL,2011,st. clair,2.48
+AL,2011,shelby,2.62
+AL,2011,talladega,2.45
+AL,2011,tuscaloosa,2.75
+AL,2011,walker,2.51
+AK,2011,anchorage municipality,2.7
+AK,2011,fairbanks north star borough,2.58
+AK,2011,matanuska-susitna borough,2.71
+AZ,2011,apache,3.58
+AZ,2011,cochise,2.59
+AZ,2011,coconino,2.8
+AZ,2011,maricopa,2.72
+AZ,2011,mohave,2.5
+AZ,2011,navajo,3.15
+AZ,2011,pima,2.54
+AZ,2011,pinal,2.92
+AZ,2011,yavapai,2.29
+AZ,2011,yuma,2.69
+AR,2011,benton,2.72
+AR,2011,craighead,2.5
+AR,2011,faulkner,2.58
+AR,2011,garland,2.5
+AR,2011,jefferson,2.44
+AR,2011,lonoke,2.68
+AR,2011,pulaski,2.5
+AR,2011,saline,2.54
+AR,2011,sebastian,2.66
+AR,2011,washington,2.5
+AR,2011,white,2.47
+CA,2011,alameda,2.75
+CA,2011,butte,2.57
+CA,2011,contra costa,2.81
+CA,2011,el dorado,2.63
+CA,2011,fresno,3.23
+CA,2011,humboldt,2.55
+CA,2011,imperial,3.39
+CA,2011,kern,3.22
+CA,2011,kings,3.25
+CA,2011,lake,2.19
+CA,2011,los angeles,3.03
+CA,2011,madera,3.47
+CA,2011,marin,2.41
+CA,2011,mendocino,2.61
+CA,2011,merced,3.42
+CA,2011,monterey,3.22
+CA,2011,napa,2.66
+CA,2011,nevada,2.37
+CA,2011,orange,3.04
+CA,2011,placer,2.65
+CA,2011,riverside,3.22
+CA,2011,sacramento,2.76
+CA,2011,san bernardino,3.31
+CA,2011,san diego,2.87
+CA,2011,san francisco,2.31
+CA,2011,san joaquin,3.18
+CA,2011,san luis obispo,2.55
+CA,2011,san mateo,2.8
+CA,2011,santa barbara,2.91
+CA,2011,santa clara,2.93
+CA,2011,santa cruz,2.68
+CA,2011,shasta,2.53
+CA,2011,solano,2.89
+CA,2011,sonoma,2.65
+CA,2011,stanislaus,3.06
+CA,2011,sutter,2.96
+CA,2011,tulare,3.36
+CA,2011,ventura,3.09
+CA,2011,yolo,2.78
+CA,2011,yuba,3.01
+CO,2011,adams,2.94
+CO,2011,arapahoe,2.59
+CO,2011,boulder,2.45
+CO,2011,denver,2.27
+CO,2011,douglas,2.8
+CO,2011,el paso,2.61
+CO,2011,jefferson,2.44
+CO,2011,larimer,2.44
+CO,2011,mesa,2.4
+CO,2011,pueblo,2.5
+CO,2011,weld,2.79
+CT,2011,fairfield,2.74
+CT,2011,hartford,2.49
+CT,2011,litchfield,2.46
+CT,2011,middlesex,2.48
+CT,2011,new haven,2.55
+CT,2011,new london,2.41
+CT,2011,tolland,2.57
+CT,2011,windham,2.51
+DE,2011,kent,2.82
+DE,2011,new castle,2.6
+DE,2011,sussex,2.66
+DC,2011,district of columbia,2.15
+FL,2011,alachua,2.44
+FL,2011,bay,2.38
+FL,2011,brevard,2.48
+FL,2011,broward,2.64
+FL,2011,charlotte,2.31
+FL,2011,citrus,2.26
+FL,2011,clay,2.86
+FL,2011,collier,2.62
+FL,2011,columbia,2.64
+FL,2011,duval,2.59
+FL,2011,escambia,2.61
+FL,2011,flagler,2.81
+FL,2011,hernando,2.41
+FL,2011,highlands,2.42
+FL,2011,hillsborough,2.68
+FL,2011,indian river,2.39
+FL,2011,lake,2.62
+FL,2011,lee,2.61
+FL,2011,leon,2.4
+FL,2011,manatee,2.4
+FL,2011,marion,2.43
+FL,2011,martin,2.44
+FL,2011,miami-dade,3.07
+FL,2011,monroe,2.91
+FL,2011,nassau,2.67
+FL,2011,okaloosa,2.53
+FL,2011,orange,2.73
+FL,2011,osceola,2.96
+FL,2011,palm beach,2.52
+FL,2011,pasco,2.52
+FL,2011,pinellas,2.29
+FL,2011,polk,2.73
+FL,2011,putnam,2.55
+FL,2011,st. johns,2.51
+FL,2011,st. lucie,2.64
+FL,2011,santa rosa,2.59
+FL,2011,sarasota,2.17
+FL,2011,seminole,2.92
+FL,2011,sumter,1.92
+FL,2011,volusia,2.55
+GA,2011,barrow,2.99
+GA,2011,bartow,2.96
+GA,2011,bibb,2.63
+GA,2011,bulloch,2.64
+GA,2011,carroll,2.77
+GA,2011,chatham,2.61
+GA,2011,cherokee,2.81
+GA,2011,clarke,2.68
+GA,2011,clayton,2.98
+GA,2011,cobb,2.64
+GA,2011,columbia,2.7
+GA,2011,coweta,2.72
+GA,2011,dekalb,2.61
+GA,2011,dougherty,2.56
+GA,2011,douglas,2.79
+GA,2011,fayette,2.79
+GA,2011,floyd,2.64
+GA,2011,forsyth,3.75
+GA,2011,fulton,2.5
+GA,2011,glynn,2.54
+GA,2011,gwinnett,3.1
+GA,2011,hall,3.01
+GA,2011,henry,2.92
+GA,2011,houston,2.71
+GA,2011,liberty,2.59
+GA,2011,lowndes,2.83
+GA,2011,muscogee,2.58
+GA,2011,newton,2.98
+GA,2011,paulding,2.92
+GA,2011,richmond,2.71
+GA,2011,rockdale,2.95
+GA,2011,troup,2.68
+GA,2011,walker,2.48
+GA,2011,walton,2.9
+GA,2011,whitfield,2.95
+HI,2011,hawaii,2.84
+HI,2011,honolulu,3.01
+HI,2011,kauai,2.92
+HI,2011,maui,2.93
+ID,2011,ada,2.59
+ID,2011,bannock,2.68
+ID,2011,bonneville,2.86
+ID,2011,canyon,2.99
+ID,2011,kootenai,2.49
+ID,2011,twin falls,2.73
+IL,2011,adams,2.53
+IL,2011,champaign,2.35
+IL,2011,cook,2.68
+IL,2011,dekalb,2.67
+IL,2011,dupage,2.71
+IL,2011,kane,3.06
+IL,2011,kankakee,2.64
+IL,2011,kendall,3.14
+IL,2011,lake,2.86
+IL,2011,lasalle,2.52
+IL,2011,mchenry,2.84
+IL,2011,mclean,2.57
+IL,2011,macon,2.46
+IL,2011,madison,2.47
+IL,2011,peoria,2.39
+IL,2011,rock island,2.34
+IL,2011,st. clair,2.62
+IL,2011,sangamon,2.34
+IL,2011,tazewell,2.44
+IL,2011,vermilion,2.53
+IL,2011,will,3.06
+IL,2011,williamson,2.43
+IL,2011,winnebago,2.58
+IN,2011,allen,2.58
+IN,2011,bartholomew,2.64
+IN,2011,clark,2.61
+IN,2011,delaware,2.41
+IN,2011,elkhart,2.76
+IN,2011,floyd,2.55
+IN,2011,grant,2.28
+IN,2011,hamilton,2.71
+IN,2011,hancock,2.67
+IN,2011,hendricks,2.71
+IN,2011,howard,2.38
+IN,2011,johnson,2.71
+IN,2011,kosciusko,2.64
+IN,2011,lake,2.7
+IN,2011,laporte,2.44
+IN,2011,madison,2.5
+IN,2011,marion,2.5
+IN,2011,monroe,2.36
+IN,2011,morgan,2.76
+IN,2011,porter,2.65
+IN,2011,st. joseph,2.49
+IN,2011,tippecanoe,2.45
+IN,2011,vanderburgh,2.33
+IN,2011,vigo,2.62
+IN,2011,wayne,2.33
+IA,2011,black hawk,2.42
+IA,2011,dallas,2.63
+IA,2011,dubuque,2.39
+IA,2011,johnson,2.32
+IA,2011,linn,2.42
+IA,2011,polk,2.54
+IA,2011,pottawattamie,2.54
+IA,2011,scott,2.47
+IA,2011,story,2.35
+IA,2011,woodbury,2.54
+KS,2011,butler,2.71
+KS,2011,douglas,2.39
+KS,2011,johnson,2.53
+KS,2011,leavenworth,2.76
+KS,2011,riley,2.54
+KS,2011,sedgwick,2.58
+KS,2011,shawnee,2.44
+KS,2011,wyandotte,2.76
+KY,2011,boone,2.86
+KY,2011,bullitt,2.69
+KY,2011,campbell,2.56
+KY,2011,christian,2.64
+KY,2011,daviess,2.68
+KY,2011,fayette,2.35
+KY,2011,hardin,2.69
+KY,2011,jefferson,2.45
+KY,2011,kenton,2.62
+KY,2011,mccracken,2.45
+KY,2011,madison,2.52
+KY,2011,pike,2.42
+KY,2011,warren,2.49
+LA,2011,ascension parish,2.94
+LA,2011,bossier parish,2.64
+LA,2011,caddo parish,2.53
+LA,2011,calcasieu parish,2.63
+LA,2011,east baton rouge parish,2.58
+LA,2011,iberia parish,2.71
+LA,2011,jefferson parish,2.58
+LA,2011,lafayette parish,2.53
+LA,2011,lafourche parish,2.73
+LA,2011,livingston parish,2.78
+LA,2011,orleans parish,2.35
+LA,2011,ouachita parish,2.53
+LA,2011,rapides parish,2.82
+LA,2011,st. landry parish,2.63
+LA,2011,st. tammany parish,2.71
+LA,2011,tangipahoa parish,2.67
+LA,2011,terrebonne parish,2.71
+ME,2011,androscoggin,2.34
+ME,2011,aroostook,2.29
+ME,2011,cumberland,2.36
+ME,2011,kennebec,2.29
+ME,2011,penobscot,2.36
+ME,2011,york,2.44
+MD,2011,allegany,2.35
+MD,2011,anne arundel,2.65
+MD,2011,baltimore,2.54
+MD,2011,calvert,2.94
+MD,2011,carroll,2.76
+MD,2011,cecil,2.81
+MD,2011,charles,2.85
+MD,2011,frederick,2.67
+MD,2011,harford,2.75
+MD,2011,howard,2.73
+MD,2011,montgomery,2.73
+MD,2011,prince george's,2.82
+MD,2011,st. mary's,2.85
+MD,2011,washington,2.48
+MD,2011,wicomico,2.66
+MD,2011,baltimore city,2.49
+MA,2011,barnstable,2.24
+MA,2011,berkshire,2.24
+MA,2011,bristol,2.54
+MA,2011,essex,2.54
+MA,2011,franklin,2.34
+MA,2011,hampden,2.55
+MA,2011,hampshire,2.33
+MA,2011,middlesex,2.51
+MA,2011,norfolk,2.55
+MA,2011,plymouth,2.71
+MA,2011,suffolk,2.35
+MA,2011,worcester,2.61
+MI,2011,allegan,2.69
+MI,2011,bay,2.45
+MI,2011,berrien,2.69
+MI,2011,calhoun,2.55
+MI,2011,clinton,2.62
+MI,2011,eaton,2.45
+MI,2011,genesee,2.55
+MI,2011,grand traverse,2.48
+MI,2011,ingham,2.45
+MI,2011,isabella,2.7
+MI,2011,jackson,2.56
+MI,2011,kalamazoo,2.5
+MI,2011,kent,2.6
+MI,2011,lapeer,2.65
+MI,2011,lenawee,2.46
+MI,2011,livingston,2.74
+MI,2011,macomb,2.54
+MI,2011,marquette,2.38
+MI,2011,midland,2.45
+MI,2011,monroe,2.61
+MI,2011,muskegon,2.61
+MI,2011,oakland,2.49
+MI,2011,ottawa,2.73
+MI,2011,saginaw,2.53
+MI,2011,st. clair,2.54
+MI,2011,shiawassee,2.53
+MI,2011,van buren,2.67
+MI,2011,washtenaw,2.46
+MI,2011,wayne,2.68
+MN,2011,anoka,2.69
+MN,2011,carver,2.74
+MN,2011,dakota,2.62
+MN,2011,hennepin,2.4
+MN,2011,olmsted,2.48
+MN,2011,ramsey,2.44
+MN,2011,st. louis,2.3
+MN,2011,scott,2.83
+MN,2011,sherburne,2.85
+MN,2011,stearns,2.53
+MN,2011,washington,2.66
+MN,2011,wright,2.79
+MS,2011,desoto,2.83
+MS,2011,forrest,2.58
+MS,2011,harrison,2.57
+MS,2011,hinds,2.74
+MS,2011,jackson,2.7
+MS,2011,jones,2.65
+MS,2011,lauderdale,2.63
+MS,2011,lee,2.59
+MS,2011,madison,2.62
+MS,2011,rankin,2.6
+MO,2011,boone,2.47
+MO,2011,buchanan,2.67
+MO,2011,cape girardeau,2.52
+MO,2011,cass,2.63
+MO,2011,christian,2.63
+MO,2011,clay,2.55
+MO,2011,cole,2.46
+MO,2011,franklin,2.56
+MO,2011,greene,2.31
+MO,2011,jackson,2.49
+MO,2011,jasper,2.59
+MO,2011,jefferson,2.65
+MO,2011,platte,2.41
+MO,2011,st. charles,2.66
+MO,2011,st. francois,2.17
+MO,2011,st. louis,2.44
+MO,2011,st. louis city,2.28
+MT,2011,cascade,2.46
+MT,2011,flathead,2.4
+MT,2011,gallatin,2.35
+MT,2011,missoula,2.34
+MT,2011,yellowstone,2.47
+NE,2011,douglas,2.55
+NE,2011,lancaster,2.41
+NE,2011,sarpy,2.71
+NV,2011,clark,2.8
+NV,2011,washoe,2.6
+NH,2011,cheshire,2.36
+NH,2011,grafton,2.42
+NH,2011,hillsborough,2.57
+NH,2011,merrimack,2.43
+NH,2011,rockingham,2.51
+NH,2011,strafford,2.61
+NJ,2011,atlantic,2.67
+NJ,2011,bergen,2.73
+NJ,2011,burlington,2.65
+NJ,2011,camden,2.73
+NJ,2011,cape may,2.29
+NJ,2011,cumberland,2.9
+NJ,2011,essex,2.79
+NJ,2011,gloucester,2.74
+NJ,2011,hudson,2.6
+NJ,2011,hunterdon,2.64
+NJ,2011,mercer,2.66
+NJ,2011,middlesex,2.83
+NJ,2011,monmouth,2.7
+NJ,2011,morris,2.66
+NJ,2011,ocean,2.58
+NJ,2011,passaic,3.02
+NJ,2011,salem,2.61
+NJ,2011,somerset,2.81
+NJ,2011,sussex,2.67
+NJ,2011,union,2.89
+NJ,2011,warren,2.52
+NM,2011,bernalillo,2.5
+NM,2011,chaves,2.71
+NM,2011,do?a ana,2.78
+NM,2011,lea,3.04
+NM,2011,mckinley,4.31
+NM,2011,otero,2.5
+NM,2011,sandoval,2.81
+NM,2011,san juan,2.99
+NM,2011,santa fe,2.33
+NM,2011,valencia,2.74
+NY,2011,albany,2.34
+NY,2011,bronx,2.89
+NY,2011,broome,2.37
+NY,2011,cattaraugus,2.42
+NY,2011,cayuga,2.41
+NY,2011,chautauqua,2.28
+NY,2011,chemung,2.26
+NY,2011,clinton,2.3
+NY,2011,dutchess,2.6
+NY,2011,erie,2.34
+NY,2011,jefferson,2.41
+NY,2011,kings,2.77
+NY,2011,livingston,2.42
+NY,2011,madison,2.54
+NY,2011,monroe,2.42
+NY,2011,nassau,2.99
+NY,2011,new york,2.12
+NY,2011,niagara,2.41
+NY,2011,oneida,2.42
+NY,2011,onondaga,2.47
+NY,2011,ontario,2.32
+NY,2011,orange,2.89
+NY,2011,oswego,2.66
+NY,2011,putnam,2.77
+NY,2011,queens,2.9
+NY,2011,rensselaer,2.45
+NY,2011,richmond,2.85
+NY,2011,rockland,3.14
+NY,2011,st. lawrence,2.45
+NY,2011,saratoga,2.4
+NY,2011,schenectady,2.61
+NY,2011,steuben,2.33
+NY,2011,suffolk,2.93
+NY,2011,sullivan,2.66
+NY,2011,tompkins,2.27
+NY,2011,ulster,2.46
+NY,2011,warren,2.33
+NY,2011,wayne,2.51
+NY,2011,westchester,2.7
+NC,2011,alamance,2.44
+NC,2011,brunswick,2.36
+NC,2011,buncombe,2.31
+NC,2011,burke,2.61
+NC,2011,cabarrus,2.75
+NC,2011,caldwell,2.53
+NC,2011,carteret,2.36
+NC,2011,catawba,2.69
+NC,2011,cleveland,2.62
+NC,2011,craven,2.59
+NC,2011,cumberland,2.63
+NC,2011,davidson,2.47
+NC,2011,durham,2.35
+NC,2011,forsyth,2.49
+NC,2011,gaston,2.56
+NC,2011,guilford,2.43
+NC,2011,harnett,2.78
+NC,2011,henderson,2.45
+NC,2011,iredell,2.67
+NC,2011,johnston,2.85
+NC,2011,lincoln,2.72
+NC,2011,mecklenburg,2.57
+NC,2011,moore,2.48
+NC,2011,nash,2.55
+NC,2011,new hanover,2.29
+NC,2011,onslow,2.73
+NC,2011,orange,2.45
+NC,2011,pitt,2.61
+NC,2011,randolph,2.55
+NC,2011,robeson,2.99
+NC,2011,rockingham,2.41
+NC,2011,rowan,2.53
+NC,2011,rutherford,2.46
+NC,2011,surry,2.36
+NC,2011,union,3.08
+NC,2011,wake,2.65
+NC,2011,wayne,2.48
+NC,2011,wilkes,2.44
+NC,2011,wilson,2.6
+ND,2011,burleigh,2.33
+ND,2011,cass,2.24
+ND,2011,grand forks,2.28
+OH,2011,allen,2.54
+OH,2011,ashtabula,2.49
+OH,2011,belmont,2.35
+OH,2011,butler,2.67
+OH,2011,clark,2.47
+OH,2011,clermont,2.63
+OH,2011,columbiana,2.45
+OH,2011,cuyahoga,2.33
+OH,2011,delaware,2.69
+OH,2011,erie,2.42
+OH,2011,fairfield,2.62
+OH,2011,franklin,2.48
+OH,2011,geauga,2.65
+OH,2011,greene,2.43
+OH,2011,hamilton,2.48
+OH,2011,hancock,2.46
+OH,2011,jefferson,2.45
+OH,2011,lake,2.43
+OH,2011,licking,2.54
+OH,2011,lorain,2.48
+OH,2011,lucas,2.42
+OH,2011,mahoning,2.34
+OH,2011,marion,2.42
+OH,2011,medina,2.63
+OH,2011,miami,2.47
+OH,2011,montgomery,2.31
+OH,2011,muskingum,2.43
+OH,2011,portage,2.59
+OH,2011,richland,2.4
+OH,2011,ross,2.51
+OH,2011,scioto,2.63
+OH,2011,stark,2.47
+OH,2011,summit,2.47
+OH,2011,trumbull,2.36
+OH,2011,tuscarawas,2.45
+OH,2011,warren,2.73
+OH,2011,wayne,2.58
+OH,2011,wood,2.45
+OK,2011,canadian,2.66
+OK,2011,cleveland,2.63
+OK,2011,comanche,2.59
+OK,2011,creek,2.74
+OK,2011,muskogee,2.49
+OK,2011,oklahoma,2.53
+OK,2011,payne,2.26
+OK,2011,pottawatomie,2.61
+OK,2011,rogers,2.58
+OK,2011,tulsa,2.51
+OK,2011,wagoner,2.78
+OR,2011,benton,2.46
+OR,2011,clackamas,2.58
+OR,2011,deschutes,2.46
+OR,2011,douglas,2.44
+OR,2011,jackson,2.38
+OR,2011,josephine,2.37
+OR,2011,klamath,2.44
+OR,2011,lane,2.37
+OR,2011,linn,2.57
+OR,2011,marion,2.79
+OR,2011,multnomah,2.37
+OR,2011,polk,2.6
+OR,2011,umatilla,2.76
+OR,2011,washington,2.64
+OR,2011,yamhill,2.88
+PA,2011,adams,2.55
+PA,2011,allegheny,2.3
+PA,2011,armstrong,2.39
+PA,2011,beaver,2.39
+PA,2011,berks,2.57
+PA,2011,blair,2.43
+PA,2011,bucks,2.66
+PA,2011,butler,2.45
+PA,2011,cambria,2.36
+PA,2011,carbon,2.56
+PA,2011,centre,2.35
+PA,2011,chester,2.65
+PA,2011,clearfield,2.33
+PA,2011,columbia,2.5
+PA,2011,crawford,2.43
+PA,2011,cumberland,2.37
+PA,2011,dauphin,2.43
+PA,2011,delaware,2.63
+PA,2011,erie,2.46
+PA,2011,fayette,2.4
+PA,2011,franklin,2.6
+PA,2011,indiana,2.4
+PA,2011,lackawanna,2.38
+PA,2011,lancaster,2.64
+PA,2011,lawrence,2.42
+PA,2011,lebanon,2.53
+PA,2011,lehigh,2.58
+PA,2011,luzerne,2.37
+PA,2011,lycoming,2.4
+PA,2011,mercer,2.34
+PA,2011,monroe,2.9
+PA,2011,montgomery,2.56
+PA,2011,northampton,2.57
+PA,2011,northumberland,2.26
+PA,2011,philadelphia,2.58
+PA,2011,schuylkill,2.34
+PA,2011,somerset,2.51
+PA,2011,washington,2.45
+PA,2011,westmoreland,2.33
+PA,2011,york,2.55
+RI,2011,kent,2.42
+RI,2011,newport,2.35
+RI,2011,providence,2.49
+RI,2011,washington,2.38
+SC,2011,aiken,2.47
+SC,2011,anderson,2.57
+SC,2011,beaufort,2.55
+SC,2011,berkeley,2.65
+SC,2011,charleston,2.44
+SC,2011,darlington,2.54
+SC,2011,dorchester,2.81
+SC,2011,florence,2.65
+SC,2011,greenville,2.54
+SC,2011,greenwood,2.45
+SC,2011,horry,2.5
+SC,2011,lancaster,2.54
+SC,2011,laurens,2.84
+SC,2011,lexington,2.5
+SC,2011,oconee,2.48
+SC,2011,orangeburg,2.68
+SC,2011,pickens,2.65
+SC,2011,richland,2.52
+SC,2011,spartanburg,2.65
+SC,2011,sumter,2.55
+SC,2011,york,2.55
+SD,2011,minnehaha,2.48
+SD,2011,pennington,2.51
+TN,2011,anderson,2.37
+TN,2011,blount,2.49
+TN,2011,bradley,2.64
+TN,2011,davidson,2.4
+TN,2011,greene,2.34
+TN,2011,hamilton,2.49
+TN,2011,knox,2.35
+TN,2011,madison,2.75
+TN,2011,maury,2.57
+TN,2011,montgomery,2.71
+TN,2011,putnam,2.4
+TN,2011,robertson,2.68
+TN,2011,rutherford,2.78
+TN,2011,sevier,2.52
+TN,2011,shelby,2.68
+TN,2011,sullivan,2.3
+TN,2011,sumner,2.64
+TN,2011,washington,2.25
+TN,2011,williamson,2.84
+TN,2011,wilson,2.65
+TX,2011,angelina,2.76
+TX,2011,bastrop,2.63
+TX,2011,bell,3.02
+TX,2011,bexar,2.83
+TX,2011,bowie,2.73
+TX,2011,brazoria,2.85
+TX,2011,brazos,2.66
+TX,2011,cameron,3.46
+TX,2011,collin,2.78
+TX,2011,comal,2.66
+TX,2011,coryell,3.57
+TX,2011,dallas,2.8
+TX,2011,denton,2.8
+TX,2011,ector,2.77
+TX,2011,ellis,3.03
+TX,2011,el paso,3.14
+TX,2011,fort bend,3.09
+TX,2011,galveston,2.67
+TX,2011,grayson,2.56
+TX,2011,gregg,2.62
+TX,2011,guadalupe,2.72
+TX,2011,harris,2.92
+TX,2011,harrison,2.68
+TX,2011,hays,2.78
+TX,2011,henderson,2.63
+TX,2011,hidalgo,3.66
+TX,2011,hunt,2.71
+TX,2011,jefferson,2.54
+TX,2011,johnson,2.86
+TX,2011,kaufman,2.88
+TX,2011,liberty,2.93
+TX,2011,lubbock,2.61
+TX,2011,mclennan,2.73
+TX,2011,midland,2.73
+TX,2011,montgomery,2.83
+TX,2011,nacogdoches,2.59
+TX,2011,nueces,2.73
+TX,2011,orange,2.66
+TX,2011,parker,2.65
+TX,2011,potter,2.74
+TX,2011,randall,2.48
+TX,2011,rockwall,2.93
+TX,2011,san patricio,2.97
+TX,2011,smith,2.6
+TX,2011,tarrant,2.8
+TX,2011,taylor,2.63
+TX,2011,tom green,2.53
+TX,2011,travis,2.53
+TX,2011,victoria,2.66
+TX,2011,walker,2.33
+TX,2011,webb,3.74
+TX,2011,wichita,2.58
+TX,2011,williamson,2.8
+UT,2011,cache,3.13
+UT,2011,davis,3.23
+UT,2011,salt lake,2.99
+UT,2011,utah,3.62
+UT,2011,washington,3.03
+UT,2011,weber,2.91
+VT,2011,chittenden,2.37
+VA,2011,albemarle,2.51
+VA,2011,arlington,2.33
+VA,2011,augusta,2.48
+VA,2011,bedford,2.67
+VA,2011,chesterfield,2.86
+VA,2011,fairfax,2.79
+VA,2011,fauquier,2.88
+VA,2011,frederick,2.75
+VA,2011,hanover,2.7
+VA,2011,henrico,2.5
+VA,2011,james city,2.5
+VA,2011,loudoun,3.04
+VA,2011,montgomery,2.52
+VA,2011,prince william,3.15
+VA,2011,roanoke,2.39
+VA,2011,rockingham,2.61
+VA,2011,spotsylvania,2.89
+VA,2011,stafford,3.05
+VA,2011,york,2.79
+VA,2011,alexandria city,2.21
+VA,2011,chesapeake city,2.82
+VA,2011,hampton city,2.59
+VA,2011,lynchburg city,2.24
+VA,2011,newport news city,2.56
+VA,2011,norfolk city,2.55
+VA,2011,portsmouth city,2.56
+VA,2011,richmond city,2.31
+VA,2011,roanoke city,2.3
+VA,2011,suffolk city,2.78
+VA,2011,virginia beach city,2.66
+WA,2011,benton,2.73
+WA,2011,chelan,2.69
+WA,2011,clallam,2.25
+WA,2011,clark,2.68
+WA,2011,cowlitz,2.49
+WA,2011,franklin,3.48
+WA,2011,grant,2.91
+WA,2011,grays harbor,2.72
+WA,2011,island,2.33
+WA,2011,king,2.42
+WA,2011,kitsap,2.42
+WA,2011,lewis,2.51
+WA,2011,pierce,2.65
+WA,2011,skagit,2.53
+WA,2011,snohomish,2.65
+WA,2011,spokane,2.44
+WA,2011,thurston,2.48
+WA,2011,whatcom,2.48
+WA,2011,yakima,3.05
+WV,2011,berkeley,2.64
+WV,2011,cabell,2.37
+WV,2011,harrison,2.57
+WV,2011,kanawha,2.33
+WV,2011,monongalia,2.62
+WV,2011,raleigh,2.35
+WV,2011,wood,2.47
+WI,2011,brown,2.47
+WI,2011,dane,2.34
+WI,2011,dodge,2.56
+WI,2011,eau claire,2.39
+WI,2011,fond du lac,2.39
+WI,2011,jefferson,2.46
+WI,2011,kenosha,2.67
+WI,2011,la crosse,2.41
+WI,2011,manitowoc,2.35
+WI,2011,marathon,2.48
+WI,2011,milwaukee,2.47
+WI,2011,outagamie,2.53
+WI,2011,ozaukee,2.52
+WI,2011,portage,2.43
+WI,2011,racine,2.51
+WI,2011,rock,2.46
+WI,2011,st. croix,2.71
+WI,2011,sheboygan,2.43
+WI,2011,walworth,2.57
+WI,2011,washington,2.53
+WI,2011,waukesha,2.52
+WI,2011,winnebago,2.33
+WI,2011,wood,2.3
+WY,2011,laramie,2.42
+WY,2011,natrona,2.49
+PR,2011,arecibo municipio,2.8
+PR,2011,bayamã³n municipio,2.77
+PR,2011,caguas municipio,2.85
+PR,2011,carolina municipio,2.7
+PR,2011,guaynabo municipio,2.79
+PR,2011,mayagã¼ez municipio,2.77
+PR,2011,ponce municipio,2.83
+PR,2011,san juan municipio,2.64
+PR,2011,toa alta municipio,3.2
+PR,2011,toa baja municipio,2.84
+PR,2011,trujillo alto municipio,2.85
+AL,2013,baldwin,2.75
+AL,2013,calhoun,2.6
+AL,2013,cullman,2.47
+AL,2013,dekalb,3.08
+AL,2013,elmore,2.66
+AL,2013,etowah,2.56
+AL,2013,houston,2.54
+AL,2013,jefferson,2.5
+AL,2013,lauderdale,2.3
+AL,2013,lee,2.55
+AL,2013,limestone,2.61
+AL,2013,madison,2.47
+AL,2013,marshall,2.78
+AL,2013,mobile,2.73
+AL,2013,montgomery,2.5
+AL,2013,morgan,2.51
+AL,2013,st. clair,2.66
+AL,2013,shelby,2.73
+AL,2013,talladega,2.46
+AL,2013,tuscaloosa,2.76
+AL,2013,walker,2.61
+AK,2013,anchorage municipality,2.82
+AK,2013,fairbanks north star borough,2.84
+AK,2013,matanuska-susitna borough,3.09
+AZ,2013,apache,3.92
+AZ,2013,cochise,2.4
+AZ,2013,coconino,2.58
+AZ,2013,maricopa,2.78
+AZ,2013,mohave,2.41
+AZ,2013,navajo,3.07
+AZ,2013,pima,2.48
+AZ,2013,pinal,2.87
+AZ,2013,yavapai,2.32
+AZ,2013,yuma,2.78
+AR,2013,benton,2.84
+AR,2013,craighead,2.59
+AR,2013,faulkner,2.7
+AR,2013,garland,2.27
+AR,2013,jefferson,2.4
+AR,2013,lonoke,2.83
+AR,2013,pulaski,2.59
+AR,2013,saline,2.76
+AR,2013,sebastian,2.51
+AR,2013,washington,2.57
+AR,2013,white,2.57
+CA,2013,alameda,2.78
+CA,2013,butte,2.55
+CA,2013,contra costa,2.83
+CA,2013,el dorado,2.7
+CA,2013,fresno,3.19
+CA,2013,humboldt,2.45
+CA,2013,imperial,3.52
+CA,2013,kern,3.24
+CA,2013,kings,3.2
+CA,2013,lake,2.4
+CA,2013,los angeles,3.03
+CA,2013,madera,3.25
+CA,2013,marin,2.44
+CA,2013,mendocino,2.53
+CA,2013,merced,3.3
+CA,2013,monterey,3.27
+CA,2013,napa,2.87
+CA,2013,nevada,2.48
+CA,2013,orange,3.06
+CA,2013,placer,2.71
+CA,2013,riverside,3.26
+CA,2013,sacramento,2.76
+CA,2013,san bernardino,3.38
+CA,2013,san diego,2.86
+CA,2013,san francisco,2.31
+CA,2013,san joaquin,3.18
+CA,2013,san luis obispo,2.49
+CA,2013,san mateo,2.85
+CA,2013,santa barbara,2.96
+CA,2013,santa clara,2.95
+CA,2013,santa cruz,2.74
+CA,2013,shasta,2.52
+CA,2013,solano,2.9
+CA,2013,sonoma,2.57
+CA,2013,stanislaus,3.11
+CA,2013,sutter,2.97
+CA,2013,tulare,3.36
+CA,2013,ventura,3.11
+CA,2013,yolo,2.77
+CA,2013,yuba,2.88
+CO,2013,adams,2.95
+CO,2013,arapahoe,2.62
+CO,2013,boulder,2.43
+CO,2013,denver,2.32
+CO,2013,douglas,2.86
+CO,2013,el paso,2.66
+CO,2013,jefferson,2.45
+CO,2013,larimer,2.48
+CO,2013,mesa,2.46
+CO,2013,pueblo,2.5
+CO,2013,weld,2.85
+CT,2013,fairfield,2.81
+CT,2013,hartford,2.52
+CT,2013,litchfield,2.45
+CT,2013,middlesex,2.45
+CT,2013,new haven,2.59
+CT,2013,new london,2.45
+CT,2013,tolland,2.52
+CT,2013,windham,2.52
+DE,2013,kent,2.64
+DE,2013,new castle,2.67
+DE,2013,sussex,2.62
+DC,2013,district of columbia,2.23
+FL,2013,alachua,2.42
+FL,2013,bay,2.71
+FL,2013,brevard,2.5
+FL,2013,broward,2.75
+FL,2013,charlotte,2.33
+FL,2013,citrus,2.21
+FL,2013,clay,2.89
+FL,2013,collier,2.57
+FL,2013,columbia,2.64
+FL,2013,duval,2.6
+FL,2013,escambia,2.53
+FL,2013,flagler,2.8
+FL,2013,hernando,2.48
+FL,2013,highlands,2.38
+FL,2013,hillsborough,2.62
+FL,2013,indian river,2.44
+FL,2013,lake,2.52
+FL,2013,lee,2.69
+FL,2013,leon,2.42
+FL,2013,manatee,2.56
+FL,2013,marion,2.47
+FL,2013,martin,2.4
+FL,2013,miami-dade,3.06
+FL,2013,monroe,2.8
+FL,2013,nassau,2.65
+FL,2013,okaloosa,2.55
+FL,2013,orange,2.81
+FL,2013,osceola,3.39
+FL,2013,palm beach,2.55
+FL,2013,pasco,2.54
+FL,2013,pinellas,2.27
+FL,2013,polk,2.84
+FL,2013,putnam,2.76
+FL,2013,st. johns,2.65
+FL,2013,st. lucie,2.72
+FL,2013,santa rosa,2.6
+FL,2013,sarasota,2.26
+FL,2013,seminole,2.91
+FL,2013,sumter,1.97
+FL,2013,volusia,2.45
+GA,2013,barrow,3.01
+GA,2013,bartow,2.89
+GA,2013,bibb,2.72
+GA,2013,bulloch,2.62
+GA,2013,carroll,2.65
+GA,2013,catoosa,2.61
+GA,2013,chatham,2.56
+GA,2013,cherokee,2.92
+GA,2013,clarke,2.5
+GA,2013,clayton,2.92
+GA,2013,cobb,2.65
+GA,2013,columbia,3.2
+GA,2013,coweta,2.77
+GA,2013,dekalb,2.61
+GA,2013,dougherty,2.57
+GA,2013,douglas,2.89
+GA,2013,fayette,2.84
+GA,2013,floyd,2.77
+GA,2013,forsyth,3.02
+GA,2013,fulton,2.5
+GA,2013,glynn,2.55
+GA,2013,gwinnett,3.17
+GA,2013,hall,3.04
+GA,2013,henry,2.97
+GA,2013,houston,2.75
+GA,2013,liberty,2.71
+GA,2013,lowndes,2.67
+GA,2013,muscogee,2.68
+GA,2013,newton,3.01
+GA,2013,paulding,3.02
+GA,2013,richmond,2.73
+GA,2013,rockdale,2.95
+GA,2013,troup,2.76
+GA,2013,walker,2.67
+GA,2013,walton,2.95
+GA,2013,whitfield,3
+HI,2013,hawaii,2.9
+HI,2013,honolulu,3.06
+HI,2013,kauai,3.07
+HI,2013,maui,2.92
+ID,2013,ada,2.63
+ID,2013,bannock,2.68
+ID,2013,bonneville,2.88
+ID,2013,canyon,2.97
+ID,2013,kootenai,2.55
+ID,2013,twin falls,2.73
+IL,2013,adams,2.42
+IL,2013,champaign,2.41
+IL,2013,cook,2.65
+IL,2013,dekalb,2.64
+IL,2013,dupage,2.71
+IL,2013,kane,3.01
+IL,2013,kankakee,2.55
+IL,2013,kendall,3.16
+IL,2013,lake,2.8
+IL,2013,lasalle,2.5
+IL,2013,mchenry,2.81
+IL,2013,mclean,2.56
+IL,2013,macon,2.35
+IL,2013,madison,2.44
+IL,2013,peoria,2.42
+IL,2013,rock island,2.39
+IL,2013,st. clair,2.53
+IL,2013,sangamon,2.36
+IL,2013,tazewell,2.47
+IL,2013,vermilion,2.47
+IL,2013,will,3.01
+IL,2013,williamson,2.43
+IL,2013,winnebago,2.53
+IN,2013,allen,2.51
+IN,2013,bartholomew,2.59
+IN,2013,clark,2.63
+IN,2013,delaware,2.37
+IN,2013,elkhart,2.77
+IN,2013,floyd,2.65
+IN,2013,grant,2.37
+IN,2013,hamilton,2.74
+IN,2013,hancock,2.72
+IN,2013,hendricks,2.74
+IN,2013,howard,2.37
+IN,2013,johnson,2.71
+IN,2013,kosciusko,2.66
+IN,2013,lake,2.6
+IN,2013,laporte,2.39
+IN,2013,madison,2.38
+IN,2013,marion,2.52
+IN,2013,monroe,2.38
+IN,2013,morgan,2.69
+IN,2013,porter,2.61
+IN,2013,st. joseph,2.47
+IN,2013,tippecanoe,2.42
+IN,2013,vanderburgh,2.4
+IN,2013,vigo,2.5
+IN,2013,wayne,2.38
+IA,2013,black hawk,2.42
+IA,2013,dallas,2.71
+IA,2013,dubuque,2.48
+IA,2013,johnson,2.35
+IA,2013,linn,2.42
+IA,2013,polk,2.49
+IA,2013,pottawattamie,2.49
+IA,2013,scott,2.48
+IA,2013,story,2.31
+IA,2013,woodbury,2.56
+KS,2013,butler,2.62
+KS,2013,douglas,2.48
+KS,2013,johnson,2.55
+KS,2013,leavenworth,2.63
+KS,2013,riley,2.47
+KS,2013,sedgwick,2.59
+KS,2013,shawnee,2.46
+KS,2013,wyandotte,2.78
+KY,2013,boone,2.71
+KY,2013,bullitt,2.75
+KY,2013,campbell,2.51
+KY,2013,christian,2.8
+KY,2013,daviess,2.5
+KY,2013,fayette,2.36
+KY,2013,hardin,2.55
+KY,2013,jefferson,2.4
+KY,2013,kenton,2.6
+KY,2013,mccracken,2.48
+KY,2013,madison,2.48
+KY,2013,pike,2.43
+KY,2013,warren,2.47
+LA,2013,ascension parish,2.79
+LA,2013,bossier parish,2.56
+LA,2013,caddo parish,2.54
+LA,2013,calcasieu parish,2.5
+LA,2013,east baton rouge parish,2.58
+LA,2013,iberia parish,2.75
+LA,2013,jefferson parish,2.58
+LA,2013,lafayette parish,2.55
+LA,2013,lafourche parish,2.76
+LA,2013,livingston parish,2.8
+LA,2013,orleans parish,2.31
+LA,2013,ouachita parish,2.6
+LA,2013,rapides parish,2.68
+LA,2013,st. landry parish,2.59
+LA,2013,st. tammany parish,2.72
+LA,2013,tangipahoa parish,2.64
+LA,2013,terrebonne parish,2.86
+ME,2013,androscoggin,2.39
+ME,2013,aroostook,2.26
+ME,2013,cumberland,2.39
+ME,2013,kennebec,2.32
+ME,2013,penobscot,2.36
+ME,2013,york,2.41
+MD,2013,allegany,2.48
+MD,2013,anne arundel,2.68
+MD,2013,baltimore,2.56
+MD,2013,calvert,2.92
+MD,2013,carroll,2.72
+MD,2013,cecil,2.73
+MD,2013,charles,2.86
+MD,2013,frederick,2.67
+MD,2013,harford,2.69
+MD,2013,howard,2.8
+MD,2013,montgomery,2.76
+MD,2013,prince george's,2.84
+MD,2013,st. mary's,2.95
+MD,2013,washington,2.49
+MD,2013,wicomico,2.61
+MD,2013,baltimore city,2.44
+MA,2013,barnstable,2.25
+MA,2013,berkshire,2.23
+MA,2013,bristol,2.52
+MA,2013,essex,2.59
+MA,2013,franklin,2.25
+MA,2013,hampden,2.58
+MA,2013,hampshire,2.32
+MA,2013,middlesex,2.56
+MA,2013,norfolk,2.59
+MA,2013,plymouth,2.76
+MA,2013,suffolk,2.44
+MA,2013,worcester,2.6
+MI,2013,allegan,2.71
+MI,2013,bay,2.34
+MI,2013,berrien,2.54
+MI,2013,calhoun,2.47
+MI,2013,clinton,2.68
+MI,2013,eaton,2.41
+MI,2013,genesee,2.5
+MI,2013,grand traverse,2.58
+MI,2013,ingham,2.39
+MI,2013,isabella,2.54
+MI,2013,jackson,2.47
+MI,2013,kalamazoo,2.46
+MI,2013,kent,2.65
+MI,2013,lapeer,2.63
+MI,2013,lenawee,2.52
+MI,2013,livingston,2.69
+MI,2013,macomb,2.52
+MI,2013,marquette,2.46
+MI,2013,midland,2.44
+MI,2013,monroe,2.55
+MI,2013,muskegon,2.51
+MI,2013,oakland,2.48
+MI,2013,ottawa,2.78
+MI,2013,saginaw,2.45
+MI,2013,st. clair,2.5
+MI,2013,shiawassee,2.43
+MI,2013,van buren,2.53
+MI,2013,washtenaw,2.44
+MI,2013,wayne,2.64
+MN,2013,anoka,2.71
+MN,2013,blue earth,2.5
+MN,2013,carver,2.73
+MN,2013,dakota,2.58
+MN,2013,hennepin,2.4
+MN,2013,olmsted,2.51
+MN,2013,ramsey,2.48
+MN,2013,rice,2.55
+MN,2013,st. louis,2.26
+MN,2013,scott,2.94
+MN,2013,sherburne,3
+MN,2013,stearns,2.5
+MN,2013,washington,2.68
+MN,2013,wright,2.83
+MS,2013,desoto,2.83
+MS,2013,forrest,2.59
+MS,2013,harrison,2.55
+MS,2013,hinds,2.65
+MS,2013,jackson,2.83
+MS,2013,jones,2.73
+MS,2013,lauderdale,2.47
+MS,2013,lee,2.6
+MS,2013,madison,2.68
+MS,2013,rankin,2.59
+MO,2013,boone,2.38
+MO,2013,buchanan,2.63
+MO,2013,cape girardeau,2.49
+MO,2013,cass,2.66
+MO,2013,christian,2.68
+MO,2013,clay,2.6
+MO,2013,cole,2.52
+MO,2013,franklin,2.57
+MO,2013,greene,2.31
+MO,2013,jackson,2.44
+MO,2013,jasper,2.5
+MO,2013,jefferson,2.67
+MO,2013,platte,2.45
+MO,2013,st. charles,2.65
+MO,2013,st. francois,2.43
+MO,2013,st. louis,2.44
+MO,2013,st. louis city,2.19
+MT,2013,cascade,2.31
+MT,2013,flathead,2.53
+MT,2013,gallatin,2.41
+MT,2013,lewis and clark,2.39
+MT,2013,missoula,2.37
+MT,2013,yellowstone,2.45
+NE,2013,douglas,2.51
+NE,2013,lancaster,2.42
+NE,2013,sarpy,2.78
+NV,2013,clark,2.81
+NV,2013,washoe,2.6
+NH,2013,cheshire,2.35
+NH,2013,grafton,2.32
+NH,2013,hillsborough,2.55
+NH,2013,merrimack,2.55
+NH,2013,rockingham,2.52
+NH,2013,strafford,2.44
+NJ,2013,atlantic,2.65
+NJ,2013,bergen,2.7
+NJ,2013,burlington,2.71
+NJ,2013,camden,2.72
+NJ,2013,cape may,2.44
+NJ,2013,cumberland,2.89
+NJ,2013,essex,2.77
+NJ,2013,gloucester,2.75
+NJ,2013,hudson,2.64
+NJ,2013,hunterdon,2.63
+NJ,2013,mercer,2.67
+NJ,2013,middlesex,2.83
+NJ,2013,monmouth,2.68
+NJ,2013,morris,2.74
+NJ,2013,ocean,2.65
+NJ,2013,passaic,3.08
+NJ,2013,salem,2.62
+NJ,2013,somerset,2.89
+NJ,2013,sussex,2.63
+NJ,2013,union,2.89
+NJ,2013,warren,2.51
+NM,2013,bernalillo,2.57
+NM,2013,chaves,2.69
+NM,2013,doã±a ana,2.79
+NM,2013,lea,2.94
+NM,2013,mckinley,4.02
+NM,2013,otero,2.68
+NM,2013,sandoval,2.86
+NM,2013,san juan,3.31
+NM,2013,santa fe,2.39
+NM,2013,valencia,3
+NY,2013,albany,2.35
+NY,2013,bronx,2.86
+NY,2013,broome,2.44
+NY,2013,cattaraugus,2.36
+NY,2013,cayuga,2.46
+NY,2013,chautauqua,2.32
+NY,2013,chemung,2.33
+NY,2013,clinton,2.31
+NY,2013,dutchess,2.59
+NY,2013,erie,2.34
+NY,2013,jefferson,2.67
+NY,2013,kings,2.76
+NY,2013,livingston,2.46
+NY,2013,madison,2.52
+NY,2013,monroe,2.42
+NY,2013,nassau,3.04
+NY,2013,new york,2.16
+NY,2013,niagara,2.39
+NY,2013,oneida,2.45
+NY,2013,onondaga,2.45
+NY,2013,ontario,2.45
+NY,2013,orange,2.94
+NY,2013,oswego,2.57
+NY,2013,putnam,3.01
+NY,2013,queens,2.89
+NY,2013,rensselaer,2.4
+NY,2013,richmond,2.78
+NY,2013,rockland,3.19
+NY,2013,st. lawrence,2.43
+NY,2013,saratoga,2.43
+NY,2013,schenectady,2.63
+NY,2013,steuben,2.35
+NY,2013,suffolk,2.95
+NY,2013,sullivan,2.63
+NY,2013,tompkins,2.39
+NY,2013,ulster,2.47
+NY,2013,warren,2.37
+NY,2013,wayne,2.56
+NY,2013,westchester,2.76
+NC,2013,alamance,2.53
+NC,2013,brunswick,2.36
+NC,2013,buncombe,2.39
+NC,2013,burke,2.53
+NC,2013,cabarrus,2.83
+NC,2013,caldwell,2.77
+NC,2013,carteret,2.25
+NC,2013,catawba,2.59
+NC,2013,chatham,2.48
+NC,2013,cleveland,2.48
+NC,2013,craven,2.55
+NC,2013,cumberland,2.51
+NC,2013,davidson,2.54
+NC,2013,durham,2.39
+NC,2013,forsyth,2.46
+NC,2013,gaston,2.57
+NC,2013,guilford,2.46
+NC,2013,harnett,2.87
+NC,2013,henderson,2.28
+NC,2013,iredell,2.81
+NC,2013,johnston,2.87
+NC,2013,lincoln,2.62
+NC,2013,mecklenburg,2.59
+NC,2013,moore,2.48
+NC,2013,nash,2.45
+NC,2013,new hanover,2.37
+NC,2013,onslow,2.82
+NC,2013,orange,2.51
+NC,2013,pitt,2.49
+NC,2013,randolph,2.7
+NC,2013,robeson,2.88
+NC,2013,rockingham,2.43
+NC,2013,rowan,2.67
+NC,2013,rutherford,2.51
+NC,2013,surry,2.39
+NC,2013,union,3.02
+NC,2013,wake,2.61
+NC,2013,wayne,2.6
+NC,2013,wilkes,2.47
+NC,2013,wilson,2.53
+ND,2013,burleigh,2.32
+ND,2013,cass,2.31
+ND,2013,grand forks,2.28
+ND,2013,ward,2.44
+OH,2013,allen,2.5
+OH,2013,ashtabula,2.45
+OH,2013,belmont,2.34
+OH,2013,butler,2.68
+OH,2013,clark,2.45
+OH,2013,clermont,2.71
+OH,2013,columbiana,2.53
+OH,2013,cuyahoga,2.31
+OH,2013,delaware,2.77
+OH,2013,erie,2.25
+OH,2013,fairfield,2.66
+OH,2013,franklin,2.49
+OH,2013,geauga,2.72
+OH,2013,greene,2.47
+OH,2013,hamilton,2.35
+OH,2013,hancock,2.33
+OH,2013,jefferson,2.35
+OH,2013,lake,2.45
+OH,2013,licking,2.6
+OH,2013,lorain,2.52
+OH,2013,lucas,2.41
+OH,2013,mahoning,2.31
+OH,2013,marion,2.49
+OH,2013,medina,2.63
+OH,2013,miami,2.5
+OH,2013,montgomery,2.36
+OH,2013,muskingum,2.44
+OH,2013,portage,2.55
+OH,2013,richland,2.4
+OH,2013,ross,2.55
+OH,2013,scioto,2.53
+OH,2013,stark,2.44
+OH,2013,summit,2.42
+OH,2013,trumbull,2.36
+OH,2013,tuscarawas,2.62
+OH,2013,warren,2.75
+OH,2013,wayne,2.55
+OH,2013,wood,2.48
+OK,2013,canadian,2.97
+OK,2013,cleveland,2.58
+OK,2013,comanche,2.66
+OK,2013,creek,2.74
+OK,2013,muskogee,2.51
+OK,2013,oklahoma,2.55
+OK,2013,payne,2.36
+OK,2013,pottawatomie,2.59
+OK,2013,rogers,2.64
+OK,2013,tulsa,2.51
+OK,2013,wagoner,2.74
+OR,2013,benton,2.4
+OR,2013,clackamas,2.56
+OR,2013,deschutes,2.53
+OR,2013,douglas,2.43
+OR,2013,jackson,2.47
+OR,2013,josephine,2.38
+OR,2013,klamath,2.52
+OR,2013,lane,2.42
+OR,2013,linn,2.68
+OR,2013,marion,2.73
+OR,2013,multnomah,2.41
+OR,2013,polk,2.66
+OR,2013,umatilla,2.68
+OR,2013,washington,2.69
+OR,2013,yamhill,2.7
+PA,2013,adams,2.62
+PA,2013,allegheny,2.26
+PA,2013,armstrong,2.38
+PA,2013,beaver,2.36
+PA,2013,berks,2.61
+PA,2013,blair,2.4
+PA,2013,bucks,2.66
+PA,2013,butler,2.43
+PA,2013,cambria,2.29
+PA,2013,carbon,2.49
+PA,2013,centre,2.45
+PA,2013,chester,2.65
+PA,2013,clearfield,2.45
+PA,2013,columbia,2.38
+PA,2013,crawford,2.47
+PA,2013,cumberland,2.36
+PA,2013,dauphin,2.4
+PA,2013,delaware,2.7
+PA,2013,erie,2.42
+PA,2013,fayette,2.48
+PA,2013,franklin,2.53
+PA,2013,indiana,2.44
+PA,2013,lackawanna,2.45
+PA,2013,lancaster,2.65
+PA,2013,lawrence,2.39
+PA,2013,lebanon,2.55
+PA,2013,lehigh,2.59
+PA,2013,luzerne,2.39
+PA,2013,lycoming,2.47
+PA,2013,mercer,2.37
+PA,2013,monroe,2.82
+PA,2013,montgomery,2.58
+PA,2013,northampton,2.58
+PA,2013,northumberland,2.28
+PA,2013,philadelphia,2.58
+PA,2013,schuylkill,2.4
+PA,2013,somerset,2.38
+PA,2013,washington,2.44
+PA,2013,westmoreland,2.37
+PA,2013,york,2.61
+RI,2013,kent,2.38
+RI,2013,newport,2.29
+RI,2013,providence,2.56
+RI,2013,washington,2.44
+SC,2013,aiken,2.56
+SC,2013,anderson,2.51
+SC,2013,beaufort,2.55
+SC,2013,berkeley,2.81
+SC,2013,charleston,2.44
+SC,2013,darlington,2.52
+SC,2013,dorchester,2.76
+SC,2013,florence,2.63
+SC,2013,greenville,2.62
+SC,2013,greenwood,2.44
+SC,2013,horry,2.52
+SC,2013,lancaster,2.77
+SC,2013,laurens,2.48
+SC,2013,lexington,2.59
+SC,2013,oconee,2.49
+SC,2013,orangeburg,2.68
+SC,2013,pickens,2.58
+SC,2013,richland,2.53
+SC,2013,spartanburg,2.62
+SC,2013,sumter,2.66
+SC,2013,york,2.69
+SD,2013,minnehaha,2.46
+SD,2013,pennington,2.46
+TN,2013,anderson,2.52
+TN,2013,blount,2.48
+TN,2013,bradley,2.6
+TN,2013,davidson,2.43
+TN,2013,greene,2.45
+TN,2013,hamilton,2.48
+TN,2013,knox,2.4
+TN,2013,madison,2.66
+TN,2013,maury,2.5
+TN,2013,montgomery,2.73
+TN,2013,putnam,2.32
+TN,2013,robertson,2.74
+TN,2013,rutherford,2.73
+TN,2013,sevier,2.51
+TN,2013,shelby,2.66
+TN,2013,sullivan,2.37
+TN,2013,sumner,2.67
+TN,2013,washington,2.34
+TN,2013,williamson,2.87
+TN,2013,wilson,2.72
+TX,2013,angelina,2.8
+TX,2013,bastrop,2.89
+TX,2013,bell,3.09
+TX,2013,bexar,2.88
+TX,2013,bowie,2.74
+TX,2013,brazoria,2.87
+TX,2013,brazos,2.62
+TX,2013,cameron,3.49
+TX,2013,collin,2.77
+TX,2013,comal,2.7
+TX,2013,coryell,2.83
+TX,2013,dallas,2.78
+TX,2013,denton,2.79
+TX,2013,ector,2.84
+TX,2013,ellis,2.91
+TX,2013,el paso,3.14
+TX,2013,fort bend,3.15
+TX,2013,galveston,2.72
+TX,2013,grayson,2.59
+TX,2013,gregg,2.53
+TX,2013,guadalupe,2.89
+TX,2013,harris,2.87
+TX,2013,harrison,2.83
+TX,2013,hays,2.79
+TX,2013,henderson,2.76
+TX,2013,hidalgo,3.61
+TX,2013,hunt,2.75
+TX,2013,jefferson,2.6
+TX,2013,johnson,2.84
+TX,2013,kaufman,3.11
+TX,2013,liberty,2.77
+TX,2013,lubbock,2.62
+TX,2013,mclennan,2.65
+TX,2013,midland,2.84
+TX,2013,montgomery,2.92
+TX,2013,nacogdoches,2.65
+TX,2013,nueces,2.69
+TX,2013,orange,2.57
+TX,2013,parker,2.71
+TX,2013,potter,2.66
+TX,2013,randall,2.54
+TX,2013,rockwall,3.04
+TX,2013,san patricio,2.88
+TX,2013,smith,2.67
+TX,2013,tarrant,2.8
+TX,2013,taylor,2.57
+TX,2013,tom green,2.5
+TX,2013,travis,2.56
+TX,2013,victoria,2.73
+TX,2013,walker,2.28
+TX,2013,webb,3.78
+TX,2013,wichita,2.37
+TX,2013,williamson,2.88
+UT,2013,cache,3.2
+UT,2013,davis,3.32
+UT,2013,salt lake,3.07
+UT,2013,utah,3.66
+UT,2013,washington,2.95
+UT,2013,weber,2.95
+VT,2013,chittenden,2.38
+VA,2013,albemarle,2.41
+VA,2013,arlington,2.24
+VA,2013,augusta,2.61
+VA,2013,bedford,2.49
+VA,2013,chesterfield,2.8
+VA,2013,fairfax,2.86
+VA,2013,fauquier,2.88
+VA,2013,frederick,2.72
+VA,2013,hanover,2.63
+VA,2013,henrico,2.57
+VA,2013,james city,2.53
+VA,2013,loudoun,3.09
+VA,2013,montgomery,2.5
+VA,2013,prince william,3.16
+VA,2013,roanoke,2.39
+VA,2013,rockingham,2.64
+VA,2013,spotsylvania,3
+VA,2013,stafford,3.07
+VA,2013,york,2.72
+VA,2013,alexandria city,2.25
+VA,2013,chesapeake city,2.79
+VA,2013,hampton city,2.49
+VA,2013,lynchburg city,2.27
+VA,2013,newport news city,2.58
+VA,2013,norfolk city,2.56
+VA,2013,portsmouth city,2.6
+VA,2013,richmond city,2.31
+VA,2013,roanoke city,2.25
+VA,2013,suffolk city,2.74
+VA,2013,virginia beach city,2.65
+WA,2013,benton,2.67
+WA,2013,chelan,2.63
+WA,2013,clallam,2.33
+WA,2013,clark,2.77
+WA,2013,cowlitz,2.62
+WA,2013,franklin,3.46
+WA,2013,grant,3.04
+WA,2013,grays harbor,2.52
+WA,2013,island,2.32
+WA,2013,king,2.45
+WA,2013,kitsap,2.52
+WA,2013,lewis,2.54
+WA,2013,pierce,2.65
+WA,2013,skagit,2.59
+WA,2013,snohomish,2.72
+WA,2013,spokane,2.48
+WA,2013,thurston,2.59
+WA,2013,whatcom,2.56
+WA,2013,yakima,3.05
+WV,2013,berkeley,2.61
+WV,2013,cabell,2.33
+WV,2013,harrison,2.51
+WV,2013,kanawha,2.29
+WV,2013,monongalia,2.52
+WV,2013,raleigh,2.42
+WV,2013,wood,2.37
+WI,2013,brown,2.48
+WI,2013,dane,2.34
+WI,2013,dodge,2.64
+WI,2013,eau claire,2.45
+WI,2013,fond du lac,2.39
+WI,2013,jefferson,2.48
+WI,2013,kenosha,2.59
+WI,2013,la crosse,2.44
+WI,2013,manitowoc,2.38
+WI,2013,marathon,2.46
+WI,2013,milwaukee,2.45
+WI,2013,outagamie,2.51
+WI,2013,ozaukee,2.55
+WI,2013,portage,2.43
+WI,2013,racine,2.64
+WI,2013,rock,2.46
+WI,2013,st. croix,2.62
+WI,2013,sheboygan,2.36
+WI,2013,walworth,2.48
+WI,2013,washington,2.49
+WI,2013,waukesha,2.5
+WI,2013,winnebago,2.33
+WI,2013,wood,2.3
+WY,2013,laramie,2.62
+WY,2013,natrona,2.43
+PR,2013,arecibo municipio,2.8
+PR,2013,bayamã³n municipio,2.72
+PR,2013,caguas municipio,2.72
+PR,2013,carolina municipio,2.66
+PR,2013,guaynabo municipio,2.55
+PR,2013,mayagã¼ez municipio,2.77
+PR,2013,ponce municipio,2.73
+PR,2013,san juan municipio,2.47
+PR,2013,toa alta municipio,3.38
+PR,2013,toa baja municipio,2.98
+PR,2013,trujillo alto municipio,2.91
+AL,2012,baldwin,2.41
+AL,2012,calhoun,2.49
+AL,2012,cullman,2.52
+AL,2012,dekalb,2.95
+AL,2012,elmore,2.7
+AL,2012,etowah,2.63
+AL,2012,houston,2.65
+AL,2012,jefferson,2.5
+AL,2012,lauderdale,2.47
+AL,2012,lee,2.56
+AL,2012,limestone,2.63
+AL,2012,madison,2.48
+AL,2012,marshall,2.77
+AL,2012,mobile,2.57
+AL,2012,montgomery,2.47
+AL,2012,morgan,2.57
+AL,2012,st. clair,2.59
+AL,2012,shelby,2.64
+AL,2012,talladega,2.46
+AL,2012,tuscaloosa,2.77
+AL,2012,walker,2.5
+AK,2012,anchorage municipality,2.76
+AK,2012,fairbanks north star borough,2.68
+AK,2012,matanuska-susitna borough,2.93
+AZ,2012,apache,3.66
+AZ,2012,cochise,2.41
+AZ,2012,coconino,2.73
+AZ,2012,maricopa,2.73
+AZ,2012,mohave,2.39
+AZ,2012,navajo,2.95
+AZ,2012,pima,2.5
+AZ,2012,pinal,2.91
+AZ,2012,yavapai,2.23
+AZ,2012,yuma,2.71
+AR,2012,benton,2.73
+AR,2012,craighead,2.5
+AR,2012,faulkner,2.61
+AR,2012,garland,2.33
+AR,2012,jefferson,2.45
+AR,2012,lonoke,2.73
+AR,2012,pulaski,2.47
+AR,2012,saline,2.59
+AR,2012,sebastian,2.44
+AR,2012,washington,2.5
+AR,2012,white,2.58
+CA,2012,alameda,2.77
+CA,2012,butte,2.53
+CA,2012,contra costa,2.81
+CA,2012,el dorado,2.73
+CA,2012,fresno,3.18
+CA,2012,humboldt,2.5
+CA,2012,imperial,3.52
+CA,2012,kern,3.22
+CA,2012,kings,3.26
+CA,2012,lake,2.4
+CA,2012,los angeles,3.03
+CA,2012,madera,3.52
+CA,2012,marin,2.42
+CA,2012,mendocino,2.42
+CA,2012,merced,3.35
+CA,2012,monterey,3.28
+CA,2012,napa,2.78
+CA,2012,nevada,2.33
+CA,2012,orange,3.06
+CA,2012,placer,2.69
+CA,2012,riverside,3.26
+CA,2012,sacramento,2.76
+CA,2012,san bernardino,3.39
+CA,2012,san diego,2.86
+CA,2012,san francisco,2.32
+CA,2012,san joaquin,3.19
+CA,2012,san luis obispo,2.53
+CA,2012,san mateo,2.82
+CA,2012,santa barbara,2.91
+CA,2012,santa clara,2.94
+CA,2012,santa cruz,2.74
+CA,2012,shasta,2.58
+CA,2012,solano,2.9
+CA,2012,sonoma,2.61
+CA,2012,stanislaus,3.08
+CA,2012,sutter,3.01
+CA,2012,tulare,3.36
+CA,2012,ventura,3.08
+CA,2012,yolo,2.73
+CA,2012,yuba,2.88
+CO,2012,adams,2.97
+CO,2012,arapahoe,2.61
+CO,2012,boulder,2.43
+CO,2012,denver,2.29
+CO,2012,douglas,2.83
+CO,2012,el paso,2.64
+CO,2012,jefferson,2.42
+CO,2012,larimer,2.43
+CO,2012,mesa,2.45
+CO,2012,pueblo,2.51
+CO,2012,weld,2.77
+CT,2012,fairfield,2.74
+CT,2012,hartford,2.51
+CT,2012,litchfield,2.44
+CT,2012,middlesex,2.37
+CT,2012,new haven,2.53
+CT,2012,new london,2.48
+CT,2012,tolland,2.48
+CT,2012,windham,2.6
+DE,2012,kent,2.73
+DE,2012,new castle,2.61
+DE,2012,sussex,2.57
+DC,2012,district of columbia,2.22
+FL,2012,alachua,2.53
+FL,2012,bay,2.46
+FL,2012,brevard,2.48
+FL,2012,broward,2.71
+FL,2012,charlotte,2.22
+FL,2012,citrus,2.34
+FL,2012,clay,2.88
+FL,2012,collier,2.65
+FL,2012,columbia,2.8
+FL,2012,duval,2.62
+FL,2012,escambia,2.49
+FL,2012,flagler,2.69
+FL,2012,hernando,2.48
+FL,2012,highlands,2.46
+FL,2012,hillsborough,2.63
+FL,2012,indian river,2.36
+FL,2012,lake,2.6
+FL,2012,lee,2.6
+FL,2012,leon,2.48
+FL,2012,manatee,2.52
+FL,2012,marion,2.44
+FL,2012,martin,2.39
+FL,2012,miami-dade,3.03
+FL,2012,monroe,2.49
+FL,2012,nassau,2.71
+FL,2012,okaloosa,2.46
+FL,2012,orange,2.77
+FL,2012,osceola,3.14
+FL,2012,palm beach,2.56
+FL,2012,pasco,2.56
+FL,2012,pinellas,2.23
+FL,2012,polk,2.69
+FL,2012,putnam,2.55
+FL,2012,st. johns,2.55
+FL,2012,st. lucie,2.56
+FL,2012,santa rosa,2.64
+FL,2012,sarasota,2.2
+FL,2012,seminole,2.87
+FL,2012,sumter,2.05
+FL,2012,volusia,2.46
+GA,2012,barrow,2.89
+GA,2012,bartow,2.76
+GA,2012,bibb,2.67
+GA,2012,bulloch,2.52
+GA,2012,carroll,2.7
+GA,2012,catoosa,2.84
+GA,2012,chatham,2.54
+GA,2012,cherokee,2.9
+GA,2012,clarke,2.69
+GA,2012,clayton,3.02
+GA,2012,cobb,2.63
+GA,2012,columbia,2.97
+GA,2012,coweta,2.73
+GA,2012,dekalb,2.65
+GA,2012,dougherty,2.52
+GA,2012,douglas,2.92
+GA,2012,fayette,2.88
+GA,2012,floyd,2.69
+GA,2012,forsyth,3.2
+GA,2012,fulton,2.52
+GA,2012,glynn,2.51
+GA,2012,gwinnett,3.09
+GA,2012,hall,3.03
+GA,2012,henry,3.01
+GA,2012,houston,2.74
+GA,2012,liberty,2.83
+GA,2012,lowndes,2.77
+GA,2012,muscogee,2.61
+GA,2012,newton,2.93
+GA,2012,paulding,3.04
+GA,2012,richmond,2.66
+GA,2012,rockdale,2.89
+GA,2012,troup,2.72
+GA,2012,walker,2.59
+GA,2012,walton,2.85
+GA,2012,whitfield,3.01
+HI,2012,hawaii,2.87
+HI,2012,honolulu,3.05
+HI,2012,kauai,2.99
+HI,2012,maui,2.98
+ID,2012,ada,2.6
+ID,2012,bannock,2.67
+ID,2012,bonneville,2.92
+ID,2012,canyon,2.99
+ID,2012,kootenai,2.52
+ID,2012,twin falls,2.78
+IL,2012,adams,2.47
+IL,2012,champaign,2.34
+IL,2012,cook,2.66
+IL,2012,dekalb,2.58
+IL,2012,dupage,2.74
+IL,2012,kane,3.03
+IL,2012,kankakee,2.61
+IL,2012,kendall,2.98
+IL,2012,lake,2.83
+IL,2012,lasalle,2.46
+IL,2012,mchenry,2.81
+IL,2012,mclean,2.49
+IL,2012,macon,2.3
+IL,2012,madison,2.44
+IL,2012,peoria,2.39
+IL,2012,rock island,2.33
+IL,2012,st. clair,2.65
+IL,2012,sangamon,2.37
+IL,2012,tazewell,2.46
+IL,2012,vermilion,2.48
+IL,2012,will,3.06
+IL,2012,williamson,2.42
+IL,2012,winnebago,2.55
+IN,2012,allen,2.56
+IN,2012,bartholomew,2.64
+IN,2012,clark,2.58
+IN,2012,delaware,2.34
+IN,2012,elkhart,2.77
+IN,2012,floyd,2.54
+IN,2012,grant,2.38
+IN,2012,hamilton,2.74
+IN,2012,hancock,2.75
+IN,2012,hendricks,2.83
+IN,2012,howard,2.41
+IN,2012,johnson,2.67
+IN,2012,kosciusko,2.57
+IN,2012,lake,2.75
+IN,2012,laporte,2.34
+IN,2012,madison,2.51
+IN,2012,marion,2.49
+IN,2012,monroe,2.35
+IN,2012,morgan,2.6
+IN,2012,porter,2.63
+IN,2012,st. joseph,2.5
+IN,2012,tippecanoe,2.41
+IN,2012,vanderburgh,2.33
+IN,2012,vigo,2.45
+IN,2012,wayne,2.36
+IA,2012,black hawk,2.42
+IA,2012,dallas,2.6
+IA,2012,dubuque,2.41
+IA,2012,johnson,2.32
+IA,2012,linn,2.49
+IA,2012,polk,2.49
+IA,2012,pottawattamie,2.48
+IA,2012,scott,2.47
+IA,2012,story,2.32
+IA,2012,woodbury,2.65
+KS,2012,butler,2.59
+KS,2012,douglas,2.35
+KS,2012,johnson,2.53
+KS,2012,leavenworth,2.66
+KS,2012,riley,2.5
+KS,2012,sedgwick,2.59
+KS,2012,shawnee,2.45
+KS,2012,wyandotte,2.69
+KY,2012,boone,2.74
+KY,2012,bullitt,2.73
+KY,2012,campbell,2.46
+KY,2012,christian,2.67
+KY,2012,daviess,2.43
+KY,2012,fayette,2.38
+KY,2012,hardin,2.64
+KY,2012,jefferson,2.39
+KY,2012,kenton,2.57
+KY,2012,mccracken,2.32
+KY,2012,madison,2.58
+KY,2012,pike,2.46
+KY,2012,warren,2.41
+LA,2012,ascension parish,2.8
+LA,2012,bossier parish,2.57
+LA,2012,caddo parish,2.6
+LA,2012,calcasieu parish,2.55
+LA,2012,east baton rouge parish,2.59
+LA,2012,iberia parish,2.77
+LA,2012,jefferson parish,2.58
+LA,2012,lafayette parish,2.52
+LA,2012,lafourche parish,2.68
+LA,2012,livingston parish,2.77
+LA,2012,orleans parish,2.35
+LA,2012,ouachita parish,2.53
+LA,2012,rapides parish,2.6
+LA,2012,st. landry parish,2.67
+LA,2012,st. tammany parish,2.65
+LA,2012,tangipahoa parish,2.75
+LA,2012,terrebonne parish,2.83
+ME,2012,androscoggin,2.34
+ME,2012,aroostook,2.23
+ME,2012,cumberland,2.33
+ME,2012,kennebec,2.3
+ME,2012,penobscot,2.32
+ME,2012,york,2.45
+MD,2012,allegany,2.32
+MD,2012,anne arundel,2.65
+MD,2012,baltimore,2.55
+MD,2012,calvert,2.86
+MD,2012,carroll,2.73
+MD,2012,cecil,2.82
+MD,2012,charles,2.85
+MD,2012,frederick,2.72
+MD,2012,harford,2.69
+MD,2012,howard,2.76
+MD,2012,montgomery,2.76
+MD,2012,prince george's,2.84
+MD,2012,st. mary's,2.71
+MD,2012,washington,2.49
+MD,2012,wicomico,2.62
+MD,2012,baltimore city,2.44
+MA,2012,barnstable,2.37
+MA,2012,berkshire,2.23
+MA,2012,bristol,2.55
+MA,2012,essex,2.6
+MA,2012,franklin,2.38
+MA,2012,hampden,2.56
+MA,2012,hampshire,2.37
+MA,2012,middlesex,2.54
+MA,2012,norfolk,2.57
+MA,2012,plymouth,2.68
+MA,2012,suffolk,2.42
+MA,2012,worcester,2.6
+MI,2012,allegan,2.58
+MI,2012,bay,2.4
+MI,2012,berrien,2.5
+MI,2012,calhoun,2.47
+MI,2012,clinton,2.56
+MI,2012,eaton,2.49
+MI,2012,genesee,2.48
+MI,2012,grand traverse,2.46
+MI,2012,ingham,2.4
+MI,2012,isabella,2.62
+MI,2012,jackson,2.5
+MI,2012,kalamazoo,2.45
+MI,2012,kent,2.61
+MI,2012,lapeer,2.63
+MI,2012,lenawee,2.46
+MI,2012,livingston,2.72
+MI,2012,macomb,2.54
+MI,2012,marquette,2.32
+MI,2012,midland,2.48
+MI,2012,monroe,2.61
+MI,2012,muskegon,2.56
+MI,2012,oakland,2.47
+MI,2012,ottawa,2.74
+MI,2012,saginaw,2.46
+MI,2012,st. clair,2.44
+MI,2012,shiawassee,2.52
+MI,2012,van buren,2.67
+MI,2012,washtenaw,2.43
+MI,2012,wayne,2.68
+MN,2012,anoka,2.7
+MN,2012,blue earth,2.51
+MN,2012,carver,2.72
+MN,2012,dakota,2.59
+MN,2012,hennepin,2.4
+MN,2012,olmsted,2.52
+MN,2012,ramsey,2.44
+MN,2012,st. louis,2.26
+MN,2012,scott,2.88
+MN,2012,sherburne,2.88
+MN,2012,stearns,2.53
+MN,2012,washington,2.69
+MN,2012,wright,2.78
+MS,2012,desoto,2.79
+MS,2012,forrest,2.71
+MS,2012,harrison,2.53
+MS,2012,hinds,2.75
+MS,2012,jackson,2.75
+MS,2012,jones,2.55
+MS,2012,lauderdale,2.62
+MS,2012,lee,2.65
+MS,2012,madison,2.64
+MS,2012,rankin,2.66
+MO,2012,boone,2.4
+MO,2012,buchanan,2.52
+MO,2012,cape girardeau,2.44
+MO,2012,cass,2.65
+MO,2012,christian,2.74
+MO,2012,clay,2.62
+MO,2012,cole,2.39
+MO,2012,franklin,2.6
+MO,2012,greene,2.31
+MO,2012,jackson,2.46
+MO,2012,jasper,2.45
+MO,2012,jefferson,2.71
+MO,2012,platte,2.48
+MO,2012,st. charles,2.63
+MO,2012,st. francois,2.46
+MO,2012,st. louis,2.44
+MO,2012,st. louis city,2.2
+MT,2012,cascade,2.37
+MT,2012,flathead,2.42
+MT,2012,gallatin,2.45
+MT,2012,missoula,2.32
+MT,2012,yellowstone,2.43
+NE,2012,douglas,2.51
+NE,2012,lancaster,2.42
+NE,2012,sarpy,2.66
+NV,2012,clark,2.77
+NV,2012,washoe,2.58
+NH,2012,cheshire,2.37
+NH,2012,grafton,2.27
+NH,2012,hillsborough,2.54
+NH,2012,merrimack,2.45
+NH,2012,rockingham,2.55
+NH,2012,strafford,2.46
+NJ,2012,atlantic,2.69
+NJ,2012,bergen,2.69
+NJ,2012,burlington,2.67
+NJ,2012,camden,2.73
+NJ,2012,cape may,2.31
+NJ,2012,cumberland,2.89
+NJ,2012,essex,2.75
+NJ,2012,gloucester,2.72
+NJ,2012,hudson,2.59
+NJ,2012,hunterdon,2.62
+NJ,2012,mercer,2.64
+NJ,2012,middlesex,2.82
+NJ,2012,monmouth,2.63
+NJ,2012,morris,2.71
+NJ,2012,ocean,2.56
+NJ,2012,passaic,3.01
+NJ,2012,salem,2.58
+NJ,2012,somerset,2.77
+NJ,2012,sussex,2.68
+NJ,2012,union,2.9
+NJ,2012,warren,2.56
+NM,2012,bernalillo,2.5
+NM,2012,chaves,2.77
+NM,2012,doã±a ana,2.84
+NM,2012,lea,3.07
+NM,2012,mckinley,3.97
+NM,2012,otero,2.79
+NM,2012,sandoval,2.84
+NM,2012,san juan,3.17
+NM,2012,santa fe,2.3
+NM,2012,valencia,2.73
+NY,2012,albany,2.38
+NY,2012,bronx,2.87
+NY,2012,broome,2.3
+NY,2012,cattaraugus,2.37
+NY,2012,cayuga,2.5
+NY,2012,chautauqua,2.45
+NY,2012,chemung,2.41
+NY,2012,clinton,2.27
+NY,2012,dutchess,2.6
+NY,2012,erie,2.35
+NY,2012,jefferson,2.49
+NY,2012,kings,2.75
+NY,2012,livingston,2.44
+NY,2012,madison,2.59
+NY,2012,monroe,2.41
+NY,2012,nassau,3.01
+NY,2012,new york,2.09
+NY,2012,niagara,2.37
+NY,2012,oneida,2.44
+NY,2012,onondaga,2.41
+NY,2012,ontario,2.36
+NY,2012,orange,2.89
+NY,2012,oswego,2.57
+NY,2012,putnam,2.85
+NY,2012,queens,2.88
+NY,2012,rensselaer,2.38
+NY,2012,richmond,2.84
+NY,2012,rockland,3.17
+NY,2012,st. lawrence,2.38
+NY,2012,saratoga,2.49
+NY,2012,schenectady,2.62
+NY,2012,steuben,2.34
+NY,2012,suffolk,2.95
+NY,2012,sullivan,2.48
+NY,2012,tompkins,2.33
+NY,2012,ulster,2.4
+NY,2012,warren,2.35
+NY,2012,wayne,2.46
+NY,2012,westchester,2.75
+NC,2012,alamance,2.52
+NC,2012,brunswick,2.4
+NC,2012,buncombe,2.39
+NC,2012,burke,2.58
+NC,2012,cabarrus,2.84
+NC,2012,caldwell,2.45
+NC,2012,carteret,2.35
+NC,2012,catawba,2.56
+NC,2012,chatham,2.5
+NC,2012,cleveland,2.6
+NC,2012,craven,2.48
+NC,2012,cumberland,2.56
+NC,2012,davidson,2.54
+NC,2012,durham,2.34
+NC,2012,forsyth,2.46
+NC,2012,gaston,2.56
+NC,2012,guilford,2.44
+NC,2012,harnett,2.88
+NC,2012,henderson,2.4
+NC,2012,iredell,2.75
+NC,2012,johnston,2.85
+NC,2012,lincoln,2.51
+NC,2012,mecklenburg,2.6
+NC,2012,moore,2.41
+NC,2012,nash,2.59
+NC,2012,new hanover,2.38
+NC,2012,onslow,2.74
+NC,2012,orange,2.45
+NC,2012,pitt,2.38
+NC,2012,randolph,2.56
+NC,2012,robeson,2.83
+NC,2012,rockingham,2.39
+NC,2012,rowan,2.6
+NC,2012,rutherford,2.41
+NC,2012,surry,2.5
+NC,2012,union,3.01
+NC,2012,wake,2.6
+NC,2012,wayne,2.55
+NC,2012,wilkes,2.38
+NC,2012,wilson,2.53
+ND,2012,burleigh,2.35
+ND,2012,cass,2.29
+ND,2012,grand forks,2.22
+OH,2012,allen,2.51
+OH,2012,ashtabula,2.48
+OH,2012,belmont,2.3
+OH,2012,butler,2.71
+OH,2012,clark,2.47
+OH,2012,clermont,2.61
+OH,2012,columbiana,2.42
+OH,2012,cuyahoga,2.34
+OH,2012,delaware,2.74
+OH,2012,erie,2.36
+OH,2012,fairfield,2.66
+OH,2012,franklin,2.48
+OH,2012,geauga,2.71
+OH,2012,greene,2.47
+OH,2012,hamilton,2.39
+OH,2012,hancock,2.46
+OH,2012,jefferson,2.31
+OH,2012,lake,2.38
+OH,2012,licking,2.6
+OH,2012,lorain,2.51
+OH,2012,lucas,2.42
+OH,2012,mahoning,2.35
+OH,2012,marion,2.37
+OH,2012,medina,2.63
+OH,2012,miami,2.47
+OH,2012,montgomery,2.34
+OH,2012,muskingum,2.5
+OH,2012,portage,2.6
+OH,2012,richland,2.38
+OH,2012,ross,2.56
+OH,2012,scioto,2.58
+OH,2012,stark,2.43
+OH,2012,summit,2.4
+OH,2012,trumbull,2.34
+OH,2012,tuscarawas,2.49
+OH,2012,warren,2.74
+OH,2012,wayne,2.63
+OH,2012,wood,2.42
+OK,2012,canadian,2.88
+OK,2012,cleveland,2.6
+OK,2012,comanche,2.7
+OK,2012,creek,2.61
+OK,2012,muskogee,2.56
+OK,2012,oklahoma,2.56
+OK,2012,payne,2.34
+OK,2012,pottawatomie,2.54
+OK,2012,rogers,2.64
+OK,2012,tulsa,2.5
+OK,2012,wagoner,2.76
+OR,2012,benton,2.44
+OR,2012,clackamas,2.6
+OR,2012,deschutes,2.44
+OR,2012,douglas,2.44
+OR,2012,jackson,2.5
+OR,2012,josephine,2.4
+OR,2012,klamath,2.21
+OR,2012,lane,2.37
+OR,2012,linn,2.67
+OR,2012,marion,2.72
+OR,2012,multnomah,2.43
+OR,2012,polk,2.63
+OR,2012,umatilla,2.71
+OR,2012,washington,2.66
+OR,2012,yamhill,2.8
+PA,2012,adams,2.55
+PA,2012,allegheny,2.26
+PA,2012,armstrong,2.33
+PA,2012,beaver,2.36
+PA,2012,berks,2.65
+PA,2012,blair,2.47
+PA,2012,bucks,2.67
+PA,2012,butler,2.45
+PA,2012,cambria,2.28
+PA,2012,carbon,2.42
+PA,2012,centre,2.44
+PA,2012,chester,2.67
+PA,2012,clearfield,2.36
+PA,2012,columbia,2.38
+PA,2012,crawford,2.42
+PA,2012,cumberland,2.39
+PA,2012,dauphin,2.47
+PA,2012,delaware,2.64
+PA,2012,erie,2.44
+PA,2012,fayette,2.44
+PA,2012,franklin,2.55
+PA,2012,indiana,2.35
+PA,2012,lackawanna,2.41
+PA,2012,lancaster,2.64
+PA,2012,lawrence,2.36
+PA,2012,lebanon,2.52
+PA,2012,lehigh,2.59
+PA,2012,luzerne,2.39
+PA,2012,lycoming,2.44
+PA,2012,mercer,2.38
+PA,2012,monroe,2.89
+PA,2012,montgomery,2.55
+PA,2012,northampton,2.57
+PA,2012,northumberland,2.28
+PA,2012,philadelphia,2.58
+PA,2012,schuylkill,2.36
+PA,2012,somerset,2.4
+PA,2012,washington,2.41
+PA,2012,westmoreland,2.32
+PA,2012,york,2.55
+RI,2012,kent,2.35
+RI,2012,newport,2.28
+RI,2012,providence,2.51
+RI,2012,washington,2.37
+SC,2012,aiken,2.54
+SC,2012,anderson,2.58
+SC,2012,beaufort,2.55
+SC,2012,berkeley,2.83
+SC,2012,charleston,2.46
+SC,2012,darlington,2.53
+SC,2012,dorchester,2.68
+SC,2012,florence,2.63
+SC,2012,greenville,2.58
+SC,2012,greenwood,2.66
+SC,2012,horry,2.37
+SC,2012,lancaster,2.68
+SC,2012,laurens,2.56
+SC,2012,lexington,2.54
+SC,2012,oconee,2.41
+SC,2012,orangeburg,2.57
+SC,2012,pickens,2.5
+SC,2012,richland,2.56
+SC,2012,spartanburg,2.59
+SC,2012,sumter,2.62
+SC,2012,york,2.64
+SD,2012,minnehaha,2.53
+SD,2012,pennington,2.49
+TN,2012,anderson,2.39
+TN,2012,blount,2.5
+TN,2012,bradley,2.54
+TN,2012,davidson,2.42
+TN,2012,greene,2.27
+TN,2012,hamilton,2.48
+TN,2012,knox,2.35
+TN,2012,madison,2.6
+TN,2012,maury,2.53
+TN,2012,montgomery,2.8
+TN,2012,putnam,2.44
+TN,2012,robertson,2.73
+TN,2012,rutherford,2.77
+TN,2012,sevier,2.52
+TN,2012,shelby,2.68
+TN,2012,sullivan,2.36
+TN,2012,sumner,2.74
+TN,2012,washington,2.3
+TN,2012,williamson,2.88
+TN,2012,wilson,2.76
+TX,2012,angelina,2.8
+TX,2012,bastrop,2.92
+TX,2012,bell,3
+TX,2012,bexar,2.89
+TX,2012,bowie,2.44
+TX,2012,brazoria,2.86
+TX,2012,brazos,2.64
+TX,2012,cameron,3.4
+TX,2012,collin,2.82
+TX,2012,comal,2.65
+TX,2012,coryell,2.89
+TX,2012,dallas,2.81
+TX,2012,denton,2.78
+TX,2012,ector,2.89
+TX,2012,ellis,2.88
+TX,2012,el paso,3.12
+TX,2012,fort bend,3.15
+TX,2012,galveston,2.66
+TX,2012,grayson,2.5
+TX,2012,gregg,2.72
+TX,2012,guadalupe,2.96
+TX,2012,harris,2.92
+TX,2012,harrison,2.72
+TX,2012,hays,2.83
+TX,2012,henderson,2.66
+TX,2012,hidalgo,3.58
+TX,2012,hunt,2.78
+TX,2012,jefferson,2.52
+TX,2012,johnson,2.86
+TX,2012,kaufman,2.97
+TX,2012,liberty,2.8
+TX,2012,lubbock,2.58
+TX,2012,mclennan,2.69
+TX,2012,midland,2.83
+TX,2012,montgomery,2.9
+TX,2012,nacogdoches,2.51
+TX,2012,nueces,2.78
+TX,2012,orange,2.7
+TX,2012,parker,2.75
+TX,2012,potter,2.68
+TX,2012,randall,2.55
+TX,2012,rockwall,2.99
+TX,2012,san patricio,2.81
+TX,2012,smith,2.69
+TX,2012,tarrant,2.79
+TX,2012,taylor,2.57
+TX,2012,tom green,2.51
+TX,2012,travis,2.59
+TX,2012,victoria,2.76
+TX,2012,walker,2.24
+TX,2012,webb,3.71
+TX,2012,wichita,2.4
+TX,2012,williamson,2.9
+UT,2012,cache,3.14
+UT,2012,davis,3.24
+UT,2012,salt lake,3.02
+UT,2012,utah,3.65
+UT,2012,washington,2.96
+UT,2012,weber,2.91
+VT,2012,chittenden,2.36
+VA,2012,albemarle,2.45
+VA,2012,arlington,2.28
+VA,2012,augusta,2.42
+VA,2012,bedford,2.43
+VA,2012,chesterfield,2.77
+VA,2012,fairfax,2.84
+VA,2012,fauquier,2.87
+VA,2012,frederick,2.67
+VA,2012,hanover,2.73
+VA,2012,henrico,2.53
+VA,2012,james city,2.49
+VA,2012,loudoun,3.09
+VA,2012,montgomery,2.44
+VA,2012,prince william,3.17
+VA,2012,roanoke,2.39
+VA,2012,rockingham,2.58
+VA,2012,spotsylvania,2.96
+VA,2012,stafford,3.07
+VA,2012,york,2.85
+VA,2012,alexandria city,2.22
+VA,2012,chesapeake city,2.76
+VA,2012,hampton city,2.51
+VA,2012,lynchburg city,2.4
+VA,2012,newport news city,2.44
+VA,2012,norfolk city,2.55
+VA,2012,portsmouth city,2.57
+VA,2012,richmond city,2.39
+VA,2012,roanoke city,2.26
+VA,2012,suffolk city,2.75
+VA,2012,virginia beach city,2.64
+WA,2012,benton,2.73
+WA,2012,chelan,2.64
+WA,2012,clallam,2.35
+WA,2012,clark,2.71
+WA,2012,cowlitz,2.6
+WA,2012,franklin,3.44
+WA,2012,grant,2.97
+WA,2012,grays harbor,2.45
+WA,2012,island,2.34
+WA,2012,king,2.45
+WA,2012,kitsap,2.54
+WA,2012,lewis,2.47
+WA,2012,pierce,2.65
+WA,2012,skagit,2.61
+WA,2012,snohomish,2.67
+WA,2012,spokane,2.43
+WA,2012,thurston,2.49
+WA,2012,whatcom,2.53
+WA,2012,yakima,3.09
+WV,2012,berkeley,2.61
+WV,2012,cabell,2.35
+WV,2012,harrison,2.39
+WV,2012,kanawha,2.25
+WV,2012,monongalia,2.52
+WV,2012,raleigh,2.44
+WV,2012,wood,2.4
+WI,2012,brown,2.49
+WI,2012,dane,2.36
+WI,2012,dodge,2.49
+WI,2012,eau claire,2.38
+WI,2012,fond du lac,2.39
+WI,2012,jefferson,2.5
+WI,2012,kenosha,2.61
+WI,2012,la crosse,2.37
+WI,2012,manitowoc,2.34
+WI,2012,marathon,2.55
+WI,2012,milwaukee,2.44
+WI,2012,outagamie,2.55
+WI,2012,ozaukee,2.5
+WI,2012,portage,2.36
+WI,2012,racine,2.51
+WI,2012,rock,2.49
+WI,2012,st. croix,2.63
+WI,2012,sheboygan,2.4
+WI,2012,walworth,2.52
+WI,2012,washington,2.54
+WI,2012,waukesha,2.51
+WI,2012,winnebago,2.37
+WI,2012,wood,2.33
+WY,2012,laramie,2.64
+WY,2012,natrona,2.4
+PR,2012,arecibo municipio,2.83
+PR,2012,bayamã³n municipio,2.73
+PR,2012,caguas municipio,2.72
+PR,2012,carolina municipio,2.61
+PR,2012,guaynabo municipio,2.68
+PR,2012,mayagã¼ez municipio,2.72
+PR,2012,ponce municipio,2.75
+PR,2012,san juan municipio,2.46
+PR,2012,toa alta municipio,3.34
+PR,2012,toa baja municipio,2.9
+PR,2012,trujillo alto municipio,2.91
+AL,2014,baldwin,2.76
+AL,2014,calhoun,2.45
+AL,2014,cullman,2.64
+AL,2014,dekalb,2.84
+AL,2014,elmore,2.7
+AL,2014,etowah,2.57
+AL,2014,houston,2.66
+AL,2014,jefferson,2.46
+AL,2014,lauderdale,2.39
+AL,2014,lee,2.57
+AL,2014,limestone,2.78
+AL,2014,madison,2.43
+AL,2014,marshall,2.68
+AL,2014,mobile,2.63
+AL,2014,montgomery,2.46
+AL,2014,morgan,2.62
+AL,2014,st. clair,2.63
+AL,2014,shelby,2.69
+AL,2014,talladega,2.54
+AL,2014,tuscaloosa,2.81
+AL,2014,walker,2.56
+AK,2014,anchorage municipality,2.79
+AK,2014,fairbanks north star borough,2.67
+AK,2014,matanuska-susitna borough,3.12
+AZ,2014,apache,3.73
+AZ,2014,cochise,2.5
+AZ,2014,coconino,2.7
+AZ,2014,maricopa,2.77
+AZ,2014,mohave,2.47
+AZ,2014,navajo,3.17
+AZ,2014,pima,2.5
+AZ,2014,pinal,2.84
+AZ,2014,yavapai,2.37
+AZ,2014,yuma,2.8
+AR,2014,benton,2.78
+AR,2014,craighead,2.57
+AR,2014,faulkner,2.72
+AR,2014,garland,2.44
+AR,2014,jefferson,2.35
+AR,2014,lonoke,2.66
+AR,2014,pulaski,2.54
+AR,2014,saline,2.75
+AR,2014,sebastian,2.56
+AR,2014,washington,2.61
+AR,2014,white,2.57
+CA,2014,alameda,2.8
+CA,2014,butte,2.57
+CA,2014,contra costa,2.84
+CA,2014,el dorado,2.75
+CA,2014,fresno,3.18
+CA,2014,humboldt,2.46
+CA,2014,imperial,3.89
+CA,2014,kern,3.22
+CA,2014,kings,3.21
+CA,2014,lake,2.29
+CA,2014,los angeles,3.04
+CA,2014,madera,3.41
+CA,2014,marin,2.45
+CA,2014,mendocino,2.56
+CA,2014,merced,3.28
+CA,2014,monterey,3.34
+CA,2014,napa,2.72
+CA,2014,nevada,2.43
+CA,2014,orange,3.05
+CA,2014,placer,2.7
+CA,2014,riverside,3.28
+CA,2014,sacramento,2.78
+CA,2014,san bernardino,3.33
+CA,2014,san diego,2.88
+CA,2014,san francisco,2.35
+CA,2014,san joaquin,3.16
+CA,2014,san luis obispo,2.56
+CA,2014,san mateo,2.91
+CA,2014,santa barbara,2.95
+CA,2014,santa clara,2.99
+CA,2014,santa cruz,2.7
+CA,2014,shasta,2.57
+CA,2014,solano,2.9
+CA,2014,sonoma,2.58
+CA,2014,stanislaus,3.12
+CA,2014,sutter,3
+CA,2014,tulare,3.41
+CA,2014,ventura,3.09
+CA,2014,yolo,2.76
+CA,2014,yuba,2.82
+CO,2014,adams,2.99
+CO,2014,arapahoe,2.64
+CO,2014,boulder,2.45
+CO,2014,denver,2.3
+CO,2014,douglas,2.9
+CO,2014,el paso,2.64
+CO,2014,jefferson,2.45
+CO,2014,larimer,2.51
+CO,2014,mesa,2.42
+CO,2014,pueblo,2.48
+CO,2014,weld,2.81
+CT,2014,fairfield,2.74
+CT,2014,hartford,2.51
+CT,2014,litchfield,2.47
+CT,2014,middlesex,2.37
+CT,2014,new haven,2.55
+CT,2014,new london,2.47
+CT,2014,tolland,2.49
+CT,2014,windham,2.5
+DE,2014,kent,2.72
+DE,2014,new castle,2.65
+DE,2014,sussex,2.41
+DC,2014,district of columbia,2.23
+FL,2014,alachua,2.47
+FL,2014,bay,2.67
+FL,2014,brevard,2.45
+FL,2014,broward,2.78
+FL,2014,charlotte,2.19
+FL,2014,citrus,2.28
+FL,2014,clay,2.82
+FL,2014,collier,2.59
+FL,2014,columbia,2.64
+FL,2014,duval,2.57
+FL,2014,escambia,2.53
+FL,2014,flagler,2.77
+FL,2014,hernando,2.46
+FL,2014,highlands,2.46
+FL,2014,hillsborough,2.65
+FL,2014,indian river,2.58
+FL,2014,lake,2.65
+FL,2014,lee,2.54
+FL,2014,leon,2.41
+FL,2014,manatee,2.52
+FL,2014,marion,2.49
+FL,2014,martin,2.39
+FL,2014,miami-dade,3.1
+FL,2014,monroe,2.63
+FL,2014,nassau,2.68
+FL,2014,okaloosa,2.6
+FL,2014,orange,2.75
+FL,2014,osceola,3.45
+FL,2014,palm beach,2.56
+FL,2014,pasco,2.56
+FL,2014,pinellas,2.29
+FL,2014,polk,2.85
+FL,2014,putnam,2.65
+FL,2014,st. johns,2.65
+FL,2014,st. lucie,2.65
+FL,2014,santa rosa,2.8
+FL,2014,sarasota,2.22
+FL,2014,seminole,2.95
+FL,2014,sumter,2.09
+FL,2014,volusia,2.48
+GA,2014,barrow,3.24
+GA,2014,bartow,2.68
+GA,2014,bibb,2.63
+GA,2014,bulloch,2.54
+GA,2014,carroll,2.84
+GA,2014,catoosa,2.77
+GA,2014,chatham,2.55
+GA,2014,cherokee,2.8
+GA,2014,clarke,2.5
+GA,2014,clayton,2.98
+GA,2014,cobb,2.66
+GA,2014,columbia,3.06
+GA,2014,coweta,2.73
+GA,2014,dekalb,2.66
+GA,2014,dougherty,2.49
+GA,2014,douglas,2.88
+GA,2014,fayette,2.8
+GA,2014,floyd,2.54
+GA,2014,forsyth,3.07
+GA,2014,fulton,2.52
+GA,2014,glynn,2.49
+GA,2014,gwinnett,3.13
+GA,2014,hall,2.98
+GA,2014,henry,3.1
+GA,2014,houston,2.75
+GA,2014,liberty,2.85
+GA,2014,lowndes,2.84
+GA,2014,muscogee,2.61
+GA,2014,newton,2.85
+GA,2014,paulding,2.95
+GA,2014,richmond,2.69
+GA,2014,rockdale,2.93
+GA,2014,troup,2.83
+GA,2014,walker,2.62
+GA,2014,walton,2.86
+GA,2014,whitfield,2.81
+HI,2014,hawaii,2.93
+HI,2014,honolulu,3.09
+HI,2014,kauai,3.14
+HI,2014,maui,2.95
+ID,2014,ada,2.62
+ID,2014,bannock,2.69
+ID,2014,bonneville,2.93
+ID,2014,canyon,3
+ID,2014,kootenai,2.59
+ID,2014,twin falls,2.7
+IL,2014,adams,2.37
+IL,2014,champaign,2.35
+IL,2014,cook,2.66
+IL,2014,dekalb,2.7
+IL,2014,dupage,2.72
+IL,2014,kane,3.03
+IL,2014,kankakee,2.6
+IL,2014,kendall,3.03
+IL,2014,lake,2.85
+IL,2014,lasalle,2.52
+IL,2014,mchenry,2.79
+IL,2014,mclean,2.51
+IL,2014,macon,2.37
+IL,2014,madison,2.46
+IL,2014,peoria,2.43
+IL,2014,rock island,2.38
+IL,2014,st. clair,2.62
+IL,2014,sangamon,2.34
+IL,2014,tazewell,2.47
+IL,2014,vermilion,2.46
+IL,2014,will,3.02
+IL,2014,williamson,2.38
+IL,2014,winnebago,2.49
+IN,2014,allen,2.59
+IN,2014,bartholomew,2.49
+IN,2014,clark,2.64
+IN,2014,delaware,2.43
+IN,2014,elkhart,2.81
+IN,2014,floyd,2.52
+IN,2014,grant,2.48
+IN,2014,hamilton,2.72
+IN,2014,hancock,2.67
+IN,2014,hendricks,2.74
+IN,2014,howard,2.41
+IN,2014,johnson,2.74
+IN,2014,kosciusko,2.59
+IN,2014,lake,2.66
+IN,2014,laporte,2.44
+IN,2014,madison,2.35
+IN,2014,marion,2.54
+IN,2014,monroe,2.37
+IN,2014,morgan,2.73
+IN,2014,porter,2.64
+IN,2014,st. joseph,2.52
+IN,2014,tippecanoe,2.56
+IN,2014,vanderburgh,2.38
+IN,2014,vigo,2.38
+IN,2014,wayne,2.41
+IA,2014,black hawk,2.4
+IA,2014,dallas,2.77
+IA,2014,dubuque,2.37
+IA,2014,johnson,2.41
+IA,2014,linn,2.41
+IA,2014,polk,2.52
+IA,2014,pottawattamie,2.43
+IA,2014,scott,2.48
+IA,2014,story,2.36
+IA,2014,woodbury,2.56
+KS,2014,butler,2.75
+KS,2014,douglas,2.38
+KS,2014,johnson,2.58
+KS,2014,leavenworth,2.77
+KS,2014,riley,2.51
+KS,2014,sedgwick,2.62
+KS,2014,shawnee,2.45
+KS,2014,wyandotte,2.67
+KY,2014,boone,2.79
+KY,2014,bullitt,2.71
+KY,2014,campbell,2.49
+KY,2014,christian,2.63
+KY,2014,daviess,2.41
+KY,2014,fayette,2.34
+KY,2014,hardin,2.68
+KY,2014,jefferson,2.42
+KY,2014,kenton,2.57
+KY,2014,mccracken,2.24
+KY,2014,madison,2.43
+KY,2014,pike,2.34
+KY,2014,warren,2.54
+LA,2014,ascension parish,2.8
+LA,2014,bossier parish,2.61
+LA,2014,caddo parish,2.61
+LA,2014,calcasieu parish,2.62
+LA,2014,east baton rouge parish,2.56
+LA,2014,iberia parish,2.83
+LA,2014,jefferson parish,2.56
+LA,2014,lafayette parish,2.61
+LA,2014,lafourche parish,2.78
+LA,2014,livingston parish,2.75
+LA,2014,orleans parish,2.43
+LA,2014,ouachita parish,2.52
+LA,2014,rapides parish,2.75
+LA,2014,st. landry parish,2.87
+LA,2014,st. tammany parish,2.76
+LA,2014,tangipahoa parish,2.7
+LA,2014,terrebonne parish,2.8
+ME,2014,androscoggin,2.36
+ME,2014,aroostook,2.23
+ME,2014,cumberland,2.38
+ME,2014,kennebec,2.34
+ME,2014,penobscot,2.39
+ME,2014,york,2.37
+MD,2014,allegany,2.24
+MD,2014,anne arundel,2.68
+MD,2014,baltimore,2.59
+MD,2014,calvert,2.88
+MD,2014,carroll,2.76
+MD,2014,cecil,2.73
+MD,2014,charles,2.79
+MD,2014,frederick,2.68
+MD,2014,harford,2.69
+MD,2014,howard,2.8
+MD,2014,montgomery,2.8
+MD,2014,prince george's,2.88
+MD,2014,st. mary's,2.75
+MD,2014,washington,2.58
+MD,2014,wicomico,2.63
+MD,2014,baltimore city,2.5
+MA,2014,barnstable,2.22
+MA,2014,berkshire,2.23
+MA,2014,bristol,2.53
+MA,2014,essex,2.61
+MA,2014,franklin,2.32
+MA,2014,hampden,2.57
+MA,2014,hampshire,2.37
+MA,2014,middlesex,2.58
+MA,2014,norfolk,2.59
+MA,2014,plymouth,2.7
+MA,2014,suffolk,2.43
+MA,2014,worcester,2.62
+MI,2014,allegan,2.7
+MI,2014,bay,2.45
+MI,2014,berrien,2.38
+MI,2014,calhoun,2.5
+MI,2014,clinton,2.69
+MI,2014,eaton,2.42
+MI,2014,genesee,2.44
+MI,2014,grand traverse,2.44
+MI,2014,ingham,2.4
+MI,2014,isabella,2.57
+MI,2014,jackson,2.44
+MI,2014,kalamazoo,2.5
+MI,2014,kent,2.67
+MI,2014,lapeer,2.75
+MI,2014,lenawee,2.44
+MI,2014,livingston,2.66
+MI,2014,macomb,2.52
+MI,2014,marquette,2.38
+MI,2014,midland,2.45
+MI,2014,monroe,2.57
+MI,2014,muskegon,2.57
+MI,2014,oakland,2.49
+MI,2014,ottawa,2.75
+MI,2014,saginaw,2.42
+MI,2014,st. clair,2.52
+MI,2014,shiawassee,2.5
+MI,2014,van buren,2.59
+MI,2014,washtenaw,2.46
+MI,2014,wayne,2.64
+MN,2014,anoka,2.72
+MN,2014,blue earth,2.47
+MN,2014,carver,2.81
+MN,2014,dakota,2.61
+MN,2014,hennepin,2.4
+MN,2014,olmsted,2.52
+MN,2014,ramsey,2.5
+MN,2014,rice,2.5
+MN,2014,st. louis,2.24
+MN,2014,scott,2.96
+MN,2014,sherburne,2.91
+MN,2014,stearns,2.52
+MN,2014,washington,2.68
+MN,2014,wright,2.9
+MS,2014,desoto,2.81
+MS,2014,forrest,2.72
+MS,2014,harrison,2.47
+MS,2014,hinds,2.66
+MS,2014,jackson,2.83
+MS,2014,jones,2.75
+MS,2014,lauderdale,2.66
+MS,2014,lee,2.71
+MS,2014,madison,2.73
+MS,2014,rankin,2.63
+MO,2014,boone,2.43
+MO,2014,buchanan,2.59
+MO,2014,cape girardeau,2.49
+MO,2014,cass,2.61
+MO,2014,christian,2.67
+MO,2014,clay,2.61
+MO,2014,cole,2.45
+MO,2014,franklin,2.49
+MO,2014,greene,2.33
+MO,2014,jackson,2.46
+MO,2014,jasper,2.59
+MO,2014,jefferson,2.66
+MO,2014,platte,2.54
+MO,2014,st. charles,2.66
+MO,2014,st. francois,2.38
+MO,2014,st. louis,2.47
+MO,2014,st. louis city,2.23
+MT,2014,cascade,2.34
+MT,2014,flathead,2.55
+MT,2014,gallatin,2.39
+MT,2014,lewis and clark,2.41
+MT,2014,missoula,2.35
+MT,2014,yellowstone,2.46
+NE,2014,douglas,2.53
+NE,2014,lancaster,2.42
+NE,2014,sarpy,2.71
+NV,2014,clark,2.8
+NV,2014,washoe,2.61
+NH,2014,cheshire,2.29
+NH,2014,grafton,2.34
+NH,2014,hillsborough,2.59
+NH,2014,merrimack,2.48
+NH,2014,rockingham,2.5
+NH,2014,strafford,2.5
+NJ,2014,atlantic,2.64
+NJ,2014,bergen,2.73
+NJ,2014,burlington,2.64
+NJ,2014,camden,2.68
+NJ,2014,cape may,2.27
+NJ,2014,cumberland,2.86
+NJ,2014,essex,2.79
+NJ,2014,gloucester,2.75
+NJ,2014,hudson,2.61
+NJ,2014,hunterdon,2.54
+NJ,2014,mercer,2.69
+NJ,2014,middlesex,2.85
+NJ,2014,monmouth,2.7
+NJ,2014,morris,2.74
+NJ,2014,ocean,2.62
+NJ,2014,passaic,3.13
+NJ,2014,salem,2.65
+NJ,2014,somerset,2.79
+NJ,2014,sussex,2.64
+NJ,2014,union,2.93
+NJ,2014,warren,2.52
+NM,2014,bernalillo,2.55
+NM,2014,chaves,2.69
+NM,2014,doã±a ana,2.76
+NM,2014,lea,3.09
+NM,2014,mckinley,4.04
+NM,2014,otero,2.67
+NM,2014,sandoval,2.77
+NM,2014,san juan,3.02
+NM,2014,santa fe,2.4
+NM,2014,valencia,2.79
+NY,2014,albany,2.33
+NY,2014,bronx,2.83
+NY,2014,broome,2.37
+NY,2014,cattaraugus,2.47
+NY,2014,cayuga,2.38
+NY,2014,chautauqua,2.38
+NY,2014,chemung,2.4
+NY,2014,clinton,2.36
+NY,2014,dutchess,2.67
+NY,2014,erie,2.33
+NY,2014,jefferson,2.59
+NY,2014,kings,2.74
+NY,2014,livingston,2.3
+NY,2014,madison,2.59
+NY,2014,monroe,2.43
+NY,2014,nassau,3.04
+NY,2014,new york,2.07
+NY,2014,niagara,2.41
+NY,2014,oneida,2.43
+NY,2014,onondaga,2.43
+NY,2014,ontario,2.43
+NY,2014,orange,2.93
+NY,2014,oswego,2.54
+NY,2014,putnam,2.83
+NY,2014,queens,2.92
+NY,2014,rensselaer,2.43
+NY,2014,richmond,2.83
+NY,2014,rockland,3.21
+NY,2014,st. lawrence,2.47
+NY,2014,saratoga,2.42
+NY,2014,schenectady,2.69
+NY,2014,steuben,2.35
+NY,2014,suffolk,2.98
+NY,2014,sullivan,2.6
+NY,2014,tompkins,2.39
+NY,2014,ulster,2.43
+NY,2014,warren,2.45
+NY,2014,wayne,2.53
+NY,2014,westchester,2.76
+NC,2014,alamance,2.41
+NC,2014,brunswick,2.37
+NC,2014,buncombe,2.36
+NC,2014,burke,2.61
+NC,2014,cabarrus,2.76
+NC,2014,caldwell,2.64
+NC,2014,carteret,2.36
+NC,2014,catawba,2.7
+NC,2014,chatham,2.4
+NC,2014,cleveland,2.58
+NC,2014,craven,2.51
+NC,2014,cumberland,2.58
+NC,2014,davidson,2.62
+NC,2014,durham,2.37
+NC,2014,forsyth,2.43
+NC,2014,gaston,2.72
+NC,2014,guilford,2.49
+NC,2014,harnett,2.8
+NC,2014,henderson,2.41
+NC,2014,iredell,2.67
+NC,2014,johnston,2.81
+NC,2014,lincoln,2.61
+NC,2014,mecklenburg,2.56
+NC,2014,moore,2.47
+NC,2014,nash,2.5
+NC,2014,new hanover,2.32
+NC,2014,onslow,2.81
+NC,2014,orange,2.53
+NC,2014,pitt,2.47
+NC,2014,randolph,2.63
+NC,2014,robeson,2.83
+NC,2014,rockingham,2.45
+NC,2014,rowan,2.57
+NC,2014,rutherford,2.54
+NC,2014,surry,2.6
+NC,2014,union,3.03
+NC,2014,wake,2.64
+NC,2014,wayne,2.63
+NC,2014,wilkes,2.49
+NC,2014,wilson,2.44
+ND,2014,burleigh,2.24
+ND,2014,cass,2.32
+ND,2014,grand forks,2.24
+ND,2014,ward,2.56
+OH,2014,allen,2.56
+OH,2014,ashtabula,2.46
+OH,2014,belmont,2.4
+OH,2014,butler,2.7
+OH,2014,clark,2.42
+OH,2014,clermont,2.64
+OH,2014,columbiana,2.42
+OH,2014,cuyahoga,2.3
+OH,2014,delaware,2.8
+OH,2014,erie,2.36
+OH,2014,fairfield,2.67
+OH,2014,franklin,2.47
+OH,2014,geauga,2.63
+OH,2014,greene,2.4
+OH,2014,hamilton,2.35
+OH,2014,hancock,2.31
+OH,2014,jefferson,2.37
+OH,2014,lake,2.38
+OH,2014,licking,2.54
+OH,2014,lorain,2.54
+OH,2014,lucas,2.41
+OH,2014,mahoning,2.33
+OH,2014,marion,2.47
+OH,2014,medina,2.64
+OH,2014,miami,2.49
+OH,2014,montgomery,2.33
+OH,2014,muskingum,2.48
+OH,2014,portage,2.51
+OH,2014,richland,2.42
+OH,2014,ross,2.58
+OH,2014,scioto,2.39
+OH,2014,stark,2.46
+OH,2014,summit,2.4
+OH,2014,trumbull,2.32
+OH,2014,tuscarawas,2.44
+OH,2014,warren,2.72
+OH,2014,wayne,2.62
+OH,2014,wood,2.42
+OK,2014,canadian,2.89
+OK,2014,cleveland,2.56
+OK,2014,comanche,2.82
+OK,2014,creek,2.63
+OK,2014,muskogee,2.55
+OK,2014,oklahoma,2.55
+OK,2014,payne,2.42
+OK,2014,pottawatomie,2.67
+OK,2014,rogers,2.64
+OK,2014,tulsa,2.5
+OK,2014,wagoner,2.76
+OR,2014,benton,2.38
+OR,2014,clackamas,2.61
+OR,2014,deschutes,2.55
+OR,2014,douglas,2.43
+OR,2014,jackson,2.48
+OR,2014,josephine,2.46
+OR,2014,klamath,2.44
+OR,2014,lane,2.4
+OR,2014,linn,2.57
+OR,2014,marion,2.77
+OR,2014,multnomah,2.42
+OR,2014,polk,2.77
+OR,2014,umatilla,2.68
+OR,2014,washington,2.65
+OR,2014,yamhill,2.83
+PA,2014,adams,2.52
+PA,2014,allegheny,2.25
+PA,2014,armstrong,2.37
+PA,2014,beaver,2.43
+PA,2014,berks,2.61
+PA,2014,blair,2.47
+PA,2014,bucks,2.65
+PA,2014,butler,2.36
+PA,2014,cambria,2.27
+PA,2014,carbon,2.44
+PA,2014,centre,2.47
+PA,2014,chester,2.68
+PA,2014,clearfield,2.37
+PA,2014,columbia,2.38
+PA,2014,crawford,2.41
+PA,2014,cumberland,2.38
+PA,2014,dauphin,2.37
+PA,2014,delaware,2.65
+PA,2014,erie,2.45
+PA,2014,fayette,2.4
+PA,2014,franklin,2.57
+PA,2014,indiana,2.36
+PA,2014,lackawanna,2.43
+PA,2014,lancaster,2.67
+PA,2014,lawrence,2.41
+PA,2014,lebanon,2.6
+PA,2014,lehigh,2.59
+PA,2014,luzerne,2.45
+PA,2014,lycoming,2.42
+PA,2014,mercer,2.38
+PA,2014,monroe,3.02
+PA,2014,montgomery,2.58
+PA,2014,northampton,2.56
+PA,2014,northumberland,2.31
+PA,2014,philadelphia,2.61
+PA,2014,schuylkill,2.39
+PA,2014,somerset,2.41
+PA,2014,washington,2.46
+PA,2014,westmoreland,2.32
+PA,2014,york,2.55
+RI,2014,kent,2.43
+RI,2014,newport,2.21
+RI,2014,providence,2.54
+RI,2014,washington,2.45
+SC,2014,aiken,2.55
+SC,2014,anderson,2.56
+SC,2014,beaufort,2.57
+SC,2014,berkeley,2.79
+SC,2014,charleston,2.41
+SC,2014,darlington,2.65
+SC,2014,dorchester,2.74
+SC,2014,florence,2.57
+SC,2014,greenville,2.6
+SC,2014,greenwood,2.48
+SC,2014,horry,2.37
+SC,2014,lancaster,2.82
+SC,2014,laurens,2.57
+SC,2014,lexington,2.56
+SC,2014,oconee,2.32
+SC,2014,orangeburg,2.79
+SC,2014,pickens,2.59
+SC,2014,richland,2.53
+SC,2014,spartanburg,2.6
+SC,2014,sumter,2.64
+SC,2014,york,2.63
+SD,2014,minnehaha,2.49
+SD,2014,pennington,2.48
+TN,2014,anderson,2.47
+TN,2014,blount,2.6
+TN,2014,bradley,2.65
+TN,2014,davidson,2.41
+TN,2014,greene,2.43
+TN,2014,hamilton,2.49
+TN,2014,knox,2.46
+TN,2014,madison,2.48
+TN,2014,maury,2.68
+TN,2014,montgomery,2.85
+TN,2014,putnam,2.39
+TN,2014,robertson,2.7
+TN,2014,rutherford,2.74
+TN,2014,sevier,2.68
+TN,2014,shelby,2.65
+TN,2014,sullivan,2.31
+TN,2014,sumner,2.74
+TN,2014,washington,2.3
+TN,2014,williamson,2.87
+TN,2014,wilson,2.65
+TX,2014,angelina,2.79
+TX,2014,bastrop,2.93
+TX,2014,bell,2.78
+TX,2014,bexar,2.92
+TX,2014,bowie,2.67
+TX,2014,brazoria,2.87
+TX,2014,brazos,2.5
+TX,2014,cameron,3.44
+TX,2014,collin,2.82
+TX,2014,comal,2.76
+TX,2014,coryell,2.72
+TX,2014,dallas,2.79
+TX,2014,denton,2.79
+TX,2014,ector,3
+TX,2014,ellis,2.95
+TX,2014,el paso,3.2
+TX,2014,fort bend,3.17
+TX,2014,galveston,2.61
+TX,2014,grayson,2.6
+TX,2014,gregg,2.57
+TX,2014,guadalupe,2.89
+TX,2014,harris,2.86
+TX,2014,harrison,2.87
+TX,2014,hays,2.8
+TX,2014,henderson,2.57
+TX,2014,hidalgo,3.63
+TX,2014,hunt,2.8
+TX,2014,jefferson,2.51
+TX,2014,johnson,2.78
+TX,2014,kaufman,3.08
+TX,2014,liberty,2.92
+TX,2014,lubbock,2.55
+TX,2014,mclennan,2.68
+TX,2014,midland,2.87
+TX,2014,montgomery,2.86
+TX,2014,nacogdoches,2.43
+TX,2014,nueces,2.71
+TX,2014,orange,2.51
+TX,2014,parker,2.84
+TX,2014,potter,2.7
+TX,2014,randall,2.56
+TX,2014,rockwall,2.97
+TX,2014,san patricio,2.86
+TX,2014,smith,2.76
+TX,2014,tarrant,2.82
+TX,2014,taylor,2.63
+TX,2014,tom green,2.61
+TX,2014,travis,2.58
+TX,2014,victoria,2.75
+TX,2014,walker,2.59
+TX,2014,webb,3.74
+TX,2014,wichita,2.5
+TX,2014,williamson,2.94
+UT,2014,cache,3.2
+UT,2014,davis,3.31
+UT,2014,salt lake,3.01
+UT,2014,utah,3.62
+UT,2014,washington,3.03
+UT,2014,weber,2.93
+VT,2014,chittenden,2.36
+VA,2014,albemarle,2.41
+VA,2014,arlington,2.22
+VA,2014,augusta,2.48
+VA,2014,bedford,2.51
+VA,2014,chesterfield,2.75
+VA,2014,fairfax,2.88
+VA,2014,fauquier,2.91
+VA,2014,frederick,2.76
+VA,2014,hanover,2.67
+VA,2014,henrico,2.57
+VA,2014,james city,2.44
+VA,2014,loudoun,3.07
+VA,2014,montgomery,2.55
+VA,2014,prince william,3.22
+VA,2014,roanoke,2.36
+VA,2014,rockingham,2.52
+VA,2014,spotsylvania,2.99
+VA,2014,stafford,3.09
+VA,2014,york,2.78
+VA,2014,alexandria city,2.17
+VA,2014,chesapeake city,2.69
+VA,2014,hampton city,2.48
+VA,2014,lynchburg city,2.46
+VA,2014,newport news city,2.54
+VA,2014,norfolk city,2.53
+VA,2014,portsmouth city,2.5
+VA,2014,richmond city,2.33
+VA,2014,roanoke city,2.29
+VA,2014,suffolk city,2.8
+VA,2014,virginia beach city,2.63
+WA,2014,benton,2.72
+WA,2014,chelan,2.71
+WA,2014,clallam,2.28
+WA,2014,clark,2.71
+WA,2014,cowlitz,2.52
+WA,2014,franklin,3.35
+WA,2014,grant,3.09
+WA,2014,grays harbor,2.47
+WA,2014,island,2.38
+WA,2014,king,2.48
+WA,2014,kitsap,2.6
+WA,2014,lewis,2.47
+WA,2014,pierce,2.69
+WA,2014,skagit,2.61
+WA,2014,snohomish,2.69
+WA,2014,spokane,2.49
+WA,2014,thurston,2.53
+WA,2014,whatcom,2.47
+WA,2014,yakima,3.06
+WV,2014,berkeley,2.67
+WV,2014,cabell,2.26
+WV,2014,harrison,2.44
+WV,2014,kanawha,2.31
+WV,2014,monongalia,2.58
+WV,2014,raleigh,2.46
+WV,2014,wood,2.36
+WI,2014,brown,2.46
+WI,2014,dane,2.37
+WI,2014,dodge,2.5
+WI,2014,eau claire,2.41
+WI,2014,fond du lac,2.35
+WI,2014,jefferson,2.55
+WI,2014,kenosha,2.64
+WI,2014,la crosse,2.4
+WI,2014,manitowoc,2.37
+WI,2014,marathon,2.45
+WI,2014,milwaukee,2.44
+WI,2014,outagamie,2.5
+WI,2014,ozaukee,2.48
+WI,2014,portage,2.45
+WI,2014,racine,2.51
+WI,2014,rock,2.51
+WI,2014,st. croix,2.64
+WI,2014,sheboygan,2.42
+WI,2014,walworth,2.54
+WI,2014,washington,2.45
+WI,2014,waukesha,2.52
+WI,2014,winnebago,2.33
+WI,2014,wood,2.24
+WY,2014,laramie,2.44
+WY,2014,natrona,2.39
+PR,2014,arecibo municipio,2.85
+PR,2014,bayamã³n municipio,2.63
+PR,2014,caguas municipio,2.73
+PR,2014,carolina municipio,2.5
+PR,2014,guaynabo municipio,2.71
+PR,2014,mayagã¼ez municipio,2.73
+PR,2014,ponce municipio,2.68
+PR,2014,san juan municipio,2.41
+PR,2014,toa alta municipio,3.31
+PR,2014,toa baja municipio,3.06
+PR,2014,trujillo alto municipio,2.87
+AL,2015,baldwin,2.78
+AL,2015,calhoun,2.54
+AL,2015,cullman,2.62
+AL,2015,dekalb,2.67
+AL,2015,elmore,2.61
+AL,2015,etowah,2.59
+AL,2015,houston,2.66
+AL,2015,jefferson,2.44
+AL,2015,lauderdale,2.33
+AL,2015,lee,2.6
+AL,2015,limestone,2.81
+AL,2015,madison,2.44
+AL,2015,marshall,2.76
+AL,2015,mobile,2.65
+AL,2015,montgomery,2.44
+AL,2015,morgan,2.5
+AL,2015,st. clair,2.66
+AL,2015,shelby,2.68
+AL,2015,talladega,2.48
+AL,2015,tuscaloosa,2.72
+AL,2015,walker,2.63
+AK,2015,anchorage municipality,2.77
+AK,2015,fairbanks north star borough,2.69
+AK,2015,matanuska-susitna borough,3.23
+AZ,2015,apache,3.54
+AZ,2015,cochise,2.26
+AZ,2015,coconino,2.74
+AZ,2015,maricopa,2.78
+AZ,2015,mohave,2.41
+AZ,2015,navajo,3.13
+AZ,2015,pima,2.48
+AZ,2015,pinal,2.96
+AZ,2015,yavapai,2.3
+AZ,2015,yuma,2.77
+AR,2015,benton,2.69
+AR,2015,craighead,2.53
+AR,2015,faulkner,2.65
+AR,2015,garland,2.37
+AR,2015,jefferson,2.5
+AR,2015,lonoke,2.69
+AR,2015,pulaski,2.45
+AR,2015,saline,2.65
+AR,2015,sebastian,2.51
+AR,2015,washington,2.62
+AR,2015,white,2.6
+CA,2015,alameda,2.81
+CA,2015,butte,2.58
+CA,2015,contra costa,2.85
+CA,2015,el dorado,2.71
+CA,2015,fresno,3.15
+CA,2015,humboldt,2.45
+CA,2015,imperial,3.77
+CA,2015,kern,3.23
+CA,2015,kings,3.13
+CA,2015,lake,2.41
+CA,2015,los angeles,3.04
+CA,2015,madera,3.23
+CA,2015,marin,2.4
+CA,2015,mendocino,2.42
+CA,2015,merced,3.31
+CA,2015,monterey,3.27
+CA,2015,napa,2.78
+CA,2015,nevada,2.36
+CA,2015,orange,3.06
+CA,2015,placer,2.7
+CA,2015,riverside,3.26
+CA,2015,sacramento,2.79
+CA,2015,san bernardino,3.28
+CA,2015,san diego,2.89
+CA,2015,san francisco,2.37
+CA,2015,san joaquin,3.18
+CA,2015,san luis obispo,2.53
+CA,2015,san mateo,2.87
+CA,2015,santa barbara,2.94
+CA,2015,santa clara,2.97
+CA,2015,santa cruz,2.8
+CA,2015,shasta,2.53
+CA,2015,solano,2.93
+CA,2015,sonoma,2.59
+CA,2015,stanislaus,3.1
+CA,2015,sutter,2.9
+CA,2015,tulare,3.37
+CA,2015,ventura,3.11
+CA,2015,yolo,2.78
+CA,2015,yuba,2.88
+CO,2015,adams,3.06
+CO,2015,arapahoe,2.67
+CO,2015,boulder,2.47
+CO,2015,broomfield,2.53
+CO,2015,denver,2.33
+CO,2015,douglas,2.71
+CO,2015,el paso,2.61
+CO,2015,jefferson,2.45
+CO,2015,larimer,2.51
+CO,2015,mesa,2.45
+CO,2015,pueblo,2.57
+CO,2015,weld,2.85
+CT,2015,fairfield,2.79
+CT,2015,hartford,2.53
+CT,2015,litchfield,2.46
+CT,2015,middlesex,2.41
+CT,2015,new haven,2.57
+CT,2015,new london,2.46
+CT,2015,tolland,2.46
+CT,2015,windham,2.56
+DE,2015,kent,2.7
+DE,2015,new castle,2.66
+DE,2015,sussex,2.44
+DC,2015,district of columbia,2.24
+FL,2015,alachua,2.51
+FL,2015,bay,2.59
+FL,2015,brevard,2.49
+FL,2015,broward,2.79
+FL,2015,charlotte,2.33
+FL,2015,citrus,2.29
+FL,2015,clay,2.82
+FL,2015,collier,2.62
+FL,2015,columbia,2.61
+FL,2015,duval,2.6
+FL,2015,escambia,2.5
+FL,2015,flagler,2.67
+FL,2015,hernando,2.49
+FL,2015,highlands,2.37
+FL,2015,hillsborough,2.64
+FL,2015,indian river,2.64
+FL,2015,lake,2.55
+FL,2015,lee,2.62
+FL,2015,leon,2.5
+FL,2015,manatee,2.67
+FL,2015,marion,2.67
+FL,2015,martin,2.34
+FL,2015,miami-dade,3.08
+FL,2015,monroe,2.41
+FL,2015,nassau,2.62
+FL,2015,okaloosa,2.52
+FL,2015,orange,2.74
+FL,2015,osceola,3.27
+FL,2015,palm beach,2.57
+FL,2015,pasco,2.55
+FL,2015,pinellas,2.33
+FL,2015,polk,2.81
+FL,2015,putnam,2.5
+FL,2015,st. johns,2.69
+FL,2015,st. lucie,2.71
+FL,2015,santa rosa,2.63
+FL,2015,sarasota,2.25
+FL,2015,seminole,2.73
+FL,2015,sumter,2.13
+FL,2015,volusia,2.43
+GA,2015,barrow,3.12
+GA,2015,bartow,2.76
+GA,2015,bibb,2.46
+GA,2015,bulloch,2.48
+GA,2015,carroll,2.7
+GA,2015,catoosa,2.63
+GA,2015,chatham,2.53
+GA,2015,cherokee,2.84
+GA,2015,clarke,2.44
+GA,2015,clayton,2.98
+GA,2015,cobb,2.66
+GA,2015,columbia,3.07
+GA,2015,coweta,2.74
+GA,2015,dekalb,2.61
+GA,2015,dougherty,2.48
+GA,2015,douglas,2.88
+GA,2015,fayette,2.77
+GA,2015,floyd,2.64
+GA,2015,forsyth,3.02
+GA,2015,fulton,2.48
+GA,2015,glynn,2.39
+GA,2015,gwinnett,3.13
+GA,2015,hall,3
+GA,2015,henry,3.02
+GA,2015,houston,2.65
+GA,2015,liberty,2.71
+GA,2015,lowndes,2.88
+GA,2015,muscogee,2.62
+GA,2015,newton,2.94
+GA,2015,paulding,2.99
+GA,2015,richmond,2.69
+GA,2015,rockdale,2.82
+GA,2015,troup,2.71
+GA,2015,walker,2.67
+GA,2015,walton,2.88
+GA,2015,whitfield,2.98
+HI,2015,hawaii,3.01
+HI,2015,honolulu,3.12
+HI,2015,kauai,3.24
+HI,2015,maui,3.11
+ID,2015,ada,2.61
+ID,2015,bannock,2.71
+ID,2015,bonneville,2.95
+ID,2015,canyon,2.99
+ID,2015,kootenai,2.53
+ID,2015,twin falls,2.69
+IL,2015,adams,2.45
+IL,2015,champaign,2.43
+IL,2015,cook,2.63
+IL,2015,dekalb,2.7
+IL,2015,dupage,2.72
+IL,2015,kane,2.99
+IL,2015,kankakee,2.71
+IL,2015,kendall,3.19
+IL,2015,lake,2.84
+IL,2015,lasalle,2.4
+IL,2015,mchenry,2.75
+IL,2015,mclean,2.5
+IL,2015,macon,2.33
+IL,2015,madison,2.44
+IL,2015,peoria,2.41
+IL,2015,rock island,2.35
+IL,2015,st. clair,2.56
+IL,2015,sangamon,2.34
+IL,2015,tazewell,2.45
+IL,2015,vermilion,2.47
+IL,2015,will,3.02
+IL,2015,williamson,2.55
+IL,2015,winnebago,2.49
+IN,2015,allen,2.55
+IN,2015,bartholomew,2.58
+IN,2015,clark,2.56
+IN,2015,delaware,2.43
+IN,2015,elkhart,2.92
+IN,2015,floyd,2.58
+IN,2015,grant,2.5
+IN,2015,hamilton,2.72
+IN,2015,hancock,2.6
+IN,2015,hendricks,2.78
+IN,2015,howard,2.35
+IN,2015,johnson,2.7
+IN,2015,kosciusko,2.58
+IN,2015,lake,2.59
+IN,2015,laporte,2.36
+IN,2015,madison,2.4
+IN,2015,marion,2.52
+IN,2015,monroe,2.37
+IN,2015,morgan,2.74
+IN,2015,porter,2.63
+IN,2015,st. joseph,2.6
+IN,2015,tippecanoe,2.43
+IN,2015,vanderburgh,2.37
+IN,2015,vigo,2.36
+IN,2015,wayne,2.65
+IA,2015,black hawk,2.45
+IA,2015,dallas,2.73
+IA,2015,dubuque,2.46
+IA,2015,johnson,2.45
+IA,2015,linn,2.41
+IA,2015,polk,2.51
+IA,2015,pottawattamie,2.46
+IA,2015,scott,2.46
+IA,2015,story,2.29
+IA,2015,woodbury,2.62
+KS,2015,butler,2.51
+KS,2015,douglas,2.55
+KS,2015,johnson,2.59
+KS,2015,leavenworth,2.69
+KS,2015,riley,2.52
+KS,2015,sedgwick,2.62
+KS,2015,shawnee,2.44
+KS,2015,wyandotte,2.73
+KY,2015,boone,2.76
+KY,2015,bullitt,2.71
+KY,2015,campbell,2.49
+KY,2015,christian,2.63
+KY,2015,daviess,2.44
+KY,2015,fayette,2.34
+KY,2015,hardin,2.51
+KY,2015,jefferson,2.43
+KY,2015,kenton,2.58
+KY,2015,mccracken,2.28
+KY,2015,madison,2.51
+KY,2015,pike,2.37
+KY,2015,warren,2.53
+LA,2015,ascension parish,2.92
+LA,2015,bossier parish,2.5
+LA,2015,caddo parish,2.57
+LA,2015,calcasieu parish,2.52
+LA,2015,east baton rouge parish,2.59
+LA,2015,iberia parish,2.8
+LA,2015,jefferson parish,2.56
+LA,2015,lafayette parish,2.6
+LA,2015,lafourche parish,2.61
+LA,2015,livingston parish,2.83
+LA,2015,orleans parish,2.41
+LA,2015,ouachita parish,2.65
+LA,2015,rapides parish,2.7
+LA,2015,st. landry parish,2.71
+LA,2015,st. tammany parish,2.72
+LA,2015,tangipahoa parish,2.71
+LA,2015,terrebonne parish,2.77
+ME,2015,androscoggin,2.3
+ME,2015,aroostook,2.26
+ME,2015,cumberland,2.44
+ME,2015,kennebec,2.27
+ME,2015,penobscot,2.47
+ME,2015,york,2.45
+MD,2015,allegany,2.36
+MD,2015,anne arundel,2.66
+MD,2015,baltimore,2.6
+MD,2015,calvert,2.89
+MD,2015,carroll,2.73
+MD,2015,cecil,2.64
+MD,2015,charles,2.8
+MD,2015,frederick,2.67
+MD,2015,harford,2.68
+MD,2015,howard,2.82
+MD,2015,montgomery,2.78
+MD,2015,prince george's,2.92
+MD,2015,st. mary's,2.78
+MD,2015,washington,2.51
+MD,2015,wicomico,2.58
+MD,2015,baltimore city,2.51
+MA,2015,barnstable,2.17
+MA,2015,berkshire,2.18
+MA,2015,bristol,2.51
+MA,2015,essex,2.63
+MA,2015,franklin,2.28
+MA,2015,hampden,2.6
+MA,2015,hampshire,2.39
+MA,2015,middlesex,2.61
+MA,2015,norfolk,2.6
+MA,2015,plymouth,2.74
+MA,2015,suffolk,2.42
+MA,2015,worcester,2.61
+MI,2015,allegan,2.7
+MI,2015,bay,2.44
+MI,2015,berrien,2.33
+MI,2015,calhoun,2.46
+MI,2015,clinton,2.64
+MI,2015,eaton,2.46
+MI,2015,genesee,2.48
+MI,2015,grand traverse,2.4
+MI,2015,ingham,2.41
+MI,2015,isabella,2.65
+MI,2015,jackson,2.53
+MI,2015,kalamazoo,2.49
+MI,2015,kent,2.64
+MI,2015,lapeer,2.64
+MI,2015,lenawee,2.52
+MI,2015,livingston,2.62
+MI,2015,macomb,2.51
+MI,2015,marquette,2.46
+MI,2015,midland,2.5
+MI,2015,monroe,2.52
+MI,2015,muskegon,2.63
+MI,2015,oakland,2.47
+MI,2015,ottawa,2.74
+MI,2015,saginaw,2.42
+MI,2015,st. clair,2.49
+MI,2015,shiawassee,2.51
+MI,2015,van buren,2.58
+MI,2015,washtenaw,2.46
+MI,2015,wayne,2.6
+MN,2015,anoka,2.69
+MN,2015,blue earth,2.4
+MN,2015,carver,2.78
+MN,2015,dakota,2.59
+MN,2015,hennepin,2.4
+MN,2015,olmsted,2.56
+MN,2015,ramsey,2.52
+MN,2015,rice,2.51
+MN,2015,st. louis,2.28
+MN,2015,scott,2.94
+MN,2015,sherburne,2.83
+MN,2015,stearns,2.49
+MN,2015,washington,2.69
+MN,2015,wright,2.77
+MS,2015,desoto,2.78
+MS,2015,forrest,2.52
+MS,2015,harrison,2.52
+MS,2015,hinds,2.64
+MS,2015,jackson,2.81
+MS,2015,jones,2.62
+MS,2015,lauderdale,2.56
+MS,2015,lee,2.47
+MS,2015,madison,2.64
+MS,2015,rankin,2.61
+MO,2015,boone,2.39
+MO,2015,buchanan,2.6
+MO,2015,cape girardeau,2.62
+MO,2015,cass,2.62
+MO,2015,christian,2.75
+MO,2015,clay,2.62
+MO,2015,cole,2.42
+MO,2015,franklin,2.46
+MO,2015,greene,2.31
+MO,2015,jackson,2.41
+MO,2015,jasper,2.52
+MO,2015,jefferson,2.68
+MO,2015,platte,2.46
+MO,2015,st. charles,2.65
+MO,2015,st. francois,2.41
+MO,2015,st. louis,2.47
+MO,2015,st. louis city,2.16
+MT,2015,cascade,2.31
+MT,2015,flathead,2.55
+MT,2015,gallatin,2.38
+MT,2015,lewis and clark,2.37
+MT,2015,missoula,2.31
+MT,2015,yellowstone,2.44
+NE,2015,douglas,2.53
+NE,2015,lancaster,2.43
+NE,2015,sarpy,2.71
+NV,2015,clark,2.82
+NV,2015,washoe,2.55
+NH,2015,cheshire,2.41
+NH,2015,grafton,2.33
+NH,2015,hillsborough,2.54
+NH,2015,merrimack,2.56
+NH,2015,rockingham,2.52
+NH,2015,strafford,2.49
+NJ,2015,atlantic,2.64
+NJ,2015,bergen,2.76
+NJ,2015,burlington,2.68
+NJ,2015,camden,2.72
+NJ,2015,cape may,2.37
+NJ,2015,cumberland,2.82
+NJ,2015,essex,2.77
+NJ,2015,gloucester,2.76
+NJ,2015,hudson,2.61
+NJ,2015,hunterdon,2.58
+NJ,2015,mercer,2.77
+NJ,2015,middlesex,2.88
+NJ,2015,monmouth,2.65
+NJ,2015,morris,2.73
+NJ,2015,ocean,2.62
+NJ,2015,passaic,3.19
+NJ,2015,salem,2.75
+NJ,2015,somerset,2.81
+NJ,2015,sussex,2.66
+NJ,2015,union,2.92
+NJ,2015,warren,2.51
+NM,2015,bernalillo,2.53
+NM,2015,chaves,2.82
+NM,2015,doã±a ana,2.81
+NM,2015,lea,3.25
+NM,2015,mckinley,3.85
+NM,2015,otero,2.54
+NM,2015,sandoval,2.92
+NM,2015,san juan,2.72
+NM,2015,santa fe,2.4
+NM,2015,valencia,2.71
+NY,2015,albany,2.36
+NY,2015,bronx,2.85
+NY,2015,broome,2.38
+NY,2015,cattaraugus,2.41
+NY,2015,cayuga,2.35
+NY,2015,chautauqua,2.42
+NY,2015,chemung,2.39
+NY,2015,clinton,2.36
+NY,2015,dutchess,2.61
+NY,2015,erie,2.34
+NY,2015,jefferson,2.59
+NY,2015,kings,2.76
+NY,2015,livingston,2.41
+NY,2015,madison,2.54
+NY,2015,monroe,2.43
+NY,2015,nassau,3.07
+NY,2015,new york,2.11
+NY,2015,niagara,2.46
+NY,2015,oneida,2.44
+NY,2015,onondaga,2.46
+NY,2015,ontario,2.42
+NY,2015,orange,2.92
+NY,2015,oswego,2.56
+NY,2015,putnam,2.81
+NY,2015,queens,2.98
+NY,2015,rensselaer,2.47
+NY,2015,richmond,2.79
+NY,2015,rockland,3.19
+NY,2015,st. lawrence,2.31
+NY,2015,saratoga,2.44
+NY,2015,schenectady,2.85
+NY,2015,steuben,2.43
+NY,2015,suffolk,3.05
+NY,2015,sullivan,2.5
+NY,2015,tompkins,2.4
+NY,2015,ulster,2.42
+NY,2015,warren,2.64
+NY,2015,wayne,2.5
+NY,2015,westchester,2.81
+NC,2015,alamance,2.43
+NC,2015,brunswick,2.44
+NC,2015,buncombe,2.39
+NC,2015,burke,2.49
+NC,2015,cabarrus,2.77
+NC,2015,caldwell,2.52
+NC,2015,carteret,2.29
+NC,2015,catawba,2.52
+NC,2015,chatham,2.54
+NC,2015,cleveland,2.62
+NC,2015,craven,2.39
+NC,2015,cumberland,2.61
+NC,2015,davidson,2.49
+NC,2015,durham,2.39
+NC,2015,forsyth,2.49
+NC,2015,gaston,2.66
+NC,2015,guilford,2.52
+NC,2015,harnett,2.86
+NC,2015,henderson,2.34
+NC,2015,iredell,2.64
+NC,2015,johnston,2.87
+NC,2015,lincoln,2.68
+NC,2015,mecklenburg,2.57
+NC,2015,moore,2.4
+NC,2015,nash,2.51
+NC,2015,new hanover,2.33
+NC,2015,onslow,2.7
+NC,2015,orange,2.49
+NC,2015,pitt,2.48
+NC,2015,randolph,2.55
+NC,2015,robeson,2.89
+NC,2015,rockingham,2.46
+NC,2015,rowan,2.63
+NC,2015,rutherford,2.53
+NC,2015,surry,2.45
+NC,2015,union,2.97
+NC,2015,wake,2.62
+NC,2015,wayne,2.55
+NC,2015,wilkes,2.45
+NC,2015,wilson,2.48
+ND,2015,burleigh,2.26
+ND,2015,cass,2.27
+ND,2015,grand forks,2.24
+ND,2015,ward,2.49
+OH,2015,allen,2.5
+OH,2015,ashtabula,2.55
+OH,2015,athens,2.47
+OH,2015,belmont,2.34
+OH,2015,butler,2.69
+OH,2015,clark,2.45
+OH,2015,clermont,2.66
+OH,2015,columbiana,2.4
+OH,2015,cuyahoga,2.3
+OH,2015,delaware,2.89
+OH,2015,erie,2.4
+OH,2015,fairfield,2.69
+OH,2015,franklin,2.47
+OH,2015,geauga,2.7
+OH,2015,greene,2.35
+OH,2015,hamilton,2.34
+OH,2015,hancock,2.35
+OH,2015,jefferson,2.37
+OH,2015,lake,2.34
+OH,2015,licking,2.57
+OH,2015,lorain,2.49
+OH,2015,lucas,2.41
+OH,2015,mahoning,2.32
+OH,2015,marion,2.45
+OH,2015,medina,2.62
+OH,2015,miami,2.53
+OH,2015,montgomery,2.3
+OH,2015,muskingum,2.47
+OH,2015,portage,2.52
+OH,2015,richland,2.44
+OH,2015,ross,2.51
+OH,2015,scioto,2.4
+OH,2015,stark,2.41
+OH,2015,summit,2.41
+OH,2015,trumbull,2.3
+OH,2015,tuscarawas,2.52
+OH,2015,warren,2.72
+OH,2015,wayne,2.64
+OH,2015,wood,2.41
+OK,2015,canadian,2.98
+OK,2015,cleveland,2.59
+OK,2015,comanche,2.77
+OK,2015,creek,2.6
+OK,2015,muskogee,2.59
+OK,2015,oklahoma,2.54
+OK,2015,payne,2.35
+OK,2015,pottawatomie,2.64
+OK,2015,rogers,2.67
+OK,2015,tulsa,2.49
+OK,2015,wagoner,2.67
+OR,2015,benton,2.34
+OR,2015,clackamas,2.61
+OR,2015,deschutes,2.51
+OR,2015,douglas,2.41
+OR,2015,jackson,2.49
+OR,2015,josephine,2.33
+OR,2015,klamath,2.39
+OR,2015,lane,2.42
+OR,2015,linn,2.58
+OR,2015,marion,2.8
+OR,2015,multnomah,2.48
+OR,2015,polk,2.58
+OR,2015,umatilla,2.7
+OR,2015,washington,2.69
+OR,2015,yamhill,2.73
+PA,2015,adams,2.55
+PA,2015,allegheny,2.25
+PA,2015,armstrong,2.36
+PA,2015,beaver,2.38
+PA,2015,berks,2.64
+PA,2015,blair,2.32
+PA,2015,bucks,2.64
+PA,2015,butler,2.44
+PA,2015,cambria,2.26
+PA,2015,carbon,2.47
+PA,2015,centre,2.53
+PA,2015,chester,2.67
+PA,2015,clearfield,2.43
+PA,2015,columbia,2.39
+PA,2015,crawford,2.32
+PA,2015,cumberland,2.4
+PA,2015,dauphin,2.4
+PA,2015,delaware,2.67
+PA,2015,erie,2.41
+PA,2015,fayette,2.37
+PA,2015,franklin,2.55
+PA,2015,indiana,2.45
+PA,2015,lackawanna,2.45
+PA,2015,lancaster,2.65
+PA,2015,lawrence,2.37
+PA,2015,lebanon,2.52
+PA,2015,lehigh,2.6
+PA,2015,luzerne,2.4
+PA,2015,lycoming,2.41
+PA,2015,mercer,2.4
+PA,2015,monroe,2.95
+PA,2015,montgomery,2.57
+PA,2015,northampton,2.57
+PA,2015,northumberland,2.23
+PA,2015,philadelphia,2.61
+PA,2015,schuylkill,2.39
+PA,2015,somerset,2.41
+PA,2015,washington,2.42
+PA,2015,westmoreland,2.34
+PA,2015,york,2.62
+RI,2015,kent,2.38
+RI,2015,newport,2.28
+RI,2015,providence,2.58
+RI,2015,washington,2.42
+SC,2015,aiken,2.52
+SC,2015,anderson,2.57
+SC,2015,beaufort,2.52
+SC,2015,berkeley,2.77
+SC,2015,charleston,2.51
+SC,2015,darlington,2.42
+SC,2015,dorchester,2.91
+SC,2015,florence,2.59
+SC,2015,greenville,2.58
+SC,2015,greenwood,2.62
+SC,2015,horry,2.45
+SC,2015,lancaster,2.66
+SC,2015,laurens,2.55
+SC,2015,lexington,2.57
+SC,2015,oconee,2.38
+SC,2015,orangeburg,2.61
+SC,2015,pickens,2.46
+SC,2015,richland,2.56
+SC,2015,spartanburg,2.56
+SC,2015,sumter,2.56
+SC,2015,york,2.57
+SD,2015,minnehaha,2.44
+SD,2015,pennington,2.39
+TN,2015,anderson,2.38
+TN,2015,blount,2.59
+TN,2015,bradley,2.55
+TN,2015,davidson,2.4
+TN,2015,greene,2.5
+TN,2015,hamilton,2.51
+TN,2015,knox,2.43
+TN,2015,madison,2.5
+TN,2015,maury,2.6
+TN,2015,montgomery,2.7
+TN,2015,putnam,2.39
+TN,2015,robertson,2.71
+TN,2015,rutherford,2.82
+TN,2015,sevier,2.51
+TN,2015,shelby,2.64
+TN,2015,sullivan,2.37
+TN,2015,sumner,2.7
+TN,2015,washington,2.29
+TN,2015,williamson,2.9
+TN,2015,wilson,2.76
+TX,2015,angelina,2.84
+TX,2015,bastrop,3.02
+TX,2015,bell,2.72
+TX,2015,bexar,2.98
+TX,2015,bowie,2.73
+TX,2015,brazoria,2.85
+TX,2015,brazos,2.57
+TX,2015,cameron,3.41
+TX,2015,collin,2.83
+TX,2015,comal,2.8
+TX,2015,coryell,2.56
+TX,2015,dallas,2.79
+TX,2015,denton,2.8
+TX,2015,ector,3.03
+TX,2015,ellis,3.04
+TX,2015,el paso,3.15
+TX,2015,fort bend,3.19
+TX,2015,galveston,2.72
+TX,2015,grayson,2.59
+TX,2015,gregg,2.62
+TX,2015,guadalupe,2.93
+TX,2015,harris,2.84
+TX,2015,harrison,2.94
+TX,2015,hays,2.78
+TX,2015,henderson,2.69
+TX,2015,hidalgo,3.69
+TX,2015,hunt,2.72
+TX,2015,jefferson,2.51
+TX,2015,johnson,2.91
+TX,2015,kaufman,3.16
+TX,2015,liberty,2.77
+TX,2015,lubbock,2.65
+TX,2015,mclennan,2.71
+TX,2015,midland,2.83
+TX,2015,montgomery,2.88
+TX,2015,nacogdoches,2.57
+TX,2015,nueces,2.7
+TX,2015,orange,2.54
+TX,2015,parker,2.91
+TX,2015,potter,2.63
+TX,2015,randall,2.65
+TX,2015,rockwall,2.98
+TX,2015,san patricio,2.99
+TX,2015,smith,2.77
+TX,2015,tarrant,2.86
+TX,2015,taylor,2.64
+TX,2015,tom green,2.52
+TX,2015,travis,2.58
+TX,2015,victoria,2.76
+TX,2015,walker,2.46
+TX,2015,webb,3.69
+TX,2015,wichita,2.42
+TX,2015,williamson,2.94
+UT,2015,cache,3.22
+UT,2015,davis,3.34
+UT,2015,salt lake,3.06
+UT,2015,utah,3.6
+UT,2015,washington,2.93
+UT,2015,weber,2.97
+VT,2015,chittenden,2.36
+VA,2015,albemarle,2.48
+VA,2015,arlington,2.19
+VA,2015,augusta,2.52
+VA,2015,bedford,2.41
+VA,2015,chesterfield,2.73
+VA,2015,fairfax,2.88
+VA,2015,fauquier,2.68
+VA,2015,frederick,2.69
+VA,2015,hanover,2.6
+VA,2015,henrico,2.57
+VA,2015,james city,2.53
+VA,2015,loudoun,3.1
+VA,2015,montgomery,2.4
+VA,2015,prince william,3.22
+VA,2015,roanoke,2.43
+VA,2015,rockingham,2.53
+VA,2015,spotsylvania,3.05
+VA,2015,stafford,3.16
+VA,2015,york,2.71
+VA,2015,alexandria city,2.2
+VA,2015,chesapeake city,2.73
+VA,2015,hampton city,2.48
+VA,2015,lynchburg city,2.48
+VA,2015,newport news city,2.46
+VA,2015,norfolk city,2.51
+VA,2015,portsmouth city,2.54
+VA,2015,richmond city,2.29
+VA,2015,roanoke city,2.35
+VA,2015,suffolk city,2.72
+VA,2015,virginia beach city,2.61
+WA,2015,benton,2.73
+WA,2015,chelan,2.75
+WA,2015,clallam,2.24
+WA,2015,clark,2.74
+WA,2015,cowlitz,2.54
+WA,2015,franklin,3.41
+WA,2015,grant,2.99
+WA,2015,grays harbor,2.51
+WA,2015,island,2.38
+WA,2015,king,2.46
+WA,2015,kitsap,2.57
+WA,2015,lewis,2.57
+WA,2015,pierce,2.69
+WA,2015,skagit,2.49
+WA,2015,snohomish,2.68
+WA,2015,spokane,2.46
+WA,2015,thurston,2.53
+WA,2015,whatcom,2.58
+WA,2015,yakima,3
+WV,2015,berkeley,2.7
+WV,2015,cabell,2.36
+WV,2015,harrison,2.53
+WV,2015,kanawha,2.26
+WV,2015,monongalia,2.62
+WV,2015,raleigh,2.39
+WV,2015,wood,2.33
+WI,2015,brown,2.42
+WI,2015,dane,2.36
+WI,2015,dodge,2.43
+WI,2015,eau claire,2.5
+WI,2015,fond du lac,2.45
+WI,2015,jefferson,2.46
+WI,2015,kenosha,2.61
+WI,2015,la crosse,2.45
+WI,2015,manitowoc,2.28
+WI,2015,marathon,2.46
+WI,2015,milwaukee,2.45
+WI,2015,outagamie,2.51
+WI,2015,ozaukee,2.45
+WI,2015,portage,2.41
+WI,2015,racine,2.53
+WI,2015,rock,2.43
+WI,2015,st. croix,2.62
+WI,2015,sheboygan,2.37
+WI,2015,walworth,2.62
+WI,2015,washington,2.48
+WI,2015,waukesha,2.49
+WI,2015,winnebago,2.31
+WI,2015,wood,2.34
+WY,2015,laramie,2.52
+WY,2015,natrona,2.47
+PR,2015,arecibo municipio,2.84
+PR,2015,bayamã³n municipio,2.6
+PR,2015,caguas municipio,2.62
+PR,2015,carolina municipio,2.55
+PR,2015,guaynabo municipio,2.68
+PR,2015,mayagã¼ez municipio,2.55
+PR,2015,ponce municipio,2.81
+PR,2015,san juan municipio,2.44
+PR,2015,toa alta municipio,3.34
+PR,2015,toa baja municipio,3.03
+PR,2015,trujillo alto municipio,2.8
+AL,2016,baldwin,2.68
+AL,2016,calhoun,2.54
+AL,2016,cullman,2.68
+AL,2016,dekalb,2.75
+AL,2016,elmore,2.62
+AL,2016,etowah,2.61
+AL,2016,houston,2.63
+AL,2016,jefferson,2.46
+AL,2016,lauderdale,2.38
+AL,2016,lee,2.58
+AL,2016,limestone,2.82
+AL,2016,madison,2.43
+AL,2016,marshall,2.71
+AL,2016,mobile,2.58
+AL,2016,montgomery,2.42
+AL,2016,morgan,2.61
+AL,2016,st. clair,2.71
+AL,2016,shelby,2.73
+AL,2016,talladega,2.44
+AL,2016,tuscaloosa,2.65
+AL,2016,walker,2.69
+AK,2016,anchorage municipality,2.76
+AK,2016,fairbanks north star borough,2.85
+AK,2016,matanuska-susitna borough,3.38
+AZ,2016,apache,3.59
+AZ,2016,cochise,2.35
+AZ,2016,coconino,2.66
+AZ,2016,maricopa,2.75
+AZ,2016,mohave,2.37
+AZ,2016,navajo,3.19
+AZ,2016,pima,2.46
+AZ,2016,pinal,2.96
+AZ,2016,yavapai,2.31
+AZ,2016,yuma,2.74
+AR,2016,benton,2.7
+AR,2016,craighead,2.56
+AR,2016,faulkner,2.66
+AR,2016,garland,2.42
+AR,2016,jefferson,2.4
+AR,2016,lonoke,2.72
+AR,2016,pulaski,2.4
+AR,2016,saline,2.71
+AR,2016,sebastian,2.47
+AR,2016,washington,2.49
+AR,2016,white,2.67
+CA,2016,alameda,2.82
+CA,2016,butte,2.57
+CA,2016,contra costa,2.88
+CA,2016,el dorado,2.64
+CA,2016,fresno,3.18
+CA,2016,humboldt,2.44
+CA,2016,imperial,3.82
+CA,2016,kern,3.15
+CA,2016,kings,3.14
+CA,2016,lake,2.57
+CA,2016,los angeles,3.01
+CA,2016,madera,3.31
+CA,2016,marin,2.38
+CA,2016,mendocino,2.41
+CA,2016,merced,3.38
+CA,2016,monterey,3.32
+CA,2016,napa,2.78
+CA,2016,nevada,2.52
+CA,2016,orange,3.03
+CA,2016,placer,2.71
+CA,2016,riverside,3.29
+CA,2016,sacramento,2.78
+CA,2016,san bernardino,3.29
+CA,2016,san diego,2.91
+CA,2016,san francisco,2.37
+CA,2016,san joaquin,3.17
+CA,2016,san luis obispo,2.51
+CA,2016,san mateo,2.86
+CA,2016,santa barbara,2.99
+CA,2016,santa clara,2.96
+CA,2016,santa cruz,2.72
+CA,2016,shasta,2.44
+CA,2016,solano,2.88
+CA,2016,sonoma,2.64
+CA,2016,stanislaus,3.1
+CA,2016,sutter,2.95
+CA,2016,tulare,3.35
+CA,2016,ventura,3.12
+CA,2016,yolo,2.84
+CA,2016,yuba,2.76
+CO,2016,adams,3.03
+CO,2016,arapahoe,2.68
+CO,2016,boulder,2.51
+CO,2016,broomfield,2.52
+CO,2016,denver,2.33
+CO,2016,douglas,2.73
+CO,2016,el paso,2.6
+CO,2016,jefferson,2.44
+CO,2016,larimer,2.52
+CO,2016,mesa,2.44
+CO,2016,pueblo,2.59
+CO,2016,weld,2.83
+CT,2016,fairfield,2.76
+CT,2016,hartford,2.47
+CT,2016,litchfield,2.42
+CT,2016,middlesex,2.38
+CT,2016,new haven,2.53
+CT,2016,new london,2.45
+CT,2016,tolland,2.51
+CT,2016,windham,2.48
+DE,2016,kent,2.63
+DE,2016,new castle,2.65
+DE,2016,sussex,2.62
+DC,2016,district of columbia,2.28
+FL,2016,alachua,2.61
+FL,2016,bay,2.58
+FL,2016,brevard,2.54
+FL,2016,broward,2.78
+FL,2016,charlotte,2.32
+FL,2016,citrus,2.21
+FL,2016,clay,2.79
+FL,2016,collier,2.59
+FL,2016,columbia,2.65
+FL,2016,duval,2.56
+FL,2016,escambia,2.5
+FL,2016,flagler,2.61
+FL,2016,hernando,2.44
+FL,2016,highlands,2.55
+FL,2016,hillsborough,2.63
+FL,2016,indian river,2.7
+FL,2016,lake,2.57
+FL,2016,lee,2.72
+FL,2016,leon,2.44
+FL,2016,manatee,2.61
+FL,2016,marion,2.53
+FL,2016,martin,2.45
+FL,2016,miami-dade,3.03
+FL,2016,monroe,2.54
+FL,2016,nassau,2.61
+FL,2016,okaloosa,2.56
+FL,2016,orange,2.74
+FL,2016,osceola,3.42
+FL,2016,palm beach,2.65
+FL,2016,pasco,2.58
+FL,2016,pinellas,2.32
+FL,2016,polk,2.89
+FL,2016,putnam,2.53
+FL,2016,st. johns,2.76
+FL,2016,st. lucie,2.72
+FL,2016,santa rosa,2.65
+FL,2016,sarasota,2.31
+FL,2016,seminole,2.7
+FL,2016,sumter,2.21
+FL,2016,volusia,2.43
+FL,2016,walton,2.35
+GA,2016,barrow,3.09
+GA,2016,bartow,2.82
+GA,2016,bibb,2.54
+GA,2016,bulloch,2.51
+GA,2016,carroll,2.79
+GA,2016,catoosa,2.66
+GA,2016,chatham,2.51
+GA,2016,cherokee,2.86
+GA,2016,clarke,2.41
+GA,2016,clayton,2.91
+GA,2016,cobb,2.66
+GA,2016,columbia,3.09
+GA,2016,coweta,2.77
+GA,2016,dekalb,2.59
+GA,2016,dougherty,2.51
+GA,2016,douglas,2.88
+GA,2016,fayette,2.78
+GA,2016,floyd,2.61
+GA,2016,forsyth,3.05
+GA,2016,fulton,2.5
+GA,2016,glynn,2.61
+GA,2016,gwinnett,3.11
+GA,2016,hall,3.14
+GA,2016,henry,2.97
+GA,2016,houston,2.69
+GA,2016,liberty,2.64
+GA,2016,lowndes,2.7
+GA,2016,muscogee,2.59
+GA,2016,newton,2.95
+GA,2016,paulding,2.91
+GA,2016,richmond,2.53
+GA,2016,rockdale,2.91
+GA,2016,troup,2.79
+GA,2016,walker,2.65
+GA,2016,walton,2.91
+GA,2016,whitfield,2.88
+HI,2016,hawaii,2.79
+HI,2016,honolulu,3.09
+HI,2016,kauai,3.07
+HI,2016,maui,3.04
+ID,2016,ada,2.61
+ID,2016,bannock,2.73
+ID,2016,bonneville,2.88
+ID,2016,canyon,2.98
+ID,2016,kootenai,2.59
+ID,2016,twin falls,2.73
+IL,2016,adams,2.38
+IL,2016,champaign,2.35
+IL,2016,cook,2.6
+IL,2016,dekalb,2.72
+IL,2016,dupage,2.68
+IL,2016,kane,3
+IL,2016,kankakee,2.66
+IL,2016,kendall,3.05
+IL,2016,lake,2.81
+IL,2016,lasalle,2.39
+IL,2016,mchenry,2.76
+IL,2016,mclean,2.52
+IL,2016,macon,2.34
+IL,2016,madison,2.47
+IL,2016,peoria,2.45
+IL,2016,rock island,2.33
+IL,2016,st. clair,2.47
+IL,2016,sangamon,2.33
+IL,2016,tazewell,2.35
+IL,2016,vermilion,2.36
+IL,2016,will,2.98
+IL,2016,williamson,2.45
+IL,2016,winnebago,2.45
+IN,2016,allen,2.56
+IN,2016,bartholomew,2.55
+IN,2016,clark,2.69
+IN,2016,delaware,2.32
+IN,2016,elkhart,2.76
+IN,2016,floyd,2.59
+IN,2016,grant,2.33
+IN,2016,hamilton,2.66
+IN,2016,hancock,2.61
+IN,2016,hendricks,2.67
+IN,2016,howard,2.38
+IN,2016,johnson,2.74
+IN,2016,kosciusko,2.54
+IN,2016,lake,2.59
+IN,2016,laporte,2.43
+IN,2016,madison,2.42
+IN,2016,marion,2.51
+IN,2016,monroe,2.4
+IN,2016,morgan,2.66
+IN,2016,porter,2.6
+IN,2016,st. joseph,2.64
+IN,2016,tippecanoe,2.49
+IN,2016,vanderburgh,2.34
+IN,2016,vigo,2.46
+IN,2016,wayne,2.42
+IA,2016,black hawk,2.42
+IA,2016,dallas,2.53
+IA,2016,dubuque,2.46
+IA,2016,johnson,2.4
+IA,2016,linn,2.43
+IA,2016,polk,2.55
+IA,2016,pottawattamie,2.53
+IA,2016,scott,2.54
+IA,2016,story,2.34
+IA,2016,woodbury,2.58
+KS,2016,butler,2.64
+KS,2016,douglas,2.44
+KS,2016,johnson,2.57
+KS,2016,leavenworth,2.74
+KS,2016,riley,2.51
+KS,2016,sedgwick,2.58
+KS,2016,shawnee,2.47
+KS,2016,wyandotte,2.78
+KY,2016,boone,2.72
+KY,2016,bullitt,2.71
+KY,2016,campbell,2.44
+KY,2016,christian,2.62
+KY,2016,daviess,2.43
+KY,2016,fayette,2.4
+KY,2016,hardin,2.63
+KY,2016,jefferson,2.39
+KY,2016,kenton,2.56
+KY,2016,mccracken,2.25
+KY,2016,madison,2.46
+KY,2016,oldham,2.91
+KY,2016,warren,2.49
+LA,2016,ascension parish,2.95
+LA,2016,bossier parish,2.57
+LA,2016,caddo parish,2.53
+LA,2016,calcasieu parish,2.56
+LA,2016,east baton rouge parish,2.67
+LA,2016,iberia parish,2.76
+LA,2016,jefferson parish,2.54
+LA,2016,lafayette parish,2.65
+LA,2016,lafourche parish,2.59
+LA,2016,livingston parish,2.93
+LA,2016,orleans parish,2.43
+LA,2016,ouachita parish,2.78
+LA,2016,rapides parish,2.69
+LA,2016,st. landry parish,2.73
+LA,2016,st. tammany parish,2.72
+LA,2016,tangipahoa parish,2.66
+LA,2016,terrebonne parish,2.79
+ME,2016,androscoggin,2.32
+ME,2016,aroostook,2.39
+ME,2016,cumberland,2.4
+ME,2016,kennebec,2.44
+ME,2016,penobscot,2.41
+ME,2016,york,2.42
+MD,2016,allegany,2.33
+MD,2016,anne arundel,2.66
+MD,2016,baltimore,2.59
+MD,2016,calvert,2.79
+MD,2016,carroll,2.66
+MD,2016,cecil,2.71
+MD,2016,charles,2.77
+MD,2016,frederick,2.7
+MD,2016,harford,2.71
+MD,2016,howard,2.8
+MD,2016,montgomery,2.77
+MD,2016,prince george's,2.89
+MD,2016,st. mary's,2.65
+MD,2016,washington,2.53
+MD,2016,wicomico,2.68
+MD,2016,baltimore city,2.46
+MA,2016,barnstable,2.28
+MA,2016,berkshire,2.22
+MA,2016,bristol,2.53
+MA,2016,essex,2.63
+MA,2016,franklin,2.23
+MA,2016,hampden,2.54
+MA,2016,hampshire,2.39
+MA,2016,middlesex,2.58
+MA,2016,norfolk,2.6
+MA,2016,plymouth,2.72
+MA,2016,suffolk,2.39
+MA,2016,worcester,2.59
+MI,2016,allegan,2.72
+MI,2016,bay,2.36
+MI,2016,berrien,2.39
+MI,2016,calhoun,2.46
+MI,2016,clinton,2.67
+MI,2016,eaton,2.41
+MI,2016,genesee,2.41
+MI,2016,grand traverse,2.39
+MI,2016,ingham,2.41
+MI,2016,isabella,2.7
+MI,2016,jackson,2.49
+MI,2016,kalamazoo,2.48
+MI,2016,kent,2.64
+MI,2016,lapeer,2.61
+MI,2016,lenawee,2.47
+MI,2016,livingston,2.65
+MI,2016,macomb,2.51
+MI,2016,marquette,2.41
+MI,2016,midland,2.39
+MI,2016,monroe,2.51
+MI,2016,muskegon,2.55
+MI,2016,oakland,2.46
+MI,2016,ottawa,2.72
+MI,2016,saginaw,2.37
+MI,2016,st. clair,2.4
+MI,2016,shiawassee,2.42
+MI,2016,van buren,2.51
+MI,2016,washtenaw,2.45
+MI,2016,wayne,2.55
+MN,2016,anoka,2.71
+MN,2016,blue earth,2.43
+MN,2016,carver,2.7
+MN,2016,dakota,2.6
+MN,2016,hennepin,2.41
+MN,2016,olmsted,2.45
+MN,2016,ramsey,2.52
+MN,2016,rice,2.5
+MN,2016,st. louis,2.24
+MN,2016,scott,2.94
+MN,2016,sherburne,2.89
+MN,2016,stearns,2.52
+MN,2016,washington,2.7
+MN,2016,wright,2.76
+MS,2016,desoto,2.87
+MS,2016,forrest,2.57
+MS,2016,harrison,2.64
+MS,2016,hinds,2.56
+MS,2016,jackson,2.71
+MS,2016,jones,2.66
+MS,2016,lauderdale,2.61
+MS,2016,lee,2.54
+MS,2016,madison,2.7
+MS,2016,rankin,2.57
+MO,2016,boone,2.43
+MO,2016,buchanan,2.49
+MO,2016,cape girardeau,2.57
+MO,2016,cass,2.61
+MO,2016,christian,2.71
+MO,2016,clay,2.64
+MO,2016,cole,2.4
+MO,2016,franklin,2.55
+MO,2016,greene,2.28
+MO,2016,jackson,2.41
+MO,2016,jasper,2.56
+MO,2016,jefferson,2.65
+MO,2016,platte,2.57
+MO,2016,st. charles,2.67
+MO,2016,st. francois,2.45
+MO,2016,st. louis,2.43
+MO,2016,st. louis city,2.16
+MT,2016,cascade,2.35
+MT,2016,flathead,2.47
+MT,2016,gallatin,2.54
+MT,2016,lewis and clark,2.4
+MT,2016,missoula,2.36
+MT,2016,yellowstone,2.38
+NE,2016,douglas,2.53
+NE,2016,lancaster,2.43
+NE,2016,sarpy,2.74
+NV,2016,clark,2.82
+NV,2016,washoe,2.56
+NH,2016,cheshire,2.42
+NH,2016,grafton,2.45
+NH,2016,hillsborough,2.52
+NH,2016,merrimack,2.46
+NH,2016,rockingham,2.51
+NH,2016,strafford,2.45
+NJ,2016,atlantic,2.74
+NJ,2016,bergen,2.75
+NJ,2016,burlington,2.64
+NJ,2016,camden,2.71
+NJ,2016,cape may,2.36
+NJ,2016,cumberland,2.76
+NJ,2016,essex,2.76
+NJ,2016,gloucester,2.73
+NJ,2016,hudson,2.64
+NJ,2016,hunterdon,2.55
+NJ,2016,mercer,2.76
+NJ,2016,middlesex,2.84
+NJ,2016,monmouth,2.69
+NJ,2016,morris,2.7
+NJ,2016,ocean,2.61
+NJ,2016,passaic,3.04
+NJ,2016,salem,2.56
+NJ,2016,somerset,2.83
+NJ,2016,sussex,2.7
+NJ,2016,union,2.91
+NJ,2016,warren,2.58
+NM,2016,bernalillo,2.55
+NM,2016,chaves,2.8
+NM,2016,doã±a ana,2.75
+NM,2016,lea,3.23
+NM,2016,mckinley,3.7
+NM,2016,otero,2.76
+NM,2016,sandoval,2.83
+NM,2016,san juan,2.63
+NM,2016,santa fe,2.42
+NM,2016,valencia,2.79
+NY,2016,albany,2.33
+NY,2016,bronx,2.84
+NY,2016,broome,2.4
+NY,2016,cattaraugus,2.39
+NY,2016,cayuga,2.37
+NY,2016,chautauqua,2.39
+NY,2016,chemung,2.36
+NY,2016,clinton,2.39
+NY,2016,dutchess,2.54
+NY,2016,erie,2.35
+NY,2016,jefferson,2.58
+NY,2016,kings,2.75
+NY,2016,livingston,2.41
+NY,2016,madison,2.59
+NY,2016,monroe,2.41
+NY,2016,nassau,3.04
+NY,2016,new york,2.12
+NY,2016,niagara,2.39
+NY,2016,oneida,2.49
+NY,2016,onondaga,2.44
+NY,2016,ontario,2.35
+NY,2016,orange,2.97
+NY,2016,oswego,2.56
+NY,2016,putnam,2.77
+NY,2016,queens,3.03
+NY,2016,rensselaer,2.45
+NY,2016,richmond,2.86
+NY,2016,rockland,3.23
+NY,2016,st. lawrence,2.41
+NY,2016,saratoga,2.38
+NY,2016,schenectady,3.08
+NY,2016,steuben,2.47
+NY,2016,suffolk,3.09
+NY,2016,sullivan,2.83
+NY,2016,tompkins,2.41
+NY,2016,ulster,2.45
+NY,2016,warren,2.21
+NY,2016,wayne,2.38
+NY,2016,westchester,2.77
+NC,2016,alamance,2.41
+NC,2016,brunswick,2.32
+NC,2016,buncombe,2.42
+NC,2016,burke,2.44
+NC,2016,cabarrus,2.84
+NC,2016,caldwell,2.44
+NC,2016,carteret,2.47
+NC,2016,catawba,2.5
+NC,2016,chatham,2.5
+NC,2016,cleveland,2.62
+NC,2016,craven,2.47
+NC,2016,cumberland,2.55
+NC,2016,davidson,2.6
+NC,2016,durham,2.36
+NC,2016,forsyth,2.47
+NC,2016,gaston,2.58
+NC,2016,guilford,2.49
+NC,2016,harnett,2.9
+NC,2016,henderson,2.36
+NC,2016,iredell,2.64
+NC,2016,johnston,2.86
+NC,2016,lincoln,2.55
+NC,2016,mecklenburg,2.6
+NC,2016,moore,2.43
+NC,2016,nash,2.6
+NC,2016,new hanover,2.33
+NC,2016,onslow,2.82
+NC,2016,orange,2.61
+NC,2016,pitt,2.44
+NC,2016,randolph,2.5
+NC,2016,robeson,2.89
+NC,2016,rockingham,2.35
+NC,2016,rowan,2.7
+NC,2016,rutherford,2.42
+NC,2016,surry,2.52
+NC,2016,union,3
+NC,2016,wake,2.64
+NC,2016,wayne,2.57
+NC,2016,wilkes,2.35
+NC,2016,wilson,2.59
+ND,2016,burleigh,2.34
+ND,2016,cass,2.23
+ND,2016,grand forks,2.21
+ND,2016,ward,2.43
+OH,2016,allen,2.48
+OH,2016,ashtabula,2.45
+OH,2016,athens,2.6
+OH,2016,belmont,2.37
+OH,2016,butler,2.66
+OH,2016,clark,2.41
+OH,2016,clermont,2.58
+OH,2016,columbiana,2.41
+OH,2016,cuyahoga,2.28
+OH,2016,delaware,2.82
+OH,2016,erie,2.4
+OH,2016,fairfield,2.69
+OH,2016,franklin,2.46
+OH,2016,geauga,2.62
+OH,2016,greene,2.44
+OH,2016,hamilton,2.36
+OH,2016,hancock,2.33
+OH,2016,jefferson,2.39
+OH,2016,lake,2.34
+OH,2016,licking,2.67
+OH,2016,lorain,2.52
+OH,2016,lucas,2.35
+OH,2016,mahoning,2.3
+OH,2016,marion,2.36
+OH,2016,medina,2.59
+OH,2016,miami,2.51
+OH,2016,montgomery,2.31
+OH,2016,muskingum,2.46
+OH,2016,portage,2.48
+OH,2016,richland,2.35
+OH,2016,ross,2.48
+OH,2016,scioto,2.43
+OH,2016,stark,2.4
+OH,2016,summit,2.39
+OH,2016,trumbull,2.31
+OH,2016,tuscarawas,2.61
+OH,2016,warren,2.67
+OH,2016,wayne,2.6
+OH,2016,wood,2.46
+OK,2016,canadian,3.04
+OK,2016,cleveland,2.53
+OK,2016,comanche,2.63
+OK,2016,creek,2.75
+OK,2016,muskogee,2.53
+OK,2016,oklahoma,2.55
+OK,2016,payne,2.4
+OK,2016,pottawatomie,2.71
+OK,2016,rogers,2.65
+OK,2016,tulsa,2.5
+OK,2016,wagoner,2.74
+OR,2016,benton,2.41
+OR,2016,clackamas,2.63
+OR,2016,deschutes,2.53
+OR,2016,douglas,2.43
+OR,2016,jackson,2.45
+OR,2016,josephine,2.39
+OR,2016,klamath,2.48
+OR,2016,lane,2.45
+OR,2016,linn,2.6
+OR,2016,marion,2.79
+OR,2016,multnomah,2.44
+OR,2016,polk,2.74
+OR,2016,umatilla,2.77
+OR,2016,washington,2.7
+OR,2016,yamhill,2.78
+PA,2016,adams,2.57
+PA,2016,allegheny,2.25
+PA,2016,armstrong,2.52
+PA,2016,beaver,2.39
+PA,2016,berks,2.67
+PA,2016,blair,2.37
+PA,2016,bucks,2.64
+PA,2016,butler,2.4
+PA,2016,cambria,2.27
+PA,2016,carbon,2.41
+PA,2016,centre,2.49
+PA,2016,chester,2.68
+PA,2016,clearfield,2.59
+PA,2016,columbia,2.32
+PA,2016,crawford,2.44
+PA,2016,cumberland,2.43
+PA,2016,dauphin,2.4
+PA,2016,delaware,2.64
+PA,2016,erie,2.4
+PA,2016,fayette,2.38
+PA,2016,franklin,2.51
+PA,2016,indiana,2.32
+PA,2016,lackawanna,2.36
+PA,2016,lancaster,2.68
+PA,2016,lawrence,2.37
+PA,2016,lebanon,2.65
+PA,2016,lehigh,2.54
+PA,2016,luzerne,2.45
+PA,2016,lycoming,2.4
+PA,2016,mercer,2.31
+PA,2016,monroe,2.86
+PA,2016,montgomery,2.56
+PA,2016,northampton,2.61
+PA,2016,northumberland,2.32
+PA,2016,philadelphia,2.62
+PA,2016,schuylkill,2.35
+PA,2016,somerset,2.4
+PA,2016,washington,2.44
+PA,2016,westmoreland,2.34
+PA,2016,york,2.56
+RI,2016,kent,2.41
+RI,2016,newport,2.25
+RI,2016,providence,2.58
+RI,2016,washington,2.37
+SC,2016,aiken,2.47
+SC,2016,anderson,2.57
+SC,2016,beaufort,2.62
+SC,2016,berkeley,2.76
+SC,2016,charleston,2.45
+SC,2016,darlington,2.54
+SC,2016,dorchester,2.75
+SC,2016,florence,2.7
+SC,2016,greenville,2.59
+SC,2016,greenwood,2.46
+SC,2016,horry,2.53
+SC,2016,lancaster,2.68
+SC,2016,laurens,2.59
+SC,2016,lexington,2.57
+SC,2016,oconee,2.4
+SC,2016,orangeburg,2.55
+SC,2016,pickens,2.47
+SC,2016,richland,2.47
+SC,2016,spartanburg,2.59
+SC,2016,sumter,2.53
+SC,2016,york,2.6
+SD,2016,minnehaha,2.46
+SD,2016,pennington,2.46
+TN,2016,anderson,2.39
+TN,2016,blount,2.55
+TN,2016,bradley,2.49
+TN,2016,davidson,2.35
+TN,2016,greene,2.62
+TN,2016,hamilton,2.48
+TN,2016,knox,2.42
+TN,2016,madison,2.51
+TN,2016,maury,2.64
+TN,2016,montgomery,2.77
+TN,2016,putnam,2.33
+TN,2016,robertson,2.7
+TN,2016,rutherford,2.73
+TN,2016,sevier,2.65
+TN,2016,shelby,2.58
+TN,2016,sullivan,2.38
+TN,2016,sumner,2.74
+TN,2016,washington,2.33
+TN,2016,williamson,2.96
+TN,2016,wilson,2.75
+TX,2016,angelina,2.8
+TX,2016,bastrop,3.09
+TX,2016,bell,2.76
+TX,2016,bexar,3.02
+TX,2016,bowie,2.67
+TX,2016,brazoria,2.93
+TX,2016,brazos,2.61
+TX,2016,cameron,3.47
+TX,2016,collin,2.8
+TX,2016,comal,2.75
+TX,2016,coryell,2.65
+TX,2016,dallas,2.75
+TX,2016,denton,2.81
+TX,2016,ector,3.05
+TX,2016,ellis,3
+TX,2016,el paso,3.08
+TX,2016,fort bend,3.19
+TX,2016,galveston,2.67
+TX,2016,grayson,2.67
+TX,2016,gregg,2.63
+TX,2016,guadalupe,2.95
+TX,2016,harris,2.83
+TX,2016,harrison,2.74
+TX,2016,hays,2.76
+TX,2016,henderson,2.59
+TX,2016,hidalgo,3.59
+TX,2016,hunt,2.85
+TX,2016,jefferson,2.48
+TX,2016,johnson,2.97
+TX,2016,kaufman,3.18
+TX,2016,liberty,2.8
+TX,2016,lubbock,2.59
+TX,2016,mclennan,2.73
+TX,2016,midland,2.86
+TX,2016,montgomery,2.86
+TX,2016,nacogdoches,2.61
+TX,2016,nueces,2.73
+TX,2016,orange,2.59
+TX,2016,parker,2.9
+TX,2016,potter,2.69
+TX,2016,randall,2.62
+TX,2016,rockwall,2.95
+TX,2016,san patricio,2.81
+TX,2016,smith,2.9
+TX,2016,tarrant,2.86
+TX,2016,taylor,2.67
+TX,2016,tom green,2.58
+TX,2016,travis,2.57
+TX,2016,victoria,2.83
+TX,2016,walker,2.56
+TX,2016,webb,3.65
+TX,2016,wichita,2.34
+TX,2016,williamson,3.03
+UT,2016,cache,3.24
+UT,2016,davis,3.28
+UT,2016,salt lake,3.03
+UT,2016,utah,3.66
+UT,2016,washington,3.06
+UT,2016,weber,3.07
+VT,2016,chittenden,2.34
+VA,2016,albemarle,2.48
+VA,2016,arlington,2.19
+VA,2016,augusta,2.42
+VA,2016,bedford,2.62
+VA,2016,chesterfield,2.74
+VA,2016,fairfax,2.86
+VA,2016,fauquier,2.77
+VA,2016,frederick,2.69
+VA,2016,hanover,2.71
+VA,2016,henrico,2.53
+VA,2016,james city,2.58
+VA,2016,loudoun,3.08
+VA,2016,montgomery,2.48
+VA,2016,prince william,3.23
+VA,2016,roanoke,2.38
+VA,2016,rockingham,2.5
+VA,2016,spotsylvania,2.98
+VA,2016,stafford,2.99
+VA,2016,york,2.8
+VA,2016,alexandria city,2.21
+VA,2016,chesapeake city,2.79
+VA,2016,hampton city,2.41
+VA,2016,lynchburg city,2.52
+VA,2016,newport news city,2.55
+VA,2016,norfolk city,2.49
+VA,2016,portsmouth city,2.51
+VA,2016,richmond city,2.31
+VA,2016,roanoke city,2.31
+VA,2016,suffolk city,2.66
+VA,2016,virginia beach city,2.63
+WA,2016,benton,2.73
+WA,2016,chelan,2.65
+WA,2016,clallam,2.31
+WA,2016,clark,2.72
+WA,2016,cowlitz,2.59
+WA,2016,franklin,3.39
+WA,2016,grant,3.27
+WA,2016,grays harbor,2.51
+WA,2016,island,2.42
+WA,2016,king,2.45
+WA,2016,kitsap,2.53
+WA,2016,lewis,2.57
+WA,2016,pierce,2.65
+WA,2016,skagit,2.62
+WA,2016,snohomish,2.71
+WA,2016,spokane,2.47
+WA,2016,thurston,2.56
+WA,2016,whatcom,2.52
+WA,2016,yakima,3.04
+WV,2016,berkeley,2.67
+WV,2016,cabell,2.36
+WV,2016,harrison,2.43
+WV,2016,kanawha,2.31
+WV,2016,monongalia,2.55
+WV,2016,raleigh,2.42
+WV,2016,wood,2.42
+WI,2016,brown,2.42
+WI,2016,dane,2.38
+WI,2016,dodge,2.42
+WI,2016,eau claire,2.39
+WI,2016,fond du lac,2.42
+WI,2016,jefferson,2.51
+WI,2016,kenosha,2.54
+WI,2016,la crosse,2.4
+WI,2016,manitowoc,2.29
+WI,2016,marathon,2.43
+WI,2016,milwaukee,2.44
+WI,2016,outagamie,2.49
+WI,2016,ozaukee,2.44
+WI,2016,portage,2.39
+WI,2016,racine,2.51
+WI,2016,rock,2.51
+WI,2016,st. croix,2.61
+WI,2016,sheboygan,2.36
+WI,2016,walworth,2.5
+WI,2016,washington,2.51
+WI,2016,waukesha,2.51
+WI,2016,winnebago,2.31
+WI,2016,wood,2.2
+WY,2016,laramie,2.52
+WY,2016,natrona,2.47
+PR,2016,arecibo municipio,2.66
+PR,2016,bayamã³n municipio,2.53
+PR,2016,caguas municipio,2.72
+PR,2016,carolina municipio,2.49
+PR,2016,guaynabo municipio,2.68
+PR,2016,mayagã¼ez municipio,2.63
+PR,2016,ponce municipio,2.69
+PR,2016,san juan municipio,2.3
+PR,2016,toa alta municipio,3.29
+PR,2016,toa baja municipio,2.84
+PR,2016,trujillo alto municipio,2.77
+AL,2017,baldwin,2.65
+AL,2017,calhoun,2.5
+AL,2017,cullman,2.65
+AL,2017,dekalb,2.73
+AL,2017,elmore,2.63
+AL,2017,etowah,2.74
+AL,2017,houston,2.64
+AL,2017,jefferson,2.48
+AL,2017,lauderdale,2.37
+AL,2017,lee,2.66
+AL,2017,limestone,2.78
+AL,2017,madison,2.38
+AL,2017,marshall,2.77
+AL,2017,mobile,2.63
+AL,2017,montgomery,2.48
+AL,2017,morgan,2.57
+AL,2017,st. clair,2.58
+AL,2017,shelby,2.68
+AL,2017,talladega,2.4
+AL,2017,tuscaloosa,2.74
+AL,2017,walker,2.5
+AK,2017,anchorage municipality,2.68
+AK,2017,fairbanks north star borough,2.71
+AK,2017,matanuska-susitna borough,3.56
+AZ,2017,apache,3.42
+AZ,2017,cochise,2.39
+AZ,2017,coconino,2.65
+AZ,2017,maricopa,2.77
+AZ,2017,mohave,2.33
+AZ,2017,navajo,2.93
+AZ,2017,pima,2.46
+AZ,2017,pinal,2.91
+AZ,2017,yavapai,2.26
+AZ,2017,yuma,2.71
+AR,2017,benton,2.71
+AR,2017,craighead,2.45
+AR,2017,faulkner,2.65
+AR,2017,garland,2.5
+AR,2017,jefferson,2.36
+AR,2017,lonoke,2.66
+AR,2017,pulaski,2.47
+AR,2017,saline,2.66
+AR,2017,sebastian,2.49
+AR,2017,washington,2.63
+AR,2017,white,2.59
+CA,2017,alameda,2.84
+CA,2017,butte,2.5
+CA,2017,contra costa,2.9
+CA,2017,el dorado,2.7
+CA,2017,fresno,3.18
+CA,2017,humboldt,2.48
+CA,2017,imperial,3.89
+CA,2017,kern,3.21
+CA,2017,kings,3.19
+CA,2017,lake,2.31
+CA,2017,los angeles,3.02
+CA,2017,madera,3.22
+CA,2017,marin,2.43
+CA,2017,mendocino,2.63
+CA,2017,merced,3.3
+CA,2017,monterey,3.35
+CA,2017,napa,2.87
+CA,2017,nevada,2.37
+CA,2017,orange,3.03
+CA,2017,placer,2.66
+CA,2017,riverside,3.32
+CA,2017,sacramento,2.77
+CA,2017,san bernardino,3.35
+CA,2017,san diego,2.88
+CA,2017,san francisco,2.4
+CA,2017,san joaquin,3.21
+CA,2017,san luis obispo,2.55
+CA,2017,san mateo,2.88
+CA,2017,santa barbara,2.9
+CA,2017,santa clara,3
+CA,2017,santa cruz,2.74
+CA,2017,shasta,2.46
+CA,2017,solano,2.88
+CA,2017,sonoma,2.63
+CA,2017,stanislaus,3.13
+CA,2017,sutter,2.99
+CA,2017,tulare,3.34
+CA,2017,ventura,3.09
+CA,2017,yolo,2.87
+CA,2017,yuba,2.89
+CO,2017,adams,3.01
+CO,2017,arapahoe,2.65
+CO,2017,boulder,2.42
+CO,2017,broomfield,2.46
+CO,2017,denver,2.32
+CO,2017,douglas,2.81
+CO,2017,el paso,2.64
+CO,2017,jefferson,2.44
+CO,2017,larimer,2.48
+CO,2017,mesa,2.4
+CO,2017,pueblo,2.49
+CO,2017,weld,2.85
+CT,2017,fairfield,2.77
+CT,2017,hartford,2.5
+CT,2017,litchfield,2.43
+CT,2017,middlesex,2.34
+CT,2017,new haven,2.56
+CT,2017,new london,2.39
+CT,2017,tolland,2.44
+CT,2017,windham,2.53
+DE,2017,kent,2.69
+DE,2017,new castle,2.63
+DE,2017,sussex,2.53
+DC,2017,district of columbia,2.32
+FL,2017,alachua,2.58
+FL,2017,bay,2.57
+FL,2017,brevard,2.55
+FL,2017,broward,2.8
+FL,2017,charlotte,2.35
+FL,2017,citrus,2.33
+FL,2017,clay,2.88
+FL,2017,collier,2.55
+FL,2017,columbia,2.67
+FL,2017,duval,2.55
+FL,2017,escambia,2.42
+FL,2017,flagler,2.6
+FL,2017,hernando,2.49
+FL,2017,highlands,2.35
+FL,2017,hillsborough,2.66
+FL,2017,indian river,2.63
+FL,2017,lake,2.51
+FL,2017,lee,2.74
+FL,2017,leon,2.4
+FL,2017,manatee,2.64
+FL,2017,marion,2.45
+FL,2017,martin,2.5
+FL,2017,miami-dade,3.1
+FL,2017,monroe,2.4
+FL,2017,nassau,2.57
+FL,2017,okaloosa,2.49
+FL,2017,orange,2.86
+FL,2017,osceola,3.42
+FL,2017,palm beach,2.65
+FL,2017,pasco,2.49
+FL,2017,pinellas,2.35
+FL,2017,polk,2.89
+FL,2017,putnam,2.45
+FL,2017,st. johns,2.77
+FL,2017,st. lucie,2.72
+FL,2017,santa rosa,2.7
+FL,2017,sarasota,2.24
+FL,2017,seminole,2.6
+FL,2017,sumter,2.11
+FL,2017,volusia,2.43
+FL,2017,walton,2.25
+GA,2017,barrow,2.93
+GA,2017,bartow,2.68
+GA,2017,bibb,2.61
+GA,2017,bulloch,2.41
+GA,2017,carroll,2.67
+GA,2017,catoosa,2.62
+GA,2017,chatham,2.58
+GA,2017,cherokee,2.75
+GA,2017,clarke,2.41
+GA,2017,clayton,2.97
+GA,2017,cobb,2.69
+GA,2017,columbia,3.44
+GA,2017,coweta,2.7
+GA,2017,dekalb,2.66
+GA,2017,dougherty,2.5
+GA,2017,douglas,2.85
+GA,2017,fayette,2.76
+GA,2017,floyd,2.53
+GA,2017,forsyth,2.9
+GA,2017,fulton,2.45
+GA,2017,glynn,2.43
+GA,2017,gwinnett,3.13
+GA,2017,hall,3.18
+GA,2017,henry,2.91
+GA,2017,houston,2.67
+GA,2017,jackson,2.8
+GA,2017,lowndes,2.68
+GA,2017,muscogee,2.64
+GA,2017,newton,2.85
+GA,2017,paulding,3.01
+GA,2017,richmond,2.69
+GA,2017,rockdale,3
+GA,2017,spalding,2.56
+GA,2017,troup,2.77
+GA,2017,walker,2.57
+GA,2017,walton,2.92
+GA,2017,whitfield,2.88
+HI,2017,hawaii,2.86
+HI,2017,honolulu,3.04
+HI,2017,kauai,3.11
+HI,2017,maui,3.05
+ID,2017,ada,2.62
+ID,2017,bannock,2.65
+ID,2017,bonneville,2.75
+ID,2017,canyon,2.94
+ID,2017,kootenai,2.58
+ID,2017,twin falls,2.72
+IL,2017,adams,2.39
+IL,2017,champaign,2.33
+IL,2017,cook,2.63
+IL,2017,dekalb,2.63
+IL,2017,dupage,2.68
+IL,2017,kane,2.93
+IL,2017,kankakee,2.63
+IL,2017,kendall,3.07
+IL,2017,lake,2.77
+IL,2017,lasalle,2.39
+IL,2017,mchenry,2.74
+IL,2017,mclean,2.54
+IL,2017,macon,2.37
+IL,2017,madison,2.43
+IL,2017,peoria,2.49
+IL,2017,rock island,2.31
+IL,2017,st. clair,2.52
+IL,2017,sangamon,2.27
+IL,2017,tazewell,2.41
+IL,2017,vermilion,2.48
+IL,2017,will,2.99
+IL,2017,williamson,2.43
+IL,2017,winnebago,2.46
+IN,2017,allen,2.57
+IN,2017,bartholomew,2.57
+IN,2017,boone,2.54
+IN,2017,clark,2.56
+IN,2017,delaware,2.31
+IN,2017,elkhart,2.75
+IN,2017,floyd,2.64
+IN,2017,grant,2.36
+IN,2017,hamilton,2.71
+IN,2017,hancock,2.54
+IN,2017,hendricks,2.76
+IN,2017,howard,2.37
+IN,2017,johnson,2.58
+IN,2017,kosciusko,2.59
+IN,2017,lake,2.61
+IN,2017,laporte,2.41
+IN,2017,madison,2.43
+IN,2017,marion,2.53
+IN,2017,monroe,2.31
+IN,2017,morgan,2.6
+IN,2017,porter,2.54
+IN,2017,st. joseph,2.61
+IN,2017,tippecanoe,2.51
+IN,2017,vanderburgh,2.27
+IN,2017,vigo,2.36
+IN,2017,wayne,2.39
+IA,2017,black hawk,2.41
+IA,2017,dallas,2.53
+IA,2017,dubuque,2.46
+IA,2017,johnson,2.39
+IA,2017,linn,2.46
+IA,2017,polk,2.53
+IA,2017,pottawattamie,2.49
+IA,2017,scott,2.63
+IA,2017,story,2.28
+IA,2017,woodbury,2.55
+KS,2017,butler,2.63
+KS,2017,douglas,2.36
+KS,2017,johnson,2.56
+KS,2017,leavenworth,2.75
+KS,2017,riley,2.37
+KS,2017,sedgwick,2.59
+KS,2017,shawnee,2.35
+KS,2017,wyandotte,2.7
+KY,2017,boone,2.8
+KY,2017,bullitt,2.69
+KY,2017,campbell,2.48
+KY,2017,christian,2.51
+KY,2017,daviess,2.37
+KY,2017,fayette,2.4
+KY,2017,hardin,2.46
+KY,2017,jefferson,2.41
+KY,2017,kenton,2.56
+KY,2017,mccracken,2.39
+KY,2017,madison,2.56
+KY,2017,oldham,3.01
+KY,2017,warren,2.53
+LA,2017,ascension parish,2.75
+LA,2017,bossier parish,2.51
+LA,2017,caddo parish,2.52
+LA,2017,calcasieu parish,2.54
+LA,2017,east baton rouge parish,2.69
+LA,2017,iberia parish,2.71
+LA,2017,jefferson parish,2.59
+LA,2017,lafayette parish,2.65
+LA,2017,lafourche parish,2.65
+LA,2017,livingston parish,2.86
+LA,2017,orleans parish,2.45
+LA,2017,ouachita parish,2.55
+LA,2017,rapides parish,2.63
+LA,2017,st. landry parish,2.73
+LA,2017,st. tammany parish,2.69
+LA,2017,tangipahoa parish,2.62
+LA,2017,terrebonne parish,2.7
+ME,2017,androscoggin,2.27
+ME,2017,aroostook,2.26
+ME,2017,cumberland,2.41
+ME,2017,kennebec,2.38
+ME,2017,penobscot,2.39
+ME,2017,york,2.42
+MD,2017,allegany,2.34
+MD,2017,anne arundel,2.69
+MD,2017,baltimore,2.56
+MD,2017,calvert,2.91
+MD,2017,carroll,2.68
+MD,2017,cecil,2.79
+MD,2017,charles,2.77
+MD,2017,frederick,2.67
+MD,2017,harford,2.67
+MD,2017,howard,2.77
+MD,2017,montgomery,2.81
+MD,2017,prince george's,2.88
+MD,2017,st. mary's,2.67
+MD,2017,washington,2.5
+MD,2017,wicomico,2.62
+MD,2017,baltimore city,2.44
+MA,2017,barnstable,2.29
+MA,2017,berkshire,2.2
+MA,2017,bristol,2.5
+MA,2017,essex,2.61
+MA,2017,franklin,2.36
+MA,2017,hampden,2.51
+MA,2017,hampshire,2.4
+MA,2017,middlesex,2.58
+MA,2017,norfolk,2.58
+MA,2017,plymouth,2.68
+MA,2017,suffolk,2.43
+MA,2017,worcester,2.58
+MI,2017,allegan,2.57
+MI,2017,bay,2.29
+MI,2017,berrien,2.35
+MI,2017,calhoun,2.38
+MI,2017,clinton,2.6
+MI,2017,eaton,2.42
+MI,2017,genesee,2.42
+MI,2017,grand traverse,2.36
+MI,2017,ingham,2.42
+MI,2017,isabella,2.57
+MI,2017,jackson,2.39
+MI,2017,kalamazoo,2.45
+MI,2017,kent,2.65
+MI,2017,lapeer,2.52
+MI,2017,lenawee,2.42
+MI,2017,livingston,2.59
+MI,2017,macomb,2.49
+MI,2017,marquette,2.44
+MI,2017,midland,2.4
+MI,2017,monroe,2.49
+MI,2017,muskegon,2.58
+MI,2017,oakland,2.45
+MI,2017,ottawa,2.65
+MI,2017,saginaw,2.29
+MI,2017,st. clair,2.42
+MI,2017,shiawassee,2.48
+MI,2017,van buren,2.55
+MI,2017,washtenaw,2.47
+MI,2017,wayne,2.53
+MN,2017,anoka,2.74
+MN,2017,blue earth,2.42
+MN,2017,carver,2.83
+MN,2017,dakota,2.61
+MN,2017,hennepin,2.42
+MN,2017,olmsted,2.47
+MN,2017,ramsey,2.52
+MN,2017,rice,2.49
+MN,2017,st. louis,2.24
+MN,2017,scott,2.88
+MN,2017,sherburne,2.9
+MN,2017,stearns,2.51
+MN,2017,washington,2.74
+MN,2017,wright,2.78
+MS,2017,desoto,2.88
+MS,2017,forrest,2.56
+MS,2017,harrison,2.55
+MS,2017,hinds,2.57
+MS,2017,jackson,2.69
+MS,2017,jones,2.76
+MS,2017,lauderdale,2.43
+MS,2017,lee,2.72
+MS,2017,madison,2.54
+MS,2017,rankin,2.69
+MO,2017,boone,2.41
+MO,2017,buchanan,2.51
+MO,2017,cape girardeau,2.55
+MO,2017,cass,2.54
+MO,2017,christian,2.65
+MO,2017,clay,2.61
+MO,2017,cole,2.42
+MO,2017,franklin,2.54
+MO,2017,greene,2.31
+MO,2017,jackson,2.4
+MO,2017,jasper,2.52
+MO,2017,jefferson,2.63
+MO,2017,platte,2.55
+MO,2017,st. charles,2.66
+MO,2017,st. francois,2.64
+MO,2017,st. louis,2.4
+MO,2017,st. louis city,2.16
+MT,2017,cascade,2.38
+MT,2017,flathead,2.65
+MT,2017,gallatin,2.34
+MT,2017,lewis and clark,2.33
+MT,2017,missoula,2.34
+MT,2017,yellowstone,2.36
+NE,2017,douglas,2.51
+NE,2017,lancaster,2.45
+NE,2017,sarpy,2.74
+NV,2017,clark,2.79
+NV,2017,washoe,2.51
+NH,2017,cheshire,2.44
+NH,2017,grafton,2.45
+NH,2017,hillsborough,2.49
+NH,2017,merrimack,2.45
+NH,2017,rockingham,2.53
+NH,2017,strafford,2.44
+NJ,2017,atlantic,2.7
+NJ,2017,bergen,2.77
+NJ,2017,burlington,2.66
+NJ,2017,camden,2.65
+NJ,2017,cape may,2.3
+NJ,2017,cumberland,2.77
+NJ,2017,essex,2.76
+NJ,2017,gloucester,2.74
+NJ,2017,hudson,2.71
+NJ,2017,hunterdon,2.63
+NJ,2017,mercer,2.79
+NJ,2017,middlesex,2.84
+NJ,2017,monmouth,2.63
+NJ,2017,morris,2.71
+NJ,2017,ocean,2.62
+NJ,2017,passaic,2.99
+NJ,2017,salem,2.47
+NJ,2017,somerset,2.88
+NJ,2017,sussex,2.62
+NJ,2017,union,2.93
+NJ,2017,warren,2.53
+NM,2017,bernalillo,2.52
+NM,2017,chaves,2.73
+NM,2017,doã±a ana,2.77
+NM,2017,lea,2.98
+NM,2017,mckinley,3.41
+NM,2017,otero,2.71
+NM,2017,sandoval,2.78
+NM,2017,san juan,3.05
+NM,2017,santa fe,2.39
+NM,2017,valencia,2.83
+NY,2017,albany,2.35
+NY,2017,bronx,2.84
+NY,2017,broome,2.33
+NY,2017,cattaraugus,2.31
+NY,2017,cayuga,2.37
+NY,2017,chautauqua,2.37
+NY,2017,chemung,2.5
+NY,2017,clinton,2.33
+NY,2017,dutchess,2.61
+NY,2017,erie,2.32
+NY,2017,jefferson,2.58
+NY,2017,kings,2.73
+NY,2017,livingston,2.32
+NY,2017,madison,2.53
+NY,2017,monroe,2.39
+NY,2017,nassau,3.02
+NY,2017,new york,2.1
+NY,2017,niagara,2.34
+NY,2017,oneida,2.46
+NY,2017,onondaga,2.39
+NY,2017,ontario,2.39
+NY,2017,orange,2.91
+NY,2017,oswego,2.47
+NY,2017,putnam,2.79
+NY,2017,queens,3.03
+NY,2017,rensselaer,2.32
+NY,2017,richmond,2.85
+NY,2017,rockland,3.22
+NY,2017,st. lawrence,2.39
+NY,2017,saratoga,2.33
+NY,2017,schenectady,3.08
+NY,2017,steuben,2.46
+NY,2017,suffolk,3.04
+NY,2017,sullivan,2.76
+NY,2017,tompkins,2.27
+NY,2017,ulster,2.44
+NY,2017,warren,2.31
+NY,2017,wayne,2.42
+NY,2017,westchester,2.72
+NC,2017,alamance,2.45
+NC,2017,brunswick,2.3
+NC,2017,buncombe,2.33
+NC,2017,burke,2.56
+NC,2017,cabarrus,2.73
+NC,2017,caldwell,2.51
+NC,2017,carteret,2.26
+NC,2017,catawba,2.52
+NC,2017,chatham,2.45
+NC,2017,cleveland,2.42
+NC,2017,craven,2.45
+NC,2017,cumberland,2.48
+NC,2017,davidson,2.47
+NC,2017,durham,2.36
+NC,2017,forsyth,2.52
+NC,2017,franklin,2.65
+NC,2017,gaston,2.58
+NC,2017,guilford,2.5
+NC,2017,harnett,2.78
+NC,2017,henderson,2.39
+NC,2017,iredell,2.66
+NC,2017,johnston,2.82
+NC,2017,lincoln,2.46
+NC,2017,mecklenburg,2.59
+NC,2017,moore,2.45
+NC,2017,nash,2.54
+NC,2017,new hanover,2.32
+NC,2017,onslow,2.76
+NC,2017,orange,2.51
+NC,2017,pitt,2.52
+NC,2017,randolph,2.46
+NC,2017,robeson,2.85
+NC,2017,rockingham,2.47
+NC,2017,rowan,2.62
+NC,2017,rutherford,2.47
+NC,2017,surry,2.42
+NC,2017,union,3.04
+NC,2017,wake,2.63
+NC,2017,wayne,2.54
+NC,2017,wilkes,2.39
+NC,2017,wilson,2.5
+ND,2017,burleigh,2.34
+ND,2017,cass,2.27
+ND,2017,grand forks,2.14
+ND,2017,ward,2.44
+OH,2017,allen,2.44
+OH,2017,ashtabula,2.57
+OH,2017,athens,2.56
+OH,2017,belmont,2.72
+OH,2017,butler,2.65
+OH,2017,clark,2.43
+OH,2017,clermont,2.59
+OH,2017,columbiana,2.53
+OH,2017,cuyahoga,2.24
+OH,2017,delaware,2.82
+OH,2017,erie,2.31
+OH,2017,fairfield,2.73
+OH,2017,franklin,2.48
+OH,2017,geauga,2.64
+OH,2017,greene,2.44
+OH,2017,hamilton,2.32
+OH,2017,hancock,2.32
+OH,2017,jefferson,2.37
+OH,2017,lake,2.41
+OH,2017,licking,2.68
+OH,2017,lorain,2.47
+OH,2017,lucas,2.36
+OH,2017,mahoning,2.27
+OH,2017,marion,2.37
+OH,2017,medina,2.58
+OH,2017,miami,2.62
+OH,2017,montgomery,2.28
+OH,2017,muskingum,2.55
+OH,2017,portage,2.49
+OH,2017,richland,2.31
+OH,2017,ross,2.55
+OH,2017,scioto,2.38
+OH,2017,stark,2.36
+OH,2017,summit,2.34
+OH,2017,trumbull,2.26
+OH,2017,tuscarawas,2.44
+OH,2017,warren,2.67
+OH,2017,wayne,2.61
+OH,2017,wood,2.48
+OK,2017,canadian,3.07
+OK,2017,cleveland,2.52
+OK,2017,comanche,2.56
+OK,2017,creek,2.69
+OK,2017,muskogee,2.51
+OK,2017,oklahoma,2.59
+OK,2017,payne,2.45
+OK,2017,pottawatomie,2.67
+OK,2017,rogers,2.61
+OK,2017,tulsa,2.54
+OK,2017,wagoner,2.77
+OR,2017,benton,2.39
+OR,2017,clackamas,2.6
+OR,2017,deschutes,2.49
+OR,2017,douglas,2.37
+OR,2017,jackson,2.39
+OR,2017,josephine,2.34
+OR,2017,klamath,2.38
+OR,2017,lane,2.42
+OR,2017,linn,2.62
+OR,2017,marion,2.86
+OR,2017,multnomah,2.43
+OR,2017,polk,2.8
+OR,2017,umatilla,2.63
+OR,2017,washington,2.67
+OR,2017,yamhill,2.66
+PA,2017,adams,2.48
+PA,2017,allegheny,2.21
+PA,2017,armstrong,2.43
+PA,2017,beaver,2.3
+PA,2017,berks,2.61
+PA,2017,blair,2.32
+PA,2017,bucks,2.58
+PA,2017,butler,2.4
+PA,2017,cambria,2.26
+PA,2017,carbon,2.4
+PA,2017,centre,2.45
+PA,2017,chester,2.66
+PA,2017,clearfield,2.55
+PA,2017,columbia,2.32
+PA,2017,crawford,2.29
+PA,2017,cumberland,2.41
+PA,2017,dauphin,2.43
+PA,2017,delaware,2.64
+PA,2017,erie,2.41
+PA,2017,fayette,2.38
+PA,2017,franklin,2.49
+PA,2017,indiana,2.35
+PA,2017,lackawanna,2.35
+PA,2017,lancaster,2.64
+PA,2017,lawrence,2.27
+PA,2017,lebanon,2.58
+PA,2017,lehigh,2.56
+PA,2017,luzerne,2.41
+PA,2017,lycoming,2.33
+PA,2017,mercer,2.25
+PA,2017,monroe,2.87
+PA,2017,montgomery,2.55
+PA,2017,northampton,2.56
+PA,2017,northumberland,2.33
+PA,2017,philadelphia,2.53
+PA,2017,schuylkill,2.36
+PA,2017,somerset,2.36
+PA,2017,washington,2.46
+PA,2017,westmoreland,2.28
+PA,2017,york,2.54
+RI,2017,kent,2.33
+RI,2017,newport,2.3
+RI,2017,providence,2.58
+RI,2017,washington,2.5
+SC,2017,aiken,2.44
+SC,2017,anderson,2.56
+SC,2017,beaufort,2.66
+SC,2017,berkeley,2.81
+SC,2017,charleston,2.46
+SC,2017,darlington,2.38
+SC,2017,dorchester,2.76
+SC,2017,florence,2.62
+SC,2017,greenville,2.56
+SC,2017,greenwood,2.54
+SC,2017,horry,2.56
+SC,2017,kershaw,2.52
+SC,2017,lancaster,2.64
+SC,2017,laurens,2.57
+SC,2017,lexington,2.6
+SC,2017,oconee,2.37
+SC,2017,orangeburg,2.66
+SC,2017,pickens,2.45
+SC,2017,richland,2.5
+SC,2017,spartanburg,2.58
+SC,2017,sumter,2.49
+SC,2017,york,2.6
+SD,2017,minnehaha,2.37
+SD,2017,pennington,2.44
+TN,2017,anderson,2.51
+TN,2017,blount,2.52
+TN,2017,bradley,2.52
+TN,2017,davidson,2.36
+TN,2017,greene,2.45
+TN,2017,hamilton,2.41
+TN,2017,knox,2.41
+TN,2017,madison,2.58
+TN,2017,maury,2.68
+TN,2017,montgomery,2.67
+TN,2017,putnam,2.42
+TN,2017,robertson,2.67
+TN,2017,rutherford,2.78
+TN,2017,sevier,2.65
+TN,2017,shelby,2.65
+TN,2017,sullivan,2.28
+TN,2017,sumner,2.76
+TN,2017,washington,2.31
+TN,2017,williamson,2.91
+TN,2017,wilson,2.68
+TX,2017,angelina,2.69
+TX,2017,bastrop,3.4
+TX,2017,bell,2.76
+TX,2017,bexar,3.04
+TX,2017,bowie,2.67
+TX,2017,brazoria,2.92
+TX,2017,brazos,2.59
+TX,2017,cameron,3.42
+TX,2017,collin,2.85
+TX,2017,comal,2.71
+TX,2017,coryell,3
+TX,2017,dallas,2.78
+TX,2017,denton,2.81
+TX,2017,ector,3.03
+TX,2017,ellis,3.01
+TX,2017,el paso,3.07
+TX,2017,fort bend,3.22
+TX,2017,galveston,2.71
+TX,2017,grayson,2.61
+TX,2017,gregg,2.68
+TX,2017,guadalupe,2.85
+TX,2017,harris,2.91
+TX,2017,harrison,2.88
+TX,2017,hays,2.76
+TX,2017,henderson,2.46
+TX,2017,hidalgo,3.55
+TX,2017,hunt,2.76
+TX,2017,jefferson,2.55
+TX,2017,johnson,2.79
+TX,2017,kaufman,3.23
+TX,2017,liberty,3.01
+TX,2017,lubbock,2.61
+TX,2017,mclennan,2.65
+TX,2017,midland,2.87
+TX,2017,montgomery,2.9
+TX,2017,nacogdoches,2.65
+TX,2017,nueces,2.74
+TX,2017,orange,2.82
+TX,2017,parker,2.98
+TX,2017,potter,2.51
+TX,2017,randall,2.7
+TX,2017,rockwall,3.02
+TX,2017,san patricio,2.88
+TX,2017,smith,2.88
+TX,2017,tarrant,2.89
+TX,2017,taylor,2.56
+TX,2017,tom green,2.67
+TX,2017,travis,2.6
+TX,2017,victoria,2.77
+TX,2017,walker,2.47
+TX,2017,webb,3.67
+TX,2017,wichita,2.41
+TX,2017,williamson,3.01
+TX,2017,wise,3.01
+UT,2017,cache,3.16
+UT,2017,davis,3.29
+UT,2017,salt lake,2.98
+UT,2017,tooele,3.27
+UT,2017,utah,3.59
+UT,2017,washington,2.92
+UT,2017,weber,2.98
+VT,2017,chittenden,2.32
+VA,2017,albemarle,2.45
+VA,2017,arlington,2.21
+VA,2017,augusta,2.37
+VA,2017,bedford,2.49
+VA,2017,chesterfield,2.74
+VA,2017,fairfax,2.87
+VA,2017,fauquier,2.97
+VA,2017,frederick,2.63
+VA,2017,hanover,2.74
+VA,2017,henrico,2.54
+VA,2017,james city,2.66
+VA,2017,loudoun,3.05
+VA,2017,montgomery,2.59
+VA,2017,prince william,3.24
+VA,2017,roanoke,2.37
+VA,2017,rockingham,2.54
+VA,2017,spotsylvania,3.09
+VA,2017,stafford,3.01
+VA,2017,york,2.61
+VA,2017,alexandria city,2.28
+VA,2017,chesapeake city,2.83
+VA,2017,hampton city,2.44
+VA,2017,lynchburg city,2.52
+VA,2017,newport news city,2.46
+VA,2017,norfolk city,2.48
+VA,2017,portsmouth city,2.51
+VA,2017,richmond city,2.48
+VA,2017,roanoke city,2.33
+VA,2017,suffolk city,2.71
+VA,2017,virginia beach city,2.61
+WA,2017,benton,2.72
+WA,2017,chelan,2.78
+WA,2017,clallam,2.24
+WA,2017,clark,2.71
+WA,2017,cowlitz,2.54
+WA,2017,franklin,3.39
+WA,2017,grant,3.03
+WA,2017,grays harbor,2.38
+WA,2017,island,2.34
+WA,2017,king,2.46
+WA,2017,kitsap,2.47
+WA,2017,lewis,2.43
+WA,2017,pierce,2.67
+WA,2017,skagit,2.51
+WA,2017,snohomish,2.7
+WA,2017,spokane,2.44
+WA,2017,thurston,2.47
+WA,2017,whatcom,2.44
+WA,2017,yakima,3
+WV,2017,berkeley,2.7
+WV,2017,cabell,2.21
+WV,2017,harrison,2.43
+WV,2017,kanawha,2.38
+WV,2017,monongalia,2.53
+WV,2017,raleigh,2.28
+WV,2017,wood,2.44
+WI,2017,brown,2.43
+WI,2017,dane,2.34
+WI,2017,dodge,2.44
+WI,2017,eau claire,2.38
+WI,2017,fond du lac,2.34
+WI,2017,jefferson,2.43
+WI,2017,kenosha,2.58
+WI,2017,la crosse,2.37
+WI,2017,manitowoc,2.27
+WI,2017,marathon,2.43
+WI,2017,milwaukee,2.47
+WI,2017,outagamie,2.47
+WI,2017,ozaukee,2.44
+WI,2017,portage,2.34
+WI,2017,racine,2.46
+WI,2017,rock,2.46
+WI,2017,st. croix,2.56
+WI,2017,sheboygan,2.32
+WI,2017,walworth,2.44
+WI,2017,washington,2.49
+WI,2017,waukesha,2.48
+WI,2017,winnebago,2.32
+WI,2017,wood,2.22
+WY,2017,laramie,2.47
+WY,2017,natrona,2.39
+PR,2017,arecibo municipio,2.52
+PR,2017,bayamã³n municipio,2.7
+PR,2017,caguas municipio,2.75
+PR,2017,carolina municipio,2.4
+PR,2017,guaynabo municipio,3.23
+PR,2017,mayagã¼ez municipio,2.52
+PR,2017,ponce municipio,2.71
+PR,2017,san juan municipio,2.35
+PR,2017,toa alta municipio,3.37
+PR,2017,toa baja municipio,2.8
+PR,2017,trujillo alto municipio,2.8
+AL,2019,baldwin,2.68
+AL,2019,calhoun,2.48
+AL,2019,cullman,2.57
+AL,2019,dekalb,2.83
+AL,2019,elmore,2.5
+AL,2019,etowah,2.52
+AL,2019,houston,2.63
+AL,2019,jefferson,2.43
+AL,2019,lauderdale,2.35
+AL,2019,lee,2.46
+AL,2019,limestone,2.99
+AL,2019,madison,2.33
+AL,2019,marshall,2.71
+AL,2019,mobile,2.61
+AL,2019,montgomery,2.47
+AL,2019,morgan,2.53
+AL,2019,st. clair,2.66
+AL,2019,shelby,2.56
+AL,2019,talladega,2.49
+AL,2019,tuscaloosa,2.69
+AL,2019,walker,2.49
+AK,2019,anchorage municipality,2.67
+AK,2019,fairbanks north star borough,2.61
+AK,2019,matanuska-susitna borough,3.24
+AZ,2019,apache,3.38
+AZ,2019,cochise,2.31
+AZ,2019,coconino,2.61
+AZ,2019,maricopa,2.75
+AZ,2019,mohave,2.29
+AZ,2019,navajo,2.79
+AZ,2019,pima,2.48
+AZ,2019,pinal,2.84
+AZ,2019,yavapai,2.24
+AZ,2019,yuma,2.81
+AR,2019,benton,2.74
+AR,2019,craighead,2.57
+AR,2019,faulkner,2.55
+AR,2019,garland,2.33
+AR,2019,jefferson,2.2
+AR,2019,lonoke,2.79
+AR,2019,pulaski,2.44
+AR,2019,saline,2.66
+AR,2019,sebastian,2.45
+AR,2019,washington,2.59
+AR,2019,white,2.62
+CA,2019,alameda,2.8
+CA,2019,butte,2.75
+CA,2019,contra costa,2.86
+CA,2019,el dorado,2.57
+CA,2019,fresno,3.11
+CA,2019,humboldt,2.36
+CA,2019,imperial,3.54
+CA,2019,kern,3.2
+CA,2019,kings,3.09
+CA,2019,lake,2.44
+CA,2019,los angeles,2.96
+CA,2019,madera,3.35
+CA,2019,marin,2.4
+CA,2019,mendocino,2.45
+CA,2019,merced,3.36
+CA,2019,monterey,3.25
+CA,2019,napa,2.78
+CA,2019,nevada,2.5
+CA,2019,orange,3
+CA,2019,placer,2.68
+CA,2019,riverside,3.31
+CA,2019,sacramento,2.74
+CA,2019,san bernardino,3.31
+CA,2019,san diego,2.87
+CA,2019,san francisco,2.36
+CA,2019,san joaquin,3.22
+CA,2019,san luis obispo,2.51
+CA,2019,san mateo,2.86
+CA,2019,santa barbara,2.9
+CA,2019,santa clara,2.94
+CA,2019,santa cruz,2.66
+CA,2019,shasta,2.43
+CA,2019,solano,2.9
+CA,2019,sonoma,2.55
+CA,2019,stanislaus,3.12
+CA,2019,sutter,2.91
+CA,2019,tehama,2.54
+CA,2019,tulare,3.2
+CA,2019,ventura,3.1
+CA,2019,yolo,2.79
+CA,2019,yuba,2.88
+CO,2019,adams,2.99
+CO,2019,arapahoe,2.64
+CO,2019,boulder,2.38
+CO,2019,broomfield,2.5
+CO,2019,denver,2.24
+CO,2019,douglas,2.75
+CO,2019,el paso,2.64
+CO,2019,jefferson,2.43
+CO,2019,larimer,2.37
+CO,2019,mesa,2.37
+CO,2019,pueblo,2.49
+CO,2019,weld,2.85
+CT,2019,fairfield,2.72
+CT,2019,hartford,2.46
+CT,2019,litchfield,2.4
+CT,2019,middlesex,2.34
+CT,2019,new haven,2.51
+CT,2019,new london,2.31
+CT,2019,tolland,2.39
+CT,2019,windham,2.37
+DE,2019,kent,2.59
+DE,2019,new castle,2.56
+DE,2019,sussex,2.39
+DC,2019,district of columbia,2.29
+FL,2019,alachua,2.47
+FL,2019,bay,2.49
+FL,2019,brevard,2.59
+FL,2019,broward,2.74
+FL,2019,charlotte,2.43
+FL,2019,citrus,2.28
+FL,2019,clay,2.87
+FL,2019,collier,2.71
+FL,2019,columbia,2.65
+FL,2019,duval,2.53
+FL,2019,escambia,2.49
+FL,2019,flagler,2.58
+FL,2019,hernando,2.44
+FL,2019,highlands,2.41
+FL,2019,hillsborough,2.68
+FL,2019,indian river,2.47
+FL,2019,lake,2.61
+FL,2019,lee,2.65
+FL,2019,leon,2.39
+FL,2019,manatee,2.75
+FL,2019,marion,2.45
+FL,2019,martin,2.42
+FL,2019,miami-dade,2.93
+FL,2019,monroe,2.2
+FL,2019,nassau,2.49
+FL,2019,okaloosa,2.69
+FL,2019,orange,2.98
+FL,2019,osceola,3.35
+FL,2019,palm beach,2.59
+FL,2019,pasco,2.57
+FL,2019,pinellas,2.42
+FL,2019,polk,2.98
+FL,2019,putnam,2.37
+FL,2019,st. johns,2.77
+FL,2019,st. lucie,2.78
+FL,2019,santa rosa,2.69
+FL,2019,sarasota,2.28
+FL,2019,seminole,2.58
+FL,2019,sumter,2.06
+FL,2019,volusia,2.47
+FL,2019,walton,2.74
+GA,2019,barrow,2.99
+GA,2019,bartow,2.68
+GA,2019,bibb,2.6
+GA,2019,bulloch,2.51
+GA,2019,carroll,2.72
+GA,2019,catoosa,2.78
+GA,2019,chatham,2.57
+GA,2019,cherokee,2.75
+GA,2019,clarke,2.23
+GA,2019,clayton,2.96
+GA,2019,cobb,2.61
+GA,2019,columbia,3.33
+GA,2019,coweta,2.76
+GA,2019,dekalb,2.57
+GA,2019,dougherty,2.56
+GA,2019,douglas,2.97
+GA,2019,fayette,2.76
+GA,2019,floyd,2.66
+GA,2019,forsyth,2.98
+GA,2019,fulton,2.34
+GA,2019,glynn,2.42
+GA,2019,gwinnett,3.09
+GA,2019,hall,3.09
+GA,2019,henry,2.93
+GA,2019,houston,2.67
+GA,2019,jackson,2.86
+GA,2019,lowndes,2.65
+GA,2019,muscogee,2.59
+GA,2019,newton,2.91
+GA,2019,paulding,2.97
+GA,2019,richmond,2.81
+GA,2019,rockdale,2.75
+GA,2019,spalding,2.57
+GA,2019,troup,2.8
+GA,2019,walker,2.54
+GA,2019,walton,2.81
+GA,2019,whitfield,2.98
+HI,2019,hawaii,2.79
+HI,2019,honolulu,2.97
+HI,2019,kauai,3.12
+HI,2019,maui,3.01
+ID,2019,ada,2.56
+ID,2019,bannock,2.68
+ID,2019,bonneville,2.89
+ID,2019,canyon,2.93
+ID,2019,kootenai,2.51
+ID,2019,twin falls,2.71
+IL,2019,adams,2.37
+IL,2019,champaign,2.38
+IL,2019,cook,2.55
+IL,2019,dekalb,2.55
+IL,2019,dupage,2.66
+IL,2019,kane,2.89
+IL,2019,kankakee,2.64
+IL,2019,kendall,3.11
+IL,2019,lake,2.74
+IL,2019,lasalle,2.32
+IL,2019,mchenry,2.71
+IL,2019,mclean,2.48
+IL,2019,macon,2.35
+IL,2019,madison,2.38
+IL,2019,peoria,2.36
+IL,2019,rock island,2.26
+IL,2019,st. clair,2.41
+IL,2019,sangamon,2.29
+IL,2019,tazewell,2.43
+IL,2019,vermilion,2.34
+IL,2019,will,2.96
+IL,2019,williamson,2.33
+IL,2019,winnebago,2.42
+IN,2019,allen,2.55
+IN,2019,bartholomew,2.72
+IN,2019,boone,2.51
+IN,2019,clark,2.67
+IN,2019,delaware,2.34
+IN,2019,elkhart,2.96
+IN,2019,floyd,2.7
+IN,2019,grant,2.2
+IN,2019,hamilton,2.69
+IN,2019,hancock,2.67
+IN,2019,hendricks,2.76
+IN,2019,howard,2.38
+IN,2019,johnson,2.72
+IN,2019,kosciusko,2.51
+IN,2019,lake,2.52
+IN,2019,laporte,2.36
+IN,2019,madison,2.41
+IN,2019,marion,2.5
+IN,2019,monroe,2.46
+IN,2019,morgan,2.68
+IN,2019,porter,2.55
+IN,2019,st. joseph,2.46
+IN,2019,tippecanoe,2.42
+IN,2019,vanderburgh,2.31
+IN,2019,vigo,2.34
+IN,2019,wayne,2.29
+IA,2019,black hawk,2.44
+IA,2019,dallas,2.52
+IA,2019,dubuque,2.43
+IA,2019,johnson,2.37
+IA,2019,linn,2.36
+IA,2019,polk,2.44
+IA,2019,pottawattamie,2.44
+IA,2019,scott,2.47
+IA,2019,story,2.19
+IA,2019,woodbury,2.53
+KS,2019,butler,2.56
+KS,2019,douglas,2.35
+KS,2019,johnson,2.58
+KS,2019,leavenworth,2.74
+KS,2019,riley,2.48
+KS,2019,sedgwick,2.56
+KS,2019,shawnee,2.34
+KS,2019,wyandotte,2.68
+KY,2019,boone,2.72
+KY,2019,bullitt,2.66
+KY,2019,campbell,2.36
+KY,2019,christian,2.43
+KY,2019,daviess,2.41
+KY,2019,fayette,2.35
+KY,2019,hardin,2.54
+KY,2019,jefferson,2.37
+KY,2019,kenton,2.52
+KY,2019,mccracken,2.25
+KY,2019,madison,2.51
+KY,2019,oldham,3.04
+KY,2019,warren,2.49
+LA,2019,ascension parish,2.84
+LA,2019,bossier parish,2.51
+LA,2019,caddo parish,2.54
+LA,2019,calcasieu parish,2.59
+LA,2019,east baton rouge parish,2.66
+LA,2019,iberia parish,2.63
+LA,2019,jefferson parish,2.49
+LA,2019,lafayette parish,2.53
+LA,2019,lafourche parish,2.6
+LA,2019,livingston parish,2.97
+LA,2019,orleans parish,2.5
+LA,2019,ouachita parish,2.52
+LA,2019,rapides parish,2.56
+LA,2019,st. landry parish,2.66
+LA,2019,st. tammany parish,2.72
+LA,2019,tangipahoa parish,2.82
+LA,2019,terrebonne parish,2.71
+ME,2019,androscoggin,2.29
+ME,2019,aroostook,2.15
+ME,2019,cumberland,2.29
+ME,2019,kennebec,2.17
+ME,2019,penobscot,2.27
+ME,2019,york,2.37
+MD,2019,allegany,2.33
+MD,2019,anne arundel,2.6
+MD,2019,baltimore,2.58
+MD,2019,calvert,2.81
+MD,2019,carroll,2.72
+MD,2019,cecil,2.63
+MD,2019,charles,2.8
+MD,2019,frederick,2.72
+MD,2019,harford,2.64
+MD,2019,howard,2.79
+MD,2019,montgomery,2.83
+MD,2019,prince george's,2.81
+MD,2019,st. mary's,2.75
+MD,2019,washington,2.53
+MD,2019,wicomico,2.61
+MD,2019,baltimore city,2.34
+MA,2019,barnstable,2.18
+MA,2019,berkshire,2.2
+MA,2019,bristol,2.49
+MA,2019,essex,2.59
+MA,2019,franklin,2.22
+MA,2019,hampden,2.51
+MA,2019,hampshire,2.28
+MA,2019,middlesex,2.54
+MA,2019,norfolk,2.55
+MA,2019,plymouth,2.67
+MA,2019,suffolk,2.44
+MA,2019,worcester,2.53
+MI,2019,allegan,2.67
+MI,2019,bay,2.27
+MI,2019,berrien,2.43
+MI,2019,calhoun,2.42
+MI,2019,clinton,2.62
+MI,2019,eaton,2.44
+MI,2019,genesee,2.37
+MI,2019,grand traverse,2.44
+MI,2019,ingham,2.38
+MI,2019,isabella,2.59
+MI,2019,jackson,2.43
+MI,2019,kalamazoo,2.5
+MI,2019,kent,2.63
+MI,2019,lapeer,2.52
+MI,2019,lenawee,2.42
+MI,2019,livingston,2.6
+MI,2019,macomb,2.46
+MI,2019,marquette,2.27
+MI,2019,midland,2.38
+MI,2019,monroe,2.45
+MI,2019,muskegon,2.53
+MI,2019,oakland,2.45
+MI,2019,ottawa,2.68
+MI,2019,saginaw,2.33
+MI,2019,st. clair,2.47
+MI,2019,shiawassee,2.51
+MI,2019,van buren,2.4
+MI,2019,washtenaw,2.44
+MI,2019,wayne,2.51
+MN,2019,anoka,2.68
+MN,2019,blue earth,2.41
+MN,2019,carver,2.68
+MN,2019,crow wing,2.29
+MN,2019,dakota,2.62
+MN,2019,hennepin,2.4
+MN,2019,olmsted,2.37
+MN,2019,ramsey,2.6
+MN,2019,rice,2.56
+MN,2019,st. louis,2.2
+MN,2019,scott,2.86
+MN,2019,sherburne,2.91
+MN,2019,stearns,2.58
+MN,2019,washington,2.67
+MN,2019,wright,2.78
+MS,2019,desoto,2.82
+MS,2019,forrest,2.62
+MS,2019,harrison,2.72
+MS,2019,hinds,2.52
+MS,2019,jackson,2.53
+MS,2019,jones,2.74
+MS,2019,lauderdale,2.4
+MS,2019,lee,2.78
+MS,2019,madison,2.6
+MS,2019,rankin,2.63
+MO,2019,boone,2.42
+MO,2019,buchanan,2.44
+MO,2019,cape girardeau,2.41
+MO,2019,cass,2.58
+MO,2019,christian,2.65
+MO,2019,clay,2.66
+MO,2019,cole,2.25
+MO,2019,franklin,2.44
+MO,2019,greene,2.1
+MO,2019,jackson,2.36
+MO,2019,jasper,2.64
+MO,2019,jefferson,2.66
+MO,2019,platte,2.57
+MO,2019,st. charles,2.62
+MO,2019,st. francois,2.51
+MO,2019,st. louis,2.37
+MO,2019,st. louis city,1.98
+MT,2019,cascade,2.4
+MT,2019,flathead,2.52
+MT,2019,gallatin,2.33
+MT,2019,lewis and clark,2.47
+MT,2019,missoula,2.29
+MT,2019,yellowstone,2.26
+NE,2019,douglas,2.51
+NE,2019,lancaster,2.38
+NE,2019,sarpy,2.7
+NV,2019,clark,2.76
+NV,2019,washoe,2.44
+NH,2019,cheshire,2.41
+NH,2019,grafton,2.34
+NH,2019,hillsborough,2.52
+NH,2019,merrimack,2.41
+NH,2019,rockingham,2.47
+NH,2019,strafford,2.4
+NJ,2019,atlantic,2.53
+NJ,2019,bergen,2.68
+NJ,2019,burlington,2.55
+NJ,2019,camden,2.66
+NJ,2019,cape may,2.19
+NJ,2019,cumberland,2.68
+NJ,2019,essex,2.62
+NJ,2019,gloucester,2.69
+NJ,2019,hudson,2.49
+NJ,2019,hunterdon,2.5
+NJ,2019,mercer,2.66
+NJ,2019,middlesex,2.8
+NJ,2019,monmouth,2.55
+NJ,2019,morris,2.61
+NJ,2019,ocean,2.65
+NJ,2019,passaic,2.93
+NJ,2019,salem,2.5
+NJ,2019,somerset,2.65
+NJ,2019,sussex,2.56
+NJ,2019,union,2.84
+NJ,2019,warren,2.44
+NM,2019,bernalillo,2.47
+NM,2019,chaves,2.52
+NM,2019,doã±a ana,2.69
+NM,2019,lea,2.79
+NM,2019,mckinley,3.25
+NM,2019,otero,2.62
+NM,2019,sandoval,2.74
+NM,2019,san juan,2.87
+NM,2019,santa fe,2.38
+NM,2019,valencia,3.04
+NY,2019,albany,2.25
+NY,2019,bronx,2.66
+NY,2019,broome,2.28
+NY,2019,cattaraugus,2.23
+NY,2019,cayuga,2.3
+NY,2019,chautauqua,2.2
+NY,2019,chemung,2.36
+NY,2019,clinton,2.31
+NY,2019,dutchess,2.51
+NY,2019,erie,2.24
+NY,2019,jefferson,2.51
+NY,2019,kings,2.57
+NY,2019,livingston,2.45
+NY,2019,madison,2.52
+NY,2019,monroe,2.34
+NY,2019,nassau,2.98
+NY,2019,new york,2.04
+NY,2019,niagara,2.27
+NY,2019,oneida,2.4
+NY,2019,onondaga,2.41
+NY,2019,ontario,2.31
+NY,2019,orange,2.85
+NY,2019,oswego,2.41
+NY,2019,putnam,2.79
+NY,2019,queens,2.84
+NY,2019,rensselaer,2.33
+NY,2019,richmond,2.82
+NY,2019,rockland,3.15
+NY,2019,st. lawrence,2.25
+NY,2019,saratoga,2.42
+NY,2019,schenectady,2.41
+NY,2019,steuben,2.39
+NY,2019,suffolk,2.9
+NY,2019,sullivan,2.48
+NY,2019,tompkins,2.21
+NY,2019,ulster,2.4
+NY,2019,warren,2.13
+NY,2019,wayne,2.42
+NY,2019,westchester,2.66
+NC,2019,alamance,2.57
+NC,2019,brunswick,2.43
+NC,2019,buncombe,2.38
+NC,2019,burke,2.39
+NC,2019,cabarrus,3.12
+NC,2019,caldwell,2.5
+NC,2019,carteret,2.36
+NC,2019,catawba,2.51
+NC,2019,chatham,2.41
+NC,2019,cleveland,3.15
+NC,2019,craven,2.3
+NC,2019,cumberland,2.49
+NC,2019,davidson,2.37
+NC,2019,durham,2.33
+NC,2019,forsyth,2.51
+NC,2019,franklin,2.55
+NC,2019,gaston,2.58
+NC,2019,guilford,2.49
+NC,2019,harnett,2.86
+NC,2019,henderson,2.27
+NC,2019,iredell,2.65
+NC,2019,johnston,2.82
+NC,2019,lincoln,2.48
+NC,2019,mecklenburg,2.57
+NC,2019,moore,2.4
+NC,2019,nash,2.45
+NC,2019,new hanover,2.26
+NC,2019,onslow,2.81
+NC,2019,orange,2.46
+NC,2019,pitt,2.44
+NC,2019,randolph,2.53
+NC,2019,robeson,2.75
+NC,2019,rockingham,2.33
+NC,2019,rowan,2.49
+NC,2019,rutherford,2.36
+NC,2019,surry,2.49
+NC,2019,union,3.05
+NC,2019,wake,2.6
+NC,2019,wayne,2.48
+NC,2019,wilkes,2.38
+NC,2019,wilson,2.48
+ND,2019,burleigh,2.41
+ND,2019,cass,2.25
+ND,2019,grand forks,2.07
+ND,2019,ward,2.27
+OH,2019,allen,2.44
+OH,2019,ashtabula,2.38
+OH,2019,athens,2.46
+OH,2019,belmont,2.45
+OH,2019,butler,2.65
+OH,2019,clark,2.41
+OH,2019,clermont,2.56
+OH,2019,columbiana,2.42
+OH,2019,cuyahoga,2.2
+OH,2019,delaware,2.82
+OH,2019,erie,2.41
+OH,2019,fairfield,2.62
+OH,2019,franklin,2.47
+OH,2019,geauga,2.61
+OH,2019,greene,2.41
+OH,2019,hamilton,2.3
+OH,2019,hancock,2.27
+OH,2019,jefferson,2.29
+OH,2019,lake,2.34
+OH,2019,licking,2.6
+OH,2019,lorain,2.5
+OH,2019,lucas,2.3
+OH,2019,mahoning,2.22
+OH,2019,marion,2.37
+OH,2019,medina,2.53
+OH,2019,miami,2.57
+OH,2019,montgomery,2.28
+OH,2019,muskingum,2.52
+OH,2019,portage,2.54
+OH,2019,richland,2.29
+OH,2019,ross,2.5
+OH,2019,scioto,2.45
+OH,2019,stark,2.34
+OH,2019,summit,2.37
+OH,2019,trumbull,2.31
+OH,2019,tuscarawas,2.47
+OH,2019,warren,2.68
+OH,2019,wayne,2.5
+OH,2019,wood,2.42
+OK,2019,canadian,3.17
+OK,2019,cleveland,2.52
+OK,2019,comanche,2.67
+OK,2019,creek,2.66
+OK,2019,muskogee,2.39
+OK,2019,oklahoma,2.56
+OK,2019,payne,2.3
+OK,2019,pottawatomie,2.71
+OK,2019,rogers,2.56
+OK,2019,tulsa,2.52
+OK,2019,wagoner,2.72
+OR,2019,benton,2.33
+OR,2019,clackamas,2.57
+OR,2019,deschutes,2.57
+OR,2019,douglas,2.36
+OR,2019,jackson,2.48
+OR,2019,josephine,2.45
+OR,2019,klamath,2.3
+OR,2019,lane,2.4
+OR,2019,linn,2.6
+OR,2019,marion,2.79
+OR,2019,multnomah,2.35
+OR,2019,polk,2.7
+OR,2019,umatilla,2.65
+OR,2019,washington,2.67
+OR,2019,yamhill,2.79
+PA,2019,adams,2.55
+PA,2019,allegheny,2.14
+PA,2019,armstrong,2.19
+PA,2019,beaver,2.28
+PA,2019,berks,2.63
+PA,2019,blair,2.26
+PA,2019,bucks,2.57
+PA,2019,butler,2.34
+PA,2019,cambria,2.19
+PA,2019,carbon,2.33
+PA,2019,centre,2.44
+PA,2019,chester,2.64
+PA,2019,clearfield,2.29
+PA,2019,columbia,2.32
+PA,2019,crawford,2.29
+PA,2019,cumberland,2.36
+PA,2019,dauphin,2.38
+PA,2019,delaware,2.6
+PA,2019,erie,2.33
+PA,2019,fayette,2.26
+PA,2019,franklin,2.54
+PA,2019,indiana,2.56
+PA,2019,lackawanna,2.29
+PA,2019,lancaster,2.61
+PA,2019,lawrence,2.24
+PA,2019,lebanon,2.57
+PA,2019,lehigh,2.6
+PA,2019,luzerne,2.33
+PA,2019,lycoming,2.39
+PA,2019,mercer,2.2
+PA,2019,monroe,2.99
+PA,2019,montgomery,2.52
+PA,2019,northampton,2.56
+PA,2019,northumberland,2.24
+PA,2019,philadelphia,2.48
+PA,2019,schuylkill,2.3
+PA,2019,somerset,2.31
+PA,2019,washington,2.32
+PA,2019,westmoreland,2.2
+PA,2019,york,2.51
+RI,2019,kent,2.33
+RI,2019,newport,2.33
+RI,2019,providence,2.58
+RI,2019,washington,2.49
+SC,2019,aiken,2.48
+SC,2019,anderson,2.64
+SC,2019,beaufort,2.57
+SC,2019,berkeley,2.78
+SC,2019,charleston,2.41
+SC,2019,darlington,2.63
+SC,2019,dorchester,2.79
+SC,2019,florence,2.55
+SC,2019,greenville,2.57
+SC,2019,greenwood,2.38
+SC,2019,horry,2.49
+SC,2019,kershaw,2.7
+SC,2019,lancaster,2.71
+SC,2019,laurens,2.52
+SC,2019,lexington,2.5
+SC,2019,oconee,2.5
+SC,2019,orangeburg,2.59
+SC,2019,pickens,2.5
+SC,2019,richland,2.5
+SC,2019,spartanburg,2.57
+SC,2019,sumter,2.37
+SC,2019,york,2.56
+SD,2019,minnehaha,2.31
+SD,2019,pennington,2.45
+TN,2019,anderson,2.5
+TN,2019,blount,2.58
+TN,2019,bradley,2.62
+TN,2019,davidson,2.32
+TN,2019,greene,2.36
+TN,2019,hamilton,2.41
+TN,2019,knox,2.39
+TN,2019,madison,2.42
+TN,2019,maury,2.57
+TN,2019,montgomery,2.67
+TN,2019,putnam,2.43
+TN,2019,robertson,2.66
+TN,2019,rutherford,2.88
+TN,2019,sevier,2.56
+TN,2019,shelby,2.6
+TN,2019,sullivan,2.27
+TN,2019,sumner,2.71
+TN,2019,washington,2.23
+TN,2019,williamson,2.82
+TN,2019,wilson,2.77
+TX,2019,angelina,2.6
+TX,2019,bastrop,3.27
+TX,2019,bell,2.76
+TX,2019,bexar,3.05
+TX,2019,bowie,2.49
+TX,2019,brazoria,2.8
+TX,2019,brazos,2.66
+TX,2019,cameron,3.25
+TX,2019,collin,2.83
+TX,2019,comal,2.72
+TX,2019,coryell,2.75
+TX,2019,dallas,2.77
+TX,2019,denton,2.87
+TX,2019,ector,3.1
+TX,2019,ellis,2.98
+TX,2019,el paso,3.06
+TX,2019,fort bend,3.18
+TX,2019,galveston,2.65
+TX,2019,grayson,2.73
+TX,2019,gregg,2.6
+TX,2019,guadalupe,2.95
+TX,2019,harris,2.84
+TX,2019,harrison,2.7
+TX,2019,hays,2.87
+TX,2019,henderson,2.66
+TX,2019,hidalgo,3.47
+TX,2019,hunt,2.73
+TX,2019,jefferson,2.64
+TX,2019,johnson,2.93
+TX,2019,kaufman,3.38
+TX,2019,liberty,2.97
+TX,2019,lubbock,2.54
+TX,2019,mclennan,2.66
+TX,2019,midland,2.95
+TX,2019,montgomery,2.89
+TX,2019,nacogdoches,2.42
+TX,2019,nueces,2.7
+TX,2019,orange,2.59
+TX,2019,parker,3.24
+TX,2019,potter,2.51
+TX,2019,randall,2.69
+TX,2019,rockwall,2.84
+TX,2019,san patricio,3.01
+TX,2019,smith,2.88
+TX,2019,tarrant,2.86
+TX,2019,taylor,2.61
+TX,2019,tom green,2.59
+TX,2019,travis,2.45
+TX,2019,victoria,3.02
+TX,2019,walker,2.62
+TX,2019,webb,3.58
+TX,2019,wichita,2.47
+TX,2019,williamson,3.04
+TX,2019,wise,3.02
+UT,2019,cache,3.12
+UT,2019,davis,3.23
+UT,2019,salt lake,2.98
+UT,2019,tooele,3.38
+UT,2019,utah,3.48
+UT,2019,washington,2.78
+UT,2019,weber,2.93
+VT,2019,chittenden,2.25
+VA,2019,albemarle,2.34
+VA,2019,arlington,2.08
+VA,2019,augusta,2.35
+VA,2019,bedford,2.5
+VA,2019,chesterfield,2.71
+VA,2019,fairfax,2.84
+VA,2019,fauquier,2.92
+VA,2019,frederick,2.75
+VA,2019,hanover,2.69
+VA,2019,henrico,2.51
+VA,2019,james city,2.49
+VA,2019,loudoun,3.08
+VA,2019,montgomery,2.45
+VA,2019,prince william,3.25
+VA,2019,roanoke,2.45
+VA,2019,rockingham,2.63
+VA,2019,spotsylvania,2.93
+VA,2019,stafford,3.1
+VA,2019,york,2.56
+VA,2019,alexandria city,2.23
+VA,2019,chesapeake city,2.76
+VA,2019,hampton city,2.33
+VA,2019,lynchburg city,2.51
+VA,2019,newport news city,2.41
+VA,2019,norfolk city,2.45
+VA,2019,portsmouth city,2.49
+VA,2019,richmond city,2.44
+VA,2019,roanoke city,2.39
+VA,2019,suffolk city,2.65
+VA,2019,virginia beach city,2.52
+WA,2019,benton,2.75
+WA,2019,chelan,2.61
+WA,2019,clallam,2.31
+WA,2019,clark,2.68
+WA,2019,cowlitz,2.56
+WA,2019,franklin,3.3
+WA,2019,grant,3.14
+WA,2019,grays harbor,2.4
+WA,2019,island,2.31
+WA,2019,king,2.44
+WA,2019,kitsap,2.45
+WA,2019,lewis,2.49
+WA,2019,mason,2.65
+WA,2019,pierce,2.66
+WA,2019,skagit,2.6
+WA,2019,snohomish,2.7
+WA,2019,spokane,2.39
+WA,2019,thurston,2.54
+WA,2019,whatcom,2.53
+WA,2019,yakima,2.94
+WV,2019,berkeley,2.56
+WV,2019,cabell,2.31
+WV,2019,harrison,2.55
+WV,2019,kanawha,2.23
+WV,2019,monongalia,2.46
+WV,2019,raleigh,2.24
+WV,2019,wood,2.41
+WI,2019,brown,2.39
+WI,2019,dane,2.32
+WI,2019,dodge,2.4
+WI,2019,eau claire,2.43
+WI,2019,fond du lac,2.35
+WI,2019,jefferson,2.48
+WI,2019,kenosha,2.58
+WI,2019,la crosse,2.34
+WI,2019,manitowoc,2.31
+WI,2019,marathon,2.45
+WI,2019,milwaukee,2.41
+WI,2019,outagamie,2.46
+WI,2019,ozaukee,2.43
+WI,2019,portage,2.33
+WI,2019,racine,2.42
+WI,2019,rock,2.46
+WI,2019,st. croix,2.59
+WI,2019,sheboygan,2.31
+WI,2019,walworth,2.36
+WI,2019,washington,2.44
+WI,2019,waukesha,2.49
+WI,2019,winnebago,2.31
+WI,2019,wood,2.21
+WY,2019,laramie,2.34
+WY,2019,natrona,2.37
+PR,2019,arecibo municipio,2.52
+PR,2019,bayamã³n municipio,2.38
+PR,2019,caguas municipio,2.59
+PR,2019,carolina municipio,2.5
+PR,2019,guaynabo municipio,2.51
+PR,2019,mayagã¼ez municipio,2.46
+PR,2019,ponce municipio,2.43
+PR,2019,san juan municipio,2.23
+PR,2019,toa alta municipio,3.17
+PR,2019,toa baja municipio,2.61
+PR,2019,trujillo alto municipio,2.71
+#N/A,,"trujillo alto municipio, puerto rico",

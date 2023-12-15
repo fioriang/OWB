@@ -1,0 +1,3219 @@
+year,county_name,state_name,educ_00
+2000,Autauga,Alabama,11.8
+2000,Baldwin,Alabama,14.8
+2000,Barbour,Alabama,7.2
+2000,Bibb,Alabama,4.1
+2000,Blount,Alabama,5.9
+2000,Bullock,Alabama,4.4
+2000,Butler,Alabama,7.4
+2000,Calhoun,Alabama,8.9
+2000,Chambers,Alabama,6.3
+2000,Cherokee,Alabama,5.5
+2000,Chilton,Alabama,5.9
+2000,Choctaw,Alabama,6.5
+2000,Clarke,Alabama,7.6
+2000,Clay,Alabama,5
+2000,Cleburne,Alabama,4.9
+2000,Coffee,Alabama,12.3
+2000,Colbert,Alabama,8.8
+2000,Conecuh,Alabama,6.4
+2000,Coosa,Alabama,5.2
+2000,Covington,Alabama,7.8
+2000,Crenshaw,Alabama,7.2
+2000,Cullman,Alabama,7.4
+2000,Dale,Alabama,9.6
+2000,Dallas,Alabama,8.5
+2000,DeKalb,Alabama,4.9
+2000,Elmore,Alabama,10.6
+2000,Escambia,Alabama,6.6
+2000,Etowah,Alabama,8.1
+2000,Fayette,Alabama,5.7
+2000,Franklin,Alabama,5.9
+2000,Geneva,Alabama,5.6
+2000,Greene,Alabama,7.4
+2000,Hale,Alabama,5.1
+2000,Henry,Alabama,9.3
+2000,Houston,Alabama,12.1
+2000,Jackson,Alabama,6.6
+2000,Jefferson,Alabama,15.9
+2000,Lamar,Alabama,5.4
+2000,Lauderdale,Alabama,11.9
+2000,Lawrence,Alabama,5.1
+2000,Lee,Alabama,15.1
+2000,Limestone,Alabama,11.9
+2000,Lowndes,Alabama,7.4
+2000,Macon,Alabama,10.4
+2000,Madison,Alabama,22.7
+2000,Marengo,Alabama,7.7
+2000,Marion,Alabama,4.9
+2000,Marshall,Alabama,9.1
+2000,Mobile,Alabama,12.2
+2000,Monroe,Alabama,7.3
+2000,Montgomery,Alabama,17.4
+2000,Morgan,Alabama,12.7
+2000,Perry,Alabama,5.2
+2000,Pickens,Alabama,6.4
+2000,Pike,Alabama,11.4
+2000,Randolph,Alabama,6.2
+2000,Russell,Alabama,6.3
+2000,St. Clair,Alabama,7.5
+2000,Shelby,Alabama,25.6
+2000,Sumter,Alabama,7.3
+2000,Talladega,Alabama,6.9
+2000,Tallapoosa,Alabama,9.4
+2000,Tuscaloosa,Alabama,14.3
+2000,Walker,Alabama,5.4
+2000,Washington,Alabama,5.6
+2000,Wilcox,Alabama,7.6
+2000,Winston,Alabama,4.4
+2000,Aleutians East Borough,Alaska,3.1
+2000,Aleutians West Census Area,Alaska,9
+2000,Anchorage Municipality,Alaska,18.7
+2000,Bethel Census Area,Alaska,8.2
+2000,Bristol Bay Borough,Alaska,12.9
+2000,Denali Borough,Alaska,17.4
+2000,Dillingham Census Area,Alaska,10.4
+2000,Fairbanks North Star Borough,Alaska,16.4
+2000,Haines Borough,Alaska,18.5
+2000,Juneau City and Borough,Alaska,23
+2000,Kenai Peninsula Borough,Alaska,13.6
+2000,Ketchikan Gateway Borough,Alaska,14.3
+2000,Kodiak Island Borough,Alaska,13.2
+2000,Lake and Peninsula Borough,Alaska,8.9
+2000,Matanuska-Susitna Borough,Alaska,12.4
+2000,Nome Census Area,Alaska,9.8
+2000,North Slope Borough,Alaska,11.1
+2000,Northwest Arctic Borough,Alaska,8
+2000,Prince of Wales-Outer Ketchikan Census Area,Alaska,9.8
+2000,Sitka City and Borough,Alaska,21.1
+2000,Skagway-Hoonah-Angoon Census Area,Alaska,16.2
+2000,Southeast Fairbanks Census Area,Alaska,12.9
+2000,Valdez-Cordova Census Area,Alaska,15.4
+2000,Wade Hampton Census Area,Alaska,6.2
+2000,Wrangell-Petersburg Census Area,Alaska,11.7
+2000,Yakutat City and Borough,Alaska,11.3
+2000,Yukon-Koyukuk Census Area,Alaska,10
+2000,Apache,Arizona,7.3
+2000,Cochise,Arizona,12.4
+2000,Coconino,Arizona,18.7
+2000,Gila,Arizona,8.5
+2000,Graham,Arizona,6.4
+2000,Greenlee,Arizona,7.1
+2000,La Paz,Arizona,5.5
+2000,Maricopa,Arizona,17.2
+2000,Mohave,Arizona,6.4
+2000,Navajo,Arizona,7.4
+2000,Pima,Arizona,15.9
+2000,Pinal,Arizona,7.5
+2000,Santa Cruz,Arizona,8.9
+2000,Yavapai,Arizona,13
+2000,Yuma,Arizona,7.2
+2000,Arkansas,Arkansas,8.5
+2000,Ashley,Arkansas,7.1
+2000,Baxter,Arkansas,8.6
+2000,Benton,Arkansas,14.5
+2000,Boone,Arkansas,8.7
+2000,Bradley,Arkansas,7.7
+2000,Calhoun,Arkansas,4.8
+2000,Carroll,Arkansas,9.2
+2000,Chicot,Arkansas,8.8
+2000,Clark,Arkansas,11.2
+2000,Clay,Arkansas,5
+2000,Cleburne,Arkansas,9
+2000,Cleveland,Arkansas,7.7
+2000,Columbia,Arkansas,11.9
+2000,Conway,Arkansas,7
+2000,Craighead,Arkansas,13.3
+2000,Crawford,Arkansas,6.5
+2000,Crittenden,Arkansas,9
+2000,Cross,Arkansas,6.3
+2000,Dallas,Arkansas,7.8
+2000,Desha,Arkansas,8.5
+2000,Drew,Arkansas,12.4
+2000,Faulkner,Arkansas,16.7
+2000,Franklin,Arkansas,7.6
+2000,Fulton,Arkansas,6.3
+2000,Garland,Arkansas,11.7
+2000,Grant,Arkansas,7.3
+2000,Greene,Arkansas,7.4
+2000,Hempstead,Arkansas,7.2
+2000,Hot Spring,Arkansas,7.9
+2000,Howard,Arkansas,8.1
+2000,Independence,Arkansas,8.6
+2000,Izard,Arkansas,7.5
+2000,Jackson,Arkansas,6.9
+2000,Jefferson,Arkansas,10.8
+2000,Johnson,Arkansas,8.6
+2000,Lafayette,Arkansas,6.5
+2000,Lawrence,Arkansas,4.5
+2000,Lee,Arkansas,5.1
+2000,Lincoln,Arkansas,5.7
+2000,Little River,Arkansas,7.5
+2000,Logan,Arkansas,6.6
+2000,Lonoke,Arkansas,10
+2000,Madison,Arkansas,7
+2000,Marion,Arkansas,7.2
+2000,Miller,Arkansas,8.4
+2000,Mississippi,Arkansas,7.7
+2000,Monroe,Arkansas,5.4
+2000,Montgomery,Arkansas,5.2
+2000,Nevada,Arkansas,7.3
+2000,Newton,Arkansas,8.1
+2000,Ouachita,Arkansas,8.8
+2000,Perry,Arkansas,7.6
+2000,Phillips,Arkansas,8.5
+2000,Pike,Arkansas,6.4
+2000,Poinsett,Arkansas,4.2
+2000,Polk,Arkansas,6.6
+2000,Pope,Arkansas,12.8
+2000,Prairie,Arkansas,6.3
+2000,Pulaski,Arkansas,18
+2000,Randolph,Arkansas,6.4
+2000,St. Francis,Arkansas,6.3
+2000,Saline,Arkansas,11.4
+2000,Scott,Arkansas,5.5
+2000,Searcy,Arkansas,5.4
+2000,Sebastian,Arkansas,10.8
+2000,Sevier,Arkansas,6.4
+2000,Sharp,Arkansas,7.1
+2000,Stone,Arkansas,6
+2000,Union,Arkansas,10.6
+2000,Van Buren,Arkansas,8
+2000,Washington,Arkansas,14.8
+2000,White,Arkansas,10.1
+2000,Woodruff,Arkansas,6.2
+2000,Yell,Arkansas,7.2
+2000,Alameda,California,21.2
+2000,Alpine,California,19.8
+2000,Amador,California,10.6
+2000,Butte,California,14.9
+2000,Calaveras,California,11.5
+2000,Colusa,California,7.9
+2000,Contra Costa,California,22.8
+2000,Del Norte,California,8
+2000,El Dorado,California,18.1
+2000,Fresno,California,12
+2000,Glenn,California,7.8
+2000,Humboldt,California,15.6
+2000,Imperial,California,6.6
+2000,Inyo,California,10.5
+2000,Kern,California,9.1
+2000,Kings,California,7.6
+2000,Lake,California,7.5
+2000,Lassen,California,7.7
+2000,Los Angeles,California,16.1
+2000,Madera,California,8.2
+2000,Marin,California,30.8
+2000,Mariposa,California,14.3
+2000,Mendocino,California,12.3
+2000,Merced,California,7.6
+2000,Modoc,California,8.8
+2000,Mono,California,19
+2000,Monterey,California,13.8
+2000,Napa,California,17
+2000,Nevada,California,17.3
+2000,Orange,California,20.4
+2000,Placer,California,20.7
+2000,Plumas,California,11.7
+2000,Riverside,California,10.7
+2000,Sacramento,California,16.7
+2000,San Benito,California,12
+2000,San Bernardino,California,10.4
+2000,San Diego,California,18.7
+2000,San Francisco,California,28.6
+2000,San Joaquin,California,10.2
+2000,San Luis Obispo,California,17.4
+2000,San Mateo,California,24.4
+2000,Santa Barbara,California,18
+2000,Santa Clara,California,24
+2000,Santa Cruz,California,21.7
+2000,Shasta,California,11.3
+2000,Sierra,California,11.4
+2000,Siskiyou,California,11.8
+2000,Solano,California,15.1
+2000,Sonoma,California,18.8
+2000,Stanislaus,California,9.6
+2000,Sutter,California,10.9
+2000,Tehama,California,8.3
+2000,Trinity,California,10.6
+2000,Tulare,California,7.8
+2000,Tuolumne,California,10.2
+2000,Ventura,California,17.4
+2000,Yolo,California,18.2
+2000,Yuba,California,6.8
+2000,Adams,Colorado,12.6
+2000,Alamosa,Colorado,15.4
+2000,Arapahoe,Colorado,25.1
+2000,Archuleta,Colorado,19.5
+2000,Baca,Colorado,9.7
+2000,Bent,Colorado,8.6
+2000,Boulder,Colorado,31.2
+2000,Chaffee,Colorado,16.3
+2000,Cheyenne,Colorado,10.8
+2000,Clear Creek,Colorado,24.6
+2000,Conejos,Colorado,9
+2000,Costilla,Colorado,8.9
+2000,Crowley,Colorado,5.7
+2000,Custer,Colorado,16.6
+2000,Delta,Colorado,12.5
+2000,Denver,Colorado,22.1
+2000,Dolores,Colorado,10.1
+2000,Douglas,Colorado,36.5
+2000,Eagle,Colorado,32.7
+2000,Elbert,Colorado,19.5
+2000,El Paso,Colorado,20.2
+2000,Fremont,Colorado,8.3
+2000,Garfield,Colorado,17.6
+2000,Gilpin,Colorado,21
+2000,Grand,Colorado,25.1
+2000,Gunnison,Colorado,31.5
+2000,Hinsdale,Colorado,25.3
+2000,Huerfano,Colorado,9.5
+2000,Jackson,Colorado,13
+2000,Jefferson,Colorado,24.5
+2000,Kiowa,Colorado,10.1
+2000,Kit Carson,Colorado,10.1
+2000,Lake,Colorado,13.3
+2000,La Plata,Colorado,24.3
+2000,Larimer,Colorado,25.1
+2000,Las Animas,Colorado,10
+2000,Lincoln,Colorado,8.4
+2000,Logan,Colorado,9.3
+2000,Mesa,Colorado,14.6
+2000,Mineral,Colorado,20.9
+2000,Moffat,Colorado,8.4
+2000,Montezuma,Colorado,12.5
+2000,Montrose,Colorado,13.3
+2000,Morgan,Colorado,9
+2000,Otero,Colorado,10
+2000,Ouray,Colorado,23.5
+2000,Park,Colorado,22.6
+2000,Phillips,Colorado,13.9
+2000,Pitkin,Colorado,40
+2000,Prowers,Colorado,7.5
+2000,Pueblo,Colorado,11.9
+2000,Rio Blanco,Colorado,12.8
+2000,Rio Grande,Colorado,13.9
+2000,Routt,Colorado,31.1
+2000,Saguache,Colorado,12.2
+2000,San Juan,Colorado,27.6
+2000,San Miguel,Colorado,36.6
+2000,Sedgwick,Colorado,9.6
+2000,Summit,Colorado,36.4
+2000,Teller,Colorado,21.5
+2000,Washington,Colorado,10.7
+2000,Weld,Colorado,14.6
+2000,Yuma,Colorado,11.5
+2000,Fairfield,Connecticut,23
+2000,Hartford,Connecticut,17.6
+2000,Litchfield,Connecticut,16.4
+2000,Middlesex,Connecticut,20.1
+2000,New Haven,Connecticut,15.3
+2000,New London,Connecticut,15.2
+2000,Tolland,Connecticut,18.6
+2000,Windham,Connecticut,11.2
+2000,Kent,Delaware,11.6
+2000,New Castle,Delaware,18.5
+2000,Sussex,Delaware,10.1
+2000,District of Columbia,District of Columbia,18.1
+2000,Alachua,Florida,19.7
+2000,Baker,Florida,5.3
+2000,Bay,Florida,11
+2000,Bradford,Florida,5.1
+2000,Brevard,Florida,15.2
+2000,Broward,Florida,15.8
+2000,Calhoun,Florida,4.7
+2000,Charlotte,Florida,10.9
+2000,Citrus,Florida,8.3
+2000,Clay,Florida,13.4
+2000,Collier,Florida,18.2
+2000,Columbia,Florida,6.9
+2000,DeSoto,Florida,5.2
+2000,Dixie,Florida,3.7
+2000,Duval,Florida,15
+2000,Escambia,Florida,13.6
+2000,Flagler,Florida,13.4
+2000,Franklin,Florida,6.3
+2000,Gadsden,Florida,8
+2000,Gilchrist,Florida,6.3
+2000,Glades,Florida,5.6
+2000,Gulf,Florida,6.6
+2000,Hamilton,Florida,5.2
+2000,Hardee,Florida,5.5
+2000,Hendry,Florida,6
+2000,Hernando,Florida,8.2
+2000,Highlands,Florida,8.3
+2000,Hillsborough,Florida,16.7
+2000,Holmes,Florida,5.6
+2000,Indian River,Florida,15.2
+2000,Jackson,Florida,7.9
+2000,Jefferson,Florida,11
+2000,Lafayette,Florida,4.4
+2000,Lake,Florida,11.3
+2000,Lee,Florida,13.5
+2000,Leon,Florida,24
+2000,Levy,Florida,6.9
+2000,Liberty,Florida,4
+2000,Madison,Florida,6.5
+2000,Manatee,Florida,13.5
+2000,Marion,Florida,8.6
+2000,Martin,Florida,17.5
+2000,Miami-Dade,Florida,12.3
+2000,Monroe,Florida,16.8
+2000,Nassau,Florida,12.3
+2000,Okaloosa,Florida,15
+2000,Okeechobee,Florida,6.1
+2000,Orange,Florida,18.3
+2000,Osceola,Florida,10.9
+2000,Palm Beach,Florida,17.6
+2000,Pasco,Florida,8.8
+2000,Pinellas,Florida,15.1
+2000,Polk,Florida,10
+2000,Putnam,Florida,5.8
+2000,St. Johns,Florida,21.8
+2000,St. Lucie,Florida,9.8
+2000,Santa Rosa,Florida,15
+2000,Sarasota,Florida,17.1
+2000,Seminole,Florida,21.1
+2000,Sumter,Florida,7.7
+2000,Suwannee,Florida,7.2
+2000,Taylor,Florida,5.3
+2000,Union,Florida,4.8
+2000,Volusia,Florida,11.6
+2000,Wakulla,Florida,10.1
+2000,Walton,Florida,10.2
+2000,Washington,Florida,5.7
+2000,Appling,Georgia,5.3
+2000,Atkinson,Georgia,4.6
+2000,Bacon,Georgia,3.7
+2000,Baker,Georgia,7.5
+2000,Baldwin,Georgia,9.6
+2000,Banks,Georgia,4.9
+2000,Barrow,Georgia,7.8
+2000,Bartow,Georgia,9.8
+2000,Ben Hill,Georgia,5.9
+2000,Berrien,Georgia,5.3
+2000,Bibb,Georgia,13.7
+2000,Bleckley,Georgia,7.6
+2000,Brantley,Georgia,3.3
+2000,Brooks,Georgia,7
+2000,Bryan,Georgia,13.2
+2000,Bulloch,Georgia,13.5
+2000,Burke,Georgia,6.5
+2000,Butts,Georgia,5.4
+2000,Calhoun,Georgia,5
+2000,Camden,Georgia,10.3
+2000,Candler,Georgia,6.9
+2000,Carroll,Georgia,9.8
+2000,Catoosa,Georgia,9.6
+2000,Charlton,Georgia,3.4
+2000,Chatham,Georgia,16.6
+2000,Chattahoochee,Georgia,18.5
+2000,Chattooga,Georgia,4.7
+2000,Cherokee,Georgia,19.6
+2000,Clarke,Georgia,20.9
+2000,Clay,Georgia,4.5
+2000,Clayton,Georgia,12.2
+2000,Clinch,Georgia,6.1
+2000,Cobb,Georgia,28
+2000,Coffee,Georgia,6.6
+2000,Colquitt,Georgia,7.5
+2000,Columbia,Georgia,20
+2000,Cook,Georgia,5.5
+2000,Coweta,Georgia,14.3
+2000,Crawford,Georgia,4.9
+2000,Crisp,Georgia,8.7
+2000,Dade,Georgia,7.5
+2000,Dawson,Georgia,12
+2000,Decatur,Georgia,7.3
+2000,DeKalb,Georgia,22.7
+2000,Dodge,Georgia,6.8
+2000,Dooly,Georgia,5.7
+2000,Dougherty,Georgia,11.4
+2000,Douglas,Georgia,13.4
+2000,Early,Georgia,7.5
+2000,Echols,Georgia,6.6
+2000,Effingham,Georgia,9.3
+2000,Elbert,Georgia,6.3
+2000,Emanuel,Georgia,5.2
+2000,Evans,Georgia,5.5
+2000,Fannin,Georgia,6.1
+2000,Fayette,Georgia,23.9
+2000,Floyd,Georgia,10
+2000,Forsyth,Georgia,26.1
+2000,Franklin,Georgia,6.4
+2000,Fulton,Georgia,26.7
+2000,Gilmer,Georgia,7.9
+2000,Glascock,Georgia,3.7
+2000,Glynn,Georgia,15.1
+2000,Gordon,Georgia,6.7
+2000,Grady,Georgia,6.8
+2000,Greene,Georgia,11
+2000,Gwinnett,Georgia,24.1
+2000,Habersham,Georgia,9.8
+2000,Hall,Georgia,11.9
+2000,Hancock,Georgia,6.2
+2000,Haralson,Georgia,5.5
+2000,Harris,Georgia,13.8
+2000,Hart,Georgia,8
+2000,Heard,Georgia,5.2
+2000,Henry,Georgia,13.5
+2000,Houston,Georgia,11.9
+2000,Irwin,Georgia,6.8
+2000,Jackson,Georgia,7.5
+2000,Jasper,Georgia,7.3
+2000,Jeff Davis,Georgia,6
+2000,Jefferson,Georgia,6.3
+2000,Jenkins,Georgia,6.7
+2000,Johnson,Georgia,4.8
+2000,Jones,Georgia,9.4
+2000,Lamar,Georgia,6.7
+2000,Lanier,Georgia,5.5
+2000,Laurens,Georgia,8.9
+2000,Lee,Georgia,11.3
+2000,Liberty,Georgia,9.6
+2000,Lincoln,Georgia,6.2
+2000,Long,Georgia,3.6
+2000,Lowndes,Georgia,12.5
+2000,Lumpkin,Georgia,10.5
+2000,McDuffie,Georgia,8
+2000,McIntosh,Georgia,6.3
+2000,Macon,Georgia,7
+2000,Madison,Georgia,6.8
+2000,Marion,Georgia,4.3
+2000,Meriwether,Georgia,6.5
+2000,Miller,Georgia,7.4
+2000,Mitchell,Georgia,5.9
+2000,Monroe,Georgia,10.6
+2000,Montgomery,Georgia,8.9
+2000,Morgan,Georgia,13
+2000,Murray,Georgia,4.9
+2000,Muscogee,Georgia,12.4
+2000,Newton,Georgia,9.5
+2000,Oconee,Georgia,22.7
+2000,Oglethorpe,Georgia,10.1
+2000,Paulding,Georgia,11.6
+2000,Peach,Georgia,9.8
+2000,Pickens,Georgia,9.9
+2000,Pierce,Georgia,6.8
+2000,Pike,Georgia,10.2
+2000,Polk,Georgia,4.1
+2000,Pulaski,Georgia,8.3
+2000,Putnam,Georgia,8.6
+2000,Quitman,Georgia,4.1
+2000,Rabun,Georgia,10.1
+2000,Randolph,Georgia,5
+2000,Richmond,Georgia,12
+2000,Rockdale,Georgia,15.9
+2000,Schley,Georgia,7.6
+2000,Screven,Georgia,7.1
+2000,Seminole,Georgia,5.9
+2000,Spalding,Georgia,8.4
+2000,Stephens,Georgia,9.4
+2000,Stewart,Georgia,5.2
+2000,Sumter,Georgia,11.2
+2000,Talbot,Georgia,4.6
+2000,Taliaferro,Georgia,4.5
+2000,Tattnall,Georgia,5.5
+2000,Taylor,Georgia,5.9
+2000,Telfair,Georgia,5.4
+2000,Terrell,Georgia,6.1
+2000,Thomas,Georgia,10.6
+2000,Tift,Georgia,9.2
+2000,Toombs,Georgia,8.4
+2000,Towns,Georgia,9.4
+2000,Treutlen,Georgia,5.2
+2000,Troup,Georgia,12
+2000,Turner,Georgia,5.8
+2000,Twiggs,Georgia,3.5
+2000,Union,Georgia,7.5
+2000,Upson,Georgia,8
+2000,Walker,Georgia,6.8
+2000,Walton,Georgia,8.9
+2000,Ware,Georgia,6.8
+2000,Warren,Georgia,5.6
+2000,Washington,Georgia,7
+2000,Wayne,Georgia,7.6
+2000,Webster,Georgia,6.9
+2000,Wheeler,Georgia,4.4
+2000,White,Georgia,9.8
+2000,Whitfield,Georgia,8
+2000,Wilcox,Georgia,3.5
+2000,Wilkes,Georgia,7.8
+2000,Wilkinson,Georgia,6.5
+2000,Worth,Georgia,5.7
+2000,Hawaii,Hawaii,14.6
+2000,Honolulu,Hawaii,18.9
+2000,Kauai,Hawaii,13.3
+2000,Maui,Hawaii,15.7
+2000,Ada,Idaho,21.7
+2000,Adams,Idaho,10.1
+2000,Bannock,Idaho,16.4
+2000,Bear Lake,Idaho,8.7
+2000,Benewah,Idaho,8.3
+2000,Bingham,Idaho,10.7
+2000,Blaine,Idaho,30.2
+2000,Boise,Idaho,13.1
+2000,Bonner,Idaho,11.4
+2000,Bonneville,Idaho,17.3
+2000,Boundary,Idaho,9
+2000,Butte,Idaho,9.2
+2000,Camas,Idaho,17.3
+2000,Canyon,Idaho,10.3
+2000,Caribou,Idaho,12.4
+2000,Cassia,Idaho,9.1
+2000,Clark,Idaho,9.5
+2000,Clearwater,Idaho,9.1
+2000,Custer,Idaho,12.9
+2000,Elmore,Idaho,11.5
+2000,Franklin,Idaho,10.3
+2000,Fremont,Idaho,9.3
+2000,Gem,Idaho,8.6
+2000,Gooding,Idaho,8.5
+2000,Idaho,Idaho,10.7
+2000,Jefferson,Idaho,11.6
+2000,Jerome,Idaho,9.9
+2000,Kootenai,Idaho,13
+2000,Latah,Idaho,22.7
+2000,Lemhi,Idaho,12.3
+2000,Lewis,Idaho,11.1
+2000,Lincoln,Idaho,9.5
+2000,Madison,Idaho,14.4
+2000,Minidoka,Idaho,7
+2000,Nez Perce,Idaho,13.7
+2000,Oneida,Idaho,12.1
+2000,Owyhee,Idaho,7.6
+2000,Payette,Idaho,7.7
+2000,Power,Idaho,10.8
+2000,Shoshone,Idaho,7.1
+2000,Teton,Idaho,20
+2000,Twin Falls,Idaho,10.8
+2000,Valley,Idaho,18.5
+2000,Washington,Idaho,9.8
+2000,Adams,Illinois,11.7
+2000,Alexander,Illinois,4.3
+2000,Bond,Illinois,9.9
+2000,Boone,Illinois,9.5
+2000,Brown,Illinois,6.5
+2000,Bureau,Illinois,10.7
+2000,Calhoun,Illinois,6.1
+2000,Carroll,Illinois,9.4
+2000,Cass,Illinois,9.4
+2000,Champaign,Illinois,18.6
+2000,Christian,Illinois,7.2
+2000,Clark,Illinois,9.3
+2000,Clay,Illinois,6.3
+2000,Clinton,Illinois,9.7
+2000,Coles,Illinois,11.2
+2000,Cook,Illinois,17.2
+2000,Crawford,Illinois,6.7
+2000,Cumberland,Illinois,7
+2000,DeKalb,Illinois,16
+2000,De Witt,Illinois,10.3
+2000,Douglas,Illinois,9.4
+2000,DuPage,Illinois,26.8
+2000,Edgar,Illinois,9.2
+2000,Edwards,Illinois,6.9
+2000,Effingham,Illinois,10.5
+2000,Fayette,Illinois,6.2
+2000,Ford,Illinois,9.3
+2000,Franklin,Illinois,7.6
+2000,Fulton,Illinois,7.8
+2000,Gallatin,Illinois,4.9
+2000,Greene,Illinois,6.5
+2000,Grundy,Illinois,10.9
+2000,Hamilton,Illinois,6.7
+2000,Hancock,Illinois,11.2
+2000,Hardin,Illinois,6.6
+2000,Henderson,Illinois,6.9
+2000,Henry,Illinois,10.9
+2000,Iroquois,Illinois,7.2
+2000,Jackson,Illinois,17.2
+2000,Jasper,Illinois,8.1
+2000,Jefferson,Illinois,8.9
+2000,Jersey,Illinois,8.2
+2000,Jo Daviess,Illinois,10.7
+2000,Johnson,Illinois,7.4
+2000,Kane,Illinois,18.7
+2000,Kankakee,Illinois,9.4
+2000,Kendall,Illinois,18
+2000,Knox,Illinois,9.7
+2000,Lake,Illinois,24
+2000,La Salle,Illinois,9
+2000,Lawrence,Illinois,6.4
+2000,Lee,Illinois,8.6
+2000,Livingston,Illinois,8.7
+2000,Logan,Illinois,9.9
+2000,McDonough,Illinois,13.3
+2000,McHenry,Illinois,19.6
+2000,McLean,Illinois,25.2
+2000,Macon,Illinois,11.4
+2000,Macoupin,Illinois,8.1
+2000,Madison,Illinois,12.4
+2000,Marion,Illinois,8
+2000,Marshall,Illinois,10.5
+2000,Mason,Illinois,7.8
+2000,Massac,Illinois,7.4
+2000,Menard,Illinois,14.7
+2000,Mercer,Illinois,9.3
+2000,Monroe,Illinois,13.3
+2000,Montgomery,Illinois,7.6
+2000,Morgan,Illinois,13.5
+2000,Moultrie,Illinois,10.8
+2000,Ogle,Illinois,11.2
+2000,Peoria,Illinois,15.2
+2000,Perry,Illinois,7.2
+2000,Piatt,Illinois,13.4
+2000,Pike,Illinois,7
+2000,Pope,Illinois,6
+2000,Pulaski,Illinois,5.1
+2000,Putnam,Illinois,7.9
+2000,Randolph,Illinois,5.8
+2000,Richland,Illinois,10.6
+2000,Rock Island,Illinois,11.5
+2000,St. Clair,Illinois,12.1
+2000,Saline,Illinois,7.6
+2000,Sangamon,Illinois,18.3
+2000,Schuyler,Illinois,8.6
+2000,Scott,Illinois,9.4
+2000,Shelby,Illinois,7.5
+2000,Stark,Illinois,10.2
+2000,Stephenson,Illinois,10.6
+2000,Tazewell,Illinois,12.5
+2000,Union,Illinois,9.5
+2000,Vermilion,Illinois,8.3
+2000,Wabash,Illinois,8.3
+2000,Warren,Illinois,11.1
+2000,Washington,Illinois,8.5
+2000,Wayne,Illinois,6.6
+2000,White,Illinois,7.1
+2000,Whiteside,Illinois,7.9
+2000,Will,Illinois,17.8
+2000,Williamson,Illinois,11.1
+2000,Winnebago,Illinois,12.8
+2000,Woodford,Illinois,15.2
+2000,Adams,Indiana,6.2
+2000,Allen,Indiana,15
+2000,Bartholomew,Indiana,13.6
+2000,Benton,Indiana,8.8
+2000,Blackford,Indiana,6.6
+2000,Boone,Indiana,17.6
+2000,Brown,Indiana,11.4
+2000,Carroll,Indiana,8.2
+2000,Cass,Indiana,7.1
+2000,Clark,Indiana,9.2
+2000,Clay,Indiana,7.4
+2000,Clinton,Indiana,6.9
+2000,Crawford,Indiana,4.3
+2000,Daviess,Indiana,5.3
+2000,Dearborn,Indiana,9.9
+2000,Decatur,Indiana,7
+2000,DeKalb,Indiana,8.3
+2000,Delaware,Indiana,10.8
+2000,Dubois,Indiana,9.5
+2000,Elkhart,Indiana,10
+2000,Fayette,Indiana,4.9
+2000,Floyd,Indiana,13
+2000,Fountain,Indiana,6
+2000,Franklin,Indiana,7.5
+2000,Fulton,Indiana,5.2
+2000,Gibson,Indiana,7.8
+2000,Grant,Indiana,8
+2000,Greene,Indiana,6.5
+2000,Hamilton,Indiana,33.3
+2000,Hancock,Indiana,15
+2000,Harrison,Indiana,8.7
+2000,Hendricks,Indiana,16.5
+2000,Henry,Indiana,6.9
+2000,Howard,Indiana,11.2
+2000,Huntington,Indiana,8.5
+2000,Jackson,Indiana,7.3
+2000,Jasper,Indiana,7.8
+2000,Jay,Indiana,5.8
+2000,Jefferson,Indiana,9.3
+2000,Jennings,Indiana,5.9
+2000,Johnson,Indiana,14.8
+2000,Knox,Indiana,7.5
+2000,Kosciusko,Indiana,9.1
+2000,LaGrange,Indiana,5.3
+2000,Lake,Indiana,10.7
+2000,LaPorte,Indiana,9
+2000,Lawrence,Indiana,6.4
+2000,Madison,Indiana,8.9
+2000,Marion,Indiana,16.7
+2000,Marshall,Indiana,9
+2000,Martin,Indiana,4.5
+2000,Miami,Indiana,6.4
+2000,Monroe,Indiana,20
+2000,Montgomery,Indiana,9.3
+2000,Morgan,Indiana,7.8
+2000,Newton,Indiana,5.9
+2000,Noble,Indiana,7.4
+2000,Ohio,Indiana,7.1
+2000,Orange,Indiana,5.4
+2000,Owen,Indiana,5.6
+2000,Parke,Indiana,7
+2000,Perry,Indiana,5.2
+2000,Pike,Indiana,4.6
+2000,Porter,Indiana,13.5
+2000,Posey,Indiana,9.1
+2000,Pulaski,Indiana,6.9
+2000,Putnam,Indiana,7.3
+2000,Randolph,Indiana,5.7
+2000,Ripley,Indiana,6.8
+2000,Rush,Indiana,7.2
+2000,St. Joseph,Indiana,14.4
+2000,Scott,Indiana,4.4
+2000,Shelby,Indiana,8
+2000,Spencer,Indiana,7.7
+2000,Starke,Indiana,4.6
+2000,Steuben,Indiana,9.4
+2000,Sullivan,Indiana,5.2
+2000,Switzerland,Indiana,4.4
+2000,Tippecanoe,Indiana,18.1
+2000,Tipton,Indiana,8.1
+2000,Union,Indiana,7.5
+2000,Vanderburgh,Indiana,12.5
+2000,Vermillion,Indiana,7.2
+2000,Vigo,Indiana,11.7
+2000,Wabash,Indiana,8.2
+2000,Warren,Indiana,8.8
+2000,Warrick,Indiana,14
+2000,Washington,Indiana,6.8
+2000,Wayne,Indiana,8
+2000,Wells,Indiana,9.8
+2000,White,Indiana,6
+2000,Whitley,Indiana,8.8
+2000,Adair,Iowa,8.9
+2000,Adams,Iowa,9.1
+2000,Allamakee,Iowa,10.7
+2000,Appanoose,Iowa,9.1
+2000,Audubon,Iowa,8.3
+2000,Benton,Iowa,10.3
+2000,Black Hawk,Iowa,14.3
+2000,Boone,Iowa,13.9
+2000,Bremer,Iowa,15.2
+2000,Buchanan,Iowa,9.6
+2000,Buena Vista,Iowa,14
+2000,Butler,Iowa,9.1
+2000,Calhoun,Iowa,11.3
+2000,Carroll,Iowa,12.5
+2000,Cass,Iowa,12
+2000,Cedar,Iowa,12.7
+2000,Cerro Gordo,Iowa,14.1
+2000,Cherokee,Iowa,11.1
+2000,Chickasaw,Iowa,9
+2000,Clarke,Iowa,8.9
+2000,Clay,Iowa,13.4
+2000,Clayton,Iowa,9.4
+2000,Clinton,Iowa,10.4
+2000,Crawford,Iowa,9.1
+2000,Dallas,Iowa,20.3
+2000,Davis,Iowa,8.1
+2000,Decatur,Iowa,9.8
+2000,Delaware,Iowa,9.9
+2000,Des Moines,Iowa,10.7
+2000,Dickinson,Iowa,15.9
+2000,Dubuque,Iowa,14.6
+2000,Emmet,Iowa,9.6
+2000,Fayette,Iowa,10.1
+2000,Floyd,Iowa,10.9
+2000,Franklin,Iowa,11.2
+2000,Fremont,Iowa,10.9
+2000,Greene,Iowa,11.2
+2000,Grundy,Iowa,12.7
+2000,Guthrie,Iowa,11.4
+2000,Hamilton,Iowa,13
+2000,Hancock,Iowa,11.7
+2000,Hardin,Iowa,12.7
+2000,Harrison,Iowa,9.5
+2000,Henry,Iowa,11.4
+2000,Howard,Iowa,9.3
+2000,Humboldt,Iowa,11.6
+2000,Ida,Iowa,10.7
+2000,Iowa,Iowa,11.5
+2000,Jackson,Iowa,8.1
+2000,Jasper,Iowa,11.5
+2000,Jefferson,Iowa,19.3
+2000,Johnson,Iowa,26.1
+2000,Jones,Iowa,9.4
+2000,Keokuk,Iowa,8.8
+2000,Kossuth,Iowa,10.3
+2000,Lee,Iowa,9.2
+2000,Linn,Iowa,20.5
+2000,Louisa,Iowa,9.3
+2000,Lucas,Iowa,8.2
+2000,Lyon,Iowa,11
+2000,Madison,Iowa,11
+2000,Mahaska,Iowa,12.2
+2000,Marion,Iowa,13.5
+2000,Marshall,Iowa,12.5
+2000,Mills,Iowa,11.9
+2000,Mitchell,Iowa,10
+2000,Monona,Iowa,10.4
+2000,Monroe,Iowa,9.4
+2000,Montgomery,Iowa,9.6
+2000,Muscatine,Iowa,12.4
+2000,O'Brien,Iowa,11.4
+2000,Osceola,Iowa,8.9
+2000,Page,Iowa,11.8
+2000,Palo Alto,Iowa,10
+2000,Plymouth,Iowa,14.8
+2000,Pocahontas,Iowa,12.1
+2000,Polk,Iowa,21
+2000,Pottawattamie,Iowa,10.5
+2000,Poweshiek,Iowa,11.7
+2000,Ringgold,Iowa,8.8
+2000,Sac,Iowa,10.2
+2000,Scott,Iowa,16.7
+2000,Shelby,Iowa,11.2
+2000,Sioux,Iowa,13.4
+2000,Story,Iowa,24.9
+2000,Tama,Iowa,10
+2000,Taylor,Iowa,8.3
+2000,Union,Iowa,11.1
+2000,Van Buren,Iowa,8.2
+2000,Wapello,Iowa,9.6
+2000,Warren,Iowa,15.2
+2000,Washington,Iowa,11.5
+2000,Wayne,Iowa,8.6
+2000,Webster,Iowa,11.8
+2000,Winnebago,Iowa,12.2
+2000,Winneshiek,Iowa,14.3
+2000,Woodbury,Iowa,12.9
+2000,Worth,Iowa,9.7
+2000,Wright,Iowa,9.7
+2000,Allen,Kansas,9
+2000,Anderson,Kansas,8
+2000,Atchison,Kansas,10.7
+2000,Barber,Kansas,15.6
+2000,Barton,Kansas,10.9
+2000,Bourbon,Kansas,10.2
+2000,Brown,Kansas,13.2
+2000,Butler,Kansas,14.3
+2000,Chase,Kansas,14.6
+2000,Chautauqua,Kansas,8.6
+2000,Cherokee,Kansas,7.6
+2000,Cheyenne,Kansas,12.8
+2000,Clark,Kansas,16.5
+2000,Clay,Kansas,10.7
+2000,Cloud,Kansas,10.6
+2000,Coffey,Kansas,14
+2000,Comanche,Kansas,10.1
+2000,Cowley,Kansas,12.6
+2000,Crawford,Kansas,14.6
+2000,Decatur,Kansas,10.8
+2000,Dickinson,Kansas,10.8
+2000,Doniphan,Kansas,10.8
+2000,Douglas,Kansas,24.4
+2000,Edwards,Kansas,12.9
+2000,Elk,Kansas,6.8
+2000,Ellis,Kansas,18.6
+2000,Ellsworth,Kansas,11.2
+2000,Finney,Kansas,9.6
+2000,Ford,Kansas,10.8
+2000,Franklin,Kansas,11.7
+2000,Geary,Kansas,11
+2000,Gove,Kansas,13.7
+2000,Graham,Kansas,13.2
+2000,Grant,Kansas,11.9
+2000,Gray,Kansas,12.2
+2000,Greeley,Kansas,12.8
+2000,Greenwood,Kansas,10.1
+2000,Hamilton,Kansas,12.3
+2000,Harper,Kansas,8.8
+2000,Harvey,Kansas,15.1
+2000,Haskell,Kansas,13.1
+2000,Hodgeman,Kansas,15.5
+2000,Jackson,Kansas,11
+2000,Jefferson,Kansas,11.9
+2000,Jewell,Kansas,10.2
+2000,Johnson,Kansas,31.7
+2000,Kearny,Kansas,9.3
+2000,Kingman,Kansas,12.8
+2000,Kiowa,Kansas,13.8
+2000,Labette,Kansas,10.6
+2000,Lane,Kansas,14.2
+2000,Leavenworth,Kansas,13.2
+2000,Lincoln,Kansas,12.4
+2000,Linn,Kansas,8.1
+2000,Logan,Kansas,12.8
+2000,Lyon,Kansas,14.2
+2000,McPherson,Kansas,16.4
+2000,Marion,Kansas,11.7
+2000,Marshall,Kansas,8.7
+2000,Meade,Kansas,13.4
+2000,Miami,Kansas,13.3
+2000,Mitchell,Kansas,12
+2000,Montgomery,Kansas,10.7
+2000,Morris,Kansas,9.7
+2000,Morton,Kansas,12.7
+2000,Nemaha,Kansas,10.5
+2000,Neosho,Kansas,9.9
+2000,Ness,Kansas,13
+2000,Norton,Kansas,11.6
+2000,Osage,Kansas,9.8
+2000,Osborne,Kansas,11.6
+2000,Ottawa,Kansas,12.3
+2000,Pawnee,Kansas,15.3
+2000,Phillips,Kansas,12.8
+2000,Pottawatomie,Kansas,15.4
+2000,Pratt,Kansas,14.8
+2000,Rawlins,Kansas,12.9
+2000,Reno,Kansas,11.5
+2000,Republic,Kansas,10.7
+2000,Rice,Kansas,12.3
+2000,Riley,Kansas,21.6
+2000,Rooks,Kansas,11.7
+2000,Rush,Kansas,11.8
+2000,Russell,Kansas,10.6
+2000,Saline,Kansas,14.2
+2000,Scott,Kansas,14.7
+2000,Sedgwick,Kansas,17.4
+2000,Seward,Kansas,9.4
+2000,Shawnee,Kansas,17.3
+2000,Sheridan,Kansas,11
+2000,Sherman,Kansas,11
+2000,Smith,Kansas,12.2
+2000,Stafford,Kansas,14
+2000,Stanton,Kansas,12.1
+2000,Stevens,Kansas,13.1
+2000,Sumner,Kansas,10.9
+2000,Thomas,Kansas,16.3
+2000,Trego,Kansas,9.3
+2000,Wabaunsee,Kansas,12
+2000,Wallace,Kansas,13.3
+2000,Washington,Kansas,10.8
+2000,Wichita,Kansas,11.7
+2000,Wilson,Kansas,7.6
+2000,Woodson,Kansas,8.5
+2000,Wyandotte,Kansas,7.7
+2000,Adair,Kentucky,5.4
+2000,Allen,Kentucky,5.1
+2000,Anderson,Kentucky,8.2
+2000,Ballard,Kentucky,5.8
+2000,Barren,Kentucky,6.4
+2000,Bath,Kentucky,5.8
+2000,Bell,Kentucky,4.6
+2000,Boone,Kentucky,15.8
+2000,Bourbon,Kentucky,8.2
+2000,Boyd,Kentucky,8.1
+2000,Boyle,Kentucky,10.8
+2000,Bracken,Kentucky,5.5
+2000,Breathitt,Kentucky,5.4
+2000,Breckinridge,Kentucky,3.2
+2000,Bullitt,Kentucky,6.1
+2000,Butler,Kentucky,3.7
+2000,Caldwell,Kentucky,5
+2000,Calloway,Kentucky,13
+2000,Campbell,Kentucky,13.4
+2000,Carlisle,Kentucky,6.5
+2000,Carroll,Kentucky,5.9
+2000,Carter,Kentucky,4.8
+2000,Casey,Kentucky,4.3
+2000,Christian,Kentucky,7.7
+2000,Clark,Kentucky,9.4
+2000,Clay,Kentucky,3.6
+2000,Clinton,Kentucky,5.1
+2000,Crittenden,Kentucky,4.2
+2000,Cumberland,Kentucky,3.2
+2000,Daviess,Kentucky,10.9
+2000,Edmonson,Kentucky,2.5
+2000,Elliott,Kentucky,4.1
+2000,Estill,Kentucky,4.7
+2000,Fayette,Kentucky,21.2
+2000,Fleming,Kentucky,4.9
+2000,Floyd,Kentucky,4.9
+2000,Franklin,Kentucky,15.2
+2000,Fulton,Kentucky,6.4
+2000,Gallatin,Kentucky,4.1
+2000,Garrard,Kentucky,6.9
+2000,Grant,Kentucky,5.7
+2000,Graves,Kentucky,7.5
+2000,Grayson,Kentucky,3.7
+2000,Green,Kentucky,4.9
+2000,Greenup,Kentucky,6.5
+2000,Hancock,Kentucky,5.4
+2000,Hardin,Kentucky,8.9
+2000,Harlan,Kentucky,4.3
+2000,Harrison,Kentucky,6.3
+2000,Hart,Kentucky,3.6
+2000,Henderson,Kentucky,8.1
+2000,Henry,Kentucky,5.6
+2000,Hickman,Kentucky,4.1
+2000,Hopkins,Kentucky,5.8
+2000,Jackson,Kentucky,3.1
+2000,Jefferson,Kentucky,15.2
+2000,Jessamine,Kentucky,12.7
+2000,Johnson,Kentucky,5.1
+2000,Kenton,Kentucky,15
+2000,Knott,Kentucky,5.1
+2000,Knox,Kentucky,4.7
+2000,Larue,Kentucky,5.3
+2000,Laurel,Kentucky,6.3
+2000,Lawrence,Kentucky,3.7
+2000,Lee,Kentucky,3.2
+2000,Leslie,Kentucky,2.6
+2000,Letcher,Kentucky,4.3
+2000,Lewis,Kentucky,3.4
+2000,Lincoln,Kentucky,5.1
+2000,Livingston,Kentucky,5.1
+2000,Logan,Kentucky,5.5
+2000,Lyon,Kentucky,5.6
+2000,McCracken,Kentucky,11.3
+2000,McCreary,Kentucky,3
+2000,McLean,Kentucky,4.4
+2000,Madison,Kentucky,13.1
+2000,Magoffin,Kentucky,2.9
+2000,Marion,Kentucky,5.1
+2000,Marshall,Kentucky,7.9
+2000,Martin,Kentucky,5.1
+2000,Mason,Kentucky,8.5
+2000,Meade,Kentucky,7.1
+2000,Menifee,Kentucky,4.1
+2000,Mercer,Kentucky,8.6
+2000,Metcalfe,Kentucky,3.2
+2000,Monroe,Kentucky,4.2
+2000,Montgomery,Kentucky,9.1
+2000,Morgan,Kentucky,4.1
+2000,Muhlenberg,Kentucky,3.8
+2000,Nelson,Kentucky,7.3
+2000,Nicholas,Kentucky,4
+2000,Ohio,Kentucky,4.2
+2000,Oldham,Kentucky,19.3
+2000,Owen,Kentucky,5.3
+2000,Owsley,Kentucky,3
+2000,Pendleton,Kentucky,6
+2000,Perry,Kentucky,4.3
+2000,Pike,Kentucky,5.3
+2000,Powell,Kentucky,3.7
+2000,Pulaski,Kentucky,5.8
+2000,Robertson,Kentucky,5.6
+2000,Rockcastle,Kentucky,4.5
+2000,Rowan,Kentucky,10.5
+2000,Russell,Kentucky,4.4
+2000,Scott,Kentucky,12.5
+2000,Shelby,Kentucky,11.2
+2000,Simpson,Kentucky,7
+2000,Spencer,Kentucky,6.8
+2000,Taylor,Kentucky,6.6
+2000,Todd,Kentucky,6
+2000,Trigg,Kentucky,6.3
+2000,Trimble,Kentucky,3.7
+2000,Union,Kentucky,6.5
+2000,Warren,Kentucky,14.7
+2000,Washington,Kentucky,7.9
+2000,Wayne,Kentucky,4.1
+2000,Webster,Kentucky,4.2
+2000,Whitley,Kentucky,6.8
+2000,Wolfe,Kentucky,5.4
+2000,Woodford,Kentucky,16
+2000,Acadia Parish,Louisiana,6.3
+2000,Allen Parish,Louisiana,6.2
+2000,Ascension Parish,Louisiana,10.5
+2000,Assumption Parish,Louisiana,5
+2000,Avoyelles Parish,Louisiana,5.9
+2000,Beauregard Parish,Louisiana,9.2
+2000,Bienville Parish,Louisiana,6.8
+2000,Bossier Parish,Louisiana,11.9
+2000,Caddo Parish,Louisiana,13.5
+2000,Calcasieu Parish,Louisiana,11.6
+2000,Caldwell Parish,Louisiana,5.6
+2000,Cameron Parish,Louisiana,5.4
+2000,Catahoula Parish,Louisiana,5.8
+2000,Claiborne Parish,Louisiana,8.4
+2000,Concordia Parish,Louisiana,6.8
+2000,De Soto Parish,Louisiana,7
+2000,East Baton Rouge Parish,Louisiana,19.5
+2000,East Carroll Parish,Louisiana,7.2
+2000,East Feliciana Parish,Louisiana,7.8
+2000,Evangeline Parish,Louisiana,6.2
+2000,Franklin Parish,Louisiana,6.2
+2000,Grant Parish,Louisiana,6.3
+2000,Iberia Parish,Louisiana,8.1
+2000,Iberville Parish,Louisiana,6.8
+2000,Jackson Parish,Louisiana,8.1
+2000,Jefferson Parish,Louisiana,14.5
+2000,Jefferson Davis Parish,Louisiana,6.9
+2000,Lafayette Parish,Louisiana,17.7
+2000,Lafourche Parish,Louisiana,8.5
+2000,La Salle Parish,Louisiana,7.4
+2000,Lincoln Parish,Louisiana,16.5
+2000,Livingston Parish,Louisiana,8.3
+2000,Madison Parish,Louisiana,7.7
+2000,Morehouse Parish,Louisiana,6.7
+2000,Natchitoches Parish,Louisiana,11.4
+2000,Orleans Parish,Louisiana,15
+2000,Ouachita Parish,Louisiana,14.8
+2000,Plaquemines Parish,Louisiana,8.5
+2000,Pointe Coupee Parish,Louisiana,9
+2000,Rapides Parish,Louisiana,10.6
+2000,Red River Parish,Louisiana,6.3
+2000,Richland Parish,Louisiana,8.8
+2000,Sabine Parish,Louisiana,6.9
+2000,St. Bernard Parish,Louisiana,6.3
+2000,St. Charles Parish,Louisiana,12.4
+2000,St. Helena Parish,Louisiana,6.4
+2000,St. James Parish,Louisiana,6.5
+2000,St. John the Baptist Parish,Louisiana,9.3
+2000,St. Landry Parish,Louisiana,7
+2000,St. Martin Parish,Louisiana,5.7
+2000,St. Mary Parish,Louisiana,6.9
+2000,St. Tammany Parish,Louisiana,18.9
+2000,Tangipahoa Parish,Louisiana,10.9
+2000,Tensas Parish,Louisiana,10.1
+2000,Terrebonne Parish,Louisiana,8.6
+2000,Union Parish,Louisiana,8.1
+2000,Vermilion Parish,Louisiana,7.6
+2000,Vernon Parish,Louisiana,9.1
+2000,Washington Parish,Louisiana,6.6
+2000,Webster Parish,Louisiana,8.5
+2000,West Baton Rouge Parish,Louisiana,8.2
+2000,West Carroll Parish,Louisiana,6.3
+2000,West Feliciana Parish,Louisiana,6.4
+2000,Winn Parish,Louisiana,5.9
+2000,Androscoggin,Maine,9.9
+2000,Aroostook,Maine,10.8
+2000,Cumberland,Maine,21.7
+2000,Franklin,Maine,14.3
+2000,Hancock,Maine,17.1
+2000,Kennebec,Maine,13.1
+2000,Knox,Maine,17.1
+2000,Lincoln,Maine,16.9
+2000,Oxford,Maine,10.5
+2000,Penobscot,Maine,12.9
+2000,Piscataquis,Maine,9.4
+2000,Sagadahoc,Maine,16.4
+2000,Somerset,Maine,8.4
+2000,Waldo,Maine,14.5
+2000,Washington,Maine,9.6
+2000,York,Maine,15.6
+2000,Allegany,Maryland,7.6
+2000,Anne Arundel,Maryland,19.1
+2000,Baltimore,Maryland,18.1
+2000,Calvert,Maryland,14.2
+2000,Caroline,Maryland,7.3
+2000,Carroll,Maryland,16
+2000,Cecil,Maryland,10.7
+2000,Charles,Maryland,13.2
+2000,Dorchester,Maryland,6.8
+2000,Frederick,Maryland,18.9
+2000,Garrett,Maryland,8.2
+2000,Harford,Maryland,17.9
+2000,Howard,Maryland,29.5
+2000,Kent,Maryland,12.6
+2000,Montgomery,Maryland,27.1
+2000,Prince George's,Maryland,16.9
+2000,Queen Anne's,Maryland,16.4
+2000,St. Mary's,Maryland,14.3
+2000,Somerset,Maryland,7.4
+2000,Talbot,Maryland,17
+2000,Washington,Maryland,8.8
+2000,Wicomico,Maryland,13.7
+2000,Worcester,Maryland,14.6
+2000,Baltimore city,Maryland,10.4
+2000,Barnstable,Massachusetts,20.6
+2000,Berkshire,Massachusetts,15
+2000,Bristol,Massachusetts,13.4
+2000,Dukes,Massachusetts,25.4
+2000,Essex,Massachusetts,19.5
+2000,Franklin,Massachusetts,16.2
+2000,Hampden,Massachusetts,12.8
+2000,Hampshire,Massachusetts,19.3
+2000,Middlesex,Massachusetts,23.5
+2000,Nantucket,Massachusetts,27.1
+2000,Norfolk,Massachusetts,25.1
+2000,Plymouth,Massachusetts,18.7
+2000,Suffolk,Massachusetts,18.8
+2000,Worcester,Massachusetts,16.7
+2000,Alcona,Michigan,6.6
+2000,Alger,Michigan,10.6
+2000,Allegan,Michigan,10.8
+2000,Alpena,Michigan,7.9
+2000,Antrim,Michigan,12.6
+2000,Arenac,Michigan,5.5
+2000,Baraga,Michigan,8.6
+2000,Barry,Michigan,9.8
+2000,Bay,Michigan,9.7
+2000,Benzie,Michigan,13.3
+2000,Berrien,Michigan,12.2
+2000,Branch,Michigan,7
+2000,Calhoun,Michigan,10.5
+2000,Cass,Michigan,8
+2000,Charlevoix,Michigan,13
+2000,Cheboygan,Michigan,8.7
+2000,Chippewa,Michigan,10.2
+2000,Clare,Michigan,5.4
+2000,Clinton,Michigan,13.8
+2000,Crawford,Michigan,8.6
+2000,Delta,Michigan,11.6
+2000,Dickinson,Michigan,11.1
+2000,Eaton,Michigan,14.8
+2000,Emmet,Michigan,16.5
+2000,Genesee,Michigan,10.5
+2000,Gladwin,Michigan,6.3
+2000,Gogebic,Michigan,10.8
+2000,Grand Traverse,Michigan,16.4
+2000,Gratiot,Michigan,8.8
+2000,Hillsdale,Michigan,7.5
+2000,Houghton,Michigan,14.1
+2000,Huron,Michigan,7.4
+2000,Ingham,Michigan,18.5
+2000,Ionia,Michigan,7.6
+2000,Iosco,Michigan,7.2
+2000,Iron,Michigan,9.1
+2000,Isabella,Michigan,13.7
+2000,Jackson,Michigan,11.2
+2000,Kalamazoo,Michigan,19
+2000,Kalkaska,Michigan,6.5
+2000,Kent,Michigan,17.5
+2000,Keweenaw,Michigan,12.2
+2000,Lake,Michigan,5.6
+2000,Lapeer,Michigan,8.8
+2000,Leelanau,Michigan,19.7
+2000,Lenawee,Michigan,10.9
+2000,Livingston,Michigan,18.9
+2000,Luce,Michigan,8.4
+2000,Mackinac,Michigan,10
+2000,Macomb,Michigan,11.9
+2000,Manistee,Michigan,9.5
+2000,Marquette,Michigan,15.9
+2000,Mason,Michigan,10
+2000,Mecosta,Michigan,11.6
+2000,Menominee,Michigan,7.7
+2000,Midland,Michigan,17.6
+2000,Missaukee,Michigan,6.8
+2000,Monroe,Michigan,9.6
+2000,Montcalm,Michigan,7.2
+2000,Montmorency,Michigan,5.2
+2000,Muskegon,Michigan,9.4
+2000,Newaygo,Michigan,7.7
+2000,Oakland,Michigan,23.2
+2000,Oceana,Michigan,8
+2000,Ogemaw,Michigan,6.1
+2000,Ontonagon,Michigan,8.7
+2000,Osceola,Michigan,7.8
+2000,Oscoda,Michigan,5.6
+2000,Otsego,Michigan,12
+2000,Ottawa,Michigan,18
+2000,Presque Isle,Michigan,7.4
+2000,Roscommon,Michigan,6.5
+2000,Saginaw,Michigan,10.5
+2000,St. Clair,Michigan,8
+2000,St. Joseph,Michigan,8.5
+2000,Sanilac,Michigan,6.2
+2000,Schoolcraft,Michigan,8.2
+2000,Shiawassee,Michigan,8.8
+2000,Tuscola,Michigan,7.1
+2000,Van Buren,Michigan,9.7
+2000,Washtenaw,Michigan,24.3
+2000,Wayne,Michigan,10.9
+2000,Wexford,Michigan,9.8
+2000,Aitkin,Minnesota,8.2
+2000,Anoka,Minnesota,16
+2000,Becker,Minnesota,12.6
+2000,Beltrami,Minnesota,16
+2000,Benton,Minnesota,12.6
+2000,Big Stone,Minnesota,8.5
+2000,Blue Earth,Minnesota,18.2
+2000,Brown,Minnesota,11.7
+2000,Carlton,Minnesota,10.5
+2000,Carver,Minnesota,26.1
+2000,Cass,Minnesota,11.4
+2000,Chippewa,Minnesota,10.1
+2000,Chisago,Minnesota,11.3
+2000,Clay,Minnesota,17.4
+2000,Clearwater,Minnesota,10.6
+2000,Cook,Minnesota,19.6
+2000,Cottonwood,Minnesota,10.5
+2000,Crow Wing,Minnesota,12.8
+2000,Dakota,Minnesota,25.6
+2000,Dodge,Minnesota,13.7
+2000,Douglas,Minnesota,12
+2000,Faribault,Minnesota,10.5
+2000,Fillmore,Minnesota,11.2
+2000,Freeborn,Minnesota,9.2
+2000,Goodhue,Minnesota,13.7
+2000,Grant,Minnesota,12.6
+2000,Hennepin,Minnesota,27
+2000,Houston,Minnesota,14.2
+2000,Hubbard,Minnesota,13.6
+2000,Isanti,Minnesota,9.9
+2000,Itasca,Minnesota,12.4
+2000,Jackson,Minnesota,11.5
+2000,Kanabec,Minnesota,7
+2000,Kandiyohi,Minnesota,13.1
+2000,Kittson,Minnesota,12
+2000,Koochiching,Minnesota,10.2
+2000,Lac qui Parle,Minnesota,9.6
+2000,Lake,Minnesota,13.2
+2000,Lake of the Woods,Minnesota,13.9
+2000,Le Sueur,Minnesota,12.5
+2000,Lincoln,Minnesota,11.1
+2000,Lyon,Minnesota,16
+2000,McLeod,Minnesota,11.9
+2000,Mahnomen,Minnesota,9.6
+2000,Marshall,Minnesota,9.7
+2000,Martin,Minnesota,12.2
+2000,Meeker,Minnesota,10.5
+2000,Mille Lacs,Minnesota,8.3
+2000,Morrison,Minnesota,8.8
+2000,Mower,Minnesota,10.8
+2000,Murray,Minnesota,9.4
+2000,Nicollet,Minnesota,20.1
+2000,Nobles,Minnesota,9.8
+2000,Norman,Minnesota,10.5
+2000,Olmsted,Minnesota,21.2
+2000,Otter Tail,Minnesota,12.2
+2000,Pennington,Minnesota,10.6
+2000,Pine,Minnesota,7.5
+2000,Pipestone,Minnesota,10.3
+2000,Polk,Minnesota,12.3
+2000,Pope,Minnesota,10.7
+2000,Ramsey,Minnesota,21.8
+2000,Red Lake,Minnesota,8
+2000,Redwood,Minnesota,10.7
+2000,Renville,Minnesota,10.1
+2000,Rice,Minnesota,14.3
+2000,Rock,Minnesota,12.2
+2000,Roseau,Minnesota,12.6
+2000,St. Louis,Minnesota,15.2
+2000,Scott,Minnesota,23.1
+2000,Sherburne,Minnesota,13.8
+2000,Sibley,Minnesota,8.8
+2000,Stearns,Minnesota,14.9
+2000,Steele,Minnesota,15.4
+2000,Stevens,Minnesota,14.6
+2000,Swift,Minnesota,11.5
+2000,Todd,Minnesota,7.3
+2000,Traverse,Minnesota,9
+2000,Wabasha,Minnesota,12.4
+2000,Wadena,Minnesota,8.5
+2000,Waseca,Minnesota,12.9
+2000,Washington,Minnesota,23.4
+2000,Watonwan,Minnesota,10.9
+2000,Wilkin,Minnesota,11.2
+2000,Winona,Minnesota,16
+2000,Wright,Minnesota,13.6
+2000,Yellow Medicine,Minnesota,10.4
+2000,Adams,Mississippi,11.7
+2000,Alcorn,Mississippi,7.7
+2000,Amite,Mississippi,6.9
+2000,Attala,Mississippi,7.6
+2000,Benton,Mississippi,6.1
+2000,Bolivar,Mississippi,11.9
+2000,Calhoun,Mississippi,7.4
+2000,Carroll,Mississippi,7.1
+2000,Chickasaw,Mississippi,6.9
+2000,Choctaw,Mississippi,7.3
+2000,Claiborne,Mississippi,10.6
+2000,Clarke,Mississippi,6.4
+2000,Clay,Mississippi,11
+2000,Coahoma,Mississippi,11.3
+2000,Copiah,Mississippi,8.2
+2000,Covington,Mississippi,7
+2000,DeSoto,Mississippi,10.3
+2000,Forrest,Mississippi,14.3
+2000,Franklin,Mississippi,7
+2000,George,Mississippi,5.5
+2000,Greene,Mississippi,5.3
+2000,Grenada,Mississippi,9.4
+2000,Hancock,Mississippi,10.9
+2000,Harrison,Mississippi,11.8
+2000,Hinds,Mississippi,17.2
+2000,Holmes,Mississippi,6.9
+2000,Humphreys,Mississippi,8.4
+2000,Issaquena,Mississippi,5.2
+2000,Itawamba,Mississippi,5.9
+2000,Jackson,Mississippi,10.7
+2000,Jasper,Mississippi,7.2
+2000,Jefferson,Mississippi,6.3
+2000,Jefferson Davis,Mississippi,6.7
+2000,Jones,Mississippi,9.3
+2000,Kemper,Mississippi,6.6
+2000,Lafayette,Mississippi,16.1
+2000,Lamar,Mississippi,17.6
+2000,Lauderdale,Mississippi,10.1
+2000,Lawrence,Mississippi,8.8
+2000,Leake,Mississippi,7.8
+2000,Lee,Mississippi,12.3
+2000,Leflore,Mississippi,10.4
+2000,Lincoln,Mississippi,8.3
+2000,Lowndes,Mississippi,14.3
+2000,Madison,Mississippi,25.9
+2000,Marion,Mississippi,7.5
+2000,Marshall,Mississippi,6.5
+2000,Monroe,Mississippi,7.9
+2000,Montgomery,Mississippi,7.3
+2000,Neshoba,Mississippi,7.3
+2000,Newton,Mississippi,7.1
+2000,Noxubee,Mississippi,7.7
+2000,Oktibbeha,Mississippi,18
+2000,Panola,Mississippi,7.9
+2000,Pearl River,Mississippi,8.9
+2000,Perry,Mississippi,5.2
+2000,Pike,Mississippi,7.9
+2000,Pontotoc,Mississippi,8.3
+2000,Prentiss,Mississippi,5.7
+2000,Quitman,Mississippi,7.7
+2000,Rankin,Mississippi,16.3
+2000,Scott,Mississippi,5.7
+2000,Sharkey,Mississippi,9.3
+2000,Simpson,Mississippi,7.6
+2000,Smith,Mississippi,6.2
+2000,Stone,Mississippi,8.1
+2000,Sunflower,Mississippi,8.6
+2000,Tallahatchie,Mississippi,6.7
+2000,Tate,Mississippi,8.7
+2000,Tippah,Mississippi,6.2
+2000,Tishomingo,Mississippi,4.9
+2000,Tunica,Mississippi,6.6
+2000,Union,Mississippi,8.6
+2000,Walthall,Mississippi,6.4
+2000,Warren,Mississippi,12.9
+2000,Washington,Mississippi,11.1
+2000,Wayne,Mississippi,6.6
+2000,Webster,Mississippi,9
+2000,Wilkinson,Mississippi,6.9
+2000,Winston,Mississippi,9.4
+2000,Yalobusha,Mississippi,6.6
+2000,Yazoo,Mississippi,8.2
+2000,Adair,Missouri,16.5
+2000,Andrew,Missouri,13.1
+2000,Atchison,Missouri,11.5
+2000,Audrain,Missouri,8.5
+2000,Barry,Missouri,7.2
+2000,Barton,Missouri,6.7
+2000,Bates,Missouri,6.7
+2000,Benton,Missouri,5.8
+2000,Bollinger,Missouri,4.7
+2000,Boone,Missouri,23.1
+2000,Buchanan,Missouri,11.4
+2000,Butler,Missouri,6.3
+2000,Caldwell,Missouri,8.7
+2000,Callaway,Missouri,11
+2000,Camden,Missouri,12.1
+2000,Cape Girardeau,Missouri,16.4
+2000,Carroll,Missouri,9.6
+2000,Carter,Missouri,7.6
+2000,Cass,Missouri,12.1
+2000,Cedar,Missouri,6.7
+2000,Chariton,Missouri,7.6
+2000,Christian,Missouri,15.3
+2000,Clark,Missouri,8.6
+2000,Clay,Missouri,17.5
+2000,Clinton,Missouri,10.3
+2000,Cole,Missouri,18.2
+2000,Cooper,Missouri,9.1
+2000,Crawford,Missouri,5.4
+2000,Dade,Missouri,6.6
+2000,Dallas,Missouri,6.5
+2000,Daviess,Missouri,8.9
+2000,DeKalb,Missouri,7.3
+2000,Dent,Missouri,7
+2000,Douglas,Missouri,6.6
+2000,Dunklin,Missouri,6.2
+2000,Franklin,Missouri,8.4
+2000,Gasconade,Missouri,7
+2000,Gentry,Missouri,9.8
+2000,Greene,Missouri,15.9
+2000,Grundy,Missouri,7.9
+2000,Harrison,Missouri,6.1
+2000,Henry,Missouri,7.5
+2000,Hickory,Missouri,4.5
+2000,Holt,Missouri,8.5
+2000,Howard,Missouri,11.6
+2000,Howell,Missouri,6.8
+2000,Iron,Missouri,5.1
+2000,Jackson,Missouri,15.5
+2000,Jasper,Missouri,11.2
+2000,Jefferson,Missouri,8.5
+2000,Johnson,Missouri,13
+2000,Knox,Missouri,8.8
+2000,Laclede,Missouri,7.9
+2000,Lafayette,Missouri,9
+2000,Lawrence,Missouri,8
+2000,Lewis,Missouri,9
+2000,Lincoln,Missouri,6.5
+2000,Linn,Missouri,8
+2000,Livingston,Missouri,9.3
+2000,McDonald,Missouri,5
+2000,Macon,Missouri,9.4
+2000,Madison,Missouri,4.9
+2000,Maries,Missouri,8.1
+2000,Marion,Missouri,11.4
+2000,Mercer,Missouri,9
+2000,Miller,Missouri,8.1
+2000,Mississippi,Missouri,7.2
+2000,Moniteau,Missouri,9.1
+2000,Monroe,Missouri,6.9
+2000,Montgomery,Missouri,6.3
+2000,Morgan,Missouri,7.4
+2000,New Madrid,Missouri,6.2
+2000,Newton,Missouri,10.5
+2000,Nodaway,Missouri,12.8
+2000,Oregon,Missouri,6.5
+2000,Osage,Missouri,7
+2000,Ozark,Missouri,5
+2000,Pemiscot,Missouri,6.1
+2000,Perry,Missouri,6.6
+2000,Pettis,Missouri,9.4
+2000,Phelps,Missouri,11.9
+2000,Pike,Missouri,6.6
+2000,Platte,Missouri,22.4
+2000,Polk,Missouri,9.9
+2000,Pulaski,Missouri,12.8
+2000,Putnam,Missouri,7.8
+2000,Ralls,Missouri,8.5
+2000,Randolph,Missouri,7.9
+2000,Ray,Missouri,7.5
+2000,Reynolds,Missouri,4.9
+2000,Ripley,Missouri,4.6
+2000,St. Charles,Missouri,18.5
+2000,St. Clair,Missouri,5.3
+2000,Ste. Genevieve,Missouri,5.6
+2000,St. Francois,Missouri,6.4
+2000,St. Louis,Missouri,22
+2000,Saline,Missouri,9.5
+2000,Schuyler,Missouri,8.3
+2000,Scotland,Missouri,7.5
+2000,Scott,Missouri,7.3
+2000,Shannon,Missouri,5.3
+2000,Shelby,Missouri,9
+2000,Stoddard,Missouri,6.6
+2000,Stone,Missouri,9.7
+2000,Sullivan,Missouri,5.5
+2000,Taney,Missouri,10.2
+2000,Texas,Missouri,7.1
+2000,Vernon,Missouri,9.6
+2000,Warren,Missouri,7.6
+2000,Washington,Missouri,5.1
+2000,Wayne,Missouri,4.9
+2000,Webster,Missouri,7.4
+2000,Worth,Missouri,8.6
+2000,Wright,Missouri,6.2
+2000,St. Louis city,Missouri,11.5
+2000,Beaverhead,Montana,18.7
+2000,Big Horn,Montana,10.1
+2000,Blaine,Montana,13.8
+2000,Broadwater,Montana,11.6
+2000,Carbon,Montana,16.9
+2000,Carter,Montana,11.7
+2000,Cascade,Montana,14.8
+2000,Chouteau,Montana,16.1
+2000,Custer,Montana,12.3
+2000,Daniels,Montana,12.1
+2000,Dawson,Montana,11.5
+2000,Deer Lodge,Montana,10.6
+2000,Fallon,Montana,10.8
+2000,Fergus,Montana,14.3
+2000,Flathead,Montana,16.1
+2000,Gallatin,Montana,28.1
+2000,Garfield,Montana,14.7
+2000,Glacier,Montana,10.8
+2000,Golden Valley,Montana,13.4
+2000,Granite,Montana,18.3
+2000,Hill,Montana,13.9
+2000,Jefferson,Montana,18.7
+2000,Judith Basin,Montana,19.1
+2000,Lake,Montana,15.6
+2000,Lewis and Clark,Montana,21.3
+2000,Liberty,Montana,14.1
+2000,Lincoln,Montana,9.4
+2000,McCone,Montana,13.2
+2000,Madison,Montana,19.7
+2000,Meagher,Montana,15.3
+2000,Mineral,Montana,9.3
+2000,Missoula,Montana,22.1
+2000,Musselshell,Montana,12.6
+2000,Park,Montana,15.9
+2000,Petroleum,Montana,16.5
+2000,Phillips,Montana,13.9
+2000,Pondera,Montana,14
+2000,Powder River,Montana,12.2
+2000,Powell,Montana,8.5
+2000,Prairie,Montana,12.3
+2000,Ravalli,Montana,15.9
+2000,Richland,Montana,14.1
+2000,Roosevelt,Montana,12.5
+2000,Rosebud,Montana,12.9
+2000,Sanders,Montana,11
+2000,Sheridan,Montana,15.3
+2000,Silver Bow,Montana,14.8
+2000,Stillwater,Montana,13.1
+2000,Sweet Grass,Montana,18.4
+2000,Teton,Montana,16
+2000,Toole,Montana,13.3
+2000,Treasure,Montana,15.8
+2000,Valley,Montana,11.4
+2000,Wheatland,Montana,10.6
+2000,Wibaux,Montana,11.2
+2000,Yellowstone,Montana,19.1
+2000,Adams,Nebraska,13.3
+2000,Antelope,Nebraska,9.8
+2000,Arthur,Nebraska,11.4
+2000,Banner,Nebraska,12.9
+2000,Blaine,Nebraska,10.8
+2000,Boone,Nebraska,9.8
+2000,Box Butte,Nebraska,11.6
+2000,Boyd,Nebraska,10.1
+2000,Brown,Nebraska,12.9
+2000,Buffalo,Nebraska,20.1
+2000,Burt,Nebraska,10.9
+2000,Butler,Nebraska,10.3
+2000,Cass,Nebraska,13.4
+2000,Cedar,Nebraska,9.2
+2000,Chase,Nebraska,12.3
+2000,Cherry,Nebraska,14.7
+2000,Cheyenne,Nebraska,13.5
+2000,Clay,Nebraska,11
+2000,Colfax,Nebraska,7.8
+2000,Cuming,Nebraska,9.3
+2000,Custer,Nebraska,11.6
+2000,Dakota,Nebraska,8.4
+2000,Dawes,Nebraska,17.9
+2000,Dawson,Nebraska,10.3
+2000,Deuel,Nebraska,12.3
+2000,Dixon,Nebraska,10
+2000,Dodge,Nebraska,10.8
+2000,Douglas,Nebraska,21.2
+2000,Dundy,Nebraska,12.5
+2000,Fillmore,Nebraska,11.7
+2000,Franklin,Nebraska,11
+2000,Frontier,Nebraska,13.2
+2000,Furnas,Nebraska,12.3
+2000,Gage,Nebraska,11.3
+2000,Garden,Nebraska,10
+2000,Garfield,Nebraska,9.1
+2000,Gosper,Nebraska,12.7
+2000,Grant,Nebraska,19.3
+2000,Greeley,Nebraska,10.9
+2000,Hall,Nebraska,11.2
+2000,Hamilton,Nebraska,12.7
+2000,Harlan,Nebraska,11.9
+2000,Hayes,Nebraska,9.4
+2000,Hitchcock,Nebraska,9.7
+2000,Holt,Nebraska,10.6
+2000,Hooker,Nebraska,11.4
+2000,Howard,Nebraska,10.5
+2000,Jefferson,Nebraska,10.3
+2000,Johnson,Nebraska,10.9
+2000,Kearney,Nebraska,16.5
+2000,Keith,Nebraska,12.5
+2000,Keya Paha,Nebraska,11.7
+2000,Kimball,Nebraska,9.9
+2000,Knox,Nebraska,9.9
+2000,Lancaster,Nebraska,21.7
+2000,Lincoln,Nebraska,11.8
+2000,Logan,Nebraska,8.8
+2000,Loup,Nebraska,9.4
+2000,McPherson,Nebraska,21.1
+2000,Madison,Nebraska,12.4
+2000,Merrick,Nebraska,10.4
+2000,Morrill,Nebraska,11.2
+2000,Nance,Nebraska,8.1
+2000,Nemaha,Nebraska,17
+2000,Nuckolls,Nebraska,8.8
+2000,Otoe,Nebraska,12.5
+2000,Pawnee,Nebraska,10.8
+2000,Perkins,Nebraska,13.4
+2000,Phelps,Nebraska,15.4
+2000,Pierce,Nebraska,9.4
+2000,Platte,Nebraska,12.2
+2000,Polk,Nebraska,9.6
+2000,Red Willow,Nebraska,10.8
+2000,Richardson,Nebraska,9.9
+2000,Rock,Nebraska,9.2
+2000,Saline,Nebraska,9.5
+2000,Sarpy,Nebraska,20.6
+2000,Saunders,Nebraska,12.4
+2000,Scotts Bluff,Nebraska,12.3
+2000,Seward,Nebraska,15.1
+2000,Sheridan,Nebraska,12.8
+2000,Sherman,Nebraska,8.3
+2000,Sioux,Nebraska,16.7
+2000,Stanton,Nebraska,9.5
+2000,Thayer,Nebraska,11
+2000,Thomas,Nebraska,13.8
+2000,Thurston,Nebraska,8.3
+2000,Valley,Nebraska,12.1
+2000,Washington,Nebraska,16.2
+2000,Wayne,Nebraska,17.9
+2000,Webster,Nebraska,9.5
+2000,Wheeler,Nebraska,11.4
+2000,York,Nebraska,12.1
+2000,Churchill,Nevada,11.5
+2000,Clark,Nevada,11.5
+2000,Douglas,Nevada,15.8
+2000,Elko,Nevada,9.8
+2000,Esmeralda,Nevada,8
+2000,Eureka,Nevada,10.3
+2000,Humboldt,Nevada,10.4
+2000,Lander,Nevada,7.9
+2000,Lincoln,Nevada,10
+2000,Lyon,Nevada,8.6
+2000,Mineral,Nevada,7.1
+2000,Nye,Nevada,6.9
+2000,Pershing,Nevada,5.2
+2000,Storey,Nevada,12.2
+2000,Washoe,Nevada,15.8
+2000,White Pine,Nevada,7.1
+2000,Carson City,Nevada,11.9
+2000,Belknap,New Hampshire,15.7
+2000,Carroll,New Hampshire,17.1
+2000,Cheshire,New Hampshire,17.2
+2000,Coos,New Hampshire,8.1
+2000,Grafton,New Hampshire,18.4
+2000,Hillsborough,New Hampshire,20
+2000,Merrimack,New Hampshire,18.8
+2000,Rockingham,New Hampshire,21.1
+2000,Strafford,New Hampshire,16.9
+2000,Sullivan,New Hampshire,12.4
+2000,Atlantic,New Jersey,12.8
+2000,Bergen,New Jersey,24
+2000,Burlington,New Jersey,19.2
+2000,Camden,New Jersey,15.6
+2000,Cape May,New Jersey,15.5
+2000,Cumberland,New Jersey,8.1
+2000,Essex,New Jersey,16.5
+2000,Gloucester,New Jersey,15.6
+2000,Hudson,New Jersey,16.3
+2000,Hunterdon,New Jersey,25.5
+2000,Mercer,New Jersey,18.5
+2000,Middlesex,New Jersey,20.5
+2000,Monmouth,New Jersey,21.8
+2000,Morris,New Jersey,27.1
+2000,Ocean,New Jersey,13.4
+2000,Passaic,New Jersey,14.2
+2000,Salem,New Jersey,11.2
+2000,Somerset,New Jersey,27.4
+2000,Sussex,New Jersey,18.6
+2000,Union,New Jersey,17.6
+2000,Warren,New Jersey,16.8
+2000,Bernalillo,New Mexico,17.4
+2000,Catron,New Mexico,12.6
+2000,Chaves,New Mexico,9.8
+2000,Cibola,New Mexico,7.4
+2000,Colfax,New Mexico,12.5
+2000,Curry,New Mexico,9.6
+2000,De Baca,New Mexico,11.2
+2000,Dona Ana,New Mexico,13.1
+2000,Eddy,New Mexico,8.7
+2000,Grant,New Mexico,11.4
+2000,Guadalupe,New Mexico,4.8
+2000,Harding,New Mexico,11.3
+2000,Hidalgo,New Mexico,6.2
+2000,Lea,New Mexico,7.5
+2000,Lincoln,New Mexico,13.4
+2000,Los Alamos,New Mexico,24.5
+2000,Luna,New Mexico,6.3
+2000,McKinley,New Mexico,6.6
+2000,Mora,New Mexico,6.8
+2000,Otero,New Mexico,9.2
+2000,Quay,New Mexico,8.4
+2000,Rio Arriba,New Mexico,9.1
+2000,Roosevelt,New Mexico,13.2
+2000,Sandoval,New Mexico,15.6
+2000,San Juan,New Mexico,8.8
+2000,San Miguel,New Mexico,12.2
+2000,Santa Fe,New Mexico,20.3
+2000,Sierra,New Mexico,7.8
+2000,Socorro,New Mexico,10.8
+2000,Taos,New Mexico,16.6
+2000,Torrance,New Mexico,10.3
+2000,Union,New Mexico,7.3
+2000,Valencia,New Mexico,9.6
+2000,Albany,New York,17.5
+2000,Allegany,New York,8.7
+2000,Bronx,New York,8.8
+2000,Broome,New York,12.6
+2000,Cattaraugus,New York,8.3
+2000,Cayuga,New York,9.3
+2000,Chautauqua,New York,9.7
+2000,Chemung,New York,10.4
+2000,Chenango,New York,8.4
+2000,Clinton,New York,9.8
+2000,Columbia,New York,12.2
+2000,Cortland,New York,10.8
+2000,Delaware,New York,9.5
+2000,Dutchess,New York,15.7
+2000,Erie,New York,14.4
+2000,Essex,New York,10.2
+2000,Franklin,New York,7.2
+2000,Fulton,New York,7.9
+2000,Genesee,New York,10.1
+2000,Greene,New York,9
+2000,Hamilton,New York,10.6
+2000,Herkimer,New York,9.9
+2000,Jefferson,New York,9.7
+2000,Kings,New York,13
+2000,Lewis,New York,6.5
+2000,Livingston,New York,11.4
+2000,Madison,New York,12.9
+2000,Monroe,New York,18.5
+2000,Montgomery,New York,8
+2000,Nassau,New York,19.8
+2000,New York,New York,26
+2000,Niagara,New York,10.7
+2000,Oneida,New York,10.9
+2000,Onondaga,New York,16.5
+2000,Ontario,New York,14.6
+2000,Orange,New York,13.2
+2000,Orleans,New York,8.2
+2000,Oswego,New York,9.2
+2000,Otsego,New York,12.2
+2000,Putnam,New York,19.8
+2000,Queens,New York,15.1
+2000,Rensselaer,New York,13.2
+2000,Richmond,New York,14.1
+2000,Rockland,New York,21.2
+2000,St. Lawrence,New York,8.5
+2000,Saratoga,New York,18.5
+2000,Schenectady,New York,14.6
+2000,Schoharie,New York,8.9
+2000,Schuyler,New York,8.5
+2000,Seneca,New York,10.5
+2000,Steuben,New York,10
+2000,Suffolk,New York,15.6
+2000,Sullivan,New York,9.1
+2000,Tioga,New York,11.8
+2000,Tompkins,New York,20.8
+2000,Ulster,New York,13.8
+2000,Warren,New York,13.5
+2000,Washington,New York,8.6
+2000,Wayne,New York,10.7
+2000,Westchester,New York,21.1
+2000,Wyoming,New York,7.1
+2000,Yates,New York,9.4
+2000,Alamance,North Carolina,13.8
+2000,Alexander,North Carolina,6.6
+2000,Alleghany,North Carolina,8.2
+2000,Anson,North Carolina,6.6
+2000,Ashe,North Carolina,8.2
+2000,Avery,North Carolina,9.3
+2000,Beaufort,North Carolina,10.9
+2000,Bertie,North Carolina,6.2
+2000,Bladen,North Carolina,8.2
+2000,Brunswick,North Carolina,11
+2000,Buncombe,North Carolina,16.3
+2000,Burke,North Carolina,8.8
+2000,Cabarrus,North Carolina,14.4
+2000,Caldwell,North Carolina,7.2
+2000,Camden,North Carolina,10.9
+2000,Carteret,North Carolina,13.1
+2000,Caswell,North Carolina,6
+2000,Catawba,North Carolina,12.3
+2000,Chatham,North Carolina,16
+2000,Cherokee,North Carolina,7.1
+2000,Chowan,North Carolina,11.2
+2000,Clay,North Carolina,9.2
+2000,Cleveland,North Carolina,9
+2000,Columbus,North Carolina,6.8
+2000,Craven,North Carolina,13.5
+2000,Cumberland,North Carolina,13.1
+2000,Currituck,North Carolina,10.2
+2000,Dare,North Carolina,19.2
+2000,Davidson,North Carolina,9.5
+2000,Davie,North Carolina,12.6
+2000,Duplin,North Carolina,7.3
+2000,Durham,North Carolina,22.7
+2000,Edgecombe,North Carolina,6.1
+2000,Forsyth,North Carolina,19.2
+2000,Franklin,North Carolina,9.8
+2000,Gaston,North Carolina,10.3
+2000,Gates,North Carolina,8.2
+2000,Graham,North Carolina,7.3
+2000,Granville,North Carolina,9.3
+2000,Greene,North Carolina,5.1
+2000,Guilford,North Carolina,21.3
+2000,Halifax,North Carolina,8
+2000,Harnett,North Carolina,9.4
+2000,Haywood,North Carolina,10
+2000,Henderson,North Carolina,15.6
+2000,Hertford,North Carolina,7.5
+2000,Hoke,North Carolina,7.7
+2000,Hyde,North Carolina,7.5
+2000,Iredell,North Carolina,12.7
+2000,Jackson,North Carolina,13.9
+2000,Johnston,North Carolina,12.3
+2000,Jones,North Carolina,6.9
+2000,Lee,North Carolina,11.4
+2000,Lenoir,North Carolina,9.6
+2000,Lincoln,North Carolina,9.6
+2000,McDowell,North Carolina,6.3
+2000,Macon,North Carolina,10.5
+2000,Madison,North Carolina,9.6
+2000,Martin,North Carolina,8.3
+2000,Mecklenburg,North Carolina,26.6
+2000,Mitchell,North Carolina,7.9
+2000,Montgomery,North Carolina,7.4
+2000,Moore,North Carolina,17.4
+2000,Nash,North Carolina,12.4
+2000,New Hanover,North Carolina,22.3
+2000,Northampton,North Carolina,8.5
+2000,Onslow,North Carolina,10.3
+2000,Orange,North Carolina,24.4
+2000,Pamlico,North Carolina,9.5
+2000,Pasquotank,North Carolina,11.6
+2000,Pender,North Carolina,9.9
+2000,Perquimans,North Carolina,8.6
+2000,Person,North Carolina,7.7
+2000,Pitt,North Carolina,17.1
+2000,Polk,North Carolina,16.2
+2000,Randolph,North Carolina,8.1
+2000,Richmond,North Carolina,6.7
+2000,Robeson,North Carolina,7.8
+2000,Rockingham,North Carolina,7.6
+2000,Rowan,North Carolina,10.3
+2000,Rutherford,North Carolina,8.6
+2000,Sampson,North Carolina,7.8
+2000,Scotland,North Carolina,10.6
+2000,Stanly,North Carolina,9.1
+2000,Stokes,North Carolina,7
+2000,Surry,North Carolina,8.8
+2000,Swain,North Carolina,9.7
+2000,Transylvania,North Carolina,14.7
+2000,Tyrrell,North Carolina,7.9
+2000,Union,North Carolina,15.7
+2000,Vance,North Carolina,7.5
+2000,Wake,North Carolina,29.6
+2000,Warren,North Carolina,7.1
+2000,Washington,North Carolina,7.9
+2000,Watauga,North Carolina,18.8
+2000,Wayne,North Carolina,10.3
+2000,Wilkes,North Carolina,7.7
+2000,Wilson,North Carolina,11.2
+2000,Yadkin,North Carolina,7.3
+2000,Yancey,North Carolina,8.9
+2000,Adams,North Dakota,12.5
+2000,Barnes,North Dakota,17.4
+2000,Benson,North Dakota,8.8
+2000,Billings,North Dakota,16.8
+2000,Bottineau,North Dakota,11.9
+2000,Bowman,North Dakota,14.4
+2000,Burke,North Dakota,10.4
+2000,Burleigh,North Dakota,21.4
+2000,Cass,North Dakota,23.1
+2000,Cavalier,North Dakota,10.6
+2000,Dickey,North Dakota,13.4
+2000,Divide,North Dakota,11.3
+2000,Dunn,North Dakota,13.2
+2000,Eddy,North Dakota,12.8
+2000,Emmons,North Dakota,9.7
+2000,Foster,North Dakota,14.3
+2000,Golden Valley,North Dakota,17.8
+2000,Grand Forks,North Dakota,18.8
+2000,Grant,North Dakota,9
+2000,Griggs,North Dakota,12.8
+2000,Hettinger,North Dakota,12.4
+2000,Kidder,North Dakota,8.8
+2000,LaMoure,North Dakota,11.2
+2000,Logan,North Dakota,10
+2000,McHenry,North Dakota,10.3
+2000,McIntosh,North Dakota,7.1
+2000,McKenzie,North Dakota,12.6
+2000,McLean,North Dakota,11.9
+2000,Mercer,North Dakota,11.5
+2000,Morton,North Dakota,13.6
+2000,Mountrail,North Dakota,12
+2000,Nelson,North Dakota,15
+2000,Oliver,North Dakota,10.4
+2000,Pembina,North Dakota,12.9
+2000,Pierce,North Dakota,11
+2000,Ramsey,North Dakota,14.5
+2000,Ransom,North Dakota,13.2
+2000,Renville,North Dakota,13.4
+2000,Richland,North Dakota,11.7
+2000,Rolette,North Dakota,10.9
+2000,Sargent,North Dakota,10.8
+2000,Sheridan,North Dakota,8.8
+2000,Sioux,North Dakota,7.2
+2000,Slope,North Dakota,13
+2000,Stark,North Dakota,17.1
+2000,Steele,North Dakota,17.6
+2000,Stutsman,North Dakota,14.6
+2000,Towner,North Dakota,13.7
+2000,Traill,North Dakota,16.1
+2000,Walsh,North Dakota,10.9
+2000,Ward,North Dakota,16.8
+2000,Wells,North Dakota,11.1
+2000,Williams,North Dakota,12.4
+2000,Adams,Ohio,4.4
+2000,Allen,Ohio,8.5
+2000,Ashland,Ohio,10.6
+2000,Ashtabula,Ohio,7.4
+2000,Athens,Ohio,12.6
+2000,Auglaize,Ohio,8.8
+2000,Belmont,Ohio,7.1
+2000,Brown,Ohio,5.5
+2000,Butler,Ohio,15.4
+2000,Carroll,Ohio,6.2
+2000,Champaign,Ohio,7.1
+2000,Clark,Ohio,9.5
+2000,Clermont,Ohio,14
+2000,Clinton,Ohio,9.3
+2000,Columbiana,Ohio,7.4
+2000,Coshocton,Ohio,6.3
+2000,Crawford,Ohio,6.6
+2000,Cuyahoga,Ohio,15.6
+2000,Darke,Ohio,6.5
+2000,Defiance,Ohio,9.7
+2000,Delaware,Ohio,28.2
+2000,Erie,Ohio,11
+2000,Fairfield,Ohio,14.4
+2000,Fayette,Ohio,7.8
+2000,Franklin,Ohio,21.2
+2000,Fulton,Ohio,9.4
+2000,Gallia,Ohio,7
+2000,Geauga,Ohio,19.9
+2000,Greene,Ohio,17.2
+2000,Guernsey,Ohio,6.1
+2000,Hamilton,Ohio,18.5
+2000,Hancock,Ohio,14.2
+2000,Hardin,Ohio,7
+2000,Harrison,Ohio,6
+2000,Henry,Ohio,8.2
+2000,Highland,Ohio,5.8
+2000,Hocking,Ohio,6.1
+2000,Holmes,Ohio,5.8
+2000,Huron,Ohio,7.6
+2000,Jackson,Ohio,7.1
+2000,Jefferson,Ohio,7.7
+2000,Knox,Ohio,10.5
+2000,Lake,Ohio,14.6
+2000,Lawrence,Ohio,6.4
+2000,Licking,Ohio,12.6
+2000,Logan,Ohio,6.9
+2000,Lorain,Ohio,10.9
+2000,Lucas,Ohio,13.8
+2000,Madison,Ohio,9.3
+2000,Mahoning,Ohio,11.8
+2000,Marion,Ohio,7.3
+2000,Medina,Ohio,17.8
+2000,Meigs,Ohio,4.9
+2000,Mercer,Ohio,7.5
+2000,Miami,Ohio,10.9
+2000,Monroe,Ohio,5.9
+2000,Montgomery,Ohio,14.4
+2000,Morgan,Ohio,5.1
+2000,Morrow,Ohio,6.5
+2000,Muskingum,Ohio,8
+2000,Noble,Ohio,5.8
+2000,Ottawa,Ohio,10.6
+2000,Paulding,Ohio,4.5
+2000,Perry,Ohio,4.5
+2000,Pickaway,Ohio,7.6
+2000,Pike,Ohio,6.3
+2000,Portage,Ohio,14
+2000,Preble,Ohio,6.6
+2000,Putnam,Ohio,9
+2000,Richland,Ohio,8.7
+2000,Ross,Ohio,7.4
+2000,Sandusky,Ohio,7.8
+2000,Scioto,Ohio,6.4
+2000,Seneca,Ohio,8.2
+2000,Shelby,Ohio,8.8
+2000,Stark,Ohio,11.9
+2000,Summit,Ohio,16.7
+2000,Trumbull,Ohio,10
+2000,Tuscarawas,Ohio,8.1
+2000,Union,Ohio,11.8
+2000,Van Wert,Ohio,7.9
+2000,Vinton,Ohio,3.9
+2000,Warren,Ohio,19.3
+2000,Washington,Ohio,9.4
+2000,Wayne,Ohio,11.6
+2000,Williams,Ohio,7.2
+2000,Wood,Ohio,15.9
+2000,Wyandot,Ohio,7
+2000,Adair,Oklahoma,6.2
+2000,Alfalfa,Oklahoma,10.9
+2000,Atoka,Oklahoma,6.6
+2000,Beaver,Oklahoma,12.9
+2000,Beckham,Oklahoma,9.5
+2000,Blaine,Oklahoma,9
+2000,Bryan,Oklahoma,11.2
+2000,Caddo,Oklahoma,9.6
+2000,Canadian,Oklahoma,15.2
+2000,Carter,Oklahoma,10.4
+2000,Cherokee,Oklahoma,13.3
+2000,Choctaw,Oklahoma,6.3
+2000,Cimarron,Oklahoma,13.6
+2000,Cleveland,Oklahoma,17.6
+2000,Coal,Oklahoma,7.2
+2000,Comanche,Oklahoma,13
+2000,Cotton,Oklahoma,11.4
+2000,Craig,Oklahoma,7.2
+2000,Creek,Oklahoma,7.8
+2000,Custer,Oklahoma,13.8
+2000,Delaware,Oklahoma,8.3
+2000,Dewey,Oklahoma,11.7
+2000,Ellis,Oklahoma,14.2
+2000,Garfield,Oklahoma,13
+2000,Garvin,Oklahoma,8.2
+2000,Grady,Oklahoma,10
+2000,Grant,Oklahoma,12
+2000,Greer,Oklahoma,8.9
+2000,Harmon,Oklahoma,7.9
+2000,Harper,Oklahoma,12.7
+2000,Haskell,Oklahoma,7.2
+2000,Hughes,Oklahoma,6.3
+2000,Jackson,Oklahoma,11.5
+2000,Jefferson,Oklahoma,7.2
+2000,Johnston,Oklahoma,8.2
+2000,Kay,Oklahoma,13.1
+2000,Kingfisher,Oklahoma,12
+2000,Kiowa,Oklahoma,9.9
+2000,Latimer,Oklahoma,7.3
+2000,Le Flore,Oklahoma,7.5
+2000,Lincoln,Oklahoma,7.5
+2000,Logan,Oklahoma,12.6
+2000,Love,Oklahoma,6.8
+2000,McClain,Oklahoma,11.7
+2000,McCurtain,Oklahoma,7.1
+2000,McIntosh,Oklahoma,7.9
+2000,Major,Oklahoma,11.1
+2000,Marshall,Oklahoma,7.9
+2000,Mayes,Oklahoma,8.2
+2000,Murray,Oklahoma,8.7
+2000,Muskogee,Oklahoma,10.4
+2000,Noble,Oklahoma,11.5
+2000,Nowata,Oklahoma,7.4
+2000,Okfuskee,Oklahoma,5.9
+2000,Oklahoma,Oklahoma,16.7
+2000,Okmulgee,Oklahoma,7.8
+2000,Osage,Oklahoma,10.1
+2000,Ottawa,Oklahoma,8.1
+2000,Pawnee,Oklahoma,7.9
+2000,Payne,Oklahoma,18.8
+2000,Pittsburg,Oklahoma,8.5
+2000,Pontotoc,Oklahoma,12.6
+2000,Pottawatomie,Oklahoma,9.9
+2000,Pushmataha,Oklahoma,7.5
+2000,Roger Mills,Oklahoma,11
+2000,Rogers,Oklahoma,12.1
+2000,Seminole,Oklahoma,7.2
+2000,Sequoyah,Oklahoma,6.6
+2000,Stephens,Oklahoma,11.9
+2000,Texas,Oklahoma,13.7
+2000,Tillman,Oklahoma,8.9
+2000,Tulsa,Oklahoma,18.5
+2000,Wagoner,Oklahoma,11.4
+2000,Washington,Oklahoma,16.6
+2000,Washita,Oklahoma,10.4
+2000,Woods,Oklahoma,16.7
+2000,Woodward,Oklahoma,11.4
+2000,Baker,Oregon,11.6
+2000,Benton,Oregon,26.2
+2000,Clackamas,Oregon,18.9
+2000,Clatsop,Oregon,12.6
+2000,Columbia,Oregon,9.8
+2000,Coos,Oregon,9.3
+2000,Crook,Oregon,8
+2000,Curry,Oregon,9.7
+2000,Deschutes,Oregon,17.1
+2000,Douglas,Oregon,8.4
+2000,Gilliam,Oregon,9.4
+2000,Grant,Oregon,10.9
+2000,Harney,Oregon,8.8
+2000,Hood River,Oregon,15.2
+2000,Jackson,Oregon,14.5
+2000,Jefferson,Oregon,9.4
+2000,Josephine,Oregon,9.5
+2000,Klamath,Oregon,10.6
+2000,Lake,Oregon,11.8
+2000,Lane,Oregon,15.6
+2000,Lincoln,Oregon,12.4
+2000,Linn,Oregon,9.1
+2000,Malheur,Oregon,7.4
+2000,Marion,Oregon,13.1
+2000,Morrow,Oregon,8.5
+2000,Multnomah,Oregon,20.1
+2000,Polk,Oregon,16.1
+2000,Sherman,Oregon,15
+2000,Tillamook,Oregon,11.5
+2000,Umatilla,Oregon,9.4
+2000,Union,Oregon,14.5
+2000,Wallowa,Oregon,13.6
+2000,Wasco,Oregon,10.5
+2000,Washington,Oregon,23.7
+2000,Wheeler,Oregon,10.8
+2000,Yamhill,Oregon,13.4
+2000,Adams,Pennsylvania,10.1
+2000,Allegheny,Pennsylvania,17.3
+2000,Armstrong,Pennsylvania,7.1
+2000,Beaver,Pennsylvania,11.1
+2000,Bedford,Pennsylvania,6.7
+2000,Berks,Pennsylvania,12
+2000,Blair,Pennsylvania,9.2
+2000,Bradford,Pennsylvania,8.9
+2000,Bucks,Pennsylvania,19.8
+2000,Butler,Pennsylvania,16.1
+2000,Cambria,Pennsylvania,9
+2000,Cameron,Pennsylvania,8.4
+2000,Carbon,Pennsylvania,7.2
+2000,Centre,Pennsylvania,18.8
+2000,Chester,Pennsylvania,26.6
+2000,Clarion,Pennsylvania,9.4
+2000,Clearfield,Pennsylvania,7.2
+2000,Clinton,Pennsylvania,8.4
+2000,Columbia,Pennsylvania,10
+2000,Crawford,Pennsylvania,9.5
+2000,Cumberland,Pennsylvania,18.1
+2000,Dauphin,Pennsylvania,14.7
+2000,Delaware,Pennsylvania,18.2
+2000,Elk,Pennsylvania,8.3
+2000,Erie,Pennsylvania,13.2
+2000,Fayette,Pennsylvania,7.2
+2000,Forest,Pennsylvania,5.5
+2000,Franklin,Pennsylvania,8.8
+2000,Fulton,Pennsylvania,5.7
+2000,Greene,Pennsylvania,8
+2000,Huntingdon,Pennsylvania,7.5
+2000,Indiana,Pennsylvania,9.3
+2000,Jefferson,Pennsylvania,7.7
+2000,Juniata,Pennsylvania,6.1
+2000,Lackawanna,Pennsylvania,12.4
+2000,Lancaster,Pennsylvania,13.8
+2000,Lawrence,Pennsylvania,9.9
+2000,Lebanon,Pennsylvania,9.5
+2000,Lehigh,Pennsylvania,14.6
+2000,Luzerne,Pennsylvania,10.4
+2000,Lycoming,Pennsylvania,9.9
+2000,McKean,Pennsylvania,8.9
+2000,Mercer,Pennsylvania,11.3
+2000,Mifflin,Pennsylvania,7
+2000,Monroe,Pennsylvania,13.5
+2000,Montgomery,Pennsylvania,23.1
+2000,Montour,Pennsylvania,11.1
+2000,Northampton,Pennsylvania,13.6
+2000,Northumberland,Pennsylvania,7.3
+2000,Perry,Pennsylvania,7.6
+2000,Philadelphia,Pennsylvania,10.3
+2000,Pike,Pennsylvania,12.2
+2000,Potter,Pennsylvania,7.8
+2000,Schuylkill,Pennsylvania,7
+2000,Snyder,Pennsylvania,7.9
+2000,Somerset,Pennsylvania,7.2
+2000,Sullivan,Pennsylvania,7.2
+2000,Susquehanna,Pennsylvania,8
+2000,Tioga,Pennsylvania,8.5
+2000,Union,Pennsylvania,10.2
+2000,Venango,Pennsylvania,8.3
+2000,Warren,Pennsylvania,9.8
+2000,Washington,Pennsylvania,12.8
+2000,Wayne,Pennsylvania,8.8
+2000,Westmoreland,Pennsylvania,13.6
+2000,Wyoming,Pennsylvania,9.8
+2000,York,Pennsylvania,12.5
+2000,Bristol,Rhode Island,20.2
+2000,Kent,Rhode Island,16.6
+2000,Newport,Rhode Island,23.3
+2000,Providence,Rhode Island,13
+2000,Washington,Rhode Island,21.7
+2000,Abbeville,South Carolina,8.1
+2000,Aiken,South Carolina,13.1
+2000,Allendale,South Carolina,7.4
+2000,Anderson,South Carolina,11
+2000,Bamberg,South Carolina,9.9
+2000,Barnwell,South Carolina,8.4
+2000,Beaufort,South Carolina,21.6
+2000,Berkeley,South Carolina,10.1
+2000,Calhoun,South Carolina,9.7
+2000,Charleston,South Carolina,19.7
+2000,Cherokee,South Carolina,7.5
+2000,Chester,South Carolina,6.1
+2000,Chesterfield,South Carolina,6.6
+2000,Clarendon,South Carolina,7.7
+2000,Colleton,South Carolina,7.4
+2000,Darlington,South Carolina,9.4
+2000,Dillon,South Carolina,6
+2000,Dorchester,South Carolina,14.1
+2000,Edgefield,South Carolina,9
+2000,Fairfield,South Carolina,8.2
+2000,Florence,South Carolina,12.5
+2000,Georgetown,South Carolina,13.3
+2000,Greenville,South Carolina,18.1
+2000,Greenwood,South Carolina,13.2
+2000,Hampton,South Carolina,7.2
+2000,Horry,South Carolina,12.8
+2000,Jasper,South Carolina,6.2
+2000,Kershaw,South Carolina,11.4
+2000,Lancaster,South Carolina,6.8
+2000,Laurens,South Carolina,8
+2000,Lee,South Carolina,6.5
+2000,Lexington,South Carolina,17
+2000,McCormick,South Carolina,10.2
+2000,Marion,South Carolina,6.9
+2000,Marlboro,South Carolina,4.7
+2000,Newberry,South Carolina,10.7
+2000,Oconee,South Carolina,11
+2000,Orangeburg,South Carolina,9.9
+2000,Pickens,South Carolina,11.3
+2000,Richland,South Carolina,20.6
+2000,Saluda,South Carolina,8.8
+2000,Spartanburg,South Carolina,11.8
+2000,Sumter,South Carolina,10.7
+2000,Union,South Carolina,6.7
+2000,Williamsburg,South Carolina,8
+2000,York,South Carolina,14.1
+2000,Aurora,South Dakota,10
+2000,Beadle,South Dakota,15
+2000,Bennett,South Dakota,9.7
+2000,Bon Homme,South Dakota,11.2
+2000,Brookings,South Dakota,19.8
+2000,Brown,South Dakota,17.4
+2000,Brule,South Dakota,16.2
+2000,Buffalo,South Dakota,4.2
+2000,Butte,South Dakota,9.3
+2000,Campbell,South Dakota,12.2
+2000,Charles Mix,South Dakota,10.8
+2000,Clark,South Dakota,9.3
+2000,Clay,South Dakota,21.2
+2000,Codington,South Dakota,14
+2000,Corson,South Dakota,9.7
+2000,Custer,South Dakota,17.4
+2000,Davison,South Dakota,14.6
+2000,Day,South Dakota,12
+2000,Deuel,South Dakota,9.9
+2000,Dewey,South Dakota,8.9
+2000,Douglas,South Dakota,10.7
+2000,Edmunds,South Dakota,12.2
+2000,Fall River,South Dakota,12.2
+2000,Faulk,South Dakota,10.9
+2000,Grant,South Dakota,10.6
+2000,Gregory,South Dakota,9.1
+2000,Haakon,South Dakota,11.9
+2000,Hamlin,South Dakota,9
+2000,Hand,South Dakota,12.6
+2000,Hanson,South Dakota,11.2
+2000,Harding,South Dakota,16.8
+2000,Hughes,South Dakota,24.1
+2000,Hutchinson,South Dakota,10.8
+2000,Hyde,South Dakota,12.3
+2000,Jackson,South Dakota,12.7
+2000,Jerauld,South Dakota,9
+2000,Jones,South Dakota,14.2
+2000,Kingsbury,South Dakota,13.1
+2000,Lake,South Dakota,15.5
+2000,Lawrence,South Dakota,16.8
+2000,Lincoln,South Dakota,19.2
+2000,Lyman,South Dakota,11.8
+2000,McCook,South Dakota,12.3
+2000,McPherson,South Dakota,8.2
+2000,Marshall,South Dakota,12.7
+2000,Meade,South Dakota,12
+2000,Mellette,South Dakota,14.7
+2000,Miner,South Dakota,11.1
+2000,Minnehaha,South Dakota,19.2
+2000,Moody,South Dakota,12.8
+2000,Pennington,South Dakota,17
+2000,Perkins,South Dakota,11.2
+2000,Potter,South Dakota,12.9
+2000,Roberts,South Dakota,9.6
+2000,Sanborn,South Dakota,11.9
+2000,Shannon,South Dakota,7.5
+2000,Spink,South Dakota,10.9
+2000,Stanley,South Dakota,16.3
+2000,Sully,South Dakota,13.1
+2000,Todd,South Dakota,7.5
+2000,Tripp,South Dakota,11
+2000,Turner,South Dakota,13
+2000,Union,South Dakota,17.5
+2000,Walworth,South Dakota,13.1
+2000,Yankton,South Dakota,15.9
+2000,Ziebach,South Dakota,9.2
+2000,Anderson,Tennessee,11.9
+2000,Bedford,Tennessee,7.6
+2000,Benton,Tennessee,3.5
+2000,Bledsoe,Tennessee,5
+2000,Blount,Tennessee,11.5
+2000,Bradley,Tennessee,10.5
+2000,Campbell,Tennessee,4.2
+2000,Cannon,Tennessee,5.4
+2000,Carroll,Tennessee,7.6
+2000,Carter,Tennessee,8.5
+2000,Cheatham,Tennessee,10.6
+2000,Chester,Tennessee,7.9
+2000,Claiborne,Tennessee,5.5
+2000,Clay,Tennessee,4.5
+2000,Cocke,Tennessee,4.1
+2000,Coffee,Tennessee,11.5
+2000,Crockett,Tennessee,6.3
+2000,Cumberland,Tennessee,8.3
+2000,Davidson,Tennessee,20.1
+2000,Decatur,Tennessee,4.7
+2000,DeKalb,Tennessee,6.5
+2000,Dickson,Tennessee,7.2
+2000,Dyer,Tennessee,7.9
+2000,Fayette,Tennessee,8.5
+2000,Fentress,Tennessee,4.9
+2000,Franklin,Tennessee,8
+2000,Gibson,Tennessee,7
+2000,Giles,Tennessee,6.7
+2000,Grainger,Tennessee,5
+2000,Greene,Tennessee,8
+2000,Grundy,Tennessee,4.5
+2000,Hamblen,Tennessee,8.5
+2000,Hamilton,Tennessee,15.8
+2000,Hancock,Tennessee,5.2
+2000,Hardeman,Tennessee,4.5
+2000,Hardin,Tennessee,6.1
+2000,Hawkins,Tennessee,6.5
+2000,Haywood,Tennessee,6.8
+2000,Henderson,Tennessee,6.4
+2000,Henry,Tennessee,7.8
+2000,Hickman,Tennessee,4.2
+2000,Houston,Tennessee,7.4
+2000,Humphreys,Tennessee,6
+2000,Jackson,Tennessee,5.6
+2000,Jefferson,Tennessee,8.2
+2000,Johnson,Tennessee,4.8
+2000,Knox,Tennessee,18.3
+2000,Lake,Tennessee,3.7
+2000,Lauderdale,Tennessee,4.6
+2000,Lawrence,Tennessee,5.2
+2000,Lewis,Tennessee,5.7
+2000,Lincoln,Tennessee,8.3
+2000,Loudon,Tennessee,11.1
+2000,McMinn,Tennessee,6.8
+2000,McNairy,Tennessee,5.3
+2000,Macon,Tennessee,3.4
+2000,Madison,Tennessee,14
+2000,Marion,Tennessee,5.5
+2000,Marshall,Tennessee,7.4
+2000,Maury,Tennessee,8.8
+2000,Meigs,Tennessee,5.1
+2000,Monroe,Tennessee,6.3
+2000,Montgomery,Tennessee,12.6
+2000,Moore,Tennessee,7.6
+2000,Morgan,Tennessee,3.4
+2000,Obion,Tennessee,7
+2000,Overton,Tennessee,5.9
+2000,Perry,Tennessee,4
+2000,Pickett,Tennessee,4.5
+2000,Polk,Tennessee,3.9
+2000,Putnam,Tennessee,12.5
+2000,Rhea,Tennessee,6.2
+2000,Roane,Tennessee,8.8
+2000,Robertson,Tennessee,8.8
+2000,Rutherford,Tennessee,16.3
+2000,Scott,Tennessee,4.1
+2000,Sequatchie,Tennessee,7.4
+2000,Sevier,Tennessee,9
+2000,Shelby,Tennessee,16.4
+2000,Smith,Tennessee,5.8
+2000,Stewart,Tennessee,6
+2000,Sullivan,Tennessee,12.1
+2000,Sumner,Tennessee,13.4
+2000,Tipton,Tennessee,7.4
+2000,Trousdale,Tennessee,6.3
+2000,Unicoi,Tennessee,6.5
+2000,Union,Tennessee,3.7
+2000,Van Buren,Tennessee,5.1
+2000,Warren,Tennessee,5.9
+2000,Washington,Tennessee,14.7
+2000,Wayne,Tennessee,4.3
+2000,Weakley,Tennessee,8.6
+2000,White,Tennessee,4.7
+2000,Williamson,Tennessee,30.1
+2000,Wilson,Tennessee,14.2
+2000,Anderson,Texas,7
+2000,Andrews,Texas,8.5
+2000,Angelina,Texas,10
+2000,Aransas,Texas,11
+2000,Archer,Texas,11.8
+2000,Armstrong,Texas,15.8
+2000,Atascosa,Texas,6.9
+2000,Austin,Texas,12.6
+2000,Bailey,Texas,6.6
+2000,Bandera,Texas,13.6
+2000,Bastrop,Texas,12.4
+2000,Baylor,Texas,8.7
+2000,Bee,Texas,7.4
+2000,Bell,Texas,13.4
+2000,Bexar,Texas,14.3
+2000,Blanco,Texas,15.3
+2000,Borden,Texas,17.3
+2000,Bosque,Texas,10.8
+2000,Bowie,Texas,10.1
+2000,Brazoria,Texas,13.8
+2000,Brazos,Texas,19.7
+2000,Brewster,Texas,17.4
+2000,Briscoe,Texas,14
+2000,Brooks,Texas,3.2
+2000,Brown,Texas,10.5
+2000,Burleson,Texas,9.5
+2000,Burnet,Texas,11.7
+2000,Caldwell,Texas,10
+2000,Calhoun,Texas,8.1
+2000,Callahan,Texas,8.9
+2000,Cameron,Texas,8.4
+2000,Camp,Texas,8.5
+2000,Carson,Texas,11.2
+2000,Cass,Texas,8.3
+2000,Castro,Texas,11.1
+2000,Chambers,Texas,8.4
+2000,Cherokee,Texas,7.4
+2000,Childress,Texas,5.7
+2000,Clay,Texas,11.1
+2000,Cochran,Texas,5.6
+2000,Coke,Texas,10.8
+2000,Coleman,Texas,8.1
+2000,Collin,Texas,32.8
+2000,Collingsworth,Texas,10
+2000,Colorado,Texas,10
+2000,Comal,Texas,17.5
+2000,Comanche,Texas,8.9
+2000,Concho,Texas,11
+2000,Cooke,Texas,10.4
+2000,Coryell,Texas,8.6
+2000,Cottle,Texas,11.5
+2000,Crane,Texas,7.2
+2000,Crockett,Texas,7
+2000,Crosby,Texas,7.4
+2000,Culberson,Texas,10.3
+2000,Dallam,Texas,6.8
+2000,Dallas,Texas,18
+2000,Dawson,Texas,7.9
+2000,Deaf Smith,Texas,8.2
+2000,Delta,Texas,8.5
+2000,Denton,Texas,26.6
+2000,DeWitt,Texas,8.1
+2000,Dickens,Texas,6.8
+2000,Dimmit,Texas,7.8
+2000,Donley,Texas,10.9
+2000,Duval,Texas,5.6
+2000,Eastland,Texas,9
+2000,Ector,Texas,8.6
+2000,Edwards,Texas,12.9
+2000,Ellis,Texas,12.4
+2000,El Paso,Texas,11
+2000,Erath,Texas,16.1
+2000,Falls,Texas,6.2
+2000,Fannin,Texas,8.2
+2000,Fayette,Texas,10.9
+2000,Fisher,Texas,9.3
+2000,Floyd,Texas,10
+2000,Foard,Texas,7.5
+2000,Fort Bend,Texas,25.2
+2000,Franklin,Texas,10.9
+2000,Freestone,Texas,7.8
+2000,Frio,Texas,6.5
+2000,Gaines,Texas,7.9
+2000,Galveston,Texas,14.7
+2000,Garza,Texas,6.8
+2000,Gillespie,Texas,15.1
+2000,Glasscock,Texas,15.3
+2000,Goliad,Texas,8.4
+2000,Gonzales,Texas,8.3
+2000,Gray,Texas,8.3
+2000,Grayson,Texas,11.3
+2000,Gregg,Texas,13.3
+2000,Grimes,Texas,7.2
+2000,Guadalupe,Texas,13.1
+2000,Hale,Texas,9.7
+2000,Hall,Texas,7.5
+2000,Hamilton,Texas,10.6
+2000,Hansford,Texas,14.5
+2000,Hardeman,Texas,8
+2000,Hardin,Texas,9.7
+2000,Harris,Texas,17.9
+2000,Harrison,Texas,10.8
+2000,Hartley,Texas,13.2
+2000,Haskell,Texas,9.4
+2000,Hays,Texas,20.4
+2000,Hemphill,Texas,14.2
+2000,Henderson,Texas,8.1
+2000,Hidalgo,Texas,8.4
+2000,Hill,Texas,8.6
+2000,Hockley,Texas,8.7
+2000,Hood,Texas,14.1
+2000,Hopkins,Texas,10.1
+2000,Houston,Texas,7.9
+2000,Howard,Texas,7.8
+2000,Hudspeth,Texas,6.4
+2000,Hunt,Texas,10.7
+2000,Hutchinson,Texas,9.5
+2000,Irion,Texas,17.1
+2000,Jack,Texas,9.1
+2000,Jackson,Texas,9.5
+2000,Jasper,Texas,7
+2000,Jeff Davis,Texas,21.5
+2000,Jefferson,Texas,11.5
+2000,Jim Hogg,Texas,6
+2000,Jim Wells,Texas,7.2
+2000,Johnson,Texas,9.7
+2000,Jones,Texas,5.8
+2000,Karnes,Texas,6.3
+2000,Kaufman,Texas,8.9
+2000,Kendall,Texas,20.6
+2000,Kenedy,Texas,11.5
+2000,Kent,Texas,10.1
+2000,Kerr,Texas,15
+2000,Kimble,Texas,11.3
+2000,King,Texas,21.1
+2000,Kinney,Texas,12.9
+2000,Kleberg,Texas,12.8
+2000,Knox,Texas,9.3
+2000,Lamar,Texas,9.4
+2000,Lamb,Texas,7.9
+2000,Lampasas,Texas,10.9
+2000,La Salle,Texas,5.5
+2000,Lavaca,Texas,7.8
+2000,Lee,Texas,9.4
+2000,Leon,Texas,8.5
+2000,Liberty,Texas,5.3
+2000,Limestone,Texas,6.6
+2000,Lipscomb,Texas,13.7
+2000,Live Oak,Texas,7.5
+2000,Llano,Texas,13.8
+2000,Lubbock,Texas,16
+2000,Lynn,Texas,9.2
+2000,McCulloch,Texas,9.7
+2000,McLennan,Texas,11.8
+2000,McMullen,Texas,13.4
+2000,Madison,Texas,8.4
+2000,Marion,Texas,5.5
+2000,Martin,Texas,9.2
+2000,Mason,Texas,13.8
+2000,Matagorda,Texas,9.5
+2000,Maverick,Texas,5.7
+2000,Medina,Texas,9.3
+2000,Menard,Texas,11.4
+2000,Midland,Texas,18.4
+2000,Milam,Texas,8.7
+2000,Mills,Texas,13
+2000,Mitchell,Texas,7.9
+2000,Montague,Texas,8.3
+2000,Montgomery,Texas,17.7
+2000,Moore,Texas,7.7
+2000,Morris,Texas,7.6
+2000,Motley,Texas,10.6
+2000,Nacogdoches,Texas,13.6
+2000,Navarro,Texas,7.9
+2000,Newton,Texas,3.7
+2000,Nolan,Texas,9.5
+2000,Nueces,Texas,12
+2000,Ochiltree,Texas,12.9
+2000,Oldham,Texas,15.5
+2000,Orange,Texas,8.2
+2000,Palo Pinto,Texas,8.1
+2000,Panola,Texas,8.8
+2000,Parker,Texas,12.5
+2000,Parmer,Texas,10.1
+2000,Pecos,Texas,7.8
+2000,Polk,Texas,7.1
+2000,Potter,Texas,8.7
+2000,Presidio,Texas,6.8
+2000,Rains,Texas,7.4
+2000,Randall,Texas,19.6
+2000,Reagan,Texas,6.4
+2000,Real,Texas,12.9
+2000,Red River,Texas,5.3
+2000,Reeves,Texas,4.9
+2000,Refugio,Texas,7.5
+2000,Roberts,Texas,20.1
+2000,Robertson,Texas,7.9
+2000,Rockwall,Texas,22.4
+2000,Runnels,Texas,9.8
+2000,Rusk,Texas,8
+2000,Sabine,Texas,6.6
+2000,San Augustine,Texas,6.4
+2000,San Jacinto,Texas,6.3
+2000,San Patricio,Texas,9.2
+2000,San Saba,Texas,10.6
+2000,Schleicher,Texas,13.7
+2000,Scurry,Texas,7.4
+2000,Shackelford,Texas,15.5
+2000,Shelby,Texas,7.6
+2000,Sherman,Texas,17
+2000,Smith,Texas,15.3
+2000,Somervell,Texas,11
+2000,Starr,Texas,3.7
+2000,Stephens,Texas,8
+2000,Sterling,Texas,12.2
+2000,Stonewall,Texas,10.2
+2000,Sutton,Texas,10.1
+2000,Swisher,Texas,13.1
+2000,Tarrant,Texas,18.8
+2000,Taylor,Texas,14.9
+2000,Terrell,Texas,15.2
+2000,Terry,Texas,7.1
+2000,Throckmorton,Texas,13.8
+2000,Titus,Texas,8.5
+2000,Tom Green,Texas,14.1
+2000,Travis,Texas,26.1
+2000,Trinity,Texas,6.5
+2000,Tyler,Texas,5.8
+2000,Upshur,Texas,7.5
+2000,Upton,Texas,8
+2000,Uvalde,Texas,9.7
+2000,Val Verde,Texas,8.9
+2000,Van Zandt,Texas,7.6
+2000,Victoria,Texas,11
+2000,Walker,Texas,11.8
+2000,Waller,Texas,11
+2000,Ward,Texas,7.9
+2000,Washington,Texas,13.7
+2000,Webb,Texas,8.6
+2000,Wharton,Texas,9.7
+2000,Wheeler,Texas,9.7
+2000,Wichita,Texas,14.3
+2000,Wilbarger,Texas,12.3
+2000,Willacy,Texas,5.4
+2000,Williamson,Texas,24.4
+2000,Wilson,Texas,9.9
+2000,Winkler,Texas,7.7
+2000,Wise,Texas,9.2
+2000,Wood,Texas,9.2
+2000,Yoakum,Texas,7
+2000,Young,Texas,10.3
+2000,Zapata,Texas,5.7
+2000,Zavala,Texas,4
+2000,Beaver,Utah,7.8
+2000,Box Elder,Utah,14.8
+2000,Cache,Utah,20.9
+2000,Carbon,Utah,8.2
+2000,Daggett,Utah,9.3
+2000,Davis,Utah,20.7
+2000,Duchesne,Utah,9.2
+2000,Emery,Utah,8.6
+2000,Garfield,Utah,14.8
+2000,Grand,Utah,14.7
+2000,Iron,Utah,16.3
+2000,Juab,Utah,8.2
+2000,Kane,Utah,14
+2000,Millard,Utah,13.6
+2000,Morgan,Utah,16.3
+2000,Piute,Utah,11.1
+2000,Rich,Utah,17
+2000,Salt Lake,Utah,18.3
+2000,San Juan,Utah,10.1
+2000,Sanpete,Utah,11.1
+2000,Sevier,Utah,9.9
+2000,Summit,Utah,30.6
+2000,Tooele,Utah,12
+2000,Uintah,Utah,9.6
+2000,Utah,Utah,21.6
+2000,Wasatch,Utah,19.6
+2000,Washington,Utah,13.9
+2000,Wayne,Utah,15.9
+2000,Weber,Utah,14.2
+2000,Addison,Vermont,17.9
+2000,Bennington,Vermont,16.9
+2000,Caledonia,Vermont,14.6
+2000,Chittenden,Vermont,25.2
+2000,Essex,Vermont,7.3
+2000,Franklin,Vermont,11.5
+2000,Grand Isle,Vermont,15.2
+2000,Lamoille,Vermont,20.8
+2000,Orange,Vermont,14.5
+2000,Orleans,Vermont,10.7
+2000,Rutland,Vermont,15.3
+2000,Washington,Vermont,19.9
+2000,Windham,Vermont,18.1
+2000,Windsor,Vermont,18.3
+2000,Accomack,Virginia,8.2
+2000,Albemarle,Virginia,24.6
+2000,Alleghany,Virginia,9.6
+2000,Amelia,Virginia,6.5
+2000,Amherst,Virginia,8.8
+2000,Appomattox,Virginia,6.6
+2000,Arlington,Virginia,29.7
+2000,Augusta,Virginia,10.9
+2000,Bath,Virginia,5.5
+2000,Bedford,Virginia,13.7
+2000,Bland,Virginia,6.1
+2000,Botetourt,Virginia,13.4
+2000,Brunswick,Virginia,7.8
+2000,Buchanan,Virginia,4.9
+2000,Buckingham,Virginia,5.7
+2000,Campbell,Virginia,10.2
+2000,Caroline,Virginia,8.1
+2000,Carroll,Virginia,5.8
+2000,Charles City,Virginia,7.8
+2000,Charlotte,Virginia,6.3
+2000,Chesterfield,Virginia,22.2
+2000,Clarke,Virginia,16.2
+2000,Craig,Virginia,7.9
+2000,Culpeper,Virginia,9.9
+2000,Cumberland,Virginia,8.7
+2000,Dickenson,Virginia,5
+2000,Dinwiddie,Virginia,7.5
+2000,Essex,Virginia,12
+2000,Fairfax,Virginia,30.4
+2000,Fauquier,Virginia,18.2
+2000,Floyd,Virginia,8.1
+2000,Fluvanna,Virginia,15.3
+2000,Franklin,Virginia,9.7
+2000,Frederick,Virginia,12.5
+2000,Giles,Virginia,7.5
+2000,Gloucester,Virginia,10.7
+2000,Goochland,Virginia,17.9
+2000,Grayson,Virginia,5.5
+2000,Greene,Virginia,13.6
+2000,Greensville,Virginia,6.3
+2000,Halifax,Virginia,6
+2000,Hanover,Virginia,19.8
+2000,Henrico,Virginia,23.2
+2000,Henry,Virginia,6.3
+2000,Highland,Virginia,7.4
+2000,Isle of Wight,Virginia,12.3
+2000,James City,Virginia,24.8
+2000,King and Queen,Virginia,7.3
+2000,King George,Virginia,15.6
+2000,King William,Virginia,10
+2000,Lancaster,Virginia,15.3
+2000,Lee,Virginia,5.5
+2000,Loudoun,Virginia,32
+2000,Louisa,Virginia,9.4
+2000,Lunenburg,Virginia,6.4
+2000,Madison,Virginia,12.6
+2000,Mathews,Virginia,11
+2000,Mecklenburg,Virginia,8.2
+2000,Middlesex,Virginia,12.6
+2000,Montgomery,Virginia,17.3
+2000,Nelson,Virginia,11.6
+2000,New Kent,Virginia,11.1
+2000,Northampton,Virginia,10.5
+2000,Northumberland,Virginia,12.7
+2000,Nottoway,Virginia,7.2
+2000,Orange,Virginia,11.8
+2000,Page,Virginia,5.9
+2000,Patrick,Virginia,6.2
+2000,Pittsylvania,Virginia,6
+2000,Powhatan,Virginia,14.9
+2000,Prince Edward,Virginia,10.8
+2000,Prince George,Virginia,13.6
+2000,Prince William,Virginia,20.3
+2000,Pulaski,Virginia,8
+2000,Rappahannock,Virginia,14.4
+2000,Richmond,Virginia,7.6
+2000,Roanoke,Virginia,18.8
+2000,Rockbridge,Virginia,10.2
+2000,Rockingham,Virginia,11.3
+2000,Russell,Virginia,6.2
+2000,Scott,Virginia,6
+2000,Shenandoah,Virginia,9.9
+2000,Smyth,Virginia,7.4
+2000,Southampton,Virginia,8.5
+2000,Spotsylvania,Virginia,16
+2000,Stafford,Virginia,18.8
+2000,Surry,Virginia,9.2
+2000,Sussex,Virginia,6.6
+2000,Tazewell,Virginia,7.3
+2000,Warren,Virginia,10.3
+2000,Washington,Virginia,9.9
+2000,Westmoreland,Virginia,8.3
+2000,Wise,Virginia,6.8
+2000,Wythe,Virginia,8.4
+2000,York,Virginia,20.9
+2000,Alexandria city,Virginia,29.5
+2000,Bedford city,Virginia,10.6
+2000,Bristol city,Virginia,12.6
+2000,Buena Vista city,Virginia,6.6
+2000,Charlottesville city,Virginia,19.4
+2000,Chesapeake city,Virginia,15.9
+2000,Clifton Forge city,Virginia,5.5
+2000,Colonial Heights city,Virginia,12.4
+2000,Covington city,Virginia,5.1
+2000,Danville city,Virginia,8.6
+2000,Emporia city,Virginia,9.9
+2000,Fairfax city,Virginia,24.8
+2000,Falls Church city,Virginia,30
+2000,Franklin city,Virginia,11.3
+2000,Fredericksburg city,Virginia,17.9
+2000,Galax city,Virginia,7.5
+2000,Hampton city,Virginia,13.5
+2000,Harrisonburg city,Virginia,19.5
+2000,Hopewell city,Virginia,6.6
+2000,Lexington city,Virginia,21.1
+2000,Lynchburg city,Virginia,15.8
+2000,Manassas city,Virginia,17.8
+2000,Manassas Park city,Virginia,14.4
+2000,Martinsville city,Virginia,10.5
+2000,Newport News city,Virginia,13.4
+2000,Norfolk city,Virginia,11.9
+2000,Norton city,Virginia,10.4
+2000,Petersburg city,Virginia,9.6
+2000,Poquoson city,Virginia,17.7
+2000,Portsmouth city,Virginia,9.1
+2000,Radford city,Virginia,18.5
+2000,Richmond city,Virginia,18.6
+2000,Roanoke city,Virginia,12.1
+2000,Salem city,Virginia,13.1
+2000,Staunton city,Virginia,12.4
+2000,Suffolk city,Virginia,11.7
+2000,Virginia Beach city,Virginia,19.2
+2000,Waynesboro city,Virginia,13.7
+2000,Williamsburg city,Virginia,23.7
+2000,Winchester city,Virginia,14.1
+2000,Adams,Washington,8.4
+2000,Asotin,Washington,11
+2000,Benton,Washington,16.5
+2000,Chelan,Washington,14.5
+2000,Clallam,Washington,12.9
+2000,Clark,Washington,14.5
+2000,Columbia,Washington,11.9
+2000,Cowlitz,Washington,8.4
+2000,Douglas,Washington,11.4
+2000,Ferry,Washington,9
+2000,Franklin,Washington,9
+2000,Garfield,Washington,13.1
+2000,Grant,Washington,9.1
+2000,Grays Harbor,Washington,7.9
+2000,Island,Washington,18.8
+2000,Jefferson,Washington,17.9
+2000,King,Washington,26.6
+2000,Kitsap,Washington,17
+2000,Kittitas,Washington,16.9
+2000,Klickitat,Washington,11.1
+2000,Lewis,Washington,7.8
+2000,Lincoln,Washington,14.1
+2000,Mason,Washington,10.6
+2000,Okanogan,Washington,10
+2000,Pacific,Washington,9.1
+2000,Pend Oreille,Washington,7.7
+2000,Pierce,Washington,13.7
+2000,San Juan,Washington,25
+2000,Skagit,Washington,13.8
+2000,Skamania,Washington,11.7
+2000,Snohomish,Washington,17.5
+2000,Spokane,Washington,16.3
+2000,Stevens,Washington,10
+2000,Thurston,Washington,18.7
+2000,Wahkiakum,Washington,9.6
+2000,Walla Walla,Washington,14.7
+2000,Whatcom,Washington,18.3
+2000,Whitman,Washington,24.2
+2000,Yakima,Washington,9.8
+2000,Barbour,West Virginia,6.7
+2000,Berkeley,West Virginia,9.1
+2000,Boone,West Virginia,4.9
+2000,Braxton,West Virginia,6
+2000,Brooke,West Virginia,9.3
+2000,Cabell,West Virginia,12.1
+2000,Calhoun,West Virginia,5.4
+2000,Clay,West Virginia,4.4
+2000,Doddridge,West Virginia,8
+2000,Fayette,West Virginia,6.7
+2000,Gilmer,West Virginia,10.6
+2000,Grant,West Virginia,7.5
+2000,Greenbrier,West Virginia,7.7
+2000,Hampshire,West Virginia,6.3
+2000,Hancock,West Virginia,7.8
+2000,Hardy,West Virginia,5.7
+2000,Harrison,West Virginia,10.7
+2000,Jackson,West Virginia,8
+2000,Jefferson,West Virginia,12.9
+2000,Kanawha,West Virginia,12.5
+2000,Lewis,West Virginia,7
+2000,Lincoln,West Virginia,3.1
+2000,Logan,West Virginia,4.5
+2000,McDowell,West Virginia,3.3
+2000,Marion,West Virginia,10.1
+2000,Marshall,West Virginia,6.8
+2000,Mason,West Virginia,4.9
+2000,Mercer,West Virginia,8.6
+2000,Mineral,West Virginia,6.4
+2000,Mingo,West Virginia,3.8
+2000,Monongalia,West Virginia,15.1
+2000,Monroe,West Virginia,5.3
+2000,Morgan,West Virginia,6.4
+2000,Nicholas,West Virginia,5.7
+2000,Ohio,West Virginia,13.3
+2000,Pendleton,West Virginia,6.8
+2000,Pleasants,West Virginia,6.1
+2000,Pocahontas,West Virginia,8
+2000,Preston,West Virginia,6.2
+2000,Putnam,West Virginia,12.8
+2000,Raleigh,West Virginia,8
+2000,Randolph,West Virginia,8.9
+2000,Ritchie,West Virginia,4.7
+2000,Roane,West Virginia,4.9
+2000,Summers,West Virginia,6.5
+2000,Taylor,West Virginia,7.3
+2000,Tucker,West Virginia,6.1
+2000,Tyler,West Virginia,5.4
+2000,Upshur,West Virginia,8.7
+2000,Wayne,West Virginia,7.2
+2000,Webster,West Virginia,5.8
+2000,Wetzel,West Virginia,6.1
+2000,Wirt,West Virginia,7
+2000,Wood,West Virginia,9.6
+2000,Wyoming,West Virginia,4.1
+2000,Adams,Wisconsin,6.5
+2000,Ashland,Wisconsin,11.2
+2000,Barron,Wisconsin,10.7
+2000,Bayfield,Wisconsin,14.7
+2000,Brown,Wisconsin,16.6
+2000,Buffalo,Wisconsin,10.1
+2000,Burnett,Wisconsin,10
+2000,Calumet,Wisconsin,15.3
+2000,Chippewa,Wisconsin,10.3
+2000,Clark,Wisconsin,7.4
+2000,Columbia,Wisconsin,11.5
+2000,Crawford,Wisconsin,9.3
+2000,Dane,Wisconsin,24.8
+2000,Dodge,Wisconsin,9.5
+2000,Door,Wisconsin,14.6
+2000,Douglas,Wisconsin,12.9
+2000,Dunn,Wisconsin,13.8
+2000,Eau Claire,Wisconsin,18.3
+2000,Florence,Wisconsin,8.9
+2000,Fond du Lac,Wisconsin,12
+2000,Forest,Wisconsin,7.1
+2000,Grant,Wisconsin,10.9
+2000,Green,Wisconsin,11.2
+2000,Green Lake,Wisconsin,10.9
+2000,Iowa,Wisconsin,13.2
+2000,Iron,Wisconsin,9.4
+2000,Jackson,Wisconsin,8
+2000,Jefferson,Wisconsin,12.3
+2000,Juneau,Wisconsin,7
+2000,Kenosha,Wisconsin,12.9
+2000,Kewaunee,Wisconsin,8.1
+2000,La Crosse,Wisconsin,16.3
+2000,Lafayette,Wisconsin,9.4
+2000,Langlade,Wisconsin,7.4
+2000,Lincoln,Wisconsin,9.2
+2000,Manitowoc,Wisconsin,11.3
+2000,Marathon,Wisconsin,12.6
+2000,Marinette,Wisconsin,9.1
+2000,Marquette,Wisconsin,7.1
+2000,Menominee,Wisconsin,10.8
+2000,Milwaukee,Wisconsin,15.7
+2000,Monroe,Wisconsin,9.7
+2000,Oconto,Wisconsin,8
+2000,Oneida,Wisconsin,13
+2000,Outagamie,Wisconsin,16.7
+2000,Ozaukee,Wisconsin,25.6
+2000,Pepin,Wisconsin,9.4
+2000,Pierce,Wisconsin,16.9
+2000,Polk,Wisconsin,10.7
+2000,Portage,Wisconsin,16.1
+2000,Price,Wisconsin,9.7
+2000,Racine,Wisconsin,14
+2000,Richland,Wisconsin,9.6
+2000,Rock,Wisconsin,11.3
+2000,Rusk,Wisconsin,8.2
+2000,St. Croix,Wisconsin,19.3
+2000,Sauk,Wisconsin,12.4
+2000,Sawyer,Wisconsin,10.9
+2000,Shawano,Wisconsin,8.7
+2000,Sheboygan,Wisconsin,12.8
+2000,Taylor,Wisconsin,7.8
+2000,Trempealeau,Wisconsin,9.2
+2000,Vernon,Wisconsin,9.4
+2000,Vilas,Wisconsin,12.6
+2000,Walworth,Wisconsin,15
+2000,Washburn,Wisconsin,10.8
+2000,Washington,Wisconsin,16
+2000,Waukesha,Wisconsin,23.6
+2000,Waupaca,Wisconsin,10.7
+2000,Waushara,Wisconsin,8.2
+2000,Winnebago,Wisconsin,16.3
+2000,Wood,Wisconsin,11.8
+2000,Albany,Wyoming,25.6
+2000,Big Horn,Wyoming,11.5
+2000,Campbell,Wyoming,11.3
+2000,Carbon,Wyoming,11.9
+2000,Converse,Wyoming,11
+2000,Crook,Wyoming,11.9
+2000,Fremont,Wyoming,13.3
+2000,Goshen,Wyoming,14.3
+2000,Hot Springs,Wyoming,10.6
+2000,Johnson,Wyoming,16.5
+2000,Laramie,Wyoming,15.4
+2000,Lincoln,Wyoming,11.6
+2000,Natrona,Wyoming,13.4
+2000,Niobrara,Wyoming,12.8
+2000,Park,Wyoming,15.7
+2000,Platte,Wyoming,10.7
+2000,Sheridan,Wyoming,16.2
+2000,Sublette,Wyoming,15.3
+2000,Sweetwater,Wyoming,12.8
+2000,Teton,Wyoming,32.1
+2000,Uinta,Wyoming,11.1
+2000,Washakie,Wyoming,13.4
+2000,Weston,Wyoming,10.1
+2000,Adjuntas Municipio,Puerto Rico,null
+2000,Aguada Municipio,Puerto Rico,null
+2000,Aguadilla Municipio,Puerto Rico,null
+2000,Aguas Buenas Municipio,Puerto Rico,null
+2000,Aibonito Municipio,Puerto Rico,null
+2000,Añasco Municipio,Puerto Rico,null
+2000,Arecibo Municipio,Puerto Rico,null
+2000,Arroyo Municipio,Puerto Rico,null
+2000,Barceloneta Municipio,Puerto Rico,null
+2000,Barranquitas Municipio,Puerto Rico,null
+2000,Bayamon Municipio,Puerto Rico,null
+2000,Cabo Rojo Municipio,Puerto Rico,null
+2000,Caguas Municipio,Puerto Rico,null
+2000,Camuy Municipio,Puerto Rico,null
+2000,Canovanas Municipio,Puerto Rico,null
+2000,Carolina Municipio,Puerto Rico,null
+2000,Cataño Municipio,Puerto Rico,null
+2000,Cayey Municipio,Puerto Rico,null
+2000,Ceiba Municipio,Puerto Rico,null
+2000,Ciales Municipio,Puerto Rico,null
+2000,Cidra Municipio,Puerto Rico,null
+2000,Coamo Municipio,Puerto Rico,null
+2000,Comerio Municipio,Puerto Rico,null
+2000,Corozal Municipio,Puerto Rico,null
+2000,Culebra Municipio,Puerto Rico,null
+2000,Dorado Municipio,Puerto Rico,null
+2000,Fajardo Municipio,Puerto Rico,null
+2000,Florida Municipio,Puerto Rico,null
+2000,Guanica Municipio,Puerto Rico,null
+2000,Guayama Municipio,Puerto Rico,null
+2000,Guayanilla Municipio,Puerto Rico,null
+2000,Guaynabo Municipio,Puerto Rico,null
+2000,Gurabo Municipio,Puerto Rico,null
+2000,Hatillo Municipio,Puerto Rico,null
+2000,Hormigueros Municipio,Puerto Rico,null
+2000,Humacao Municipio,Puerto Rico,null
+2000,Isabela Municipio,Puerto Rico,null
+2000,Jayuya Municipio,Puerto Rico,null
+2000,Juana Diaz Municipio,Puerto Rico,null
+2000,Juncos Municipio,Puerto Rico,null
+2000,Lajas Municipio,Puerto Rico,null
+2000,Lares Municipio,Puerto Rico,null
+2000,Las Marias Municipio,Puerto Rico,null
+2000,Las Piedras Municipio,Puerto Rico,null
+2000,Loiza Municipio,Puerto Rico,null
+2000,Luquillo Municipio,Puerto Rico,null
+2000,Manati Municipio,Puerto Rico,null
+2000,Maricao Municipio,Puerto Rico,null
+2000,Maunabo Municipio,Puerto Rico,null
+2000,Mayaguez Municipio,Puerto Rico,null
+2000,Moca Municipio,Puerto Rico,null
+2000,Morovis Municipio,Puerto Rico,null
+2000,Naguabo Municipio,Puerto Rico,null
+2000,Naranjito Municipio,Puerto Rico,null
+2000,Orocovis Municipio,Puerto Rico,null
+2000,Patillas Municipio,Puerto Rico,null
+2000,Peñuelas Municipio,Puerto Rico,null
+2000,Ponce Municipio,Puerto Rico,null
+2000,Quebradillas Municipio,Puerto Rico,null
+2000,Rincon Municipio,Puerto Rico,null
+2000,Rio Grande Municipio,Puerto Rico,null
+2000,Sabana Grande Municipio,Puerto Rico,null
+2000,Salinas Municipio,Puerto Rico,null
+2000,San German Municipio,Puerto Rico,null
+2000,San Juan Municipio,Puerto Rico,null
+2000,San Lorenzo Municipio,Puerto Rico,null
+2000,San Sebastian Municipio,Puerto Rico,null
+2000,Santa Isabel Municipio,Puerto Rico,null
+2000,Toa Alta Municipio,Puerto Rico,null
+2000,Toa Baja Municipio,Puerto Rico,null
+2000,Trujillo Alto Municipio,Puerto Rico,null
+2000,Utuado Municipio,Puerto Rico,null
+2000,Vega Alta Municipio,Puerto Rico,null
+2000,Vega Baja Municipio,Puerto Rico,null
+2000,Vieques Municipio,Puerto Rico,null
+2000,Villalba Municipio,Puerto Rico,null
+2000,Yabucoa Municipio,Puerto Rico,null
+2000,Yauco Municipio,Puerto Rico,null
+,College CDP,Alaska,20.8
