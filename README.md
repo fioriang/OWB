@@ -11,8 +11,7 @@ Includes all the data we used to estimate the treatment effects of organic waste
 2. Waste characterizations data (all_WCS.csv)
 3. Data required to estimate the bans' coverage: (food_generators_MA.csv & food_generators_VT.csv, food_processors_list_MA.csv & food_processors_list_VT.csv, towns_coordinates_VT.csv)
 
-## Data from Code
-
+## Intermediate data
 Here are all the data that are results of the code. 
 
 1. All State Level Results [found in xy.R] (xy_plot_data.csv)
