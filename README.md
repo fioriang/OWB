@@ -55,7 +55,8 @@ These files include intermediate data that have been produced at midpoints in th
 4. xy_passage: all analyses regarding bans's anticipation effects (Fig. S7)
 5. diff_in_diff: all analyses for difference in differences specification (Table S6)
 ## Data section
-1. data_section: all data manipulations can be found there. Additionally imports/exports (Fig. 1, Table S1, Fig. S1)
+1. data_section: producing all the data-related figures and tables (Fig. 1, Table S1, Fig. S1)
 2. WCS: contains all information regarding waste composition (Fig. S2, Fig. S3)
 3. cross_sectional_variation: all analyses regarding determinants of waste (Section A.1.1, Table S3)
+4. data_section_basic_manipulations: all manipulations to the raw data received from states (this produces the power2_impexp.csv file)
 
