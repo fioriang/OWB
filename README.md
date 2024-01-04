@@ -1,5 +1,6 @@
 # OWB
 
+In this repository, we provide all the data and necessary information for replication of our paper titled "Organic waste bans have failed to divert waste away from landfills in the United States—except in Massachusetts".
 
 # Data 
 
