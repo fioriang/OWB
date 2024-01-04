@@ -48,7 +48,7 @@ Here are all the data that are results of the code.
 # Code
 
 ## Primary analysis
-1. placebo_all.RMD: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated") (Fig. S4, Fig. 2
+1. placebo_all.RMD: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated") (Fig. S4, Fig. 2)
 2. xy.R: main results and plots for Fig. 2, Fig. S5
 ## Robustness checks
 1. year_placebo: produces results for California-specific provision (Fig. S6)
