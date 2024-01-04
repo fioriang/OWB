@@ -1,4 +1,4 @@
-
+library(tidyverse)
 do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
 {
   #Approach 2- Only Intercept
@@ -51,8 +51,7 @@ year_cutoff = 2018
 pooled_ban_year = 2015
 reg_effect <- c(0.098, 0.185, 0.101834)
 
-dt_state_initial <- pre_processing_dt_state(power2)
-#dt_state_initial<- dt_state_initial %>% mutate(tons_pc = ifelse(state_id=="CT", tons_pc+0.15, tons_pc))
+dt_state_initial <- pre_processing_dt_state(power2) #run the function from the placebo_all.RMD
 treated_counties_id <- unique(dt_state_initial$county_id[dt_state_initial$state_id%in% all_treated])
 donors_state <- unique(dt_state_initial$county_id[!(dt_state_initial$state_id%in% all_treated)])
 donors <- donors_state
@@ -198,7 +197,7 @@ xy_plot_data_function <- function (treated_state, f, seed)
 
 dt_initial <- dt_municipal_initial
 donors_cities <- unique(dt_initial$county_id[!(dt_initial$state_id%in% all_treated)])
-treated_counties_id_cities <- unique(dt_initial$county_id[dt_initial$state_id%in% all_treated])
+treated_counties_id_cities <- unique(dt_initial$county_id[dt_initial$state_id%in% all_treated]) #make sure that it includes seattle and boulder
 samp= c(3:10)
 all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2", "M3")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016, 2015, 2016, 2009)
@@ -952,23 +951,8 @@ xy_plot_data <-
   )
 
 
-# xy_plot_data <- xy_plot_data %>% filter(treated_state!="Seattle, WA")
-# 
-# xy_plot_data <- xy_plot_data %>%
-#     rbind(
-#     xy_plot_data_function_cities(66, 1) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
-#   )
-
-
-# xy_plot_data <- xy_plot_data %>% filter(treated_state!="MA")
-# 
-# xy_plot_data <-
-#   xy_plot_data %>%
-#   rbind(
-#     xy_plot_data_function("MA",5,19)
-#   )
-
-xy_plot_data <- write.csv(xy_plot_data, "xy_plot_data.csv", row.names = FALSE)
+# this is to save and load the datasets. for exact reproduction of the paper's figures please load the "xy_plot_data.csv"
+#xy_plot_data <- write.csv(xy_plot_data, "xy_plot_data.csv", row.names = FALSE)
 xy_plot_data <- read.csv("xy_plot_data.csv")
 
 xy_plot_fun(1)
@@ -983,22 +967,6 @@ xy_plot <-
 
 xy_plot
 xy_plot_sf <- xy_plot_fun_sf(1)
-
-# xy_plot <-
-#   ggpubr::ggarrange(
-#   xy_plot+
-#     labs(x="", y = "", title = "Annual waste (tons per capita)") + 
-#     theme(
-#       strip.text = element_blank(), 
-#       plot.title = element_text(hjust = 0.5, size = 10, family= "Helvetica")),
-#   xy_plot_sf+theme(strip.text = element_blank()),
-#   heights= c(9.5, 1), nrow=2)
-# xy_plot
-
-# 
-# ggsave(xy_plot, filename = "xy_plot.pdf", device = cairo_pdf,
-#        path= figure_path,
-#        width = 7, height = 7, units = "in")
 
 
 ### Science Plot
@@ -1212,13 +1180,14 @@ xy_and_power_2
 #        path= figure_path,
 #        width = 7, height = 7, units = "in")
 
+##### MAIN PLOT #####
 ggsave(
   xy_and_power_2, filename = "xy_and_power_2.pdf", device = cairo_pdf,
   path= figure_path,
   width = 9, height = 9, units = "in")
 
 
-
+###### ACTUAL TREATMENT EFFECTS ######
 # Output in txt
 all_effect <- 100*bt_with_power_data %>% filter(state_id=="All States") %>% pluck("actual_treatment_effect") %>% abs
 ma_effect <- 100*bt_with_power_data %>% filter(state_id=="MA") %>% pluck("actual_treatment_effect") %>% abs
@@ -1398,7 +1367,7 @@ rm(power_all, power_all_upper, power_ca, power_ct, power_vt, power_ma, power_ri,
 #rm(ma_effect, ca_effect, vt_effect, all_effect)
 ##### ONLY STATE LEVEL #####
 
-
+##### PLOTS FOR PRESENTATIONS ####
 xy_and_power_2_pres <- 
   ggpubr::ggarrange(
   xy_plot %+% 
@@ -1766,8 +1735,6 @@ ggsave(xy_and_power_2_sf, filename = "xy_and_power_2_sf.pdf", device = cairo_pdf
        width = 11, height = 2.5, units = "in")
 
 
-
-############################ FOR 5 MIN PRESENTATION #####################################
 
 
 
