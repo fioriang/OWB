@@ -49,7 +49,12 @@ disposal_effect_size <- read.csv("disposal_effect_size.csv")
 year_start = 2006
 year_cutoff = 2018
 pooled_ban_year = 2015
-reg_effect <- c(0.098, 0.185, 0.101834)
+
+vt_p <-48098/power2 %>% filter(year%in%c(2014), type=="disposal", state_id=="VT") %>% summarise(tons=mean(tons)) %>% pluck("tons")
+vt_exp_dec <-(vt_p*0.463/0.922+vt_p*0.665/0.922+vt_p*0.873/0.922+vt_p*0.922/0.922*2)/5
+
+reg_effect <- c(0.098, 0.185, vt_exp_dec)
+
 
 dt_state_initial <- pre_processing_dt_state(power2) #run the function from the placebo_all.RMD
 treated_counties_id <- unique(dt_state_initial$county_id[dt_state_initial$state_id%in% all_treated])
@@ -604,7 +609,7 @@ xy_plot_fun <- function (i)
           ylab_mae=ifelse(treated_state%in%c("All"), ylab_mae+0.01,ylab_mae), 
           ylab_mae=ifelse(treated_state%in%c("CA"), ylab_mae+0.01, ylab_mae), 
           ylab_mae=ifelse(treated_state%in%c("RI"), ylab_mae-0.01, ylab_mae), 
-          xlab_mae=ifelse(treated_state%in%c("All"), xlab_mae, xlab_mae), 
+          xlab_mae=ifelse(treated_state%in%c("All", "Seattle, WA"), xlab_mae-2.5, xlab_mae), 
           xlab_mae=ifelse(treated_state%in%c("CA"), xlab_mae+0.2, xlab_mae)) %>% 
           group_by(treated_state, xlab_mae, ylab_mae, year) %>% 
         summarise(
@@ -624,7 +629,7 @@ xy_plot_fun <- function (i)
     mutate(
       xlab = ifelse(!is.na(ylab), year, NA),
       xlab = ifelse(!is.na(ylab) & year==pooled_ban_year-2, xlab+0.5, xlab), 
-      MAE = ifelse(treated_state=="All", paste0("MAPE (%): ", MAE), MAE), 
+      MAE = ifelse(treated_state%in%c("All", "Seattle, WA"), paste0("Mean absolute percentage error (%): ", MAE), MAE), 
       y_first = ifelse(year==2006 & location =="Actual", tons_pc %>% round(2), NA), 
       y_last =ifelse(year==2018 & location =="Actual", tons_pc%>% round(2)*1.0, NA)
     ) 
@@ -694,10 +699,10 @@ xy_plot_fun <- function (i)
     )+
     geom_segment(
       aes(x=ban_year, xend=ban_year, y=y_end_low, yend  = y_end_high),
-      linetype = "dotted", linewidth = 0.2, color = ut_colors[5])+
+      linetype = "dotted", linewidth = 0.2, color = ut_colors[4])+
     geom_segment(
       aes(x=ban_year-3, xend=ban_year-3, y=y_end_low_2, yend  = y_end_high_2),
-      linetype = "dotted", linewidth = 0.2, color = ut_colors[5])+
+      linetype = "dotted", linewidth = 0.2, color = ut_colors[4])+
     
     geom_line()+
     facet_grid(
@@ -904,10 +909,10 @@ xy_plot_fun_sf <- function (i)
     )+
     geom_segment(
       aes(x=ban_year, xend=ban_year, y=y_end_low, yend  = y_end_high),
-      linetype = "dotted", linewidth = 0.2, color = ut_colors[5])+
+      linetype = "dotted", linewidth = 0.2, color = ut_colors[4])+
     geom_segment(
       aes(x=ban_year-3, xend=ban_year-3, y=y_end_low_2, yend  = y_end_high_2),
-      linetype = "dotted", linewidth = 0.2, color = ut_colors[5])+
+      linetype = "dotted", linewidth = 0.2, color = ut_colors[4])+
     
     geom_line()+
     geom_text(aes(x=xlab, y=ylab-0.01, label = label), color=ut_colors[5], size=3, family="Helvetica")+
@@ -991,8 +996,12 @@ bt_with_power_data <-
   ungroup %>% 
   filter(specification == "State") %>%
   rbind(
-      disposal_spec %>%  mutate(type = "disposal") %>%  
-      filter(treated_state %in% c("M1", "CA", "M3"), specification == "County", sample_size!=0) %>% 
+    disposal_spec %>%  
+      mutate(type = "disposal") %>%  
+      filter(
+        treated_state %in% c("M1", "CA", "M3"), 
+        specification == "County", 
+        sample_size!=0) %>% 
       rename(
         power_low = att_min, 
         power_high = att_max
@@ -1204,11 +1213,14 @@ sf_effect <- 100*bt_with_power_data %>% filter(state_id=="San Francisco, CA") %>
 power_ma <- bt_with_power_data %>% filter(state_id=="MA") %>% pluck("power_low") %>% abs
 power_vt <- bt_with_power_data %>% filter(state_id=="VT") %>% pluck("power_low") %>% abs
 power_ca <- bt_with_power_data %>% filter(state_id=="CA") %>% pluck("power_low") %>% abs
-power_vt_upper <- bt_with_power_data %>% filter(state_id=="VT") %>% pluck("power_high") %>% abs
 power_ct <- bt_with_power_data %>% filter(state_id=="CT") %>% pluck("power_low") %>% abs
 power_ri <- bt_with_power_data %>% filter(state_id=="RI") %>% pluck("power_low") %>% abs
-power_ri_upper <- bt_with_power_data %>% filter(state_id=="RI") %>% pluck("power_high") %>% abs
 
+power_ca_upper <- bt_with_power_data %>% filter(state_id=="CA") %>% pluck("power_high") %>% abs
+power_ct_upper <- bt_with_power_data %>% filter(state_id=="CT") %>% pluck("power_high") %>% abs
+power_ma_upper <- bt_with_power_data %>% filter(state_id=="MA") %>% pluck("power_high") %>% abs
+power_ri_upper <- bt_with_power_data %>% filter(state_id=="RI") %>% pluck("power_high") %>% abs
+power_vt_upper <- bt_with_power_data %>% filter(state_id=="VT") %>% pluck("power_high") %>% abs
 
 power_all <- bt_with_power_data %>% filter(state_id=="All States") %>% pluck("power_low") %>% abs
 #power_all <- (bt_with_power_data %>% filter(state_id=="All States") %>% pluck("power_high") %>% abs +all_effect)
@@ -1235,6 +1247,13 @@ mae_ri <- xy_plot$data %>% filter(treated_state=="RI", location == "Actual") %>%
 mae_vt <- xy_plot$data %>% filter(treated_state=="VT", location == "Actual") %>% select(MAE) %>% mutate(MAE = str_extract(MAE, "\\d+\\.\\d+")) %>% filter(!is.na(MAE)) %>% pluck("MAE") %>% as.numeric
 
 last_year_effect <- xy_plot_data %>% filter(treated_state=="MA", year==2018, attempt==1) %>% summarise(last_year_effect=100*(y_0-tons_pc)/y_0) %>% pluck("last_year_effect")
+
+ca_exp_effect <- 100*bt_with_power_data %>% filter(state_id=="CA") %>% pluck("mean_effect") %>% abs
+ct_exp_effect <- 100*bt_with_power_data %>% filter(state_id=="CT") %>% pluck("mean_effect") %>% abs
+ma_exp_effect <- 100*bt_with_power_data %>% filter(state_id=="MA") %>% pluck("mean_effect") %>% abs
+vt_exp_effect <- 100*bt_with_power_data %>% filter(state_id=="VT") %>% pluck("mean_effect") %>% abs
+ri_exp_effect <- 100*bt_with_power_data %>% filter(state_id=="RI") %>% pluck("mean_effect") %>% abs
+
 
 
 figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
@@ -1263,6 +1282,22 @@ fileConn<-file(paste0(figure_path, "/vt_att.txt"))
 writeLines(paste0(format(round(vt_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
+fileConn<-file(paste0(figure_path, "/bo_att.txt"))
+writeLines(paste0(format(round(bo_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/se_att.txt"))
+writeLines(paste0(format(round(se_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/sf_att.txt"))
+writeLines(paste0(format(round(sf_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+
+
+
+
 fileConn<-file(paste0(figure_path, "/power_ma.txt"))
 writeLines(paste0(format(round(power_ma,1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
@@ -1275,12 +1310,25 @@ fileConn<-file(paste0(figure_path, "/power_ca.txt"))
 writeLines(paste0(format(round(power_ca,1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
-fileConn<-file(paste0(figure_path, "/power_vt_upper.txt"))
-writeLines(paste0(format(round(power_vt_upper,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+
+fileConn<-file(paste0(figure_path, "/power_ca_upper.txt"))
+writeLines(paste0(format(round(power_ca_upper,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/power_ct_upper.txt"))
+writeLines(paste0(format(round(power_ct_upper,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/power_ma_upper.txt"))
+writeLines(paste0(format(scales::number(power_ma_upper, accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
 fileConn<-file(paste0(figure_path, "/power_ri_upper.txt"))
 writeLines(paste0(format(round(power_ri_upper,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/power_vt_upper.txt"))
+writeLines(paste0(format(round(power_vt_upper,1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
 
@@ -1334,23 +1382,18 @@ close(fileConn)
 fileConn<-file(paste0(figure_path, "/mae_all.txt"))
 writeLines(paste0(format(round(mae_all,2),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
-
 fileConn<-file(paste0(figure_path, "/mae_ca.txt"))
 writeLines(paste0(format(round(mae_ca,2),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
-
 fileConn<-file(paste0(figure_path, "/mae_ct.txt"))
 writeLines(paste0(format(round(mae_ct,2),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
-
 fileConn<-file(paste0(figure_path, "/mae_ma.txt"))
 writeLines(paste0(format(round(mae_ma,2),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
-
 fileConn<-file(paste0(figure_path, "/mae_ri.txt"))
 writeLines(paste0(format(round(mae_ri,2),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
-
 fileConn<-file(paste0(figure_path, "/mae_vt.txt"))
 writeLines(paste0(format(round(mae_vt,2),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
@@ -1358,6 +1401,25 @@ close(fileConn)
 
 fileConn<-file(paste0(figure_path, "/last_year_effect.txt"))
 writeLines(paste0(format(round(last_year_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+
+
+
+fileConn<-file(paste0(figure_path, "/ca_expected.txt"))
+writeLines(paste0(format(round(ca_exp_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+fileConn<-file(paste0(figure_path, "/ct_expected.txt"))
+writeLines(paste0(format(round(ct_exp_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+fileConn<-file(paste0(figure_path, "/ma_expected.txt"))
+writeLines(paste0(format(round(ma_exp_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+fileConn<-file(paste0(figure_path, "/ri_expected.txt"))
+writeLines(paste0(format(round(ri_exp_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+fileConn<-file(paste0(figure_path, "/vt_expected.txt"))
+writeLines(paste0(format(round(vt_exp_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
 
@@ -1683,7 +1745,7 @@ ggsave(xy_and_power_2_pres, filename = "xy_and_power_2_pres_0.pdf", device = cai
        width = 9, height = 7, units = "in")
 
 
-# Cities 
+############################## Cities ########################################
 xy_and_power_2_cities <- 
   ggpubr::ggarrange(
     ggpubr::ggarrange(
@@ -2327,14 +2389,14 @@ plac_plot <-
     panel.grid.major.x = element_blank() ,
     panel.grid.major.y = element_blank(),
     panel.background = element_blank(), 
-    text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]), 
+    text = element_text(family = "Helvetica",size = 15, color= ut_colors[4]), 
     strip.text = element_text(angle = 0, hjust = 1), 
     strip.placement = "outside",
     axis.ticks.y = element_blank(), 
     legend.key = element_rect(colour = NA, fill = NA, size = 5),
     legend.spacing.x = unit(-1, "pt"),
     axis.ticks.x = element_line(size = 0.1), 
-    legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
+    legend.text = element_text(family = "Helvetica",size = 15, color= ut_colors[4])
   )
 
 ggsave(plac_plot, filename = "plac_plot_plac.pdf", device = cairo_pdf,

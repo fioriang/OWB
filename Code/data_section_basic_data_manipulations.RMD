@@ -3,6 +3,8 @@ title: "data_section_basic_data_manipulations"
 author: "Fiori Anglou"
 date: "2024-01-04"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -2729,5 +2731,68 @@ power2 <- power2_imp_exp
 
 ```{r}
 #write.csv(power2_imp_exp, "power2_impexp.csv", row.names = FALSE)
+```
+
+
+
+
+## Validation of imp exp
+
+```{r}
+data_states <- power2 %>% filter(year>2010, type=="disposal") %>% summarise(state_id =unique(state_id)) %>% pluck("state_id")
+
+
+# To check imports i have to go to imports and do destination 
+
+state_id_given <- "VT"
+
+check_fun <- function (state_id_given)
+{
+  imports %>% 
+    filter(origin %in% data_states, destination %in% data_states) %>% 
+    group_by(year, destination, origin, source_data) %>% 
+    summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+    filter(origin == state_id_given, year > 2010) %>% 
+    group_by(year, origin, destination) %>% 
+    summarise(from_imports = sum(tons)) %>% 
+    left_join( 
+      exports %>% 
+        filter(origin %in% data_states, destination %in% data_states) %>% 
+        filter(destination=="NY"& year>2011|destination!="NY") %>% 
+        filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
+        group_by(year, destination, origin, source_data) %>% 
+        summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+        filter(origin == state_id_given, year > 2010) %>% 
+        group_by(year, origin, destination, source_data) %>% 
+        summarise(from_exports = sum(tons)), 
+      by = c("year", "origin", "destination")
+    ) %>% 
+    mutate(state_id_given) %>% 
+    filter(!is.na(from_imports), from_imports>0, 
+           !is.na(from_exports), from_exports>0)
+}
+
+validate_imports <- lapply(data_states, check_fun) %>% bind_rows() %>% as_tibble()
+
+validate_imports %>% 
+  # filter(!is.na(from_exports), 
+  #        from_imports > 10000, 
+  #        from_exports > 10000) %>% 
+  left_join(
+    power2 %>% 
+      filter(year>2010, type%in%c("disposal", "msw_disposed")) %>% 
+      group_by(state_id, year) %>% 
+      summarise(tons= sum(tons, na.rm = TRUE)), 
+    by = c("state_id_given"="state_id", "year")) %>%
+  group_by(year,state_id_given, tons) %>% 
+  summarise(from_imports=sum(from_imports),from_exports=sum(from_exports)) %>% 
+  mutate(
+    val=(from_imports-from_exports)/ tons) %>% 
+  group_by(state_id_given) %>% 
+  summarise(m=median(val,na.rm=TRUE)) %>% summarise(mean(m))
+
+  
+
+
 ```
 

@@ -1,9 +1,10 @@
-ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/GHG_Data"
+ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/06. Emissions/GHG_Data"
 facility <- read.csv(paste0(ghg_data_path,"/facility_info.csv"))%>% as_tibble
 msw_fac <- read.csv(paste0(ghg_data_path,"/msw_facilities.csv"))%>% as_tibble
 gas <- read.csv(paste0(ghg_data_path,"/gas_data.csv")) %>% as_tibble
 measurements <-read.csv(paste0(ghg_data_path,"/measure_data.csv")) %>% as_tibble
 captured_methane <-read.csv(paste0(ghg_data_path,"/captured_methane.csv")) %>% as_tibble
+
 
 #Check our data, with EPA's data
 data_comparison <-
@@ -11,6 +12,9 @@ data_comparison <-
   as_tibble() %>% 
   filter(
     type %in% c("disposal")
+  ) %>% 
+  mutate(
+    tons = ifelse(state_id=="DE" & year < 2009, NA, tons)
   ) %>% 
   group_by(state_id, year) %>% 
   summarise(
@@ -164,7 +168,9 @@ vt <-fixest::feols (gas_pt ~ treated| facility_id+year, gas_fc%>% filter(!state_
 
 fixest::etable (all, ma, ca, ri, vt, ct, vcov="twoway")
 
-
+######## capture rates DID ################
+#add winsoring filter:   filter(gas_pt > quantile(gas_pt, 0.05), gas_pt < quantile(gas_pt, 0.95)) for exact results
+# Robust if not too
 all<-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc)
 ma <-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
 ca <-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
@@ -470,17 +476,31 @@ power_gas_res_ri <- lapply(1:25, power_gas, "RI",f)
 power_gas_res_vt <- lapply(1:25, power_gas, "VT",f)
 
 
+sc_data <- 
+  rbind(
+    sc_data_ma, 
+    sc_data_ct,
+    sc_data_ri, 
+    sc_data_ca,
+    sc_data_vt
+  )  
+
+#write.csv(sc_data, "sc_data_ghg.csv", row.names = FALSE)
+sc_data <- read.csv("sc_data_ghg.csv")
+
 actual_effects <- 
-  tibble(
-    actual= c(
-      sc_data_ct %>% filter(attempt==1) %>% summarise(att2=unique(att2))%>% pluck("att2"), 
-      sc_data_ma %>% filter(attempt==1) %>% summarise(att2=unique(att2))%>% pluck("att2"),
-      sc_data_ca %>% filter(attempt==1) %>% summarise(att2=unique(att2))%>% pluck("att2"),
-      sc_data_ri %>% filter(attempt==1) %>% summarise(att2=unique(att2))%>% pluck("att2"), 
-      sc_data_vt %>% filter(attempt==1) %>% summarise(att2=unique(att2))%>% pluck("att2")), 
-    ban_year = c(2014, 2014, 2016, 2016, 2014), 
-    state_id = c("CT", "MA", "CA", "RI", "VT")
+  sc_data %>% 
+  group_by(county_id) %>% 
+  filter(attempt==1)%>% 
+  summarise(actual=unique(att2)) %>% 
+  rename(state_id=county_id) %>% 
+  left_join(
+    tibble(
+      ban_year = c(2014, 2014, 2016, 2016, 2014), 
+      state_id = c("CT", "MA", "CA", "RI", "VT")
+    ), by = c("state_id")
   )
+
 
 mfood <- 
   wcs %>% 
@@ -492,14 +512,10 @@ mfood <-
   summarise(mfood=sum(mfood)) %>% 
   mutate(mfood=ifelse(state_id=="MA", 0.2045, mfood), mfood=100*mfood)
 
+
+
 expected_effects <- 
-  rbind(
-    sc_data_ma, 
-    sc_data_ct,
-    sc_data_ri, 
-    sc_data_ca, 
-    sc_data_vt
-  ) %>% 
+  sc_data %>% 
   filter(attempt==1) %>% 
   left_join(dt_state %>% select(state_id, year, tons_pc), by = c("county_id" = "state_id")) %>% 
   select(-iterations) %>% 
@@ -533,23 +549,28 @@ expected_effects <-
     prior_to_the_ban = ifelse(year==ban_year-1, tons_pc, 0),
     prior_to_the_ban= ifelse(prior_to_the_ban==0, max(prior_to_the_ban, na.rm=TRUE), prior_to_the_ban),
     effect_size =1- (prior_to_the_ban*100*.58*(mfood-effect_size*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100), 
-    reg_effect =1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
+    reg_effect =NA#1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
     
   ) %>% 
   select(-prior_to_the_ban) %>% 
   group_by(county_id,reg_effect) %>% 
   summarise(expected_effect = mean(effect_size, na.rm=TRUE))
 
+# power_gas_res <- 
+#   rbind(
+#     power_gas_res_ma %>% bind_rows, 
+#     power_gas_res_ca %>% bind_rows, 
+#     power_gas_res_ct %>% bind_rows, 
+#     power_gas_res_ri %>% bind_rows, 
+#     power_gas_res_vt %>% bind_rows
+#   )
 
+
+#write.csv(power_gas_res, "power_gas_res.csv", row.names=FALSE)
+power_gas_res <- read.csv("power_gas_res.csv")
 
 power_gas_res_plot <- 
-  rbind(
-    power_gas_res_ma %>% bind_rows, 
-    power_gas_res_ca %>% bind_rows, 
-    power_gas_res_ct %>% bind_rows, 
-    power_gas_res_ri %>% bind_rows, 
-    power_gas_res_vt %>% bind_rows
-  ) %>% 
+  power_gas_res %>% 
   group_by(treated_state_2, attempt) %>% 
   summarise(
     min = quantile(att2, 0.025), 
@@ -592,9 +613,9 @@ power_gas_res_plot <-
   labs(y="", x = "", color = "")+
   ggnewscale::new_scale_color()+
   
-  geom_errorbar(aes(xmin=-100*reg_effect, xmax=-100*reg_effect, color = "Regulators' Exp."), linewidth=1, width=0.2)+
-  scale_color_manual(breaks = c("Regulators' Exp."), values = c("#bad9c6" ),guide = guide_legend(order = 4,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
-  labs(y="", x = "", color = "")+
+  #geom_errorbar(aes(xmin=-100*reg_effect, xmax=-100*reg_effect, color = "Regulators' Exp."), linewidth=1, width=0.2)+
+  #scale_color_manual(breaks = c("Regulators' Exp."), values = c("#bad9c6" ),guide = guide_legend(order = 4,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+  #labs(y="", x = "", color = "")+
   
   
   scale_x_continuous(breaks = c(seq(-40, 40, by = 15)), limits = c(-45, 45))+ 
@@ -619,16 +640,13 @@ power_gas_res_plot <-
   )
 
 
+
+
+
 xy_gas_plot_function <- function (chosen_attempt)
 {
   xy_gas_data <- 
-    rbind(
-      sc_data_ma %>% filter(attempt==chosen_attempt), 
-      sc_data_ct %>% filter(attempt==chosen_attempt),
-      sc_data_ri%>% filter(attempt==chosen_attempt), 
-      sc_data_ca%>% filter(attempt==chosen_attempt),
-      sc_data_vt%>% filter(attempt==chosen_attempt)
-    )  %>% 
+    sc_data %>% filter(attempt==chosen_attempt)%>% 
     left_join(dt_state %>% select(state_id, year, tons_pc), by = c("county_id" = "state_id")) %>% 
     select(-iterations) %>% 
     left_join(
@@ -662,7 +680,7 @@ xy_gas_plot_function <- function (chosen_attempt)
       prior_to_the_ban = ifelse(year==ban_year-1, tons_pc, 0),
       prior_to_the_ban= ifelse(prior_to_the_ban==0, max(prior_to_the_ban, na.rm=TRUE), prior_to_the_ban),
       effect_size =1- (prior_to_the_ban*100*.58*(mfood-effect_size*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100), 
-      reg_effect =1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
+      reg_effect =NA#1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
       ) %>% select(-prior_to_the_ban) %>% 
     mutate(
       y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA), 
@@ -767,9 +785,13 @@ xy_gas_plot_function <- function (chosen_attempt)
     geom_text(aes(x=2009.5, y = y_first%>% as.numeric, label=scales::number(y_first, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
     geom_text(aes(x=2018.5, y = y_last %>% as.numeric, label=scales::number(y_last, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
     
-    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
-    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
-    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
+    #scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
+    #scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
+    #scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
+    
+    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
+    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
+    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
     scale_x_continuous(breaks=c(seq(2010, 2018, 2)), limits=c(2009, 2019), expand = c(0,0))+
     scale_y_continuous(expand = c(0.03,0.02))+
     labs(y="", x= "")+

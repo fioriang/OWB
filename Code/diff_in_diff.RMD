@@ -132,8 +132,7 @@ pre_processing_dt_state <- function (power2, year_start, year_cutoff)
     filter(
       year >= year_start, 
       year <= year_cutoff, 
-      state_id != "OH",
-      #state_id != "DE",
+      state_id != "DE",
       type %in% c("disposal", "msw_disposed")
     ) %>%
     group_by(state_id) %>% 
@@ -170,26 +169,26 @@ pre_processing_dt_state <- function (power2, year_start, year_cutoff)
 ```{r}
 
 
-lm_log <- fixest::feols(log(tons_pc) ~ ban_ind|county_id+year, dt_did %>% filter(!is.na(county_name)))
-
-lm_log_state <- fixest::feols(log(tons_pc) ~ ban_ind|state_id + year, dt_did_state)
-
-lm <- fixest::feols(tons_pc ~ ban_ind|county_id+year, dt_did %>% filter(!is.na(county_name)))
-lm_state <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state)
-
-fixest::etable(lm_log, lm_log_state, lm, lm_state, tex= FALSE)
-
-lm_ca <- fixest::feols(tons_pc ~ ban_ind|year+county_id, dt_did %>% filter(state_id== "CA") %>%  mutate(pop_ind = ifelse(pop>=70000, 1, 0), ban_ind= pop_ind*ban_ind))
-
-lm_ca_all <- fixest::feols(tons_pc ~ ban_ind|year+county_id, dt_did %>%  mutate(pop_ind = ifelse(state_id=="CA"& pop<70000, 0, 1), ban_ind= pop_ind*ban_ind))
-
-fixest::etable(lm_log, lm_log_state, lm, lm_state,lm_ca,lm_ca_all,  tex= FALSE,  vcov = "twoway")
-
-
-
+# lm_log <- fixest::feols(log(tons_pc) ~ ban_ind|county_id+year, dt_did %>% filter(!is.na(county_name)))
+# 
+# lm_log_state <- fixest::feols(log(tons_pc) ~ ban_ind|state_id + year, dt_did_state)
+# 
+# lm <- fixest::feols(tons_pc ~ ban_ind|county_id+year, dt_did %>% filter(!is.na(county_name)))
+# lm_state <- fixest::feols(tons_pc ~ ban_ind|state_id + year, dt_did_state)
+# 
+# fixest::etable(lm_log, lm_log_state, lm, lm_state, tex= FALSE)
+# 
+# lm_ca <- fixest::feols(tons_pc ~ ban_ind|year+county_id, dt_did %>% filter(state_id== "CA") %>%  mutate(pop_ind = ifelse(pop>=70000, 1, 0), ban_ind= pop_ind*ban_ind))
+# 
+# lm_ca_all <- fixest::feols(tons_pc ~ ban_ind|year+county_id, dt_did %>%  mutate(pop_ind = ifelse(state_id=="CA"& pop<70000, 0, 1), ban_ind= pop_ind*ban_ind))
+# 
+# fixest::etable(lm_log, lm_log_state, lm, lm_state,lm_ca,lm_ca_all,  tex= FALSE,  vcov = "twoway")
+# 
 
 
-dt_did <- pre_processing_dt(power2, 2006, 2018)
+
+
+dt_did <- pre_processing_dt(power2,2006,2018)
 dt_did <- 
   dt_did %>% left_join(dates, by = c("state_id")) %>% 
   mutate(
@@ -204,10 +203,11 @@ dt_did <-
 
 
 
-dt_did_state <- pre_processing_dt_state(power2, 2006, 2018)
+dt_did_state <- pre_processing_dt_state(power2,2006,2018)
 
 dt_did_state <- 
-  dt_did_state %>% left_join(dates, by = c("state_id")) %>% 
+  dt_did_state %>% 
+  left_join(dates, by = c("state_id")) %>% 
   mutate(
     ban_ind = ifelse(year>=ban_year, 1, 0), 
     pass_ind = ifelse(year >= passage_year, 1, 0), 
@@ -222,7 +222,8 @@ dt_did_state <-
   group_by(state_id) %>% 
   mutate(
     group = max(ban_ind), 
-    cluster = ifelse(group==1 & year <= ban_year, 1, ifelse(group==1, 2, 3)) 
+    cluster = ifelse(group==1 & year <= ban_year, 1, ifelse(group==1, 2, 3)) , 
+    tons_pc = log(tons_pc)
   )
 
 lm_state <- feols(tons_pc ~ ban_ind|state_id+ year, dt_did_state)
@@ -234,13 +235,17 @@ lm_state_ri <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(
 lm_state_vt <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "MA", "RI")))
 
 fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,  tex= TRUE, digits = "r3", digits.stats = "r2")
-
+fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,  tex= FALSE, digits = "r3", digits.stats = "r2")
 fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,vcov="hetero",  tex= TRUE, digits = "r3", digits.stats = "r2")
 
 
 
 dt_did_state <- 
-  dt_did_state %>% 
+  dt_did_state %>%
+  #mutate(
+  #  year = ifelse(state_id %in% c("CA", "RI"), year-2, year) #when i do it like this, PT is not satisfied
+  #) %>% 
+  filter(year>=2006) %>% 
   group_by(state_id) %>% 
   mutate(
     cat = max(ban_ind), 
@@ -248,7 +253,9 @@ dt_did_state <-
     cat = seq*cat
   )
 
-feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2014, !state_id %in% c("CA", "RI"))) %>% etable(vcov="cluster")
+feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2014)) %>% etable()
+
+feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2014, !state_id %in% c("CA", "RI"))) %>% etable(vcov=)
 feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2016, !state_id %in% c("CT", "MA", "VT"))) %>% etable(vcov="cluster")
 
 pa_trend_ca <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CT", "MA", "RI", "VT"), year < 2016))

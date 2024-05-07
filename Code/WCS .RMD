@@ -290,7 +290,7 @@ tibble(
 
 
 
-# Graph
+# Bargraph
 
 ```{r}
 
@@ -328,7 +328,7 @@ wcs_plot <-
     ),
     share = share %>% 
       fct_recode(
-        `Other Commercial` = "total_share", 
+        `Other` = "total_share", 
         Food = "food_share", 
         `Organic (non-food)` = "organic_share", 
         `Compostable Paper` = "comp_paper_share"
@@ -353,17 +353,15 @@ wcs_plot <-
   #scale_fill_grey(start = 0.9, end = .1)+
   scale_fill_grey(start = 0.9, end =0.3, guide = guide_legend(reverse = TRUE))+
   scale_y_continuous(breaks=c(seq(0,60, by =10)))+
-  labs (x="", y="Fraction of total waste (%)", fill = "Category")+
+  labs (x="", y="Fraction of total landfill MSW (%)", fill = "Commercial:")+
   theme(
     panel.border = element_blank(),
     legend.position = "bottom", 
     panel.background = element_blank(),
     axis.ticks.x = element_blank(), 
     axis.text.x=element_blank(),
-    #plot.title = element_text(hjust = 0.5, size=10),
-    #plot.caption = element_text(hjust=0.5,size = 10)
-    text = element_text(family="Helvetica",size = 16), 
-    legend.title = element_blank(),
+    text = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    legend.title = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
     strip.background = element_blank(), 
     legend.key = element_blank())
 # 
@@ -700,7 +698,7 @@ composting_effect <-
 write.csv(composting_effect, "composting_effect.csv", row.names = FALSE)
 ```
 
-## Table 3: Expected Regulations Effect
+## Table 1: Expected Regulations Effect
 
 ```{r}
 #install.packages("xtable")
@@ -727,12 +725,14 @@ disposal_effect_size %>%
     Food = 100*food_share,
     Coverage = 100*pc, 
     Disposal = 100*effect_size, 
-    Composting = 100*composting_effect
-  ) %>% select(state_id, year, MSW, `Com. MSW`, Organic, Food, Coverage, Disposal, Composting) %>%
+    Composting = 100*composting_effect, 
+    Covered = ifelse(state_id=="CT", 100*(comp_paper_share+food_share), 
+                     ifelse(state_id=="CA", Organic, Food))
+  ) %>% select(state_id, year, MSW, `Com. MSW`, Organic, Food, Coverage, Disposal, Composting, Covered) %>%
   group_by(state_id) %>%
   mutate(phase = cumsum(Coverage != lag(Coverage, default = first(Coverage))) + 1) %>%
   ungroup() %>% 
-  group_by(state_id, MSW, `Com. MSW`, Organic, Food, phase) %>% 
+  group_by(state_id, MSW, `Com. MSW`, Organic, Food, Covered, phase) %>% 
   summarise(
     year = min(year),
     Coverage=mean(Coverage), 
@@ -756,7 +756,8 @@ disposal_effect_size %>%
     Composting = Composting %>% round(1)
   )  %>%
   ungroup() %>% 
-  select(state_id, phase,  year, Coverage, null_column2, Disposal, Composting,null_column1, MSW, `Com. MSW`, Organic, Food) %>% 
+  #select(state_id, phase,  year, Coverage, null_column2, Disposal, Composting,null_column1, MSW, `Com. MSW`, Organic, Food) %>%
+  select(state_id, phase,  year, Coverage, null_column2, Covered, null_column1, Disposal) %>%
   {
     print(xtable::xtable(.), include.rownames=FALSE)
   }
@@ -847,7 +848,8 @@ disposal_effect_size_plot <-
     label_y = ifelse(state_id == "MA", label_y-0.01, label_y),
     label_y = ifelse(state_id == "CT", label_y+0.01, label_y)
   ) %>%
-  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+geom_line()+
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+  
+  geom_line(size=0.5)+
   labs(x="", y = "Expected Effect Size (%)", subtitle = "State-Level")+
   geom_text(aes(x=label_x, y = -100*label_y, label = state_id), family="Helvetica", size = 3)+
   geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
@@ -877,7 +879,8 @@ disposal_effect_size_plot_muni <-
     label_y = ifelse(year== max(year), effect_size- 0.02, NA), 
     effect_size = - effect_size
   ) %>%
-  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+geom_line()+
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+    
+  geom_line(size=0.5)+
   labs(x="", y = "", subtitle = "City-Level")+
   geom_text(aes(x=label_x, y = 100*label_y, label = state_id), family="Helvetica", size = 3)+
   geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
@@ -917,13 +920,15 @@ disposal_effect_size_plot <-
     label_y = ifelse(state_id == "MA", label_y-0.01, label_y),
     label_y = ifelse(state_id == "CT", label_y+0.01, label_y)
   ) %>%
-  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+geom_line()+
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id, size=state_id))+
+  geom_line()+
   labs(x="", y = "Expected Effect Size (%)", subtitle = "State-Level")+
   geom_text(aes(x=label_x, y = -100*label_y, label = state_id), family="Helvetica", size = 3)+
   geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
   geom_hline(yintercept = -20, color = ut_colors[5], linetype="dotted", size =0.3)+
   geom_hline(yintercept = -30, color = ut_colors[5], linetype="dotted", size =0.3)+
   scale_color_manual(values=c(rep(ut_colors[5], 4), "seagreen"))+
+  scale_size_manual(values=c(rep(0.5, 4),1))+
   scale_x_continuous(breaks = c(2014:2022))+
   scale_y_continuous(breaks = c(seq(0, -40, by = -10)), limits= c(-45,0))+
   theme(
@@ -947,7 +952,8 @@ disposal_effect_size_plot_muni <-
     label_y = ifelse(year== max(year), effect_size- 0.02, NA), 
     effect_size = - effect_size
   ) %>%
-  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+geom_line()+
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+
+  geom_line(size=0.5)+
   labs(x="", y = "", subtitle = "City-Level")+
   geom_text(aes(x=label_x, y = 100*label_y, label = state_id), family="Helvetica", size = 3)+
   geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
@@ -1018,7 +1024,10 @@ exempt_MA <-function(distance_threshold, threshold_chosen)
         summarise(tons = sum(tons)) %>% 
         mutate(total_tons_category = sum(tons)) %>% 
         ungroup %>% group_by(cover, threshold) %>% 
-        summarise(tons = sum(tons)) %>% ungroup %>%  filter(cover==1) %>% select(-cover), 
+        summarise(tons = sum(tons)) %>% 
+        ungroup %>%  
+        filter(cover==1) %>% 
+        select(-cover), 
       by = "threshold"
     )%>% 
     mutate(
@@ -1038,7 +1047,8 @@ exempt_VT <- function(distance_threshold, threshold_chosen)
       by = "town_name"
     ) %>% select(tons, lat_gen, long_gen, id) %>% filter(!is.na(lat_gen)) %>% 
     expand_grid(
-      processors_VT %>%filter(TYPE=="Food Scraps Management Facility", !name %in% c("Middlebury College  -College only compost facility")) %>%  select(Longitude, Latitude)
+      processors_VT %>% as_tibble() %>% 
+        filter(TYPE=="Food Scraps Management Facility", !NAME %in% c("Middlebury College  -College only compost facility")) %>%  select(Longitude, Latitude)
     ) %>% 
     rename(
       lat_pro = Latitude, 
@@ -1086,8 +1096,8 @@ exempt_VT <- function(distance_threshold, threshold_chosen)
 }
 
 
-exempt_MA(10^6, 104)
-exempt_VT(10^6, 104)
+exempt_MA(20, 26)
+exempt_VT(20, 26)
 
 
 ```

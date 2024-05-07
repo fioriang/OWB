@@ -229,7 +229,7 @@ xy_plot_fun_passage <- function (i)
         mutate(
           year=mean(year), # i duplicate so i join and then also keep the xlab_mae
           xlab_mae = 2010,
-          xlab_mae = ifelse(treated_state=="CA", 2012.5, xlab_mae),
+          xlab_mae = ifelse(treated_state=="CA", 2010, xlab_mae),
           xlab_mae = ifelse(treated_state=="CT", 2009.5, xlab_mae),
           xlab_mae = ifelse(treated_state=="MA", 2011.5, xlab_mae),
           xlab_mae = ifelse(treated_state=="RI", 2012.5, xlab_mae),
@@ -260,7 +260,7 @@ xy_plot_fun_passage <- function (i)
     mutate(
       xlab = ifelse(!is.na(ylab), year, NA),
       xlab = ifelse(!is.na(ylab) & year==pooled_ban_year-2, xlab+0.5, xlab), 
-      MAE = ifelse(treated_state=="All", paste0("MAPE (%): ", MAE), MAE), 
+      MAE = ifelse(treated_state=="CA", paste0("Mean absolute percentage error (%): ", MAE), MAE), 
       y_first = ifelse(year==2006 & location =="Actual", tons_pc %>% round(2), NA), 
       y_last =ifelse(year==2018 & location =="Actual", tons_pc%>% round(2)*1.0, NA)
     ) 
@@ -378,15 +378,15 @@ xy_plot_fun_passage <- function (i)
 
 
 
-xy_plot_data_passage <-
-  rbind(
-    xy_plot_data_function("CA",2,2),
-    xy_plot_data_function("CT",6,8),
-    xy_plot_data_function("MA",5,7),
-    xy_plot_data_function("RI",1,1),
-    xy_plot_data_function("VT",5,1)
- )
-
+# xy_plot_data_passage <-
+#   rbind(
+#     xy_plot_data_function("CA",2,2),
+#     xy_plot_data_function("CT",6,8),
+#     xy_plot_data_function("MA",5,7),
+#     xy_plot_data_function("RI",1,1),
+#     xy_plot_data_function("VT",5,1)
+#  )
+# 
 
 
 xy_plot <- xy_plot_fun_passage(1)
