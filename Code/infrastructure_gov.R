@@ -679,7 +679,7 @@ ma_gen <- food_generators_MA %>% as_tibble() %>% filter(tons>52|(Type%in%c("W", 
 vt_gen <- food_generators_VT %>% as_tibble() %>% mutate(tons = TonsPerWeek*52) %>% filter(tons>52| is.na(tons)) %>% 
   summarise(n = n()) %>% pluck("n")
 # Alameda generators 
-al_gen <- 7000*0.19
+al_gen <- 7000*0.19 # from Alameda report (7000 total generators, 0.19 fraction of organics related violations)
 # California generators
 ca_gen <- 
   population %>% filter(year==2019, state_id=="CA") %>% 
@@ -692,14 +692,14 @@ ca_gen <-
   pluck("generators")
   
 
-fines_al_food <- 2400*0.19/5 #685*0.19
+fines_al_food <- 2400*0.19/5 #685*0.19 #2400 is the total citations that they have had, 0.19 the fraction of organic, 5 the total years for data
 #food waste actions = total fines in 19-20 * fraction of organics violations OR total fines * fraction of organics / 5
 monetary_fines_alameda_food <- fines_al_food*100
 monetary_fines_alameda_food/ca_gen
 monetary_fines_alameda_food/al_gen
 
 
-monetary_fines_massachusetts_food <- 31544
+monetary_fines_massachusetts_food <- 31544 # from FOIA
 monetary_fines_massachusetts_food/ma_gen/(2021-2016+1)
 
 3000/685*2400*0.19/al_gen/5
@@ -712,9 +712,9 @@ enforcement <-
     (3000*0.19+36/0.19)/ ca_gen, 
     0,
     #(45000/(2023-2016+1)*(2020-2016+1))/ ma_gen, 
-    45000/(2023-2014+1)/ ma_gen*(95/933), 
+    45000/(2023-2014+1)/ ma_gen*(95/933), # from FOIA 95 is the total numvber of organics citations/violations and 933 is the toatl
     0,
-    (432)/vt_gen/(2020-2014+1)
+    (432)/vt_gen/(2020-2014+1) # from FOIA, 432 total inspections
   )
 
 # MA's enforcement xx % higher than the second best
@@ -881,7 +881,7 @@ ggsave(
 
 summaries_complexity_claude <- read.csv("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/summaries_complexity_claude.csv")
 set.seed(4)
-epsilon <- rnorm(850, 0, 0.001)
+epsilon <- rnorm(850, 0, 0.001) # to resolve same rank
 
 complexity_rank <- 
   summaries_complexity_claude %>% 
