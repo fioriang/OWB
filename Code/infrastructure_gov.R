@@ -879,7 +879,7 @@ ggsave(
 
 ############# Simplicity ################
 
-summaries_complexity_claude <- read.csv("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/summaries_complexity_claude.csv")
+summaries_complexity_claude <- read.csv("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/complexity_claude.csv")
 set.seed(4)
 epsilon <- rnorm(750, 0, 0.001) # to resolve same rank
 
