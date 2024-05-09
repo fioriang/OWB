@@ -1,4 +1,4 @@
-ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/06. Emissions/GHG_Data"
+ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/06. Emissions/ GHG_Data"
 facility <- read.csv(paste0(ghg_data_path,"/facility_info.csv"))%>% as_tibble
 msw_fac <- read.csv(paste0(ghg_data_path,"/msw_facilities.csv"))%>% as_tibble
 gas <- read.csv(paste0(ghg_data_path,"/gas_data.csv")) %>% as_tibble
@@ -6,15 +6,13 @@ measurements <-read.csv(paste0(ghg_data_path,"/measure_data.csv")) %>% as_tibble
 captured_methane <-read.csv(paste0(ghg_data_path,"/captured_methane.csv")) %>% as_tibble
 
 
+############### Data, Fig. S10 #############################
 #Check our data, with EPA's data
 data_comparison <-
   power2 %>% 
   as_tibble() %>% 
   filter(
     type %in% c("disposal")
-  ) %>% 
-  mutate(
-    tons = ifelse(state_id=="DE" & year < 2009, NA, tons)
   ) %>% 
   group_by(state_id, year) %>% 
   summarise(
@@ -91,7 +89,7 @@ ggsave(data_comparison, filename = "data_comparison.pdf", device = cairo_pdf,
        path= figure_path,
        width = 14, height = 13, dpi=320, units = "in")
 
-
+############### SC Emissions pre-work #############################
 
 gas_fc <- 
   gas %>% 
@@ -135,11 +133,11 @@ gas_fc <-
   select(-bans) %>% 
   filter(!is.na(region)) %>% 
   ungroup %>% 
-  #filter(gas_pt > quantile(gas_pt, 0.05), gas_pt < quantile(gas_pt, 0.95)) %>% 
+  filter(gas_pt > quantile(gas_pt, 0.05), gas_pt < quantile(gas_pt, 0.95)) %>% 
   #group_by(facility_id) %>% filter(n()==9) %>% 
   mutate(cluster=paste0(year, region), gas=gas) %>% 
   mutate(
-    gas=ifelse(state_id=="RI"& year==2012, gas/2, gas),
+    #gas=ifelse(state_id=="RI"& year==2012, gas/2, gas),
     efficiency=gas/waste) %>% 
   left_join(
     captured_methane %>% 
@@ -150,27 +148,7 @@ gas_fc <-
 
 
 
-all<-fixest::feols (log(gas) ~ treated| facility_id+year, gas_fc)
-ma <-fixest::feols (log(gas) ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
-ca <-fixest::feols (log(gas) ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
-ri <-fixest::feols (log(gas) ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "MA", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
-ct <-fixest::feols (log(gas) ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "RI", "MA", "VT")))
-vt <-fixest::feols (log(gas) ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "RI", "CT", "MA")))
-
-fixest::etable (all, ma, ca, ri, vt, ct, vcov="twoway")
-
-all<-fixest::feols (gas_pt ~ treated| facility_id+year, gas_fc)
-ma <-fixest::feols (gas_pt ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
-ca <-fixest::feols (gas_pt ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
-ri <-fixest::feols (gas_pt ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "MA", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
-ct <-fixest::feols (gas_pt ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "RI", "MA", "VT")))
-vt <-fixest::feols (gas_pt ~ treated| facility_id+year, gas_fc%>% filter(!state_id %in% c("CA", "RI", "CT", "MA")))
-
-fixest::etable (all, ma, ca, ri, vt, ct, vcov="twoway")
-
-######## capture rates DID ################
-#add winsoring filter:   filter(gas_pt > quantile(gas_pt, 0.05), gas_pt < quantile(gas_pt, 0.95)) for exact results
-# Robust if not too
+############### Capture Rates, Tab S7 #############################
 all<-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc)
 ma <-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
 ca <-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
@@ -180,6 +158,8 @@ vt <-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc%>% filte
 
 fixest::etable (all, ca, ct, ma, ri, vt, vcov="twoway", tex=TRUE, digits = "r3", digits.stats = "r2")
 
+
+############### SC Emissions Fig. S9 #############################
 
 gas_st <- gas_fc %>% group_by(year, state_id, treated) %>% summarise(waste = sum(waste), gas_per_facility = mean(gas), gas=sum(gas))
 gas_st <- 
@@ -205,7 +185,8 @@ gas_st <-
     implied_pop = waste/avg_waste_disp, 
     gas_pc = gas/implied_pop
   ) %>% 
-  filter(!state_id %in% c("DE", "NV", "ME", "WA", "WI", "PA")) %>% 
+  #filter(!state_id %in% c("DE", "NV", "ME", "WA", "WI", "PA")) %>% 
+  filter(!state_id %in% c("ME", "NV")) %>% # ME not complete panel, NV 400% increase in 1 year
   left_join(
     regions, by = c("state_id")
   ) %>% 
@@ -219,55 +200,6 @@ gas_st <-
   )
 
 
-
-
-all<-fixest::feols (log(gas) ~ treatment + post + treatment*post| region, gas_st)
-ma <-fixest::feols (log(gas) ~ treatment + post + treatment*post| region, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
-ca <-fixest::feols (log(gas) ~ treatment + post + treatment*post| region, gas_st%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
-ri <-fixest::feols (log(gas) ~ treatment + post + treatment*post| region, gas_st%>% filter(!state_id %in% c("CA", "MA", "CT", "VT")) %>% mutate(post = ifelse(year >= 2016, 1, 0) ))
-ct <-fixest::feols (log(gas) ~ treatment + post + treatment*post| region, gas_st%>% filter(!state_id %in% c("CA", "RI", "MA", "VT")))
-vt <-fixest::feols (log(gas) ~ treatment + post + treatment*post| region, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "MA")))
-
-fixest::etable (all, ma, ca, ri, vt, ct)
-
-all<-fixest::feols (log(gas) ~ treated| year+state_id, gas_st)
-ma <-fixest::feols (log(gas) ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
-ca <-fixest::feols (log(gas) ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")))
-ri <-fixest::feols (log(gas) ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "MA", "CT", "VT")))
-ct <-fixest::feols (log(gas) ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "MA", "VT")))
-vt <-fixest::feols (log(gas) ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "MA")))
-
-fixest::etable (all, ma, ca, ri, vt, ct, vcov="twoway")
-
-
-all<-fixest::feols (gas_pc ~ treated| year+state_id, gas_st)
-ma <-fixest::feols (gas_pc ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
-ca <-fixest::feols (gas_pc ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")))
-ri <-fixest::feols (gas_pc ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "MA", "CT", "VT")))
-ct <-fixest::feols (gas_pc ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "MA", "VT")))
-vt <-fixest::feols (gas_pc ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "MA")))
-
-fixest::etable (all, ma, ca, ri, vt, ct)
-
-all<-fixest::feols (efficiency ~ treated| year+state_id, gas_st)
-ma <-fixest::feols (efficiency ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
-ca <-fixest::feols (efficiency ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")))
-ri <-fixest::feols (efficiency ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "MA", "CT", "VT")))
-ct <-fixest::feols (efficiency ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "MA", "VT")))
-vt <-fixest::feols (efficiency ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "MA")))
-
-fixest::etable (all, ma, ca, ri, vt, ct)
-fixest::etable (all, ma, ca, ri, vt, ct, vcov="twoway")
-
-all<-fixest::feols (gas_per_facility ~ treated| year+state_id, gas_st)
-ma <-fixest::feols (gas_per_facility ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "VT")))
-ca <-fixest::feols (gas_per_facility ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("MA", "RI", "CT", "VT")))
-ri <-fixest::feols (gas_per_facility ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "MA", "CT", "VT")))
-ct <-fixest::feols (gas_per_facility ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "MA", "VT")))
-vt <-fixest::feols (gas_per_facility ~ treated| year+state_id, gas_st%>% filter(!state_id %in% c("CA", "RI", "CT", "MA")))
-
-fixest::etable (all, ma, ca, ri, vt, ct)
-fixest::etable (all, ma, ca, ri, vt, ct, vcov="twoway")
 
 
 
@@ -306,34 +238,33 @@ dt_state_initial <- dt_state
 xy_plot_data_function <- function (treated_state, f, seed, treated_state_2)
 {
   set.seed(seed)
-  # if(treated_state_2 == "MA")
-  # {
-  #   dt_state <- dt_state_initial %>% group_by(state_id) %>% 
-  #     mutate(
-  #       tons_pc = tons_pc*1 + 0*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
-  #     )
-  # }else if(treated_state_2 == "VT")
-  # {
-  #   dt_state <- dt_state_initial %>%group_by(state_id) %>% 
-  #     mutate(
-  #       lag =lag(tons_pc, n=1, default = NA),
-  #       tons_pc = tons_pc*.5 + .5*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
-  #     )
-  # }else if(treated_state_2 == "CA")
-  # {
-  #   dt_state <- dt_state_initial %>%group_by(state_id) %>% 
-  #     mutate(
-  #       tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
-  #     )
-  # }else {dt_state <- dt_state_initial} 
-  
+  if(treated_state_2 == "MA")
+  {
+    dt_state <- dt_state_initial %>% group_by(state_id) %>%
+      mutate(
+        tons_pc = tons_pc*1 + 0*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA))
+      )
+  }else if(treated_state_2 == "VT")
+  {
+    dt_state <- dt_state_initial %>%group_by(state_id) %>%
+      mutate(
+        lag =lag(tons_pc, n=1, default = NA),
+        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA))
+      )
+  }else if(treated_state_2 == "CA")
+  {
+    dt_state <- dt_state_initial %>%group_by(state_id) %>%
+      mutate(
+        tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA))
+      )
+  }else {dt_state <- dt_state_initial}
   
   dt <- dt_state %>% as.data.frame()
   if (treated_state %in% all_treated){ban_year <- bans[which(all_treated == treated_state)]}else{ban_year <- bans[which(all_treated == treated_state_2)]}
   year_end <- ban_year-offset
   treated_location <- treated_state
   don_new <- donors[donors!=treated_state]
-  don_new <- donors[!donors %in% all_treated]
+  don_new <- don_new[!don_new %in% all_treated]
   n_don <- length(don_new)
   test_ind_end1 <- year_end - year_start+1
   test_ind_end2 <- ban_year-year_end +test_ind_end1-1
@@ -418,62 +349,29 @@ xy_plot_data_function <- function (treated_state, f, seed, treated_state_2)
 }
 
 
-f <- 4
-seed <- 2
+itrations = 10000
 c<-1
-sc_data_ma <-xy_plot_data_function("MA", f, seed, "MA")
-sc_data_ct <-xy_plot_data_function("CT", f, seed, "CT")
-sc_data_ca <-xy_plot_data_function("CA", f, seed, "CA") 
-sc_data_ri <-xy_plot_data_function("RI", f, seed, "RI")
-sc_data_vt <-xy_plot_data_function("VT", f, seed, "VT")
+samp <- c(2,3,4,5,6,7,8,9, 10)
+sc_data_ma <-xy_plot_data_function("MA", f=1, seed=1, "MA")
+sc_data_ct <-xy_plot_data_function("CT", 1, 1, "CT")
+sc_data_ca <-xy_plot_data_function("CA", 3, 1, "CA") 
+sc_data_ri <-xy_plot_data_function("RI", 2, 1, "RI")
+sc_data_vt <-xy_plot_data_function("VT", 3, 1, "VT")
 
-plot_sc <- function (all){
-  all %>% as_tibble() %>% 
-    #rename(state_id = county_id)  %>% 
-    left_join(dt_state %>% select(state_id, year, tons_pc), by = c("county_id" = "state_id")) %>% 
-    select(-iterations) %>% 
-    left_join(
-      dt_state %>% 
-        select(state_id, year, tons_pc, county_id) %>% 
-        rename (y=tons_pc, donor_state_id = state_id),
-      by = c("chosen_donor"="county_id", "year")) %>% 
-    group_by(year, county_id, intercept2, intercept, ban_year, attempt, tons_pc) %>% 
-    summarise(y=mean(y)) %>%
-    mutate(
-      y_0  = y+intercept2
-    ) %>% filter(attempt < 5) %>% 
-    ggplot(aes(x=year))+geom_line(aes(y = tons_pc), color="black")+geom_line(aes(y=y_0, color=as.factor(attempt)))
-}
 
-reg_sc <- function (sc_data)
-{
-  chosen <- c(sc_data %>% filter(attempt==1) %>% pluck("chosen_donor"), sc_data %>%summarise(county_id=unique(county_id)) %>%  pluck("county_id"))
-  
-  
-  lm1 <- fixest::feols (log(gas) ~ treated| year+state_id, gas_st%>% filter(state_id %in% chosen))
-  lm2 <- fixest::feols (gas_pc  ~ treated| year+state_id, gas_st%>% filter(state_id %in% chosen))
-  
-  fixest::etable(lm1, lm2)
-}
-
-att_sc <- function (all){
-  all %>% as_tibble() %>% 
-    group_by(attempt) %>% 
-    summarise(att2=unique(att2))
-}
-
-power_gas <- function (i, treated_state_2, f){
+power_gas <- function (i, treated_state_2, f, seed){
   xy_plot_data_function(donors[i], f, seed, treated_state_2) %>% as_tibble() %>% 
     group_by(attempt) %>% 
-    summarise(att2=unique(att2)) %>% 
+    summarise(att2=unique(att2), mape = mean(mape)) %>% 
     mutate(treated_location=donors[i], treated_state_2=treated_state_2)
 }
 
-power_gas_res_ma <- lapply(1:25, power_gas, "MA",f)
-power_gas_res_ct <- lapply(1:25, power_gas, "CT",f)
-power_gas_res_ca <- lapply(1:25, power_gas, "CA",f)
-power_gas_res_ri <- lapply(1:25, power_gas, "RI",f)
-power_gas_res_vt <- lapply(1:25, power_gas, "VT",f)
+
+power_gas_res_ma <- lapply(1:29, power_gas, "MA",f=1, seed=2)
+power_gas_res_ct <- lapply(1:29, power_gas, "CT",f=1, seed=2)
+power_gas_res_ca <- lapply(1:29, power_gas, "CA",f=3, seed=1) 
+power_gas_res_ri <- lapply(1:29, power_gas, "RI",f=2, seed=1) # we have to use f=1 because
+power_gas_res_vt <- lapply(1:29, power_gas, "VT",f=3, seed=3) #power for f=1, f=2 is lower 
 
 
 sc_data <- 
@@ -510,13 +408,13 @@ mfood <-
     mfood=mean(food_share)) %>% 
   group_by(state_id) %>% 
   summarise(mfood=sum(mfood)) %>% 
-  mutate(mfood=ifelse(state_id=="MA", 0.2045, mfood), mfood=100*mfood)
+  mutate(mfood=ifelse(state_id=="MA", 0.103/0.55, mfood), mfood=100*mfood) # from WCS, we need the thing for both commercial and organics
 
 
 
 expected_effects <- 
   sc_data %>% 
-  filter(attempt==1) %>% 
+  group_by(county_id) %>% filter(mape==min(mape)) %>% filter(attempt==min(attempt)) %>% 
   left_join(dt_state %>% select(state_id, year, tons_pc), by = c("county_id" = "state_id")) %>% 
   select(-iterations) %>% 
   left_join(
@@ -544,40 +442,41 @@ expected_effects <-
   ) %>% 
   group_by(county_id) %>% 
   mutate(
-    effect_size = ifelse(county_id=="CA", effect_size *0.6, effect_size), # because it covers many more materials other than food waste
-    reg_effect = ifelse(county_id=="CA", reg_effect *0.6, reg_effect), # because it covers many more materials other than food waste
+    effect_size = ifelse(county_id=="CA", effect_size *0.0778/(0.0787 + 0.0778+ 0.0279), effect_size), # because it covers many more materials other than food waste, we use only the food waste fraction for CA
+    reg_effect = ifelse(county_id=="CA", reg_effect *0.0778/(0.0787 + 0.0778+ 0.0279), reg_effect), # because it covers many more materials other than food waste
     prior_to_the_ban = ifelse(year==ban_year-1, tons_pc, 0),
     prior_to_the_ban= ifelse(prior_to_the_ban==0, max(prior_to_the_ban, na.rm=TRUE), prior_to_the_ban),
     effect_size =1- (prior_to_the_ban*100*.58*(mfood-effect_size*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100), 
-    reg_effect =NA#1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
+    reg_effect =1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
     
   ) %>% 
   select(-prior_to_the_ban) %>% 
   group_by(county_id,reg_effect) %>% 
   summarise(expected_effect = mean(effect_size, na.rm=TRUE))
 
-# power_gas_res <- 
-#   rbind(
-#     power_gas_res_ma %>% bind_rows, 
-#     power_gas_res_ca %>% bind_rows, 
-#     power_gas_res_ct %>% bind_rows, 
-#     power_gas_res_ri %>% bind_rows, 
-#     power_gas_res_vt %>% bind_rows
-#   )
+power_gas_res <- 
+  rbind(
+    power_gas_res_ma %>% bind_rows, 
+    power_gas_res_ca %>% bind_rows, 
+    power_gas_res_ct %>% bind_rows, 
+    power_gas_res_ri %>% bind_rows, 
+    power_gas_res_vt %>% bind_rows
+  )
 
 
 #write.csv(power_gas_res, "power_gas_res.csv", row.names=FALSE)
-power_gas_res <- read.csv("power_gas_res.csv")
+#power_gas_res <- read.csv("power_gas_res.csv")
 
 power_gas_res_plot <- 
   power_gas_res %>% 
-  group_by(treated_state_2, attempt) %>% 
-  summarise(
-    min = quantile(att2, 0.025), 
-    max = quantile(att2, 0.975)) %>%  
-  filter(min == max(min)) %>% 
+  group_by(treated_state_2, treated_location) %>%
+  filter(mape ==min(mape)) %>% 
+  summarise(mape=mean(mape), att=mean(att2)) %>% 
   group_by(treated_state_2) %>% 
-  summarise(min = unique(min), max = min(max)) %>% 
+  filter(att!=min(att), att!=max(att)) %>% 
+  summarise(
+    min = min(att), 
+    max = max(att)) %>%  
   
   left_join(actual_effects, by = c("treated_state_2"="state_id")) %>% 
   rename(state_id=treated_state_2) %>% 
@@ -675,13 +574,13 @@ xy_gas_plot_function <- function (chosen_attempt)
     group_by(county_id) %>% 
     mutate(
       effect_size = ifelse(county_id=="CA", effect_size *0.6, effect_size), # because it covers many more materials other than food waste
-
+      
       reg_effect = ifelse(county_id=="CA", reg_effect *0.6, reg_effect), # because it covers many more materials other than food waste
       prior_to_the_ban = ifelse(year==ban_year-1, tons_pc, 0),
       prior_to_the_ban= ifelse(prior_to_the_ban==0, max(prior_to_the_ban, na.rm=TRUE), prior_to_the_ban),
       effect_size =1- (prior_to_the_ban*100*.58*(mfood-effect_size*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100), 
-      reg_effect =NA#1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
-      ) %>% select(-prior_to_the_ban) %>% 
+      reg_effect =1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
+    ) %>% select(-prior_to_the_ban) %>% 
     mutate(
       y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA), 
       `Regulators' Exp.` = ifelse(!is.na(effect_size), y_0*(1-reg_effect), NA)
@@ -707,7 +606,7 @@ xy_gas_plot_function <- function (chosen_attempt)
     mutate(
       xlab = ifelse(!is.na(ylab), year, NA)
     )
-
+  
   
   
   xy_gas_data <- 
@@ -763,7 +662,7 @@ xy_gas_plot_function <- function (chosen_attempt)
       by = c("year", "treated_state", "location")
     )
   
-  xy_gas_data %>%  
+  xy_gas_data %>% filter(location!="Regulators' Exp.") %>%  
     ggplot(
       aes(x=year, y=tons_pc, color =location, linetype= location, size=location)
     )+
@@ -785,13 +684,9 @@ xy_gas_plot_function <- function (chosen_attempt)
     geom_text(aes(x=2009.5, y = y_first%>% as.numeric, label=scales::number(y_first, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
     geom_text(aes(x=2018.5, y = y_last %>% as.numeric, label=scales::number(y_last, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
     
-    #scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
-    #scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
-    #scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
-    
-    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
-    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
-    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
+    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen", "#bad9c6"), name = "")+
+    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c("solid", "solid", "solid", "solid"), name = "")+
+    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.5, 0.5, 1.0, 1.0), name = "")+
     scale_x_continuous(breaks=c(seq(2010, 2018, 2)), limits=c(2009, 2019), expand = c(0,0))+
     scale_y_continuous(expand = c(0.03,0.02))+
     labs(y="", x= "")+
@@ -821,29 +716,17 @@ xy_gas_plot <-
     strip.text = element_blank(),
     plot.title = element_text(family = "Helvetica", color = ut_colors[4],size = 9, hjust=0.5))
 
-  
+
 xy_and_power_gas <-
   ggpubr::ggarrange(
     xy_gas_plot,
     power_gas_res_plot,
     heights = c(0.5, 1))
 
-xy_and_power_gas
-
+############## Save Figure #################
 ggsave(
   xy_and_power_gas, filename = "xy_and_power_gas.pdf", device = cairo_pdf,
   path= figure_path,
   width = 8, height = 7, units = "in")
 
 
-# reg_sc(sc_data_ct)
-# reg_sc(sc_data_ma)
-# reg_sc(sc_data_ca)
-# reg_sc(sc_data_ri)
-# reg_sc(sc_data_vt)
-
-plot_sc(sc_data_ct)
-plot_sc(sc_data_ma)
-plot_sc(sc_data_ca)
-plot_sc(sc_data_ri)
-plot_sc(sc_data_vt)
