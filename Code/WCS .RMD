@@ -67,8 +67,6 @@ pre_processing_dt_state <- function (power2, year_cutoff)
 
 ```{r}
 
-
-
 wcs<-
   wcs %>% 
   rename(
@@ -790,7 +788,7 @@ municipal <-
       select(year, state_id, county_id, tons_pc, tons, type)
   ) %>% 
   left_join(
-    wcs %>%filter(year <=2018) %>% select(-year) %>%  filter(state_id %in% c("M1", "M2")), #basically assume that percentages hold
+    wcs %>%group_by(state_id) %>% filter(year ==max(year)) %>% select(-year) %>%  filter(state_id %in% c("M1", "M2")), #basically assume that percentages hold
     by = c("state_id")
   ) %>% 
   filter(type %in% c("disposal", "composting")) %>% 
@@ -811,7 +809,10 @@ municipal <-
     #in seattle the law covers foods 
     #in Boulder (M2) it covers composting materials: here I use compostable paper + food
   ) %>% 
+  select(year, state_id, type, disposal_effect, tons) %>% 
   pivot_wider(names_from = type, values_from = tons) %>% 
+  group_by(year, state_id) %>% 
+  summarise(disposal_effect=mean(disposal_effect), composting = mean(composting, na.rm=TRUE), disposal = mean(disposal, na.rm=TRUE)) %>% 
   mutate(
     composting_effect = disposal_effect* disposal*0.5/ composting
   ) %>% 

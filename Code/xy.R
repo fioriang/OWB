@@ -45,6 +45,52 @@ do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_tr
   
 }
 
+do_many_times_v3_with_inter_samp_1 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
+{
+  #Approach 2- Only Intercept
+  samples <- sample(n_don, sample_size)
+  x=x[, samples]
+  n <- length(y_train)+ length(y_test) + length(y_att)
+  
+  intercept <- mean(y_train-x[1:test_ind_end1])
+  
+  ss_res <- sum((y_train-x[1:test_ind_end1] - intercept)^2) #calculating the in-sample R-squared
+  ss_tot <- sum((y_train-mean(y_train))^2)
+  r <- 1- ss_res/ss_tot
+  MA  <- (intercept + x[(test_ind_end1+1):test_ind_end2] - y_test )/(intercept + x[(test_ind_end1+1):test_ind_end2]) 
+  MA <- MA %>% abs %>%  mean
+  
+  att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% sum
+  cf <- (x[(test_ind_end2+1):n]+intercept) %>% sum
+  intercept2 <-  mean(c(y_train, y_test)-x[1:test_ind_end2])
+  att2 <- ((y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum)/(x[(test_ind_end2+1):n]+intercept2) %>% sum
+  
+  c(r, MA, att, cf,intercept,att2, intercept2, c(samples))
+  
+  
+  # 
+  # samples <- sample(n_don, sample_size)
+  # x <- rowMeans(x[, samples])
+  # n <- length(y_train)+ length(y_test) + length(y_att)
+  # 
+  # x_train <- x[1:test_ind_end1]
+  # x_test <-  x[(test_ind_end1+1):test_ind_end2]
+  # x_att <- x[(test_ind_end2+1):n]
+  # 
+  # coef <- sum((x_train - mean(x_train)) * (y_train - mean(y_train))) / sum((x_train - mean(x_train))^2)
+  # intercept <- mean(y_train)-coef * mean(x_train)
+  # 
+  # MA <- mean(abs((intercept + x_test * coef - y_test) / y_test))
+  # #att <- sum(intercept + x_att * coef - y_att)
+  # cf <-(intercept + x_att * coef ) %>% sum
+  # att <- (y_att - intercept - x_att * coef) %>% sum
+  # #ss_res <- sum((y_train - intercept - x_train * coef)^2)
+  # #ss_tot <- sum((y_train - mean(y_train))^2)
+  # r <- 1 - sum((y_train - intercept - x_train * coef)^2) /  sum((y_train - mean(y_train))^2)
+  # c(r, MA, att, cf, c(samples))
+  
+}
+
 disposal_effect_size <- read.csv("disposal_effect_size.csv")
 year_start = 2006
 year_cutoff = 2018
@@ -211,9 +257,9 @@ year_cutoff = 2018
 municipal_effect <- read.csv("municipal_effect.csv")
 
 
-xy_plot_data_function_cities <- function (k, f)
+xy_plot_data_function_cities <- function (k, f, seed)
 {
-  
+  set.seed(seed)
   dt <- dt_initial %>% as.data.frame()
   treated_state <- str_sub(treated_counties_id_cities[k],start=-2)
   ban_year <- bans[which(all_treated == treated_state)]
@@ -251,7 +297,7 @@ xy_plot_data_function_cities <- function (k, f)
   )
   
   sample_size <- samp[f]
-  all <- lapply(seq(1:iterations),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+  all <- lapply(seq(1:15000),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
   donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
   
   all <- all %>% sapply(c) %>% t
@@ -344,8 +390,9 @@ xy_plot_data_function_cities <- function (k, f)
     )
 }
 
-xy_plot_data_function_sf <- function (f)
+xy_plot_data_function_sf <- function (f, seed)
 {
+  set.seed(seed)
   year_start <- 1996
   year_cutoff <- 2014
   year_end <- 2011
@@ -946,19 +993,25 @@ set.seed(1)
 xy_plot_data <-
   rbind(
     xy_plot_data_function("CA",2,2),
-    xy_plot_data_function("CT",6,8),
-    xy_plot_data_function("MA",5,7),
-    xy_plot_data_function("RI",1,1),
-    xy_plot_data_function("VT",5,1),
-    xy_plot_data_function_cities(66, 1) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect) ,
-    xy_plot_data_function_cities(67, 1) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
-    xy_plot_data_function_sf(1)  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+     xy_plot_data_function("CT",6,8),
+     xy_plot_data_function("MA",5,7),
+     xy_plot_data_function("RI",1,1),
+     xy_plot_data_function("VT",5,1),
+    xy_plot_data_function_cities(66, 1, 1) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect) ,
+    xy_plot_data_function_cities(67, 1, 13) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    xy_plot_data_function_sf(1, 4)  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
   )
 
+xy_plot_data %>%
+  mutate(county_id=ifelse(county_id == "sanfranciscoM3", "san franciscoM3", county_id)) %>%
+  filter(attempt==1) %>%
+  group_by(county_id) %>%
+  filter(year>=ban_year) %>%
+  summarise(actual_treatment_effect = sum(tons_pc - y_0)/sum(y_0))
 
 # this is to save and load the datasets. for exact reproduction of the paper's figures please load the "xy_plot_data.csv"
 #xy_plot_data <- write.csv(xy_plot_data, "xy_plot_data.csv", row.names = FALSE)
-xy_plot_data <- read.csv("xy_plot_data.csv")
+#xy_plot_data <- read.csv("xy_plot_data.csv")
 
 xy_plot_fun(1)
 
@@ -977,10 +1030,11 @@ xy_plot_sf <- xy_plot_fun_sf(1)
 ### Science Plot
 
 disposal_spec <- rbind(
-  read.csv("power_county.csv"), 
+  read.csv("power_county.csv") %>% filter(sample_size>2), # because sample_size<3 produces really bad fit 
   read.csv("power_state.csv"), 
   read.csv("sf_power.csv"))%>% 
   filter((treated_state=="VT" & sample_size < 9)|treated_state!="VT") %>% 
+  filter((treated_state=="CT" & sample_size > 7)|treated_state!="CT") %>% # basically this chooses the sample size =8 because while it has v similar power_low it has way better power_high providing us with better power for the mu_0 test 
   filter((treated_state=="All" & specification == "State Pooled")| treated_state!="All")
 
 
@@ -1177,7 +1231,7 @@ xy_and_power_2 <-
       subset(xy_plot$data, !treated_state %in% c("Boulder, CO", "Seattle, WA"))+
       geom_point(data = subset(xy_plot$data %>% filter(!treated_state %in%  c("Boulder, CO", "Seattle, WA")), location %in% c("Actual", "Synthetic"))), 
     bt_with_power_2 %+% subset(bt_with_power_2$data, !state_id %in% c("San Francisco, CA", "Boulder, CO", "Seattle, WA")) +
-      labs(x="", title = "Average treatment effect (%)")+
+      labs(x="", title = "Average treatment effect on the treated (%)")+
       scale_x_continuous(limits=c(-20, 20), breaks = c(seq(-15, 15, by =5)))+
       theme (
         plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4])), 
@@ -1333,7 +1387,7 @@ close(fileConn)
 
 
 fileConn<-file(paste0(figure_path, "/power_ct.txt"))
-writeLines(paste0(format(round(power_ct,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(power_ct, accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
 fileConn<-file(paste0(figure_path, "/power_ri.txt"))
@@ -1374,8 +1428,9 @@ fileConn<-file(paste0(figure_path, "/reject_ri.txt"))
 writeLines(paste0(format(round(reject_ri,1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 fileConn<-file(paste0(figure_path, "/reject_vt.txt"))
-writeLines(paste0(format(round(reject_vt,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(reject_vt, accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
+
 
 
 
@@ -1750,26 +1805,68 @@ xy_and_power_2_cities <-
   ggpubr::ggarrange(
     ggpubr::ggarrange(
       xy_plot %+% 
-        subset(xy_plot$data, treated_state %in% c("Boulder, CO", "Seattle, WA"))+
-        geom_point(data = subset(xy_plot$data %>% filter(treated_state %in%  c("Boulder, CO", "Seattle, WA")), location %in% c("Actual", "Synthetic")))+
+        subset(subset(xy_plot$data, treated_state %in% c("Boulder, CO", "Seattle, WA")), location!= "Regulators' Exp.")+
+        geom_point(data = xy_plot$data %>% filter(treated_state %in%  c("Boulder, CO", "Seattle, WA"), location != "Regulators' Exp."))+
         scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
         theme(
           panel.spacing = unit(1.0, "cm")
         ), 
-      xy_plot_sf+ geom_point(data = subset(xy_plot_sf$data, location %in% c("Actual", "Synthetic"))), 
+      xy_plot_sf+ geom_point(data = subset(xy_plot_sf$data %>% filter(location!="Regulators' Exp."), location %in% c("Actual", "Synthetic"))), 
       nrow=2, 
       heights = c(2, 1)), 
-    bt_with_power_2 %+% subset(bt_with_power_2$data, state_id %in% c("Boulder, CO", "Seattle, WA", "San Francisco, CA")) +
-      labs(x="", title = "Average treatment effect (%)")+
-      theme (
-        plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4]), 
-        panel.spacing = unit(1.0, "cm")), 
+    
+    bt_with_power_data %>% #filter(state_id!="San Francisco, CA") %>% 
+      mutate(
+        state_id = fct_recode(
+          state_id,
+          "San Francisco, CA" = "San Francisco, CA", 
+          "Boulder, CO" = "Boulder, CO",
+          "Seattle, WA" = "Seattle, WA"
+        ))%>% 
+      filter(state_id %in% c( "San Francisco, CA", "Boulder, CO", "Seattle, WA")) %>% 
+      ggplot()+
+      aes(y= state_id, x= 100*actual_treatment_effect, group = 1)+
+      geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), width = 0.2, size=0.5)+
+      scale_color_manual(breaks = c("Placebo"), values = c(ut_colors[5]), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), byrow=TRUE ))+
+      geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+
+      labs(y="", x = "", color = "")+
+      ggnewscale::new_scale_color()+
+      # 
+      geom_point(aes(color = "Estimate"),size=1.5)+
+      scale_color_manual(breaks = c("Estimate"), values = c(ut_colors[4]),guide = guide_legend(order = 1,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+      labs(y="", x = "", color = "")+
+      ggnewscale::new_scale_color()+
+      
+      geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
+      scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+      labs(y="", x = "", color = "")+
+      ggnewscale::new_scale_color()+
+      
+      scale_x_continuous(breaks = c(seq(-35, 35, by = 10)), limits = c(-40, 40))+ 
+      scale_y_discrete(position= "right", expand=c(0.02,0.15))+
+      theme(
+        legend.position = "top",  # Keep the legend at the top
+        legend.box.margin = margin(t = 0, r = 0, b = 0, l = 70),
+        strip.background = element_rect(color = "white", fill = "white"),
+        panel.grid.major.x = element_blank() ,
+        panel.grid.major.y = element_blank(),
+        panel.background = element_blank(), 
+        text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]), 
+        strip.text = element_text(angle = 0, hjust = 1), 
+        strip.placement = "outside",
+        axis.ticks.y = element_blank(), 
+        legend.key = element_rect(colour = NA, fill = NA, size = 5),
+        legend.spacing.x = unit(-1, "pt"),
+        axis.ticks.x = element_line(size = 0.1), 
+        legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
+      ), 
     heights = c(0.5, 1))
-
 
 ggsave(xy_and_power_2_cities, filename = "xy_and_power_2_cities.pdf", device = cairo_pdf,
        path= figure_path,
        width = 11, height = 6, units = "in")
+
+
 
 
 
