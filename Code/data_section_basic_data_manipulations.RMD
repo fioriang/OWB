@@ -86,9 +86,7 @@ gdp$gross_current <- as.numeric(gdp$gross_current)
 Then I enlarge the previous dataset by including county-level information as well. The main difference is that while before, i used as ID the state ID, now I will use a new field, county ID. The county ID is equal to the state ID if the state does not report on the county level while it is equal to the county name concatenated with the state ID if the state reports by counties. 
 
 ```{r, include=FALSE, message=FALSE}
-
-
-#Alabama -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Alabama -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 alabama <- read.csv(paste0(state_data_path,"/Alabama/import_R/alabama.csv"))
 
 al_imports <-  
@@ -120,7 +118,7 @@ alabama <-
 
 
 
-#Arizona -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Arizona -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 arizona <- read.csv(paste0(state_data_path,"/Arizona/import_R/arizona.csv"))
 
 arizona <-  
@@ -137,7 +135,7 @@ arizona <-
   filter(year >=2013)
 
 
-#California -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# California -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 california <- read.csv(paste0(state_data_path,"/California/import_R/california.csv"))
 ca_exports <- read.csv(paste0(state_data_path,"/California/import_R/ca_exports.csv"))
 
@@ -187,12 +185,16 @@ ca_exports<-
   select(year, county_name, tons, destination, origin, source_data)
 
 
-#Colorado -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Colorado -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 conversion_rates <- read.csv(paste0(state_data_path,"/Colorado/import_R/CO_conversion_rates.csv"))
 names(conversion_rates) <- c("year", "volume_CY", "equivalent_tons", "conversion")
 
 colorado <- read.csv(paste0(state_data_path,"/Colorado/import_R/CO_msw_disposal.csv"))
 colorado_recycling <- read.csv(paste0(state_data_path,"/Colorado/import_R/CO_recycling.csv"))
+
+texas <- read.csv(paste0(state_data_path,"/Texas/import_R/texas.csv"))
+
+msw_frac <- texas %>% filter(year>2010) %>% summarise(msw_percentage=mean(msw_percentage)) %>% pluck("msw_percentage")
 
 colorado <- 
   colorado %>% 
@@ -208,7 +210,7 @@ colorado <-
   rename(tons = CY) %>% 
   group_by(county_name, year, state_id, type) %>% 
   summarise(tons = sum(tons))%>% 
-  mutate(tons=tons*0.7) %>% 
+  mutate(tons=tons*msw_frac) %>% #usual MSW fraction
   select(year, state_id, county_name,type, tons) %>%
   rbind (
     colorado_recycling %>% 
@@ -228,7 +230,7 @@ colorado <-
 
 rm(conversion_rates, colorado_recycling)
 
-#Connecticut --------------------------------------------------------------------------------------------------------------------------------------------
+# Connecticut --------------------------------------------------------------------------------------------------------------------------------------------
 msw_lf <- read.csv(paste0(state_data_path,"/Connecticut/import_R/MSW_LF.csv"))
 msw_oos <- read.csv(paste0(state_data_path,"/Connecticut/import_R/MSW_OOS.csv"))
 composting <- read.csv(paste0(state_data_path,"/Connecticut/import_R/composting.csv"))
@@ -450,7 +452,7 @@ ct_imports <-
   )%>% select(year, county_name, tons, destination, origin, source_data)
 
 rm(msw_lf, msw_oos, counties_cities, recycling, composting, ct_exports_additional)
-#Florida -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Florida -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 florida <-read.csv(paste0(state_data_path,"/Florida/import_R/florida.csv"))
 
@@ -476,7 +478,7 @@ florida <-
   group_by (year, state_id, county_name,type) %>% 
   summarise(tons = sum(tons, na.rm = TRUE))
 
-#Georgia -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Georgia -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 georgia <- read.csv(paste0(state_data_path,"/Georgia/import_R/georgia.csv"))
 
 georgia <-
@@ -512,7 +514,8 @@ delaware <-
     county_name = NA
   ) %>% 
   group_by (year, state_id, county_name, type) %>% 
-  summarise(tons = sum(tons, na.rm = TRUE))
+  summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+  filter(year>=2009)
 
 
 # Illinois -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -555,7 +558,7 @@ illinois <-
   ) %>% 
   group_by(state_id, year, type, imports) %>% 
   summarise(tons = sum(tons)) %>% 
-  mutate(tons = tons*0.7) # usual msw percentage
+  mutate(tons = tons*(0.754+0.818)/2) # avg msw percentage between 2 state WCS
 
 rm(illinois_1, illinois_2, illinois_3) 
  
@@ -573,7 +576,7 @@ il_imports <-
   ) %>% 
   ungroup %>% 
   select(year, county_name, tons, destination, origin, source_data)%>% 
-  mutate(tons = tons*0.7) # usual msw percentage
+  mutate(tons = tons*(0.754+0.818)/2) # avg msw percentage
 
 illinois <- 
   illinois %>% 
@@ -1317,7 +1320,7 @@ nm <-
 ny <- read.csv(paste0(state_data_path,"/New York/import_R/ny.csv"))
 
 ny <-
-  ny %>% 
+  read.csv(paste0(state_data_path,"/New York/import_R/ny.csv")) %>% 
   rename(
     waste_type = Waste.Type, 
     tons = Amount..in.tons., 
@@ -1507,6 +1510,9 @@ ohio_exports<-
 
 # Oklahoma -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 oklahoma <- read.csv(paste0(state_data_path,"/Oklahoma/import_R/oklahoma.csv"))
+texas <- read.csv(paste0(state_data_path,"/Texas/import_R/texas.csv"))
+
+msw_frac <- texas %>% filter(year>2010) %>% summarise(msw_percentage=mean(msw_percentage)) %>% pluck("msw_percentage")
 
 oklahoma <-
   oklahoma %>% 
@@ -1520,7 +1526,7 @@ oklahoma <-
   ) %>% 
   group_by (year, state_id, county_name, type) %>% 
   summarise (tons = sum(tons, na.rm=TRUE)) %>% 
-  mutate(tons=0.7*tons) #usual percentage of MSW
+  mutate(tons=msw_frac*tons) #usual percentage of MSW
 
 # Oregon -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2288,8 +2294,10 @@ ct_exports <-
   )%>%
   filter(!destination %in% c("OS", "OOS")) %>%
   mutate(
-    exports = ifelse(destination%in% c("MA", "OH") & year> 2014 & year < 2020, exports_2, exports),
-    exports = ifelse(destination%in% c("NY") & year> 2014 & year < 2019, exports_2, exports)) %>%
+   exports = ifelse(destination%in% c("MA") & !is.na(exports_2) & year>2014, exports_2, exports), 
+   exports = ifelse(destination%in% c("NY") & !is.na(exports_2) & year>2014, exports_2, exports), 
+   exports = ifelse(destination%in% c("OH") & !is.na(exports_2) & year>2014, exports_2, exports),
+   ) %>%
   mutate(
     county_name = NA,
     source_data = "CT",
@@ -2403,7 +2411,15 @@ rm(facility_exc, na_tons, excluded_tons, msw_lf, recycling, composting, counties
 ```{r}
 imports <- rbind(imports, ct_imports)
 exports <- rbind(exports, ct_exports)
+
+power2 <- power2 %>% filter(state_id!="CT") 
 power2 <- rbind(power2, connecticut)
+
+
+power2 %>% filter(state_id=="CT", year==2018, type == "disposal") %>% summarise(sum(tons))
+power2 %>% filter(state_id=="CT", year==2006, type == "disposal") %>% summarise(sum(tons))
+#2679243
+#2380291
 ```
 
 
@@ -2741,14 +2757,93 @@ power2 <- power2_imp_exp
 ```{r}
 data_states <- power2 %>% filter(year>2010, type=="disposal") %>% summarise(state_id =unique(state_id)) %>% pluck("state_id")
 
+imports_check <- imports %>% filter(source_data!="CT") %>% rbind(ct_imports)
+exports_check <- exports %>% filter(source_data!="CT") %>% rbind(ct_exports)
+
 
 # To check imports i have to go to imports and do destination 
 
-state_id_given <- "VT"
+state_id_given <- "NY"
 
-check_fun <- function (state_id_given)
+check_fun_exporting <- function (state_id_given)
 {
   imports %>% 
+    filter(origin %in% data_states, destination %in% data_states) %>% 
+    group_by(year, destination, origin, source_data) %>% 
+    summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+    filter(origin == state_id_given, year > 2009) %>% 
+    group_by(year, origin, destination) %>% 
+    summarise(from_imports = sum(tons)) %>% 
+    left_join( 
+      exports %>% 
+        filter(origin %in% data_states, destination %in% data_states) %>% 
+        #filter(destination=="NY"& year>2011|destination!="NY") %>% 
+        #filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
+        group_by(year, destination, origin, source_data) %>% 
+        summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+        filter(origin == state_id_given, year > 2009) %>% 
+        group_by(year, origin, destination, source_data) %>% 
+        summarise(from_exports = sum(tons)), 
+      by = c("year", "origin", "destination")
+    ) %>% 
+    mutate(state_id_given) %>% 
+    filter(!is.na(from_imports), from_imports>0, 
+           !is.na(from_exports), from_exports>0)
+}
+
+check_fun_importing <- function (state_id_given)
+{
+  imports %>% 
+    filter(origin %in% data_states, destination %in% data_states) %>% 
+    group_by(year, destination, origin, source_data) %>% 
+    summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+    filter(destination == state_id_given, year > 2009) %>% 
+    group_by(year, origin, destination) %>% 
+    summarise(from_imports = sum(tons)) %>% 
+    left_join( 
+      exports %>% 
+        filter(origin %in% data_states, destination %in% data_states) %>% 
+        #filter(destination=="NY"& year>2011|destination!="NY") %>% 
+        #filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
+        group_by(year, destination, origin, source_data) %>% 
+        summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+        filter(destination == state_id_given, year > 2009) %>% 
+        group_by(year, origin, destination, source_data) %>% 
+        summarise(from_exports = sum(tons)), 
+      by = c("year", "origin", "destination")
+    ) %>% 
+    mutate(state_id_given) %>% 
+    filter(!is.na(from_imports), from_imports>0, 
+           !is.na(from_exports), from_exports>0)
+}
+
+check_fun_ct <- function (state_id_given)
+{
+  # imports_check %>% 
+  #   filter(origin %in% data_states, destination %in% data_states) %>% 
+  #   group_by(year, destination, origin, source_data) %>% 
+  #   summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+  #   filter(origin == state_id_given|destination==state_id_given, year > 2005) %>% 
+  #   group_by(year, origin, destination) %>% 
+  #   summarise(from_imports = sum(tons)) %>% 
+  #   left_join( 
+  #     exports_check %>% 
+  #       filter(origin %in% data_states, destination %in% data_states) %>% 
+  #       #filter(destination=="NY"& year>2011|destination!="NY") %>% 
+  #       #filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
+  #       group_by(year, destination, origin, source_data) %>% 
+  #       summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+  #       filter(origin == state_id_given|destination==state_id_given, year > 2005) %>% 
+  #       group_by(year, origin, destination, source_data) %>% 
+  #       summarise(from_exports = sum(tons)), 
+  #     by = c("year", "origin", "destination")
+  #   ) %>% 
+  #   mutate(state_id_given) %>% 
+  #   filter(!is.na(from_imports), from_imports>0, 
+  #          !is.na(from_exports), from_exports>0)
+  
+  
+  imports_check %>% 
     filter(origin %in% data_states, destination %in% data_states) %>% 
     group_by(year, destination, origin, source_data) %>% 
     summarise(tons = sum(tons, na.rm = TRUE)) %>% 
@@ -2756,10 +2851,10 @@ check_fun <- function (state_id_given)
     group_by(year, origin, destination) %>% 
     summarise(from_imports = sum(tons)) %>% 
     left_join( 
-      exports %>% 
+      exports_check %>% 
         filter(origin %in% data_states, destination %in% data_states) %>% 
-        filter(destination=="NY"& year>2011|destination!="NY") %>% 
-        filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
+        #filter(destination=="NY"& year>2011|destination!="NY") %>% 
+        #filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
         group_by(year, destination, origin, source_data) %>% 
         summarise(tons = sum(tons, na.rm = TRUE)) %>% 
         filter(origin == state_id_given, year > 2010) %>% 
@@ -2772,27 +2867,191 @@ check_fun <- function (state_id_given)
            !is.na(from_exports), from_exports>0)
 }
 
-validate_imports <- lapply(data_states, check_fun) %>% bind_rows() %>% as_tibble()
 
-validate_imports %>% 
-  # filter(!is.na(from_exports), 
-  #        from_imports > 10000, 
-  #        from_exports > 10000) %>% 
+check_fun_ct_imp <- function (state_id_given)
+{
+
+  imports_check %>% 
+    filter(origin %in% data_states, destination %in% data_states) %>% 
+    group_by(year, destination, origin, source_data) %>% 
+    summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+    filter(origin == state_id_given, year > 2005) %>% 
+    group_by(year, origin, destination) %>% 
+    summarise(from_imports = sum(tons)) %>% 
+    full_join( 
+      exports_check %>% 
+        filter(origin %in% data_states, destination %in% data_states) %>% 
+        #filter(destination=="NY"& year>2011|destination!="NY") %>% 
+        #filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
+        group_by(year, destination, origin, source_data) %>% 
+        summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+        filter(origin == state_id_given, year > 2005) %>% 
+        group_by(year, origin, destination, source_data) %>% 
+        summarise(from_exports = sum(tons)), 
+      by = c("year", "origin", "destination")
+    ) %>% 
+    mutate(state_id_given) %>% 
+    filter(!is.na(from_imports), from_imports>0, 
+           !is.na(from_exports), from_exports>0)
+}
+
+
+check_fun_ct_exp <- function (state_id_given)
+{
+
+  imports_check %>% 
+    filter(origin %in% data_states, destination %in% data_states) %>% 
+    group_by(year, destination, origin, source_data) %>% 
+    summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+    filter(destination == state_id_given, year > 2005) %>% 
+    group_by(year, origin, destination) %>% 
+    summarise(from_imports = sum(tons)) %>% 
+    full_join( 
+      exports_check %>% 
+        filter(origin %in% data_states, destination %in% data_states) %>% 
+        #filter(destination=="NY"& year>2011|destination!="NY") %>% 
+        #filter(destination=="NY" & origin=="VT"| destination!="NY") %>% 
+        group_by(year, destination, origin, source_data) %>% 
+        summarise(tons = sum(tons, na.rm = TRUE)) %>% 
+        filter(destination == state_id_given, year > 2005) %>% 
+        group_by(year, origin, destination, source_data) %>% 
+        summarise(from_exports = sum(tons)), 
+      by = c("year", "origin", "destination")
+    ) %>% 
+    mutate(state_id_given) %>% 
+    filter(!is.na(from_imports), from_imports>0, 
+           !is.na(from_exports), from_exports>0)
+}
+
+
+validate_imports_1 <- lapply(data_states, check_fun_exporting) %>% bind_rows() %>% as_tibble()
+validate_imports_2 <- lapply(data_states, check_fun_importing) %>% bind_rows() %>% as_tibble()
+
+
+validate_imports_1 %>% 
+  filter(
+    !is.na(from_exports),
+    from_imports > 5000,
+    from_exports > 5000
+  ) %>%
   left_join(
     power2 %>% 
-      filter(year>2010, type%in%c("disposal", "msw_disposed")) %>% 
+      filter(year>2009, type%in%c("disposal", "msw_disposed")) %>% 
+      group_by(state_id, year) %>% 
+      summarise(tons= sum(tons, na.rm = TRUE)), 
+    by = c("state_id_given"="state_id", "year")) %>%
+  filter(year<=2018) %>% 
+  group_by(year,state_id_given, tons) %>% 
+  summarise(
+    from_imports=sum(from_imports),
+    from_exports=sum(from_exports)) %>% 
+  mutate(
+    val=(from_imports-from_exports)/ from_exports,
+    val2=(from_imports-from_exports)/ tons,
+    ) %>% 
+  group_by(state_id_given, year) %>% 
+  summarise(
+    m=median(val,na.rm=TRUE), 
+    m2=median(val2,na.rm=TRUE), 
+    m3 = median (abs(val), na.rm=TRUE), 
+    m4 = median (abs(val2), na.rm=TRUE)) %>%
+  ungroup %>% 
+  filter(state_id_given!="CT") %>% 
+  #group_by(year)
+  summarise(mean(m), mean(m2), mean (m3), mean(m4))
+
+
+validate_imports_2 %>% 
+  filter(
+    !is.na(from_imports),
+    from_imports > 5000,
+    from_exports > 5000
+  ) %>%
+  left_join(
+    power2 %>% 
+      filter(year>2009, type%in%c("disposal", "msw_disposed")) %>% 
+      group_by(state_id, year) %>% 
+      summarise(tons= sum(tons, na.rm = TRUE)), 
+    by = c("state_id_given"="state_id", "year")) %>%
+  filter(year<=2018) %>% 
+  group_by(year,state_id_given, tons) %>% 
+  summarise(from_imports=sum(from_imports),from_exports=sum(from_exports)) %>% 
+  mutate(
+    val=(from_imports-from_exports)/ from_imports,
+    val2=(from_imports-from_exports)/ tons,
+    ) %>% 
+  group_by(state_id_given, year) %>% 
+  summarise(
+    m=median(val,na.rm=TRUE), 
+    m2=median(val2,na.rm=TRUE), 
+    m3 = median (abs(val), na.rm=TRUE), 
+    m4 = median (abs(val2), na.rm=TRUE)) %>%
+  ungroup %>% 
+  filter(state_id_given!="CT") %>% 
+ # group_by(year) %>% 
+  summarise(mean(m), mean(m2), mean (m3), mean(m4))
+
+
+
+state_id_given = "PA"
+check_fun_ct_imp(state_id_given) %>% 
+  filter(year< 2019, year>2009) %>%  filter(!source_data %in% c("CT")) %>% 
+  left_join(
+    power2 %>% 
+      filter(year>=2005, type%in%c("disposal", "msw_disposed")) %>% 
       group_by(state_id, year) %>% 
       summarise(tons= sum(tons, na.rm = TRUE)), 
     by = c("state_id_given"="state_id", "year")) %>%
   group_by(year,state_id_given, tons) %>% 
-  summarise(from_imports=sum(from_imports),from_exports=sum(from_exports)) %>% 
+  summarise(
+    from_imports=sum(from_imports),
+    from_exports=sum(from_exports)) %>% 
   mutate(
-    val=(from_imports-from_exports)/ tons) %>% 
-  group_by(state_id_given) %>% 
-  summarise(m=median(val,na.rm=TRUE)) %>% summarise(mean(m))
+    val=(from_imports-from_exports)/ from_exports,
+    val2= (from_imports-from_exports)/tons
+  ) %>% 
+  group_by(state_id_given, year) %>% 
+  summarise(
+    m=median(val,na.rm=TRUE), 
+    m2=median(val2,na.rm=TRUE), 
+    m3 = median (abs(val), na.rm=TRUE), 
+    m4 = median (abs(val2), na.rm=TRUE)) %>%
+  ungroup %>% 
+  summarise(mean(m), mean(m2), mean (m3), mean(m4))
 
-  
+state_id_given = "PA"
+check_fun_ct_exp(state_id_given) %>% 
+  filter(year< 2019, year>2009) %>%  filter(!source_data %in% c("CT")) %>% 
+  left_join(
+    power2 %>% 
+      filter(year>=2005, type%in%c("disposal", "msw_disposed")) %>% 
+      group_by(state_id, year) %>% 
+      summarise(tons= sum(tons, na.rm = TRUE)), 
+    by = c("state_id_given"="state_id", "year")) %>%
+  group_by(year,state_id_given, tons) %>% 
+  summarise(
+    from_imports=sum(from_imports),
+    from_exports=sum(from_exports)) %>% 
+  mutate(
+    val=(from_imports-from_exports)/ from_imports,
+    val2= (from_imports-from_exports)/tons
+  ) %>% 
+  group_by(state_id_given, year) %>% 
+  summarise(
+    m=median(val,na.rm=TRUE), 
+    m2=median(val2,na.rm=TRUE), 
+    m3 = median (abs(val), na.rm=TRUE), 
+    m4 = median (abs(val2), na.rm=TRUE)) %>%
+  ungroup %>% 
+  summarise(mean(m), mean(m2), mean (m3), mean(m4))
 
+```
+
+```{r}
+
+imports %>%filter(year>2010) %>%  filter(source_data=="OH", origin== "MA") %>% arrange(year)
+
+exports %>%filter(year>2010) %>%  filter(source_data=="MA", destination == "OH") %>% arrange(year)
 
 ```
 

@@ -1,4 +1,4 @@
-disposal_effect_size <- read.csv("disposal_effect_size.csv")
+disposal_effect_size <- read.csv("disposal_effect_size2.csv") %>% as_tibble() %>% rename(effect = effect_size)
 year_start = 2006
 year_cutoff = 2018
 pooled_ban_year = 2015
@@ -139,7 +139,7 @@ xy_plot_data_function <- function (treated_state, f, seed)
     ) %>% #filter(attempt %in% c(1,7,19)) %>% 
     ungroup %>% 
     left_join(
-      disposal_effect_size %>% filter(effect_type== "lower_bound") %>%  select(year, state_id, effect_size), 
+      disposal_effect_size2 %>%  select(year, state_id, effect_size), 
       by = c("year", "county_id" = 'state_id')
     ) %>% 
     mutate(
@@ -177,8 +177,7 @@ xy_plot_fun_passage <- function (i)
       y_0 = mean(y_0), 
     ) %>%
     left_join(
-      disposal_effect_size %>%
-        filter(effect_type== "lower_bound") %>%  
+      disposal_effect_size2 %>%
         select(year, state_id, effect_size) %>% 
         group_by(year) %>% 
         summarise(effect_size=mean(effect_size, na.rm=TRUE)), 
@@ -378,16 +377,18 @@ xy_plot_fun_passage <- function (i)
 
 
 
-# xy_plot_data_passage <-
-#   rbind(
-#     xy_plot_data_function("CA",2,2),
-#     xy_plot_data_function("CT",6,8),
-#     xy_plot_data_function("MA",5,7),
-#     xy_plot_data_function("RI",1,1),
-#     xy_plot_data_function("VT",5,1)
-#  )
-# 
+xy_plot_data_passage <-
+  rbind(
+    xy_plot_data_function("CA",2,1),
+    xy_plot_data_function("CT",4,1),
+    xy_plot_data_function("MA",5,1),
+    xy_plot_data_function("RI",1,1),
+    xy_plot_data_function("VT",5,1)
+ )
 
+#write.csv(xy_plot_data_passage, "xy_plot_data_passage.csv", row.names=FALSE)
+
+#xy_plot_data_passage <- read.csv("xy_plot_data_passage.csv")
 
 xy_plot <- xy_plot_fun_passage(1)
 xy_plot <-
@@ -401,14 +402,27 @@ xy_plot <-
 passage_spec <- rbind(
   read.csv("power_state_p.csv"))
 
+chosen_sample_size <-
+  bt_with_power_data %>% 
+  select(state_id, sample_size) %>% 
+  rename(
+    chosen_sample_size=sample_size 
+  ) 
 
 bt_with_power_data_passage <- 
   passage_spec %>% 
   rename(
     power_low = att_min, 
     power_high = att_max
-  ) %>% select(-att_median)%>%  mutate (power_low = 100*power_low, power_high=100*power_high) %>% 
-  group_by(specification, treated_state, ban_year) %>% filter(power_low == max(power_low)) %>%
+  ) %>% 
+  select(-att_median)%>%  
+  mutate (
+    power_low = 100*power_low, 
+    power_high=100*power_high) %>% 
+  group_by(specification, treated_state, ban_year) %>% 
+  right_join(
+    chosen_sample_size, by = c("treated_state"="state_id", "sample_size"="chosen_sample_size")
+  ) %>% 
   ungroup %>% 
   filter(specification == "State") %>%
   left_join(
@@ -447,7 +461,7 @@ bt_with_power_passage2 <-
       "California" = "CA"
     )#, 
     #state_id = factor(state_id, levels = c("California","Connecticut", "Massachusetts", "Rhode Island", "Vermont"))
-    )%>% 
+  )%>% 
   ggplot()+
   aes(y= state_id, x= 100*actual_treatment_effect, group = 1)+
   geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), width = 0.2, size=0.5)+
@@ -496,7 +510,7 @@ xy_and_power_placebo <-
       subset(xy_plot$data, !treated_state %in% c("All", "Boulder, CO", "Seattle, WA"))+
       geom_point(data = subset(xy_plot$data %>% filter(!treated_state %in%  c("All", "Boulder, CO", "Seattle, WA")), location %in% c("Actual", "Synthetic"))), 
     bt_with_power_passage2+
-      labs(x="", title = "Average treatment effect (%)")+
+      labs(x="", title = "Average treatment effect on the treated (%)")+
       scale_x_continuous(limits=c(-20, 20), breaks = c(seq(-15, 15, by =5)))+
       theme (
         plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4])), 

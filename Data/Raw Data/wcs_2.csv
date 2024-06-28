@@ -1,0 +1,592 @@
+﻿Activity,state_id,City,year,generator_category,material,tons,percentage,need_to_find
+Disposal,WA,Statewide,2021,commercial,compostable_paper,95317,,
+Disposal,WA,Statewide,2021,commercial,food,206163,,
+Disposal,WA,Statewide,2021,commercial,yard_waste,24979,,
+Disposal,WA,Statewide,2021,commercial,total,1507195,,
+Disposal,WA,Statewide,2021,residential,compostable_paper,177388,,
+Disposal,WA,Statewide,2021,residential,food,446436,,
+Disposal,WA,Statewide,2021,residential,yard_waste,79768,,
+Disposal,WA,Statewide,2021,residential,total,2352770,,
+Disposal,WA,Statewide,2021,self_haul,compostable_paper,14834,,
+Disposal,WA,Statewide,2021,self_haul,food,68329,,
+Disposal,WA,Statewide,2021,self_haul,yard_waste,84581,,
+Disposal,WA,Statewide,2021,self_haul,total,1415549,,
+Disposal,WA,Statewide,2021,all,compostable_paper,287541,,
+Disposal,WA,Statewide,2021,all,food,720927,,
+Disposal,WA,Statewide,2021,all,yard_waste,189328,,
+Disposal,WA,Statewide,2021,all,total,5275514,,
+Disposal,WA,Statewide,2015,all,compostable_paper,49332,,
+Disposal,WA,Statewide,2015,all,food,779555,,
+Disposal,WA,Statewide,2015,all,yard_waste,308154,,
+Disposal,WA,Statewide,2015,all,total,4589537,,
+Disposal,WA,Statewide,2015,commercial,compostable_paper,30758,,
+Disposal,WA,Statewide,2015,commercial,food,374218,,
+Disposal,WA,Statewide,2015,commercial,yard_waste,73603,,
+Disposal,WA,Statewide,2015,commercial,total,2007171,,
+Disposal,WA,Statewide,2015,residential,compostable_paper,16738,,
+Disposal,WA,Statewide,2015,residential,food,369178,,
+Disposal,WA,Statewide,2015,residential,yard_waste,180452,,
+Disposal,WA,Statewide,2015,residential,total,1561810,,
+Disposal,WI,Statewide,2009,all,compostable_paper,213694,,
+Disposal,WI,Statewide,2009,all,food,455259,,
+Disposal,WI,Statewide,2009,all,yard_waste,179695,,
+Disposal,WI,Statewide,2009,all,total,4291503,,
+Disposal,WI,Statewide,2009,residential,compostable_paper,103706,,
+Disposal,WI,Statewide,2009,residential,food,251423,,
+Disposal,WI,Statewide,2009,residential,yard_waste,99124,,
+Disposal,WI,Statewide,2009,residential,total,1440491,,
+Disposal,WI,Statewide,2009,commercial,compostable_paper,89534,,
+Disposal,WI,Statewide,2009,commercial,food,239546,,
+Disposal,WI,Statewide,2009,commercial,yard_waste,67319,,
+Disposal,WI,Statewide,2009,commercial,total,2109456,,
+Disposal,WI,Statewide,2002,all,compostable_paper,228310,,
+Disposal,WI,Statewide,2002,all,food,486619,,
+Disposal,WI,Statewide,2002,all,yard_waste,61921,,
+Disposal,WI,Statewide,2002,all,total,4752218,,
+Disposal,WI,Statewide,2002,residential,compostable_paper,95567,,
+Disposal,WI,Statewide,2002,residential,food,206363,,
+Disposal,WI,Statewide,2002,residential,yard_waste,29825,,
+Disposal,WI,Statewide,2002,residential,total,1535679,,
+Disposal,WI,Statewide,2002,commercial,compostable_paper,131327,,
+Disposal,WI,Statewide,2002,commercial,food,277650,,
+Disposal,WI,Statewide,2002,commercial,yard_waste,27692,,
+Disposal,WI,Statewide,2002,commercial,total,2100198,,
+Disposal,PA,Statewide,2003,all,compostable_paper,,,
+Disposal,PA,Statewide,2003,all,food,1127170,,
+Disposal,PA,Statewide,2003,all,yard_waste,483248,,
+Disposal,PA,Statewide,2003,all,total,9369083,,
+Disposal,PA,Statewide,2003,residential,compostable_paper,,,
+Disposal,PA,Statewide,2003,residential,food,621205,,
+Disposal,PA,Statewide,2003,residential,yard_waste,384564,,
+Disposal,PA,Statewide,2003,residential,total,5081930,,
+Disposal,PA,Statewide,2003,commercial,compostable_paper,,,
+Disposal,PA,Statewide,2003,commercial,food,506554,,
+Disposal,PA,Statewide,2003,commercial,yard_waste,106036,,
+Disposal,PA,Statewide,2003,commercial,total,4287153,,
+Disposal,PA,Statewide,2021,all,compostable_paper,687153,,
+Disposal,PA,Statewide,2021,all,food,1593109,,
+Disposal,PA,Statewide,2021,all,yard_waste,332061,,
+Disposal,PA,Statewide,2021,all,total,9392702,,
+Disposal,PA,Statewide,2021,residential,compostable_paper,382562,,
+Disposal,PA,Statewide,2021,residential,food,764239,,
+Disposal,PA,Statewide,2021,residential,yard_waste,252169,,
+Disposal,PA,Statewide,2021,residential,total,4820572,,
+Disposal,PA,Statewide,2021,commercial,compostable_paper,304590,,
+Disposal,PA,Statewide,2021,commercial,food,828870,,
+Disposal,PA,Statewide,2021,commercial,yard_waste,79893,,
+Disposal,PA,Statewide,2021,commercial,total,4572128,,
+Disposal,OR,Statewide,2016,residential,compostable_paper,,,
+Disposal,OR,Statewide,2016,residential,food,191353.6173,,
+Disposal,OR,Statewide,2016,residential,yard_waste,31145.41294,,
+Disposal,OR,Statewide,2016,residential,total,779101.17,,
+Disposal,OR,Statewide,2016,all,compostable_paper,,,
+Disposal,OR,Statewide,2016,all,food,279896.2929,,
+Disposal,OR,Statewide,2016,all,yard_waste,37690.72599,,
+Disposal,OR,Statewide,2016,all,total,1122501.79,,
+Disposal,OR,Statewide,2016,commercial,compostable_paper,,,
+Disposal,OR,Statewide,2016,commercial,food,88542.67562,,
+Disposal,OR,Statewide,2016,commercial,yard_waste,6545.313051,,
+Disposal,OR,Statewide,2016,commercial,total,343400.62,,
+Disposal,OR,Statewide,2009,residential,compostable_paper,,,
+Disposal,OR,Statewide,2009,residential,food,186559.3537,,
+Disposal,OR,Statewide,2009,residential,yard_waste,42763.14497,,
+Disposal,OR,Statewide,2009,residential,total,646170,,
+Disposal,OR,Statewide,2009,all,compostable_paper,,,
+Disposal,OR,Statewide,2009,all,food,268552.8872,,
+Disposal,OR,Statewide,2009,all,yard_waste,53935.85317,,
+Disposal,OR,Statewide,2009,all,total,972216,,
+Disposal,OR,Statewide,2009,commercial,compostable_paper,,,
+Disposal,OR,Statewide,2009,commercial,food,81993.53354,,
+Disposal,OR,Statewide,2009,commercial,yard_waste,11172.7082,,
+Disposal,OR,Statewide,2009,commercial,total,326046,,
+Disposal,OH,Statewide,2019,all,compostable_paper,88457,,
+Disposal,OH,Statewide,2019,all,food,168798,,
+Disposal,OH,Statewide,2019,all,yard_waste,35424,,
+Disposal,OH,Statewide,2019,all,total,1149278,,
+Disposal,OH,Statewide,2019,commercial,compostable_paper,53746,,
+Disposal,OH,Statewide,2019,commercial,food,102768,,
+Disposal,OH,Statewide,2019,commercial,yard_waste,9062,,
+Disposal,OH,Statewide,2019,commercial,total,691378,,
+Disposal,OH,Statewide,2019,residential,compostable_paper,34711,,
+Disposal,OH,Statewide,2019,residential,food,66030,,
+Disposal,OH,Statewide,2019,residential,yard_waste,26363,,
+Disposal,OH,Statewide,2019,residential,total,457900,,
+Disposal,MO,Statewide,2017,all,compostable_paper,312127,,
+Disposal,MO,Statewide,2017,all,food,578315,,
+Disposal,MO,Statewide,2017,all,yard_waste,101921,,
+Disposal,MO,Statewide,2017,all,total,3858452,,
+Disposal,MO,Statewide,2017,commercial,compostable_paper,116560,,
+Disposal,MO,Statewide,2017,commercial,food,254977,,
+Disposal,MO,Statewide,2017,commercial,yard_waste,21792,,
+Disposal,MO,Statewide,2017,commercial,total,1659931,,
+Disposal,MO,Statewide,2017,residential,compostable_paper,195567,,
+Disposal,MO,Statewide,2017,residential,food,323337,,
+Disposal,MO,Statewide,2017,residential,yard_waste,80128,,
+Disposal,MO,Statewide,2017,residential,total,2198521,,
+Disposal,MA,Statewide,2010,all,compostable_paper,,0.06165359,known
+Disposal,MA,Statewide,2010,all,food,,0.150866761,known
+Disposal,MA,Statewide,2010,all,yard_waste,,0.034041158,known
+Disposal,MA,Statewide,2010,all,total,,,known
+Disposal,MA,Statewide,2013,all,compostable_paper,,0.078176626,known
+Disposal,MA,Statewide,2013,all,food,,0.188390654,known
+Disposal,MA,Statewide,2013,all,yard_waste,,0.042100224,known
+Disposal,MA,Statewide,2013,all,total,,,known
+Disposal,MA,Statewide,2016,all,compostable_paper,,0.058312916,known
+Disposal,MA,Statewide,2016,all,food,,0.259662113,known
+Disposal,MA,Statewide,2016,all,yard_waste,,0.026014028,known
+Disposal,MA,Statewide,2016,all,total,,,known
+Disposal,MA,Statewide,2019,all,compostable_paper,,0.087254247,known
+Disposal,MA,Statewide,2019,all,food,,0.214604638,known
+Disposal,MA,Statewide,2019,all,yard_waste,,0.025691731,known
+Disposal,MA,Statewide,2019,all,total,,,known
+Disposal,TN,"Lewisburg, ",2008,residential,compostable_paper,,,
+Disposal,TN,"Lewisburg, ",2008,residential,food,,0.1773,
+Disposal,TN,"Lewisburg, ",2008,residential,yard_waste,,0.0639,
+Disposal,TN,"Lewisburg, ",2008,residential,total,,,
+Disposal,TN,"Lewisburg, ",2008,commercial,compostable_paper,,,
+Disposal,TN,"Lewisburg, ",2008,commercial,food,,0.0961,
+Disposal,TN,"Lewisburg, ",2008,commercial,yard_waste,,0.062,
+Disposal,TN,"Lewisburg, ",2008,commercial,total,,,
+Disposal,IA,Statewide,2017,all,compostable_paper,,0.076,
+Disposal,IA,Statewide,2017,all,food,,0.2,
+Disposal,IA,Statewide,2017,all,yard_waste,,0.029,
+Disposal,IA,Statewide,2017,commercial,compostable_paper,,0.084,
+Disposal,IA,Statewide,2017,commercial,food,,0.219,
+Disposal,IA,Statewide,2017,commercial,yard_waste,,0.013,
+Disposal,IA,Statewide,2017,residential,compostable_paper,,0.068,
+Disposal,IA,Statewide,2017,residential,food,,0.179,
+Disposal,IA,Statewide,2017,residential,yard_waste,,0.047,
+Disposal,IA,Statewide,2005,all,compostable_paper,,0.065,
+Disposal,IA,Statewide,2005,all,food,,0.106,
+Disposal,IA,Statewide,2005,all,yard_waste,,0.016,
+Disposal,IA,Statewide,2005,commercial,compostable_paper,,0.054,
+Disposal,IA,Statewide,2005,commercial,food,,0.103,
+Disposal,IA,Statewide,2005,commercial,yard_waste,,0.011,
+Disposal,IA,Statewide,2005,residential,compostable_paper,,0.079,
+Disposal,IA,Statewide,2005,residential,food,,0.112,
+Disposal,IA,Statewide,2005,residential,yard_waste,,0.017,
+Disposal,GA,Statewide,2005,residential,compostable_paper,,,
+Disposal,GA,Statewide,2005,residential,food,45042.51612,,
+Disposal,GA,Statewide,2005,residential,yard_waste,1568.9016,,
+Disposal,GA,Statewide,2005,residential,total,2807700.84,,
+Disposal,GA,Statewide,2005,commercial,compostable_paper,,,
+Disposal,GA,Statewide,2005,commercial,food,47635.58208,,
+Disposal,GA,Statewide,2005,commercial,yard_waste,2561.472,,
+Disposal,GA,Statewide,2005,commercial,total,3208800.96,,
+Disposal,GA,Statewide,2005,all,compostable_paper,,,
+Disposal,GA,Statewide,2005,all,food,800329,,
+Disposal,GA,Statewide,2005,all,yard_waste,177880,,
+Disposal,GA,Statewide,2005,all,total,6685002,,
+Disposal,TN,"Lewisburg, ",2008,all,paper,,0.3209,1
+Disposal,TN,"Lewisburg, ",2008,all,glass,,0.0506,1
+Disposal,TN,"Lewisburg, ",2008,all,organics,,0.2165,1
+Disposal,TN,"Lewisburg, ",2008,all,textiles,,0.0535,1
+Disposal,TN,"Lewisburg, ",2008,all,metal,,0.0573,1
+Disposal,TN,"Lewisburg, ",2008,all,special,,0.0177,1
+Disposal,TN,"Lewisburg, ",2008,residential,paper,,0.2955,1
+Disposal,TN,"Lewisburg, ",2008,residential,glass,,0.0518,1
+Disposal,TN,"Lewisburg, ",2008,residential,organics,,0.2411,1
+Disposal,TN,"Lewisburg, ",2008,residential,textiles,,0.0527,1
+Disposal,TN,"Lewisburg, ",2008,residential,metal,,0.0564,1
+Disposal,TN,"Lewisburg, ",2008,residential,special,,0.0145,1
+Disposal,TN,"Lewisburg, ",2008,commercial,paper,,0.3703,1
+Disposal,TN,"Lewisburg, ",2008,commercial,glass,,0.0494,1
+Disposal,TN,"Lewisburg, ",2008,commercial,organics,,0.1581,1
+Disposal,TN,"Lewisburg, ",2008,commercial,textiles,,0.0542,1
+Disposal,TN,"Lewisburg, ",2008,commercial,metal,,0.0602,1
+Disposal,TN,"Lewisburg, ",2008,commercial,special,,0.0279,1
+Disposal,IA,Statewide,2005,all,paper,,0.33,1
+Disposal,IA,Statewide,2005,all,plastic,,0.149,1
+Disposal,IA,Statewide,2005,all,metal,,0.047,1
+Disposal,IA,Statewide,2005,all,glass,,0.017,1
+Disposal,IA,Statewide,2005,all,organics,,0.122,1
+Disposal,IA,Statewide,2005,all,CD,,0.055,1
+Disposal,IA,Statewide,2005,all,other,,0.28,1
+Disposal,IA,Statewide,2005,residential,paper,,0.311,1
+Disposal,IA,Statewide,2005,residential,plastic,,0.132,1
+Disposal,IA,Statewide,2005,residential,metal,,0.042,1
+Disposal,IA,Statewide,2005,residential,glass,,0.024,1
+Disposal,IA,Statewide,2005,residential,organics,,0.129,1
+Disposal,IA,Statewide,2005,residential,CD,,0.054,1
+Disposal,IA,Statewide,2005,residential,other,,0.308,1
+Disposal,IA,Statewide,2005,commercial,paper,,0.341,1
+Disposal,IA,Statewide,2005,commercial,plastic,,0.162,1
+Disposal,IA,Statewide,2005,commercial,metal,,0.049,1
+Disposal,IA,Statewide,2005,commercial,glass,,0.01,1
+Disposal,IA,Statewide,2005,commercial,organics,,0.114,1
+Disposal,IA,Statewide,2005,commercial,CD,,0.056,1
+Disposal,IA,Statewide,2005,commercial,other,,0.268,1
+Disposal,MD,Statewide,2016,all,compostable_paper,285516,,
+Disposal,MD,Statewide,2016,all,food,676590,,
+Disposal,MD,Statewide,2016,all,yard_waste,104459,,
+Disposal,MD,Statewide,2016,all,total,3784062,,
+Disposal,MD,Statewide,2016,commercial,compostable_paper,127963,,
+Disposal,MD,Statewide,2016,commercial,food,352996,,
+Disposal,MD,Statewide,2016,commercial,yard_waste,9039,,
+Disposal,MD,Statewide,2016,commercial,total,1933860,,
+Disposal,MD,Statewide,2016,residential,compostable_paper,157553,,
+Disposal,MD,Statewide,2016,residential,food,323595,,
+Disposal,MD,Statewide,2016,residential,yard_waste,95421,,
+Disposal,MD,Statewide,2016,residential,total,1850202,,
+Disposal,KY,Louisville,2016,all,compostable_paper,38442,,
+Disposal,KY,Louisville,2016,all,food,88162,,
+Disposal,KY,Louisville,2016,all,yard_waste,34465,,
+Disposal,KY,Louisville,2016,all,total,625061,,
+Disposal,KY,Louisville,2016,commercial,compostable_paper,18054,,
+Disposal,KY,Louisville,2016,commercial,food,46989,,
+Disposal,KY,Louisville,2016,commercial,yard_waste,11489,,
+Disposal,KY,Louisville,2016,commercial,total,335514,,
+Disposal,KY,Louisville,2016,residential,compostable_paper,17965,,
+Disposal,KY,Louisville,2016,residential,food,35924,,
+Disposal,KY,Louisville,2016,residential,yard_waste,22050,,
+Disposal,KY,Louisville,2016,residential,total,240799,,
+Disposal,KY,Louisville,2016,multi_family,compostable_paper,2424,,
+Disposal,KY,Louisville,2016,multi_family,food,5249,,
+Disposal,KY,Louisville,2016,multi_family,yard_waste,926,,
+Disposal,KY,Louisville,2016,multi_family,total,48748,,
+Disposal,DE,Statewide,2016,all,compostable_paper,62258,,
+Disposal,DE,Statewide,2016,all,food,131999,,
+Disposal,DE,Statewide,2016,all,yard_waste,27571,,
+Disposal,DE,Statewide,2016,all,total,626914,,
+Disposal,DE,Statewide,2016,commercial,compostable_paper,31391,,
+Disposal,DE,Statewide,2016,commercial,food,67088,,
+Disposal,DE,Statewide,2016,commercial,yard_waste,11806,,
+Disposal,DE,Statewide,2016,commercial,total,306755,,
+Disposal,DE,Statewide,2016,residential,compostable_paper,30867,,
+Disposal,DE,Statewide,2016,residential,food,64913,,
+Disposal,DE,Statewide,2016,residential,yard_waste,15768,,
+Disposal,DE,Statewide,2016,residential,total,320159,,
+Disposal,CO,Boulder,2019,all,compostable_paper,16370,,
+Disposal,CO,Boulder,2019,all,food,37039,,
+Disposal,CO,Boulder,2019,all,yard_waste,6258,,
+Disposal,CO,Boulder,2019,all,total,234216,,
+Disposal,CO,Boulder,2019,commercial,compostable_paper,10191,,
+Disposal,CO,Boulder,2019,commercial,food,21813,,
+Disposal,CO,Boulder,2019,commercial,yard_waste,1694,,
+Disposal,CO,Boulder,2019,commercial,total,142146,,
+Disposal,CO,Boulder,2019,residential,compostable_paper,3853,,
+Disposal,CO,Boulder,2019,residential,food,9580,,
+Disposal,CO,Boulder,2019,residential,yard_waste,4332,,
+Disposal,CO,Boulder,2019,residential,total,58521,,
+Disposal,CO,Boulder,2019,multi_family,compostable_paper,2326,,
+Disposal,CO,Boulder,2019,multi_family,food,5646,,
+Disposal,CO,Boulder,2019,multi_family,yard_waste,231,,
+Disposal,CO,Boulder,2019,multi_family,total,33549,,
+Disposal,CO,Larimer,2016,all,compostable_paper,0,,
+Disposal,CO,Larimer,2016,all,food,32254.311,,
+Disposal,CO,Larimer,2016,all,yard_waste,26226.022,,
+Disposal,CO,Larimer,2016,all,total,211010.8,,
+Disposal,CO,Larimer,2016,commercial,compostable_paper,0,,
+Disposal,CO,Larimer,2016,commercial,food,9643.056,,
+Disposal,CO,Larimer,2016,commercial,yard_waste,6629.601,,
+Disposal,CO,Larimer,2016,commercial,total,60269.1,,
+Disposal,CO,Larimer,2016,residential,compostable_paper,0,,
+Disposal,CO,Larimer,2016,residential,food,22611.255,,
+Disposal,CO,Larimer,2016,residential,yard_waste,19596.421,,
+Disposal,CO,Larimer,2016,residential,total,150741.7,,
+Disposal,CA,Statewide,2014,all,compostable_paper,2093462,,
+Disposal,CA,Statewide,2014,all,food,5591179,,
+Disposal,CA,Statewide,2014,all,yard_waste,2663680,,
+Disposal,CA,Statewide,2014,all,total,30864279,,
+Disposal,CA,Statewide,2014,commercial,compostable_paper,900683,,
+Disposal,CA,Statewide,2014,commercial,food,2390922,,
+Disposal,CA,Statewide,2014,commercial,yard_waste,797404,,
+Disposal,CA,Statewide,2014,commercial,total,11909937,,
+Disposal,CA,Statewide,2014,self_haul,compostable_paper,6391.88097,,
+Disposal,CA,Statewide,2014,self_haul,food,11848,,
+Disposal,CA,Statewide,2014,self_haul,yard_waste,370819,,
+Disposal,CA,Statewide,2014,self_haul,total,3486297,,
+Disposal,CA,Statewide,2014,multi_family,compostable_paper,293128.7578,,
+Disposal,CA,Statewide,2014,multi_family,food,888327,,
+Disposal,CA,Statewide,2014,multi_family,yard_waste,131806,,
+Disposal,CA,Statewide,2014,multi_family,total,3591900,,
+Disposal,CA,Statewide,2018,all,compostable_paper,2046717,,
+Disposal,CA,Statewide,2018,all,food,5859535,,
+Disposal,CA,Statewide,2018,all,yard_waste,2735938,,
+Disposal,CA,Statewide,2018,all,total,39304457,,
+Disposal,CA,Statewide,2018,commercial,compostable_paper,1177313,,
+Disposal,CA,Statewide,2018,commercial,food,3296189,,
+Disposal,CA,Statewide,2018,commercial,yard_waste,886859,,
+Disposal,CA,Statewide,2018,commercial,total,16467606,,
+Disposal,CA,Statewide,2018,self_haul,compostable_paper,5550.575265,,
+Disposal,CA,Statewide,2018,self_haul,food,187662.2318,,
+Disposal,CA,Statewide,2018,self_haul,yard_waste,843070.797,,
+Disposal,CA,Statewide,2018,self_haul,total,9115732.696,,
+Disposal,CA,Statewide,2018,multi_family,compostable_paper,107693,,
+Disposal,CA,Statewide,2018,multi_family,food,444622,,
+Disposal,CA,Statewide,2018,multi_family,yard_waste,75970,,
+Disposal,CA,Statewide,2018,multi_family,total,1810852,,
+Disposal,CA,Statewide,2021,all,compostable_paper,1407596,,
+Disposal,CA,Statewide,2021,all,food,4262949,,
+Disposal,CA,Statewide,2021,all,yard_waste,2411188,,
+Disposal,CA,Statewide,2021,all,total,39878983,,
+Disposal,CA,Statewide,2021,commercial,compostable_paper,786188,,
+Disposal,CA,Statewide,2021,commercial,food,2738599,,
+Disposal,CA,Statewide,2021,commercial,yard_waste,488621,,
+Disposal,CA,Statewide,2021,commercial,total,19206355,,
+Disposal,CA,Statewide,2021,self_haul,compostable_paper,18798.58713,,
+Disposal,CA,Statewide,2021,self_haul,food,108976.1896,,
+Disposal,CA,Statewide,2021,self_haul,yard_waste,702713.3548,,
+Disposal,CA,Statewide,2021,self_haul,total,7862416,,
+Disposal,CT,Statewide,2015,all,compostable_paper,249829,,
+Disposal,CT,Statewide,2015,all,food,519832,,
+Disposal,CT,Statewide,2015,all,yard_waste,157089,,
+Disposal,CT,Statewide,2015,all,total,2332598,,
+Disposal,CT,Statewide,2015,commercial,compostable_paper,119070,,
+Disposal,CT,Statewide,2015,commercial,food,247176,,
+Disposal,CT,Statewide,2015,commercial,yard_waste,28960,,
+Disposal,CT,Statewide,2015,commercial,total,970035,,
+Disposal,CT,Statewide,2015,residential,compostable_paper,130759,,
+Disposal,CT,Statewide,2015,residential,food,272656,,
+Disposal,CT,Statewide,2015,residential,yard_waste,128130,,
+Disposal,CT,Statewide,2015,residential,total,1362563,,
+Disposal,CT,Statewide,2009,all,compostable_paper,195185,,
+Disposal,CT,Statewide,2009,all,food,321481,,
+Disposal,CT,Statewide,2009,all,yard_waste,234107,,
+Disposal,CT,Statewide,2009,all,total,2379687,,
+Disposal,CT,Statewide,2009,commercial,compostable_paper,131389,,
+Disposal,CT,Statewide,2009,commercial,food,183112,,
+Disposal,CT,Statewide,2009,commercial,yard_waste,187964,,
+Disposal,CT,Statewide,2009,commercial,total,1334651,,
+Disposal,CT,Statewide,2009,residential,compostable_paper,63795,,
+Disposal,CT,Statewide,2009,residential,food,138369,,
+Disposal,CT,Statewide,2009,residential,yard_waste,45444,,
+Disposal,CT,Statewide,2009,residential,total,1045036,,
+Disposal,RI,Statewide,2015,all,compostable_paper,34048,,
+Disposal,RI,Statewide,2015,all,food,100029,,
+Disposal,RI,Statewide,2015,all,yard_waste,28576,,
+Disposal,RI,Statewide,2015,all,total,528168,,
+Disposal,RI,Statewide,2015,commercial,compostable_paper,11849,,
+Disposal,RI,Statewide,2015,commercial,food,39453,,
+Disposal,RI,Statewide,2015,commercial,yard_waste,5150,,
+Disposal,RI,Statewide,2015,commercial,total,225051,,
+Disposal,RI,Statewide,2015,residential,compostable_paper,22199,,
+Disposal,RI,Statewide,2015,residential,food,60557,,
+Disposal,RI,Statewide,2015,residential,yard_waste,23426,,
+Disposal,RI,Statewide,2015,residential,total,303117,,
+Disposal,VT,Statewide,2018,all,compostable_paper,35403,,
+Disposal,VT,Statewide,2018,all,food,81628,,
+Disposal,VT,Statewide,2018,all,yard_waste,3382,,
+Disposal,VT,Statewide,2018,all,total,381361,,
+Disposal,VT,Statewide,2018,commercial,compostable_paper,14515,,
+Disposal,VT,Statewide,2018,commercial,food,40852,,
+Disposal,VT,Statewide,2018,commercial,yard_waste,531,,
+Disposal,VT,Statewide,2018,commercial,total,185251,,
+Disposal,VT,Statewide,2018,residential,compostable_paper,20888,,
+Disposal,VT,Statewide,2018,residential,food,40776,,
+Disposal,VT,Statewide,2018,residential,yard_waste,2851,,
+Disposal,VT,Statewide,2018,residential,total,196110,,
+Disposal,VT,Statewide,2013,all,compostable_paper,21851,,
+Disposal,VT,Statewide,2013,all,food,60078,,
+Disposal,VT,Statewide,2013,all,yard_waste,12731,,
+Disposal,VT,Statewide,2013,all,total,413517,,
+Disposal,VT,Statewide,2013,commercial,compostable_paper,6345,,
+Disposal,VT,Statewide,2013,commercial,food,18592,,
+Disposal,VT,Statewide,2013,commercial,yard_waste,4818,,
+Disposal,VT,Statewide,2013,commercial,total,165407,,
+Disposal,VT,Statewide,2013,residential,compostable_paper,15506,,
+Disposal,VT,Statewide,2013,residential,food,41486,,
+Disposal,VT,Statewide,2013,residential,yard_waste,7913,,
+Disposal,VT,Statewide,2013,residential,total,248110,,
+Disposal,FL,Pinellas,2021,all,compostable_paper,33783.052,,
+Disposal,FL,Pinellas,2021,all,food,114364.658,,
+Disposal,FL,Pinellas,2021,all,yard_waste,88290.244,,
+Disposal,FL,Pinellas,2021,all,total,765964,,
+Disposal,FL,Pinellas,2021,commercial,compostable_paper,12065,,
+Disposal,FL,Pinellas,2021,commercial,food,40055.8,,
+Disposal,FL,Pinellas,2021,commercial,yard_waste,6997.7,,
+Disposal,FL,Pinellas,2021,commercial,total,241300,,
+Disposal,FL,Pinellas,2021,residential,compostable_paper,17271.25,,
+Disposal,FL,Pinellas,2021,residential,food,72033.75,,
+Disposal,FL,Pinellas,2021,residential,yard_waste,63608.75,,
+Disposal,FL,Pinellas,2021,residential,total,421250,,
+Disposal,FL,Pinellas,2021,multi_family,compostable_paper,4446.802,,
+Disposal,FL,Pinellas,2021,multi_family,food,2275.108,,
+Disposal,FL,Pinellas,2021,multi_family,yard_waste,17683.794,,
+Disposal,FL,Pinellas,2021,multi_family,total,103414,,
+Disposal,IA,Statewide,2017,all,paper,,0.255,1
+Disposal,IA,Statewide,2017,all,plastic,,0.183,1
+Disposal,IA,Statewide,2017,all,metal,,0.039,1
+Disposal,IA,Statewide,2017,all,glass,,0.021,1
+Disposal,IA,Statewide,2017,all,organics,,0.316,1
+Disposal,IA,Statewide,2017,all,durable,,0.014,1
+Disposal,IA,Statewide,2017,all,CD,,0.054,1
+Disposal,IA,Statewide,2017,all,HHW,,0.005,1
+Disposal,IA,Statewide,2017,all,other,,0.114,1
+Disposal,IA,Statewide,2017,residential,paper,,0.228,1
+Disposal,IA,Statewide,2017,residential,plastic,,0.166,1
+Disposal,IA,Statewide,2017,residential,metal,,0.039,1
+Disposal,IA,Statewide,2017,residential,glass,,0.026,1
+Disposal,IA,Statewide,2017,residential,organics,,0.335,1
+Disposal,IA,Statewide,2017,residential,durable,,0.015,1
+Disposal,IA,Statewide,2017,residential,CD,,0.04,1
+Disposal,IA,Statewide,2017,residential,HHW,,0.005,1
+Disposal,IA,Statewide,2017,residential,other,,0.146,1
+Disposal,IA,Statewide,2017,commercial,paper,,0.279,1
+Disposal,IA,Statewide,2017,commercial,plastic,,0.198,1
+Disposal,IA,Statewide,2017,commercial,metal,,0.038,1
+Disposal,IA,Statewide,2017,commercial,glass,,0.018,1
+Disposal,IA,Statewide,2017,commercial,organics,,0.299,1
+Disposal,IA,Statewide,2017,commercial,durable,,0.013,1
+Disposal,IA,Statewide,2017,commercial,CD,,0.066,1
+Disposal,IA,Statewide,2017,commercial,HHW,,0.004,1
+Disposal,IA,Statewide,2017,commercial,other,,0.086,1
+Disposal,FL,Orange County,2019,all,paper,,0.271,1
+Disposal,FL,Orange County,2019,all,plastic,,0.228,1
+Disposal,FL,Orange County,2019,all,metal,,0.037,1
+Disposal,FL,Orange County,2019,all,glass,,0.036,1
+Disposal,FL,Orange County,2019,all,organic,,0.201,1
+Disposal,FL,Orange County,2019,all,other,,0.227,1
+Disposal,FL,Orange County,2019,commercial,paper,,0.309,1
+Disposal,FL,Orange County,2019,commercial,plastic,,0.24,1
+Disposal,FL,Orange County,2019,commercial,metal,,0.025,1
+Disposal,FL,Orange County,2019,commercial,glass,,0.03,1
+Disposal,FL,Orange County,2019,commercial,organic,,0.181,1
+Disposal,FL,Orange County,2019,commercial,other,,0.216,1
+Disposal,FL,Orange County,2019,residential,paper,,0.252,1
+Disposal,FL,Orange County,2019,residential,plastic,,0.224,1
+Disposal,FL,Orange County,2019,residential,metal,,0.042,1
+Disposal,FL,Orange County,2019,residential,glass,,0.039,1
+Disposal,FL,Orange County,2019,residential,organic,,0.211,1
+Disposal,FL,Orange County,2019,residential,other,,0.232,1
+Disposal,FL,Palm Beach County,2019,all,paper,,0.286,1
+Disposal,FL,Palm Beach County,2019,all,plastic,,0.182,1
+Disposal,FL,Palm Beach County,2019,all,metal,,0.027,1
+Disposal,FL,Palm Beach County,2019,all,glass,,0.031,1
+Disposal,FL,Palm Beach County,2019,all,organic,,0.257,1
+Disposal,FL,Palm Beach County,2019,all,other,,0.22,1
+Disposal,FL,Palm Beach County,2019,commercial,paper,,0.279,1
+Disposal,FL,Palm Beach County,2019,commercial,plastic,,0.182,1
+Disposal,FL,Palm Beach County,2019,commercial,metal,,0.026,1
+Disposal,FL,Palm Beach County,2019,commercial,glass,,0.029,1
+Disposal,FL,Palm Beach County,2019,commercial,organic,,0.251,1
+Disposal,FL,Palm Beach County,2019,commercial,other,,0.236,1
+Disposal,FL,Palm Beach County,2019,residential,paper,,0.301,1
+Disposal,FL,Palm Beach County,2019,residential,plastic,,0.175,1
+Disposal,FL,Palm Beach County,2019,residential,metal,,0.03,1
+Disposal,FL,Palm Beach County,2019,residential,glass,,0.036,1
+Disposal,FL,Palm Beach County,2019,residential,organic,,0.276,1
+Disposal,FL,Palm Beach County,2019,residential,other,,0.183,1
+Disposal,FL,Orange County,2019,all,compostable_paper,,,
+Disposal,FL,Orange County,2019,all,food,,0.102,
+Disposal,FL,Orange County,2019,all,yard_waste,,0.028,
+Disposal,FL,Orange County,2019,commercial,compostable_paper,,,
+Disposal,FL,Orange County,2019,commercial,food,,0.103,
+Disposal,FL,Orange County,2019,commercial,yard_waste,,0.003,
+Disposal,FL,Orange County,2019,residential,compostable_paper,,,
+Disposal,FL,Orange County,2019,residential,food,,0.102,
+Disposal,FL,Orange County,2019,residential,yard_waste,,0.04,
+Disposal,FL,Palm Beach County,2019,all,compostable_paper,,,
+Disposal,FL,Palm Beach County,2019,all,food,,0.172,
+Disposal,FL,Palm Beach County,2019,all,yard_waste,,0.025,
+Disposal,FL,Palm Beach County,2019,commercial,compostable_paper,,,
+Disposal,FL,Palm Beach County,2019,commercial,food,,0.179,
+Disposal,FL,Palm Beach County,2019,commercial,yard_waste,,0.029,
+Disposal,FL,Palm Beach County,2019,residential,compostable_paper,,,
+Disposal,FL,Palm Beach County,2019,residential,food,,0.157,
+Disposal,FL,Palm Beach County,2019,residential,yard_waste,,0.017,
+Disposal,WI,Statewide,2021,all,compostable_paper,232000,0.053,
+Disposal,WI,Statewide,2021,all,food,854000,0.196,
+Disposal,WI,Statewide,2021,all,yard_waste,88400,0.02,
+Disposal,WI,Statewide,2021,all,total,4350100,,
+Disposal,WI,Statewide,2021,residential,paper,,0.195,1
+Disposal,WI,Statewide,2021,residential,plastic,,0.164,1
+Disposal,WI,Statewide,2021,residential,metal,,0.046,1
+Disposal,WI,Statewide,2021,residential,glass,,0.022,1
+Disposal,WI,Statewide,2021,residential,organic,,0.338,1
+Disposal,WI,Statewide,2021,residential,other,,0.235,1
+Disposal,WI,Statewide,2021,commercial,paper,,0.237,1
+Disposal,WI,Statewide,2021,commercial,plastic,,0.182,1
+Disposal,WI,Statewide,2021,commercial,metal,,0.046,1
+Disposal,WI,Statewide,2021,commercial,glass,,0.023,1
+Disposal,WI,Statewide,2021,commercial,organic,,0.263,1
+Disposal,WI,Statewide,2021,commercial,other,,0.249,1
+Disposal,WI,Statewide,2021,all,paper,,0.212615802,1
+Disposal,WI,Statewide,2021,all,plastic,,0.171398359,1
+Disposal,WI,Statewide,2021,all,metal,,0.045631135,1
+Disposal,WI,Statewide,2021,all,glass,,0.022436266,1
+Disposal,WI,Statewide,2021,all,organic,,0.303947036,1
+Disposal,WI,Statewide,2021,all,other,,0.243971403,1
+Disposal,WI,Statewide,2021,commercial,compostable_paper,,0.051,
+Disposal,WI,Statewide,2021,commercial,food,,0.188,
+Disposal,WI,Statewide,2021,commercial,yard_waste,,0.011,
+Disposal,WI,Statewide,2021,commercial,total,,,
+Disposal,WI,Statewide,2021,residential,compostable_paper,,0.056,
+Disposal,WI,Statewide,2021,residential,food,,0.185,
+Disposal,WI,Statewide,2021,residential,yard_waste,,0.029,
+Disposal,WI,Statewide,2021,residential,total,,,
+Disposal,MN,Statewide,2013,all,compostable_paper,286360.41,,
+Disposal,MN,Statewide,2013,all,food,520124.01,,
+Disposal,MN,Statewide,2013,all,yard_waste,81817.26,,
+Disposal,MN,Statewide,2013,all,total,2922045,,
+Disposal,MI,Statewide,2016,all,paper,,0.2171,1
+Disposal,MI,Statewide,2016,all,plastic,,0.1402,1
+Disposal,MI,Statewide,2016,all,metal,,0.0375,1
+Disposal,MI,Statewide,2016,all,glass,,0.0215,1
+Disposal,MI,Statewide,2016,all,organics,,0.3517,1
+Disposal,MI,Statewide,2016,all,other,,0.232,1
+Disposal,MI,Statewide,2016,residential,paper,,0.2011,1
+Disposal,MI,Statewide,2016,residential,plastic,,0.1467,1
+Disposal,MI,Statewide,2016,residential,metal,,0.0299,1
+Disposal,MI,Statewide,2016,residential,glass,,0.0272,1
+Disposal,MI,Statewide,2016,residential,organics,,0.3858,1
+Disposal,MI,Statewide,2016,residential,other,,0.2093,1
+Disposal,MI,Statewide,2016,commercial,paper,,0.2399,1
+Disposal,MI,Statewide,2016,commercial,plastic,,0.1474,1
+Disposal,MI,Statewide,2016,commercial,metal,,0.0394,1
+Disposal,MI,Statewide,2016,commercial,glass,,0.015,1
+Disposal,MI,Statewide,2016,commercial,organics,,0.35,1
+Disposal,MI,Statewide,2016,commercial,other,,0.2083,1
+Disposal,MI,Statewide,2016,all,compostable_paper,,,
+Disposal,MI,Statewide,2016,all,food,,0.1357,
+Disposal,MI,Statewide,2016,all,yard_waste,,0.05,
+Disposal,MI,Statewide,2016,commercial,compostable_paper,,,
+Disposal,MI,Statewide,2016,commercial,food,,0.1435,
+Disposal,MI,Statewide,2016,commercial,yard_waste,,0.0534,
+Disposal,MI,Statewide,2016,residential,compostable_paper,,,
+Disposal,MI,Statewide,2016,residential,food,,0.1689,
+Disposal,MI,Statewide,2016,residential,yard_waste,,0.0511,
+Disposal,IN,Statewide,2012,all,compostable_paper,269540,,
+Disposal,IN,Statewide,2012,all,food,591557,,
+Disposal,IN,Statewide,2012,all,yard_waste,424349,,
+Disposal,IN,Statewide,2012,all,total,5996960,,
+Disposal,IL,Statewide,2009,all,compostable_paper,451450,,
+Disposal,IL,Statewide,2009,all,food,1833880,,
+Disposal,IL,Statewide,2009,all,yard_waste,383070,,
+Disposal,IL,Statewide,2009,all,total,13697700,,
+Disposal,IL,Statewide,2009,commercial,compostable_paper,175760,,
+Disposal,IL,Statewide,2009,commercial,food,859110,,
+Disposal,IL,Statewide,2009,commercial,yard_waste,177500,,
+Disposal,IL,Statewide,2009,commercial,total,7040000,,
+Disposal,IL,Statewide,2009,residential,compostable_paper,275690,,
+Disposal,IL,Statewide,2009,residential,food,974770,,
+Disposal,IL,Statewide,2009,residential,yard_waste,205570,,
+Disposal,IL,Statewide,2009,residential,total,6657700,,
+Disposal,IL,Statewide,2015,all,compostable_paper,450170,,
+Disposal,IL,Statewide,2015,all,food,2119150,,
+Disposal,IL,Statewide,2015,all,yard_waste,363740,,
+Disposal,IL,Statewide,2015,all,total,11761500,,
+Disposal,IL,Statewide,2015,commercial,compostable_paper,243480,,
+Disposal,IL,Statewide,2015,commercial,food,1123840,,
+Disposal,IL,Statewide,2015,commercial,yard_waste,117140,,
+Disposal,IL,Statewide,2015,commercial,total,6845000,,
+Disposal,IL,Statewide,2015,residential,compostable_paper,206690,,
+Disposal,IL,Statewide,2015,residential,food,995310,,
+Disposal,IL,Statewide,2015,residential,yard_waste,246600,,
+Disposal,IL,Statewide,2015,residential,total,4916500,,
+Disposal,M1,Seattle,2014,residential,compostable_paper,7169,,
+Disposal,M1,Seattle,2014,residential,food,33113,,
+Disposal,M1,Seattle,2014,residential,yard_waste,1754,,
+Disposal,M1,Seattle,2014,residential,total,112238,,
+Disposal,M1,Seattle,2016,commercial,compostable_paper,9879,,
+Disposal,M1,Seattle,2016,commercial,food,29935,,
+Disposal,M1,Seattle,2016,commercial,yard_waste,2286,,
+Disposal,M1,Seattle,2016,commercial,total,122036,,
+Disposal,M1,Seattle,2016,all,compostable_paper,17048,,
+Disposal,M1,Seattle,2016,all,food,63048,,
+Disposal,M1,Seattle,2016,all,yard_waste,4040,,
+Disposal,M1,Seattle,2016,all,total,234274,,
+Disposal,WA,Statewide,2015,self_haul,compostable_paper,1796,,
+Disposal,WA,Statewide,2015,self_haul,food,32578,,
+Disposal,WA,Statewide,2015,self_haul,yard_waste,45582,,
+Disposal,WA,Statewide,2015,self_haul,total,430918,,

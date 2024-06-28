@@ -1,17 +1,14 @@
 #### Data ####
 
-composting_all_facilities <- read.csv(
-  "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.1.Composting Infrastructure/composting_infrastructure_all_states_gov.csv"
-) %>% as_tibble() %>%  filter(data_type=="gov")
+composting_inf_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.1.Composting Infrastructure"
+controls_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data/00. Controls"
 
-
-composting_capacities <- read.csv(
-  "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.1.Composting Infrastructure/composting_capacity_all_states.csv"
-) %>% as_tibble()
+composting_all_facilities <- read.csv(paste0(composting_inf_path,"/composting_infrastructure_all_states_gov.csv")) %>% as_tibble() %>%  filter(data_type=="gov")
+composting_capacities <- read.csv(paste0(composting_inf_path,"/composting_capacity_all_states.csv")) %>% as_tibble()
 
 cities <- 
   read.csv(
-    "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data/00. Controls/uscities.csv"
+    paste0(controls_path,"/uscities.csv")
   ) %>% as_tibble() %>% 
   mutate(
     county_name = str_to_lower(county_name),
@@ -49,53 +46,53 @@ data_states <-
   pluck("state_id")
 
 
-#### Counties centroids ####
-groups <- # counties for which we want to find the centroids
-  composting_all_facilities %>% 
-  summarise(state_name=unique(state_name)) %>% 
-  rename(
-    region = state_name
-  ) %>% 
-  mutate(
-    region = str_to_lower(region)
-  ) %>% 
-  left_join(
-    map_data("county"), 
-    by = c("region")
-  ) %>% 
-  ungroup %>% 
-  summarise(
-    group = unique(group)
-  ) %>% 
-  pluck(
-    "group"
-  )
-
-
-counties_centroids <- function (group_chosen)
-{
-  df <- map_data("county") %>% filter(group==group_chosen)
-  coordinates <- df[, c("long", "lat")]
-  df_sf <- st_as_sf(df, coords = c("long", "lat"), crs = 4326)
-  
-  centroid <- st_centroid(st_combine(df_sf))
-
-  c(
-    st_coordinates(centroid) %>% c, 
-    group_chosen
-  )
-}
-
-# counties_centroids_res <- lapply(groups, counties_centroids)
-# 
-# counties_centroids_res <- 
-#   do.call(rbind, counties_centroids_res) %>% 
-#   as_tibble() %>% 
+# #### Counties centroids ####
+# groups <- # counties for which we want to find the centroids
+#   composting_all_facilities %>% 
+#   summarise(state_name=unique(state_name)) %>% 
 #   rename(
-#     long_gen = V1,
-#     lat_gen = V2, 
-#     group = V3
+#     region = state_name
+#   ) %>% 
+#   mutate(
+#     region = str_to_lower(region)
+#   ) %>% 
+#   left_join(
+#     map_data("county"), 
+#     by = c("region")
+#   ) %>% 
+#   ungroup %>% 
+#   summarise(
+#     group = unique(group)
+#   ) %>% 
+#   pluck(
+#     "group"
 #   )
+# 
+# 
+# counties_centroids <- function (group_chosen)
+# {
+#   df <- map_data("county") %>% filter(group==group_chosen)
+#   coordinates <- df[, c("long", "lat")]
+#   df_sf <- st_as_sf(df, coords = c("long", "lat"), crs = 4326)
+#   
+#   centroid <- st_centroid(st_combine(df_sf))
+# 
+#   c(
+#     st_coordinates(centroid) %>% c, 
+#     group_chosen
+#   )
+# }
+# 
+# # counties_centroids_res <- lapply(groups, counties_centroids)
+# # 
+# # counties_centroids_res <- 
+# #   do.call(rbind, counties_centroids_res) %>% 
+# #   as_tibble() %>% 
+# #   rename(
+# #     long_gen = V1,
+# #     lat_gen = V2, 
+# #     group = V3
+# #   )
 
 
 #### Minimum distance functions ####
@@ -636,10 +633,10 @@ ggsave(
   width = 17, height = 6.5, units = "in")
 
 
-ggsave(
-  infrastructure_plot_2, filename = "densities_for_pres.pdf", device = cairo_pdf,
-  path= figure_path,
-  width = 8, height = 7, units = "in")
+# ggsave(
+#   infrastructure_plot_2, filename = "densities_for_pres.pdf", device = cairo_pdf,
+#   path= figure_path,
+#   width = 8, height = 7, units = "in")
 
 
 #MA is % higher than the second highest, Vermont: 
@@ -658,11 +655,11 @@ ggsave(
 #### Mechanism plot ####
 
 effect = 
-  c(ca_effect,
-    ct_effect,
-    -ma_effect,
-    ri_effect,
-    vt_effect
+  c(100*bt_with_power_data %>% filter(state_id=="CA") %>% pluck("actual_treatment_effect"),
+    100*bt_with_power_data %>% filter(state_id=="CT") %>% pluck("actual_treatment_effect"),
+    100*bt_with_power_data %>% filter(state_id=="MA") %>% pluck("actual_treatment_effect"),
+    100*bt_with_power_data %>% filter(state_id=="RI") %>% pluck("actual_treatment_effect"),
+    100*bt_with_power_data %>% filter(state_id=="VT") %>% pluck("actual_treatment_effect")
   )
 
 
@@ -690,7 +687,7 @@ ca_gen <-
   filter(county_id=="alamedaCA") %>% 
   mutate(generators = al_gen/pop*total_pop) %>% 
   pluck("generators")
-  
+
 
 fines_al_food <- 2400*0.19/5 #685*0.19 #2400 is the total citations that they have had, 0.19 the fraction of organic, 5 the total years for data
 #food waste actions = total fines in 19-20 * fraction of organics violations OR total fines * fraction of organics / 5
@@ -796,8 +793,8 @@ mech1_plot <-
   geom_text(
     aes(label = state_id,
         color = ind, 
-        vjust = ifelse(state_id=="CA", -0.9, 0), 
-        hjust = ifelse(state_id=="CA", +0.5, -0.3)
+        vjust = ifelse(state_id%in%c("CA"), -0.5, ifelse(state_id=="CT", +1.6,0)), 
+        hjust = ifelse(state_id%in%c("CA"), +0.5, ifelse(state_id=="CT", +0.5,-0.3))
     ),
     size = 3.2,
     family = "Helvetica", show.legend = FALSE, 
@@ -868,7 +865,7 @@ ggsave(
 
 effects_mechanism <- 
   ggpubr::ggarrange(
-  mech1, mech2, nrow=2, heights = c(2, 1))
+    mech1, mech2, nrow=2, heights = c(2, 1))
 
 
 ggsave(
@@ -879,7 +876,8 @@ ggsave(
 
 ############# Simplicity ################
 
-summaries_complexity_claude <- read.csv("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/complexity_claude.csv")
+complexity_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity"
+summaries_complexity_claude <- read.csv(paste0(complexity_path, "/complexity_claude.csv"))
 set.seed(4)
 epsilon <- rnorm(750, 0, 0.001) # to resolve same rank
 

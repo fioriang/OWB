@@ -1,10 +1,9 @@
-ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/06. Emissions/ GHG_Data"
+ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/06. Emissions/GHG_Data"
 facility <- read.csv(paste0(ghg_data_path,"/facility_info.csv"))%>% as_tibble
 msw_fac <- read.csv(paste0(ghg_data_path,"/msw_facilities.csv"))%>% as_tibble
 gas <- read.csv(paste0(ghg_data_path,"/gas_data.csv")) %>% as_tibble
 measurements <-read.csv(paste0(ghg_data_path,"/measure_data.csv")) %>% as_tibble
 captured_methane <-read.csv(paste0(ghg_data_path,"/captured_methane.csv")) %>% as_tibble
-
 
 ############### Data, Fig. S10 #############################
 #Check our data, with EPA's data

@@ -143,169 +143,16 @@ donors <-
   pluck("county_id")
 
 
-# ca_year_placebo<- function(placebo_ban_year)
-# {
-#   end_year = placebo_ban_year+3
-#   year_start = placebo_ban_year-10
-#   dt_initial <- pre_processing_dt(power2, year_start, end_year)
-#   dt <-  
-#     dt_initial %>% 
-#     filter(county_name != "san francisco") %>% 
-#     mutate(
-#       #tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
-#     ) %>% as.data.frame
-#   
-#   dt <- 
-#     dt_initial %>% as_tibble %>% 
-#     filter(
-#       state_id == "CA", 
-#       year >= year_start, 
-#       year <=end_year, 
-#       county_name !="del norte" #oti na nai noumera
-#     ) %>% 
-#     mutate(
-#       #tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)),
-#       state_id = "CA1"
-#     )
-#   
-#   dt <- dt %>%  as.data.frame()    
-#   
-#   all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
-#   bans <- c(2014, 2014, placebo_ban_year, 2014, 2016)
-#   
-#   in_sample_R2_tr <- function (k, dt, donors, iterations, option, offset, samp)
-#   {
-#     treated_state <- str_sub(treated_counties_id[k],start=-2)
-#     ban_year <- bans[which(all_treated == treated_state)]
-#     year_end <- ban_year-offset
-#     treated_location <- treated_counties_id[k]
-#     don_new <- donors[donors!=treated_location]
-#     n_don <- length(don_new)
-#     test_ind_end1 <- year_end - year_start+1
-#     test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
-#     
-#     y <- dt[dt$county_id==treated_location, c("tons_pc")] 
-#     y_train <- y[1:test_ind_end1]
-#     y_test <-  y[(test_ind_end1+1):test_ind_end2]
-#     y_att <- y[(test_ind_end2+1):length(y)]
-#     
-#     x <- dt[!dt$county_id %in% treated_counties_id,]
-#     x <- x[x$county_id!=treated_location, c("tons_pc", "county_id")]
-#     x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
-#     
-#     
-#     res <- tibble(
-#       r_sq = 0, 
-#       mape = 0, 
-#       att=0, 
-#       cf=0, 
-#       sample_size=0, 
-#       county_id ="", 
-#       iterations = 0, 
-#       ban_year = 0, 
-#       donor_number="", 
-#       chosen_donor=0
-#     )
-#     
-#     #Initialize x's so it takes less time
-#     for ( f in 1:length(samp))
-#     {
-#       sample_size <- samp[f]
-#       
-#       all <- lapply(seq(1:iterations),do_many_times_v3,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
-#       donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
-#       
-#       all <- all %>% sapply(c) %>% t
-#       
-#       colnames(all) <- c(
-#         "r_sq",
-#         "mape", 
-#         "att",
-#         "cf",
-#         paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
-#       )
-#       
-#       if(treated_location%in% c("VT", "CA", "MA"))
-#       {
-#         all <-
-#           all %>%
-#           as_tibble %>%
-#           filter(r_sq > 0)
-#       }
-#       all <- 
-#         all %>% 
-#         as_tibble %>% 
-#         #filter(r_sq > 0) %>% 
-#         arrange(mape) %>% 
-#         slice(1:50) %>% 
-#         mutate(
-#           sample_size = samp[f], 
-#           county_id = treated_location, 
-#           iterations = iterations, 
-#           ban_year = ban_year, 
-#           att = att/cf
-#         ) %>%  
-#         pivot_longer(
-#           cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
-#           names_to = "donor_number", 
-#           values_to = "chosen_donor"
-#         )
-#       
-#       res <- rbind(res, all)
-#     }
-#     res %>% 
-#       as_tibble 
-#   }
-#   
-#   tr <- lapply(seq(1,length(treated_counties_id)),in_sample_R2_tr,dt, donors, iterations=2000, option="V2", offset=3, samp = c(3))
-#   
-#   tr <- 
-#     tr%>% 
-#     bind_rows %>% 
-#     filter(sample_size!=0) %>% 
-#     group_by(sample_size, county_id, ban_year) %>% 
-#     summarise(att=median(att)) %>% 
-#     left_join(
-#       dt %>% 
-#         ungroup %>% 
-#         select(year, state_id, tons, tons_pc, county_id, pop), 
-#       by = c("county_id", "ban_year"= "year")
-#     ) %>% 
-#     group_by(state_id, ban_year, sample_size) %>% 
-#     mutate(
-#       state_tons = sum(tons),
-#       state_pop =  sum(pop),
-#       weight = ifelse(county_id != state_id, tons/state_tons, 1),
-#       weight2 = ifelse(county_id != state_id, pop/state_pop, 1)
-#     ) %>% 
-#     summarise(
-#       att_pop=sum(att*weight2),
-#       att_waste=sum(att*weight)
-#     ) %>% ungroup
-#   
-#   
-#   
-#   return(tr)
-# }
-# 
-# repeat_fun <- function (i)
-# {
-#   res <- lapply(seq(2006, 2016),ca_year_placebo) %>%  bind_rows
-#   return(res)
-# }
-#   
-# 
-# res <- lapply(1:4, repeat_fun)
-# 
-#   
-# write.csv(res %>% bind_rows, "year_placebo.csv", row.names = FALSE )
-
 year_placebo <- read.csv("year_placebo.csv")
 
 mean_effect = 
-  disposal_effect %>% 
-  filter(effect_type=="lower_bound", state_id=="CA", year <=2019) %>% 
-  summarise(mean_effect=mean(effect)) %>% pluck("mean_effect")
+  disposal_effect_size2 %>% 
+  filter(state_id=="CA", year <=2019) %>% 
+  summarise(mean_effect=100*mean(effect_size)) %>% pluck("mean_effect")
+
+fileConn<-file(paste0(figure_path, "/ca_expected_year_placebo.txt"))
+writeLines(paste0(format(scales::number(mean_effect %>% round(1), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
 
 
 set.seed(2)
@@ -445,8 +292,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
     
     
     effect_size = 
-      disposal_effect_size %>% 
-      filter(effect_type== "lower_bound") %>%  
+      disposal_effect_size2  %>% 
       select(year, state_id, effect_size) %>% 
       filter(state_id=="CA", year <=2019) %>% 
       summarise(effect_size= mean(effect_size)) %>% pluck("effect_size")
@@ -486,8 +332,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
   all <- lapply(1:length(treated_counties), in_sample_R2_xy, dt,donors, iterations, offset, c(2))
   
   effect_size = 
-    disposal_effect_size %>% 
-    filter(effect_type== "lower_bound") %>%  
+    disposal_effect_size2 %>% 
     select(year, state_id, effect_size) %>% 
     filter(state_id=="CA", year <=2019) %>% 
     summarise(effect_size= mean(effect_size)) %>% pluck("effect_size")
@@ -515,10 +360,9 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
 res <- lapply (2007:2016, xy_plot_data_function_pl_year)
 
 #write.csv(res %>% bind_rows(), "year_placebo.csv", row.names=FALSE)
+year_placebo <- read.csv("year_placebo.csv")
 
-#year_placebo <- read.csv("year_placebo.csv")
-
-year_placebo <- res %>% bind_rows()
+#year_placebo <- res %>% bind_rows()
 ca_reg_expect =reg_expect %>% filter(state_id=="CA") %>% pluck("reg_effect")
 
 xy_plot_year_data <- 
@@ -778,26 +622,25 @@ mean_pl_year <-
 
 
 fileConn<-file(paste0(figure_path, "/att_pl_year.txt"))
-writeLines(paste0(format(round(att_pl_year*100,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(att_pl_year*100, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 fileConn<-file(paste0(figure_path, "/att_pl_year_max.txt"))
-writeLines(paste0(format(round(att_pl_year_max*100,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(att_pl_year_max*100, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 fileConn<-file(paste0(figure_path, "/att_pl_year_min.txt"))
-writeLines(paste0(format(round(att_pl_year_min*100,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(att_pl_year_min*100, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
 
 reject_year <- -att_pl_year +att_pl_year_max + mean_pl_year %>% abs()
 
 fileConn<-file(paste0(figure_path, "/reject_year.txt"))
-writeLines(paste0(format(round(reject_year*100,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(reject_year*100, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
 
 
 
 p_value_year <- 
-  
   year_placebo %>% 
   group_by(ban_year, attempt) %>%
   mutate(
@@ -830,139 +673,3 @@ p_value_year <-
 fileConn<-file(paste0(figure_path, "/p_value_year.txt"))
 writeLines(paste0(format(round(p_value_year,2),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
-
-# Calculating power
-
-# 
-# power_function_pl_year <- function (placebo_ban_year)
-# {
-#   
-#   end_year = placebo_ban_year+3
-#   year_start = placebo_ban_year-10
-#   dt_initial <- pre_processing_dt(power2, year_start, end_year)
-#   dt <-  dt_initial %>% filter(county_name != "san francisco") %>% 
-#     mutate(
-#       tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
-#     ) %>% as.data.frame
-#   
-#   dt <- 
-#     dt_initial %>% as_tibble %>% 
-#     filter(
-#       state_id == "CA", 
-#       year >= year_start, 
-#       year <=end_year, 
-#       county_name !="del norte" #oti na nai noumera
-#     ) %>% 
-#     mutate(
-#       tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)),
-#       state_id = "CA1"
-#     )
-#   
-#   dt <- dt %>%  as.data.frame()    
-#   
-#   all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
-#   bans <- c(2014, 2014, placebo_ban_year, 2014, 2016)
-#   
-#   offset = 3
-#   
-#   in_sample_R2_pl <- function (k, dt, donors, iterations, offset, samp)
-#   {
-#   
-#     treated_state <- str_sub(treated_counties_id[k],start=-2)
-#     ban_year <- bans[which(all_treated == treated_state)]
-#     year_end <- ban_year-offset
-#     treated_location <- donors[k]
-#     don_new <- donors[donors!=treated_location]
-#     n_don <- length(don_new)
-#     test_ind_end1 <- year_end - year_start+1
-#     test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
-#     
-#     y <- dt[dt$county_id==treated_location, c("tons_pc")] 
-#     y_train <- y[1:test_ind_end1]
-#     y_test <-  y[(test_ind_end1+1):test_ind_end2]
-#     y_att <- y[(test_ind_end2+1):length(y)]
-#     
-#     x <- dt[!dt$county_id %in% treated_counties_id,]
-#     x <- x[x$county_id!=treated_location, c("tons_pc", "county_id")]
-#     x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
-#     
-#     
-#     res <- tibble(
-#       r_sq = 0, 
-#       mape = 0, 
-#       att=0, 
-#       cf=0, 
-#       sample_size=0, 
-#       county_id ="", 
-#       iterations = 0, 
-#       ban_year = 0, 
-#       donor_number="", 
-#       chosen_donor=0
-#     )
-#     
-#     #Initialize x's so it takes less time
-# 
-#     all <- lapply(seq(1:iterations),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
-#     donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
-#     
-#     all <- all %>% sapply(c) %>% t
-#     
-#     colnames(all) <- c(
-#       "r_sq",
-#       "mape", 
-#       "att",
-#       "cf",
-#       "intercept",
-#       "att2", 
-#       "intercept2",
-#       paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
-#     )
-#     
-#     
-#     all <- 
-#       all %>% 
-#       as_tibble %>% 
-#       arrange(mape) %>% 
-#       slice(1:50) %>% 
-#       mutate(
-#         sample_size = sample_size, 
-#         county_id = treated_location, 
-#         iterations = iterations, 
-#         ban_year = ban_year, 
-#         att = att/cf
-#       ) %>%  
-#       pivot_longer(
-#         cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
-#         names_to = "donor_number", 
-#         values_to = "chosen_donor"
-#       )
-#     
-#     
-#     all <- 
-#       all %>% filter(donor_number == "donor_1") %>% 
-#       select(r_sq, mape, att, county_id)
-#     
-#     
-#     return(all)
-#     
-#   }
-#   
-#   all <- lapply(1:length(donors), in_sample_R2_pl, dt,donors, iterations, offset, c(5))
-#   
-#   all %>%  bind_rows %>% mutate(ban_year = placebo_ban_year)
-#   
-# }
-# 
-# res_power <- lapply (2006:2016, power_function_pl_year)
-# 
-# 
-# res_power %>%  bind_rows %>% 
-#   #filter(r_sq> 0) %>% 
-#   group_by(ban_year, county_id) %>% 
-#   summarise(att = mean(att)) %>% 
-#   group_by(ban_year) %>% 
-#   summarise(
-#     att_low = quantile(att, 0.05), 
-#     att_high = quantile(att, 0.95), 
-#     att_mean = mean(att)
-#   )

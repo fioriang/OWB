@@ -91,15 +91,16 @@ do_many_times_v3_with_inter_samp_1 <- function (i, x, test_ind_end1, test_ind_en
   
 }
 
-disposal_effect_size <- read.csv("disposal_effect_size.csv")
+disposal_effect_size <- read.csv("disposal_effect_size2.csv")
 year_start = 2006
 year_cutoff = 2018
 pooled_ban_year = 2015
-
-vt_p <-48098/power2 %>% filter(year%in%c(2014), type=="disposal", state_id=="VT") %>% summarise(tons=mean(tons)) %>% pluck("tons")
-vt_exp_dec <-(vt_p*0.463/0.922+vt_p*0.665/0.922+vt_p*0.873/0.922+vt_p*0.922/0.922*2)/5
-
-reg_effect <- c(0.098, 0.185, vt_exp_dec)
+offset=3
+iterations = 100000
+#vt_p <-48098/power2 %>% filter(year%in%c(2014), type=="disposal", state_id=="VT") %>% summarise(tons=mean(tons)) %>% pluck("tons")
+#vt_exp_dec <-(vt_p*0.463/0.922+vt_p*0.665/0.922+vt_p*0.873/0.922+vt_p*0.922/0.922*2)/5
+vt_exp_effect <- disposal_effect_size %>% filter(state_id=="VT", year<2019) %>% summarise(m=mean(effect_size)) %>% pluck("m")
+reg_effect <- c(0.098, 0.185, 0.6*0.316/0.214*vt_exp_effect)
 
 
 dt_state_initial <- pre_processing_dt_state(power2) #run the function from the placebo_all.RMD
@@ -163,7 +164,7 @@ xy_plot_data_function <- function (treated_state, f, seed)
     donor_number=0, 
     chosen_donor=0
   )
-
+  
   sample_size <- samp[f]
   all <- lapply(seq(1:iterations),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
   donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
@@ -236,7 +237,7 @@ xy_plot_data_function <- function (treated_state, f, seed)
     ) %>% #filter(attempt %in% c(1,7,19)) %>% 
     ungroup %>% 
     left_join(
-      disposal_effect_size %>% filter(effect_type== "lower_bound") %>%  select(year, state_id, effect_size), 
+      disposal_effect_size2 %>%  select(year, state_id, effect_size), 
       by = c("year", "county_id" = 'state_id')
     ) %>% 
     mutate(
@@ -244,6 +245,133 @@ xy_plot_data_function <- function (treated_state, f, seed)
       #y_0_effect = ifelse(year>=ban_year, y_0*(1-effect), ifelse(year == ban_year-1, y_0, NA))
       y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA)
     )
+}
+
+xy_plot_data_function_donors <- function (treated_state, f, seed)
+{
+  set.seed(seed)
+  if(treated_state == "MA")
+  {
+    dt_state <- dt_state_initial %>% group_by(state_id) %>% 
+      mutate(
+        tons_pc = tons_pc*0.25 + .75*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+      )
+  }else if(treated_state == "VT")
+  {
+    dt_state <- dt_state_initial %>%group_by(state_id) %>% 
+      mutate(
+        lag =lag(tons_pc, n=1, default = NA),
+        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+      )
+  }else if(treated_state == "CA")
+  {
+    dt_state <- dt_state_initial %>%group_by(state_id) %>% 
+      mutate(
+        tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+      )
+  }else {dt_state <- dt_state_initial} 
+  
+  dt <- dt_state %>% as.data.frame()
+  ban_year <- bans[which(all_treated == treated_state)]
+  year_end <- ban_year-offset
+  treated_location <- treated_state
+  don_new <- donors[donors!=treated_location]
+  n_don <- length(don_new)
+  test_ind_end1 <- year_end - year_start+1
+  test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
+  
+  y <- dt[dt$county_id==treated_location, c("tons_pc")] 
+  y_train <- y[1:test_ind_end1]
+  y_test <-  y[(test_ind_end1+1):test_ind_end2]
+  y_att <- y[(test_ind_end2+1):length(y)]
+  
+  x <- dt[!dt$county_id %in% treated_counties_id,]
+  x <- x[x$county_id!=treated_location, c("tons_pc", "county_id")]
+  x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
+  
+  res <- tibble(
+    r_sq = 0, 
+    mape = 0, 
+    att=0, 
+    cf=0, 
+    att2 =0, 
+    intercept2=0,
+    intercept = 0, 
+    sample_size=0, 
+    county_id =0, 
+    iterations = 0, 
+    ban_year = 0, 
+    donor_number=0, 
+    chosen_donor=0
+  )
+  
+  sample_size <- samp[f]
+  all <- lapply(seq(1:iterations),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+  donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
+  
+  all <- all %>% sapply(c) %>% t
+  
+  colnames(all) <- c(
+    "r_sq",
+    "mape", 
+    "att",
+    "cf",
+    "intercept",
+    "att2", 
+    "intercept2",
+    paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+  )
+  
+  if(treated_location%in% c("VT", "CA", "MA"))
+  {
+    all <-
+      all %>%
+      as_tibble %>%
+      filter(r_sq > 0)
+  }
+  
+  all <- 
+    all %>% 
+    as_tibble %>% 
+    #filter(r_sq > 0) %>% 
+    arrange(mape) %>% 
+    slice(1:50) %>% 
+    mutate(
+      sample_size = samp[f], 
+      county_id = treated_location, 
+      iterations = iterations, 
+      ban_year = ban_year, 
+      att = att/cf
+    ) %>%  
+    pivot_longer(
+      cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
+      names_to = "donor_number", 
+      values_to = "chosen_donor"
+    ) %>% 
+    mutate(
+      chosen_donor = colnames(x)[chosen_donor]
+    )
+  
+  attempts <-all %>% filter(donor_number == "donor_1") %>% summarise(n= n()) %>%  pluck("n")
+  
+  all <- 
+    all %>%  
+    mutate(
+      attempt = rep(1:attempts, each= sample_size)
+    )
+  
+  
+  all %>% 
+    #rename(state_id = county_id)  %>% 
+    left_join(dt %>% select(state_id, year, tons_pc), by = c("county_id" = "state_id")) %>% 
+    select(-iterations) %>% 
+    left_join(
+      dt %>% 
+        select(state_id, year, tons_pc, county_id) %>% 
+        rename (y=tons_pc, donor_state_id = state_id),
+      by = c("chosen_donor"="county_id", "year")) %>% 
+    group_by(year, county_id, intercept2, intercept, ban_year, attempt, tons_pc) %>% 
+    filter(attempt==1, year==2015) %>% select(donor_state_id)
 }
 
 dt_initial <- dt_municipal_initial
@@ -255,7 +383,7 @@ bans <- c(2014, 2014, 2016, 2014, 2016, 2015, 2016, 2009)
 year_start = 2006
 year_cutoff = 2018
 municipal_effect <- read.csv("municipal_effect.csv")
-
+disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble()
 
 xy_plot_data_function_cities <- function (k, f, seed)
 {
@@ -297,7 +425,7 @@ xy_plot_data_function_cities <- function (k, f, seed)
   )
   
   sample_size <- samp[f]
-  all <- lapply(seq(1:15000),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+  all <- lapply(seq(1:50000),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
   donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
   
   all <- all %>% sapply(c) %>% t
@@ -402,29 +530,14 @@ xy_plot_data_function_sf <- function (f, seed)
     filter(
       year >= year_start, 
       year <= year_cutoff, 
-      state_id != "OH",
       type %in% c("disposal", "msw_disposed")
     ) %>% 
     mutate(
-      tons = ifelse(county_name=="butte" & state_id == "CA" & year == 2019, 181914, tons), #I think one digit was wron original is: 1819143
-      tons = ifelse(county_name=="colusa" & state_id == "CA" & year == 1995, 13375, tons), # Use next year's tonnage 13375
-      tons = ifelse(county_name=="glenn" & state_id == "CA" & year == 2019, 27394, tons), # First quarter tonnage is 60,200 --> i think it should have been 6,020 
-      tons = ifelse(county_name=="tehama" & state_id == "CA" & year == 2011, (67376+41921)/2, tons), # Linear extrapolation between 2010 and 2012. The original is more than 3 times as high. 
-      tons = ifelse(county_name=="trinity" & state_id == "CA" & year == 2017, 8669, tons), # Fourth quarter tonnage is 21,493 which is unusually high=> I think it should have been 2,149
-      tons = ifelse(county_name=="modoc" & state_id == "CA" & year == 2019, tons-11537, tons), # Unusally high 
-      tons = ifelse(county_name=="mariposa" & state_id == "CA" & year == 2017, 14559, tons), #3rd quarter is extremely high
-      tons = ifelse(county_name=="mariposa" & state_id == "CA" & year == 2019, 13500, tons), #2nd quarter is extremely high
-      tons = ifelse(county_name=="del norte" & state_id == "CA" & year == 2019, tons+ 4883*2, tons), #missing 3rd and 4th quarter
-      tons = ifelse(county_name=="mono" & state_id == "CA" & year == 1995, 22024, tons), #linear interpolation from years 1996 1997
-      tons = ifelse(county_name=="sonoma" & state_id == "CA" & year == 2017, tons-495370, tons), #4th quarter is 4times as much as the previous- use the third
-      tons = ifelse(county_name=="sonoma" & state_id == "CA" & year == 2018, tons-662089, tons), #1st quarter is 5times as much as the next- use the second
-      tons = ifelse(county_name=="shasta" & state_id == "CA" & year == 2018, 198899, tons), #use the average between the previous and the next year
-      tons = ifelse(county_name=="sierra" & state_id == "CA" & year == 2019, tons+1371, tons), #3rd and 4th quarter missing (adding the 2018 ones)
-      tons = ifelse(county_name=="nevada" & state_id == "CA" & year == 2012, 68165, tons), #2012 has unusually low tonnage
-      tons = ifelse(county_name=="calaveras" & state_id == "CA" & year == 2015, (31741.23+42755.94)/2, tons), #use the average between the previous and the next year
-      tons = ifelse(county_name=="san benito" & state_id == "CA" & year %in% c(1995, 1996, 1997), 56821.52, tons), #use the 1998 for all the years between 95 and 98 because its like half
-      tons = ifelse(county_name=="siskiyou" & state_id == "CA" & year == 2014, (27811.48+35305.71)/2, tons) #use the average between the previous and the next year
-    )%>%  
+      tons_high = quantile(tons, 0.95), 
+      tons_low = quantile(tons, 0.05), 
+      tons = ifelse(tons> tons_high, tons_high, tons), 
+      tons = ifelse(tons< tons_low, tons_low, tons)
+    )%>%  select(-tons_high)%>% select(-tons_low)%>%
     group_by (year, state_id, county_name) %>% 
     summarise(tons = sum(tons)) %>% 
     left_join (
@@ -448,7 +561,7 @@ xy_plot_data_function_sf <- function (f, seed)
   donors <- unique(dt$county_id[!(dt$state_id%in% all_treated)])
   treated_state = "M3"
   ban_year <- bans[which(all_treated == treated_state)]
-
+  
   year_end <- ban_year-offset
   treated_location <- "san franciscoM3"
   
@@ -589,7 +702,8 @@ xy_plot_fun <- function (i)
     )
   
   all <-  
-    xy_plot_data %>% filter(attempt ==i, treated_state %in% c("CA", "CT","MA", "VT", "RI")) %>% 
+    xy_plot_data %>% 
+    filter(attempt ==i, treated_state %in% c("CA", "CT","MA", "VT", "RI")) %>% 
     group_by(year, attempt) %>% 
     summarise(
       tons_pc = mean(tons_pc), 
@@ -597,8 +711,7 @@ xy_plot_fun <- function (i)
       y_0 = mean(y_0), 
     ) %>%
     left_join(
-      disposal_effect_size %>%
-        filter(effect_type== "lower_bound") %>%  
+      disposal_effect_size2 %>%
         select(year, state_id, effect_size) %>% 
         group_by(year) %>% 
         summarise(effect_size=mean(effect_size, na.rm=TRUE)), 
@@ -643,7 +756,7 @@ xy_plot_fun <- function (i)
           values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year)
     ) %>% 
     left_join(
-      rbind(xy_plot_data%>% select(year, treated_state, ban_year, attempt, tons_pc, y, y_0, y_0_effect), all) %>% 
+      rbind(xy_plot_data%>% filter(attempt==i) %>%  select(year, treated_state, ban_year, attempt, tons_pc, y, y_0, y_0_effect), all) %>% 
         group_by(treated_state) %>% 
         filter(year >= ban_year-3, year < ban_year) %>%
         mutate(
@@ -658,7 +771,7 @@ xy_plot_fun <- function (i)
           ylab_mae=ifelse(treated_state%in%c("RI"), ylab_mae-0.01, ylab_mae), 
           xlab_mae=ifelse(treated_state%in%c("All", "Seattle, WA"), xlab_mae-2.5, xlab_mae), 
           xlab_mae=ifelse(treated_state%in%c("CA"), xlab_mae+0.2, xlab_mae)) %>% 
-          group_by(treated_state, xlab_mae, ylab_mae, year) %>% 
+        group_by(treated_state, xlab_mae, ylab_mae, year) %>% 
         summarise(
           MAE = abs((tons_pc-y_0)/tons_pc) %>%{.*100} %>%  mean %>% round(2)) %>% 
         mutate(
@@ -733,7 +846,7 @@ xy_plot_fun <- function (i)
           location= "Actual", 
           y_end_low_2 = ifelse(location=="Boulder, CO", y_end_low_2-0.35, y_end_low_2),
           y_end_high_2 = ifelse(location=="Boulder, CO", y_end_high_2+0.35, y_end_high_2)
-          )%>% 
+        )%>% 
         ungroup %>% 
         select(-ban_year), 
       by = c("year", "treated_state", "location")
@@ -787,9 +900,9 @@ xy_plot_fun <- function (i)
       panel.spacing = unit(1, "cm")
     )
   
-
+  
   return(p)
-
+  
 }
 
 xy_plot_fun_sf <- function (i)
@@ -809,8 +922,7 @@ xy_plot_fun_sf <- function (i)
       y_0 = mean(y_0), 
     ) %>%
     left_join(
-      disposal_effect_size %>% 
-        filter(effect_type== "lower_bound") %>%  
+      disposal_effect_size2 %>%
         select(year, state_id, effect_size) %>% 
         group_by(year) %>% 
         summarise(effect_size=mean(effect_size, na.rm=TRUE)), 
@@ -856,7 +968,7 @@ xy_plot_fun_sf <- function (i)
     left_join(
       rbind(xy_plot_data%>% select(year, treated_state, ban_year, attempt, tons_pc, y, y_0, y_0_effect), all) %>% 
         group_by(treated_state) %>% 
-        filter(year >= ban_year-3, year < ban_year) %>%
+        filter(year >= ban_year-3, year < ban_year, attempt==i) %>%
         mutate(
           year=mean(year), # i duplicate so i join and then also keep the xlab_mae
           xlab_mae=mean(year)+0.5,  
@@ -989,27 +1101,34 @@ xy_plot_fun_sf <- function (i)
     )
 }
 
+######## xy_plot_data ##############
+
 set.seed(1)
 xy_plot_data <-
   rbind(
-    xy_plot_data_function("CA",2,2),
-     xy_plot_data_function("CT",6,8),
-     xy_plot_data_function("MA",5,7),
-     xy_plot_data_function("RI",1,1),
-     xy_plot_data_function("VT",5,1),
-    xy_plot_data_function_cities(66, 1, 1) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect) ,
-    xy_plot_data_function_cities(67, 1, 13) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    xy_plot_data_function("CA",2,4), 
+    xy_plot_data_function("CT",4,4), 
+    xy_plot_data_function("MA",5,4), 
+    xy_plot_data_function("RI",1,4), 
+    xy_plot_data_function("VT",5,4), 
+    
+    xy_plot_data_function_cities(68, 1, 55) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    xy_plot_data_function_cities(69, 1, 62) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
     xy_plot_data_function_sf(1, 4)  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+    # if there's error its probably because the relevant datasets are not loaded. go to placebo_all and load the municipal data 
+    # ensure that treated_counties_id_cities is a vector of 69x1 with seattleM1 and boulderM2 in 68th and 69th places. 
+        
   )
 
-xy_plot_data %>%
-  mutate(county_id=ifelse(county_id == "sanfranciscoM3", "san franciscoM3", county_id)) %>%
-  filter(attempt==1) %>%
-  group_by(county_id) %>%
-  filter(year>=ban_year) %>%
-  summarise(actual_treatment_effect = sum(tons_pc - y_0)/sum(y_0))
+
+#xy_plot_data_function_donors("CA",2,4)
+#xy_plot_data_function_donors("CT",4,4) 
+#xy_plot_data_function_donors("MA",5,4) 
+#xy_plot_data_function_donors("RI",1,4) 
+#xy_plot_data_function_donors("VT",5,4) 
 
 # this is to save and load the datasets. for exact reproduction of the paper's figures please load the "xy_plot_data.csv"
+# 
 #xy_plot_data <- write.csv(xy_plot_data, "xy_plot_data.csv", row.names = FALSE)
 #xy_plot_data <- read.csv("xy_plot_data.csv")
 
@@ -1034,11 +1153,13 @@ disposal_spec <- rbind(
   read.csv("power_state.csv"), 
   read.csv("sf_power.csv"))%>% 
   filter((treated_state=="VT" & sample_size < 9)|treated_state!="VT") %>% 
-  filter((treated_state=="CT" & sample_size > 7)|treated_state!="CT") %>% # basically this chooses the sample size =8 because while it has v similar power_low it has way better power_high providing us with better power for the mu_0 test 
+  filter((treated_state=="CT" )|treated_state!="CT") %>% 
   filter((treated_state=="All" & specification == "State Pooled")| treated_state!="All")
 
 
-disposal_effect <-read.csv("disposal_effect_size.csv")  %>% rename(effect = effect_size)
+#disposal_effect <-read.csv("disposal_effect_size.csv")  %>% rename(effect = effect_size)
+disposal_effect <- disposal_effect_size2%>% rename(effect = effect_size)
+
 
 bt_with_power_data <- 
   disposal_spec %>% 
@@ -1062,10 +1183,10 @@ bt_with_power_data <-
       ) %>% select(-att_median)%>% select(-type) %>%  mutate (power_low = 100*power_low, power_high=100*power_high) %>% 
       group_by(specification, treated_state, ban_year) %>% filter(power_low == max(power_low)) %>%
       ungroup %>% 
-        mutate(
-          treated_state = ifelse(treated_state=="CA","boulderM2", treated_state),
-          treated_state = ifelse(treated_state=="M1","seattleM1", treated_state),
-          treated_state = ifelse(treated_state=="M3","san franciscoM3", treated_state)) # i use 2016 power for boulder
+      mutate(
+        treated_state = ifelse(treated_state=="CA","boulderM2", treated_state),
+        treated_state = ifelse(treated_state=="M1","seattleM1", treated_state),
+        treated_state = ifelse(treated_state=="M3","san franciscoM3", treated_state)) # i use 2016 power for boulder
   ) %>% 
   left_join(
     xy_plot_data %>% 
@@ -1105,21 +1226,21 @@ bt_with_power_data <-
         filter(
           year <= ey
         ) %>% 
-        group_by (state_id, effect_type) %>% 
+        #group_by (state_id, effect_type) %>% 
+        group_by(state_id) %>% 
         summarise(mean_effect = mean(effect)) %>% 
         ungroup %>%
-        group_by(effect_type) %>%  
         mutate(mean_all_effect = mean(mean_effect)) %>%  
         rbind(
           tibble (
-            state_id = rep("All",2), 
-            effect_type = c("fiori_estimates", "lower_bound"), 
+            state_id = rep("All",1), 
+            #effect_type = c("fiori_estimates", "lower_bound"), 
             mean_effect = NA, 
             mean_all_effect= NA)) %>%  
         mutate(mean_effect = ifelse(is.na(mean_effect), mean(mean_all_effect, na.rm=TRUE),mean_effect)) %>%  
-        ungroup %>%  select(-mean_all_effect) %>% 
-        filter(effect_type=="lower_bound") %>% 
-        select(-effect_type),
+        ungroup %>%  select(-mean_all_effect), #%>% 
+      #filter(effect_type=="lower_bound") %>% 
+      #select(-effect_type),
       
       municipal_effect %>% filter(type=="disposal") %>% select(-type) %>% 
         rename(mean_effect= effect) %>% 
@@ -1128,7 +1249,7 @@ bt_with_power_data <-
           state_id = ifelse(state_id=="M1","seattleM1", state_id),
           state_id = ifelse(state_id=="M3","san franciscoM3", state_id), 
           mean_effect = -mean_effect)
-        ),
+    ),
     by = c("treated_state"= "state_id")
   )  %>% 
   left_join(
@@ -1145,8 +1266,8 @@ bt_with_power_data <-
     treated_state = ifelse(treated_state=="san franciscoM3","San Francisco, CA", treated_state), 
     treated_state = ifelse(treated_state=="All","All States", treated_state),
     treated_state=factor(treated_state, levels=c("San Francisco, CA","Boulder, CO","Seattle, WA","VT", "RI", "MA", "CT", "CA", "All States"))
-    ) %>%  rename(state_id=treated_state) 
- 
+  ) %>%  rename(state_id=treated_state) 
+
 
 
 
@@ -1183,7 +1304,7 @@ bt_with_power_2 <-
   scale_color_manual(breaks = c("Estimate"), values = c(ut_colors[4]),guide = guide_legend(order = 1,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
   labs(y="", x = "", color = "")+
   ggnewscale::new_scale_color()+
-
+  
   geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
   scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
   labs(y="", x = "", color = "")+
@@ -1215,7 +1336,7 @@ bt_with_power_2 <-
     legend.spacing.x = unit(-1, "pt"),
     axis.ticks.x = element_line(size = 0.1), 
     legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
-    )
+  )
 
 
 # bt_with_power_2 <- 
@@ -1254,14 +1375,13 @@ ggsave(
 # Output in txt
 all_effect <- 100*bt_with_power_data %>% filter(state_id=="All States") %>% pluck("actual_treatment_effect") %>% abs
 ma_effect <- 100*bt_with_power_data %>% filter(state_id=="MA") %>% pluck("actual_treatment_effect") %>% abs
-ca_effect <- 100*bt_with_power_data %>% filter(state_id=="CA") %>% pluck("actual_treatment_effect")
-vt_effect <- 100*bt_with_power_data %>% filter(state_id=="VT") %>% pluck("actual_treatment_effect")
-ct_effect <- 100*bt_with_power_data %>% filter(state_id=="CT") %>% pluck("actual_treatment_effect")
-ri_effect <- 100*bt_with_power_data %>% filter(state_id=="RI") %>% pluck("actual_treatment_effect")
+ca_effect <- 100*bt_with_power_data %>% filter(state_id=="CA") %>% pluck("actual_treatment_effect") %>% abs
+vt_effect <- 100*bt_with_power_data %>% filter(state_id=="VT") %>% pluck("actual_treatment_effect") %>% abs
+ct_effect <- 100*bt_with_power_data %>% filter(state_id=="CT") %>% pluck("actual_treatment_effect") %>% abs
+ri_effect <- 100*bt_with_power_data %>% filter(state_id=="RI") %>% pluck("actual_treatment_effect") %>% abs
 bo_effect <- 100*bt_with_power_data %>% filter(state_id=="Boulder, CO") %>% pluck("actual_treatment_effect")
 se_effect <- 100*bt_with_power_data %>% filter(state_id=="Seattle, WA") %>% pluck("actual_treatment_effect")
 sf_effect <- 100*bt_with_power_data %>% filter(state_id=="San Francisco, CA") %>% pluck("actual_treatment_effect")
-
 
 
 power_ma <- bt_with_power_data %>% filter(state_id=="MA") %>% pluck("power_low") %>% abs
@@ -1279,7 +1399,7 @@ power_vt_upper <- bt_with_power_data %>% filter(state_id=="VT") %>% pluck("power
 power_all <- bt_with_power_data %>% filter(state_id=="All States") %>% pluck("power_low") %>% abs
 #power_all <- (bt_with_power_data %>% filter(state_id=="All States") %>% pluck("power_high") %>% abs +all_effect)
 power_all_upper <- bt_with_power_data %>% filter(state_id=="All States") %>% pluck("power_high") %>% abs
-reject_all <- power_all_upper %>% round(1)+all_effect %>% round(1)
+reject_all <- (power_all_upper+all_effect) %>% round(1)
 
 
 power_se <- bt_with_power_data %>% filter(state_id=="Seattle, WA") %>% pluck("power_low") %>% abs
@@ -1347,8 +1467,6 @@ close(fileConn)
 fileConn<-file(paste0(figure_path, "/sf_att.txt"))
 writeLines(paste0(format(round(sf_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)
-
-
 
 
 
@@ -1462,7 +1580,8 @@ close(fileConn)
 
 
 fileConn<-file(paste0(figure_path, "/ca_expected.txt"))
-writeLines(paste0(format(round(ca_exp_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(ca_exp_effect, accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+
 close(fileConn)
 fileConn<-file(paste0(figure_path, "/ct_expected.txt"))
 writeLines(paste0(format(round(ct_exp_effect,1),big.mark=",",scientific=FALSE),'%'), fileConn)
@@ -1487,64 +1606,64 @@ rm(power_all, power_all_upper, power_ca, power_ct, power_vt, power_ma, power_ri,
 ##### PLOTS FOR PRESENTATIONS ####
 xy_and_power_2_pres <- 
   ggpubr::ggarrange(
-  xy_plot %+% 
-    subset(xy_plot$data %>% mutate(MAE= NA), !treated_state %in% c("Boulder, CO", "Seattle, WA") & !location %in% c("Our Exp.", "Regulators' Exp.") )+
-    scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
-    theme(
-      panel.spacing = unit(1.0, "cm"), strip.text = element_blank()
-    ), 
-  bt_with_power_data %>% filter(!state_id %in% c("San Francisco, CA", "Boulder, CO", "Seattle, WA")) %>% 
-    mutate(
-      state_id = fct_recode(
-        state_id,
-        "Vermont" = "VT",
-        "Rhode Island" = "RI",
-        "Massachusetts" = "MA",
-        "Connecticut" = "CT",
-        "California" = "CA",
-        "All States" = "All States"
-      ))%>% 
-    ggplot()+
-    aes(y= state_id, x= 100*actual_treatment_effect, group = 1)+
-    geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+
-    geom_point(aes(color = "Estimate"),size=1.5)+
-    scale_color_manual(breaks = c("Estimate"), values = c(ut_colors[4]),guide = guide_legend(order = 1,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
-    labs(y="", x = "", color = "")+
-    ggnewscale::new_scale_color()+      
-    geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), width = 0.2, size=0.5)+
-    scale_color_manual(breaks = c("Placebo"), values = c(ut_colors[5]), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), byrow=TRUE ))+
-    geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+
-    labs(y="", x = "", color = "")+
-    ggnewscale::new_scale_color()+
-    
-    #scale_x_continuous(breaks = c(seq(-25, 25, by = 5)), limits = c(-30, 25))+ 
-    scale_x_continuous(breaks = c(seq(-15, 15, by = 5)), limits = c(-20, 20))+ 
-    scale_y_discrete(position= "right", expand=c(0.02,0.15))+
-    theme(
-      legend.position = "top",  # Keep the legend at the top
-      legend.box.margin = margin(t = 0, r = 0, b = 0, l = 70),
-      strip.background = element_rect(color = "white", fill = "white"),
-      panel.grid.major.x = element_blank() ,
-      panel.grid.major.y = element_blank(),
-      panel.background = element_blank(), 
-      text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]), 
-      strip.text = element_text(angle = 0, hjust = 1), 
-      strip.placement = "outside",
-      #axis.text.y = element_blank(), 
-      axis.ticks.y = element_blank(), 
-      #axis.ticks.x = element_blank(), 
-      #axis.text.x = element_blank(), 
-      #legend.key = element_blank(),
-      legend.key = element_rect(colour = NA, fill = NA, size = 5),
-      legend.spacing.x = unit(-1, "pt"),
-      axis.ticks.x = element_line(size = 0.1), 
-      legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
-    )+
-    labs(x="", title = "Average treatment effect (%)")+
-    theme (
-      plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4]), 
-      panel.spacing = unit(1.0, "cm")), 
-  heights = c(0.5, 1))
+    xy_plot %+% 
+      subset(xy_plot$data %>% mutate(MAE= NA), !treated_state %in% c("Boulder, CO", "Seattle, WA") & !location %in% c("Our Exp.", "Regulators' Exp.") )+
+      scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
+      theme(
+        panel.spacing = unit(1.0, "cm"), strip.text = element_blank()
+      ), 
+    bt_with_power_data %>% filter(!state_id %in% c("San Francisco, CA", "Boulder, CO", "Seattle, WA")) %>% 
+      mutate(
+        state_id = fct_recode(
+          state_id,
+          "Vermont" = "VT",
+          "Rhode Island" = "RI",
+          "Massachusetts" = "MA",
+          "Connecticut" = "CT",
+          "California" = "CA",
+          "All States" = "All States"
+        ))%>% 
+      ggplot()+
+      aes(y= state_id, x= 100*actual_treatment_effect, group = 1)+
+      geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+
+      geom_point(aes(color = "Estimate"),size=1.5)+
+      scale_color_manual(breaks = c("Estimate"), values = c(ut_colors[4]),guide = guide_legend(order = 1,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
+      labs(y="", x = "", color = "")+
+      ggnewscale::new_scale_color()+      
+      geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), width = 0.2, size=0.5)+
+      scale_color_manual(breaks = c("Placebo"), values = c(ut_colors[5]), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), byrow=TRUE ))+
+      geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+
+      labs(y="", x = "", color = "")+
+      ggnewscale::new_scale_color()+
+      
+      #scale_x_continuous(breaks = c(seq(-25, 25, by = 5)), limits = c(-30, 25))+ 
+      scale_x_continuous(breaks = c(seq(-15, 15, by = 5)), limits = c(-20, 20))+ 
+      scale_y_discrete(position= "right", expand=c(0.02,0.15))+
+      theme(
+        legend.position = "top",  # Keep the legend at the top
+        legend.box.margin = margin(t = 0, r = 0, b = 0, l = 70),
+        strip.background = element_rect(color = "white", fill = "white"),
+        panel.grid.major.x = element_blank() ,
+        panel.grid.major.y = element_blank(),
+        panel.background = element_blank(), 
+        text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]), 
+        strip.text = element_text(angle = 0, hjust = 1), 
+        strip.placement = "outside",
+        #axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        #axis.ticks.x = element_blank(), 
+        #axis.text.x = element_blank(), 
+        #legend.key = element_blank(),
+        legend.key = element_rect(colour = NA, fill = NA, size = 5),
+        legend.spacing.x = unit(-1, "pt"),
+        axis.ticks.x = element_line(size = 0.1), 
+        legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
+      )+
+      labs(x="", title = "Average treatment effect (%)")+
+      theme (
+        plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4]), 
+        panel.spacing = unit(1.0, "cm")), 
+    heights = c(0.5, 1))
 
 ggsave(xy_and_power_2_pres, filename = "xy_and_power_2_pres.pdf", device = cairo_pdf,
        path= figure_path,
@@ -1622,7 +1741,7 @@ xy_and_power_2_pres <-
         plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4]), 
         panel.spacing = unit(1.0, "cm")
       ))
-    
+
 ggsave(xy_and_power_2_pres, filename = "xy_and_power_2_pres_exp_no_est.pdf", device = cairo_pdf,
        path= figure_path,
        width = 9, height = 7, units = "in")
@@ -1842,7 +1961,7 @@ xy_and_power_2_cities <-
       labs(y="", x = "", color = "")+
       ggnewscale::new_scale_color()+
       
-      scale_x_continuous(breaks = c(seq(-35, 35, by = 10)), limits = c(-40, 40))+ 
+      scale_x_continuous(breaks = c(seq(-35, 35, by = 10)), limits = c(-42, 42))+ 
       scale_y_discrete(position= "right", expand=c(0.02,0.15))+
       theme(
         legend.position = "top",  # Keep the legend at the top
@@ -1875,13 +1994,13 @@ ggsave(xy_and_power_2_cities, filename = "xy_and_power_2_cities.pdf", device = c
 
 xy_and_power_2_sf <- 
   ggpubr::ggarrange(
-      xy_plot_sf+
-        labs(title="Disposal (tons per capita)")+
-        theme(
-          legend.position = "top", 
-          plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4]) 
-        ), 
-      bt_with_power_2 %+% subset(bt_with_power_2$data, state_id %in% c("San Francisco, CA")) +
+    xy_plot_sf+
+      labs(title="Disposal (tons per capita)")+
+      theme(
+        legend.position = "top", 
+        plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4]) 
+      ), 
+    bt_with_power_2 %+% subset(bt_with_power_2$data, state_id %in% c("San Francisco, CA")) +
       labs(x="", title = "Average treatment effect (%)")+
       theme (
         plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4]), 
@@ -2113,7 +2232,7 @@ xy_pres_5min <-
   scale_y_continuous(breaks = c(seq(0.6, 1.2, by = 0.1)), limits=c(0.58, 1.22))+
   theme(
     panel.spacing = unit(1.0, "cm"), strip.text = element_blank()
-    )
+  )
 
 ggsave(xy_pres_5min, filename = "xy_pres_5min_1.pdf", device = cairo_pdf,
        path= figure_path,
@@ -2364,7 +2483,7 @@ syn_example <-
     legend.text = element_text(family = "Helvetica",size = 25, color= ut_colors[4]), 
     axis.title.x = element_text(margin = margin(t = 20)),
     axis.title.y = element_text(margin = margin(r = 20))
-    )
+  )
 
 syn_example1 <- 
   syn_example%+% 
@@ -2383,7 +2502,7 @@ syn_example2 <-
         label_x = ifelse(state_id %in% c("WA", "TX", "SC", "MN", "OH"), NA, label_x), 
         label_y = ifelse(state_id %in% c("WA", "TX", "SC", "MN", "OH"), NA, label_y), 
         tons_pc = ifelse(year> 2014, NA, tons_pc)
-        ))
+      ))
 
 ggsave(syn_example2, filename = "syn_example2.pdf", device = cairo_pdf,
        path= figure_path,
@@ -2402,7 +2521,7 @@ syn_example3 <-
         label_y = ifelse(state_id=="Synthetic", tons_pc+0.015, label_y), 
         label_y = ifelse(state_id=="CT", tons_pc+0.01, label_y) , 
         tons_pc = ifelse(year> 2014, NA, tons_pc)
-  ))
+      ))
 
 ggsave(syn_example3, filename = "syn_example3.pdf", device = cairo_pdf,
        path= figure_path,
@@ -2526,7 +2645,7 @@ plac_plot <-
 ggsave(plac_plot, filename = "plac_plot_policy_exp.pdf", device = cairo_pdf,
        path= figure_path,
        width = 9, height = 7, units = "in")
-  
+
 
 plac_plot <- 
   plac_plot+
@@ -2534,8 +2653,137 @@ plac_plot <-
   geom_point(aes(color = "Estimate"),size=1.5)+
   scale_color_manual(breaks = c("Estimate"), values = c(ut_colors[4]),guide = guide_legend(order = 1,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
   labs(y="", x = "", color = "")
+
+
+ggsave(plac_plot, filename = "plac_plot_all.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 9, height = 7, units = "in")
+
+
+################# CHOOSE THE SEED ########################
+
+
+choose_seed <- function(seed_c)
+{
+  xy_plot_data <-
+    rbind(
+      xy_plot_data_function("CA",2,seed_c),
+      xy_plot_data_function("CT",4,seed_c),
+      xy_plot_data_function("MA",5,seed_c),
+      xy_plot_data_function("RI",1,seed_c),
+      xy_plot_data_function("VT",5,seed_c),
+      xy_plot_data_function_cities(68, 1, seed_c) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+      xy_plot_data_function_cities(69, 1, seed_c) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+    )
   
   
-  ggsave(plac_plot, filename = "plac_plot_all.pdf", device = cairo_pdf,
-         path= figure_path,
-         width = 9, height = 7, units = "in")
+  xy_plot_data %>% filter(attempt==1, year >= ban_year-3, year < ban_year) %>%
+    group_by(county_id) %>% 
+    summarise(r=abs((tons_pc-y_0)/tons_pc) %>%{.*100} %>%  mean %>% round(2)) %>% 
+    cbind(seed_chosen=seed_c)
+  
+}
+
+choose_seed_res <- lapply(1:100, choose_seed)
+
+choose_seed_res %>% bind_rows() %>% group_by(county_id) %>% filter(r==min(r)) %>% filter(seed_chosen==min(seed_chosen))
+
+
+################# SIMULATE MANY SEEDS AND SEE WHERE OUR RESULTS CHANGE ########################
+
+simulate_seed <- function(seed_c)
+{
+  xy_plot_data <-
+    rbind(
+      xy_plot_data_function("CA",2,seed_c),
+      xy_plot_data_function("CT",4,seed_c),
+      xy_plot_data_function("MA",5,seed_c),
+      xy_plot_data_function("RI",1,seed_c),
+      xy_plot_data_function("VT",5,seed_c)
+      #xy_plot_data_function_cities(68, 1, seed_c) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+      #xy_plot_data_function_cities(69, 1, seed_c) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+    )
+  
+  
+  
+  
+  disposal_spec %>% 
+    rename(
+      power_low = att_min, 
+      power_high = att_max
+    ) %>% select(-att_median)%>%  mutate (power_low = 100*power_low, power_high=100*power_high) %>% 
+    group_by(specification, treated_state, ban_year) %>% filter(power_low == max(power_low)) %>%
+    ungroup %>% 
+    filter(specification == "State") %>%
+    rbind(
+      disposal_spec %>%  
+        mutate(type = "disposal") %>%  
+        filter(
+          treated_state %in% c("M1", "CA", "M3"), 
+          specification == "County", 
+          sample_size!=0) %>% 
+        rename(
+          power_low = att_min, 
+          power_high = att_max
+        ) %>% select(-att_median)%>% select(-type) %>%  mutate (power_low = 100*power_low, power_high=100*power_high) %>% 
+        group_by(specification, treated_state, ban_year) %>% filter(power_low == max(power_low)) %>%
+        ungroup %>% 
+        mutate(
+          treated_state = ifelse(treated_state=="CA","boulderM2", treated_state),
+          treated_state = ifelse(treated_state=="M1","seattleM1", treated_state),
+          treated_state = ifelse(treated_state=="M3","san franciscoM3", treated_state)) # i use 2016 power for boulder
+    ) %>% 
+    left_join(
+      xy_plot_data %>% 
+        mutate(county_id=ifelse(county_id == "sanfranciscoM3", "san franciscoM3", county_id)) %>% 
+        filter(attempt==1) %>% 
+        group_by(county_id) %>% 
+        filter(year>=ban_year) %>% 
+        summarise(actual_treatment_effect = sum(tons_pc - y_0)/sum(y_0)), 
+      by = c("treated_state"= "county_id")
+    ) %>% 
+    left_join(
+      tibble(
+        state_id=c("MA", "CA", "VT"), 
+        reg_effect = reg_effect # Vermont's reg expect comes from: Regulators expectations are 17.52% to 21.78% by 2022. 
+        #Using our coverage we find that by 2022 exp effect is 15.9%. Then using simple linear approximation and taking the mean (0.0824*21.78/15.9+0.0824*17.52/15.9)/2 we get this number
+      ), 
+      by = c("treated_state"="state_id")
+    ) %>% 
+    mutate(
+      treated_state = ifelse(treated_state=="boulderM2","Boulder, CO", treated_state),
+      treated_state = ifelse(treated_state=="seattleM1","Seattle, WA", treated_state),
+      treated_state = ifelse(treated_state=="san franciscoM3","San Francisco, CA", treated_state), 
+      treated_state = ifelse(treated_state=="All","All States", treated_state),
+      treated_state=factor(treated_state, levels=c("San Francisco, CA","Boulder, CO","Seattle, WA","VT", "RI", "MA", "CT", "CA", "All States"))
+    ) %>%  rename(state_id=treated_state) %>% 
+    filter(!is.na(actual_treatment_effect)) %>% 
+    mutate(
+      significant = ifelse(actual_treatment_effect < power_low/100, 1, 0), 
+      seed_c = seed_c
+    ) %>% 
+    left_join(
+      xy_plot_data %>% filter(attempt==1, year >= ban_year-3, year < ban_year) %>%
+        group_by(county_id) %>% 
+        summarise(r=abs((tons_pc-y_0)/tons_pc) %>%{.*100} %>%  mean %>% round(2)) %>% 
+        cbind(seed_c=seed_c) %>% 
+        mutate(
+          county_id = ifelse(county_id=="boulderM2","Boulder, CO", county_id),
+          county_id = ifelse(county_id=="seattleM1","Seattle, WA", county_id)
+        ), 
+      by = c("state_id"="county_id", "seed_c")
+      
+    )
+  
+  
+}
+
+simulate_seed_res <- lapply(1:1000, simulate_seed)
+
+simulate_seed_res %>% 
+  bind_rows() %>% select(state_id, seed_c, significant, r, actual_treatment_effect) %>% 
+  group_by(state_id) %>% 
+  #slice(20:200) %>% 
+  summarise(mean(significant))
+
+

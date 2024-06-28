@@ -53,8 +53,7 @@ dt <-
     type = ifelse(type=="msw_generated", "generation", type),
     type = ifelse(type=="msw_disposed", "disposal", type), 
     type = ifelse(type == "msw_recycled", "recycling", type), 
-    type = ifelse(type == "organics", "composting", type), 
-    tons = ifelse(state_id=="DE" & year < 2009, NA, tons)
+    type = ifelse(type == "organics", "composting", type)
   ) %>%
   group_by (year, state_id, type)%>% 
   summarise(tons_pc = sum(tons, na.rm=TRUE)/ sum(pop))
@@ -4049,74 +4048,8 @@ year_cutoff <- 2018
 year_end <- 2011
 
 dt <- power2
+dt_state_initial <- pre_processing_dt_state(power2)
 
-dt <- 
-  dt %>% 
-  filter(
-    year >= year_start, 
-    year <= year_cutoff, 
-    state_id != "OH",
-    type %in% c("disposal", "msw_disposed")
-  ) %>% 
-  group_by (year, state_id, county_name) %>% 
-  summarise(tons = sum(tons)) %>% 
-  left_join (
-    population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
-    by = c("state_id", "year")
-  ) %>%
-  left_join (
-    population,
-    by = c("state_id", "county_name", "year")
-  ) %>% 
-  mutate(
-    tons_pc = ifelse(is.na(county_name),tons/state_pop, tons/pop), 
-    county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id) )
-  ) %>% 
-  filter(
-    tons_pc > 0.2
-  )
-
-exc<- 
-  as.data.frame(
-    dt %>% 
-      group_by(county_id) %>% 
-      filter(state_id != "CT", state_id != "RI") %>% 
-      summarize(
-        m = mean(tons_pc), 
-        min_year = min(year), 
-        min_tons = min(tons_pc), 
-        max_tons = max(tons_pc)) %>%
-      filter(
-        m < 0.3 | min_year > year_start | max_tons > 2.5)
-  )
-
-dt <- dt[!(dt$county_id %in% exc$county_id),]
-dt <- dt[dt$year >=year_start  & dt$year <=year_cutoff,]
-exc<- 
-  as.data.frame(
-    dt %>% 
-      group_by(county_id) %>% 
-      summarize(n=  n()) %>% 
-      filter(
-        n < (year_cutoff- year_start+1)
-      )
-  )
-dt <- dt[!(dt$county_id %in% exc$county_id),]
-# Percentage change in disposal tons
-f <- 
-  as.data.frame(
-    dt %>% 
-      filter(state_id != "RI") %>% 
-      group_by(county_id) %>% 
-      mutate(
-        percentage = (tons-dplyr::lag(tons, n = 1, default = NA))/dplyr::lag(tons, n = 1, default = NA),
-        percentage_1 = (tons-dplyr::lead(tons, n = 1, default = NA))/dplyr::lead(tons, n = 1, default = NA)
-      )
-  )
-
-f <- f[!is.na(f$percentage),]
-threshold <- 0.6
-exclude2 <- unique(f$county_id[f$percentage > threshold | f$percentage < -threshold | f$percentage_1 > threshold | f$percentage_1 < -threshold])
 ```
 
 ## ANOVA
@@ -4132,13 +4065,13 @@ regions <-
 dt_anova <- 
   power2 %>% 
   as_tibble  %>% 
-  filter(year >=2006, year <=2018) %>% 
+  filter(year >=2000, year <=2018) %>% 
   mutate(
     county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id, sep =""))
   ) %>% 
   filter(type == "disposal") %>%
   group_by(county_id) %>% 
-  mutate(n=n()) %>%  filter(n==13) %>% 
+  mutate(n=n()) %>%  filter(n>=9) %>% 
   left_join(
     population, 
     by = c("year", "state_id", "county_name")
@@ -4166,6 +4099,9 @@ dt_anova <-
   ) %>% 
   filter(!county_id %in% c(exclude2, exc %>% pluck("county_id")))
 
+
+dt_anova <- 
+  dt_anova %>% group_by(state_id, year) %>% summarise(tons_pc = sum(tons)/sum(pop))
 
 lm11 <- lm(tons_pc ~ as.factor(region), data= dt_anova%>% filter(!is.na(county_name)))
 summary(lm11)
@@ -4248,8 +4184,37 @@ dt_anova %>%
   mutate(fraction = pop/total_pop) %>% summarise(mean(fraction))
   
   
-  
+```
 
+### For paper: 
+
+```{r}
+
+library(fixest)
+dt_state_initial <- pre_processing_dt_state(power2)
+fixest::feols(tons_pc ~ 0|state_id, data=dt_anova) %>% summary()
+fixest::feols(tons_pc ~ 0|state_id, data=dt_anova) %>% fixef(se=TRUE)
+# R sq. from here!!!!
+
+
+feols(tons_pc ~ 0 | state_id, data = dt_anova) %>% fixef()
+lm(tons_pc ~ 0 + as.factor(state_id), dt_anova) %>% summary()
+# Estimates of fixed effects from here!
+
+
+
+feols(tons_pc ~ 0+ as.factor(state_id), data = dt_anova %>% filter(!state_id%in% c("NV", "NY")))%>% etable(vcov="hetero", tex=FALSE)
+
+
+dt_anova %>% group_by(state_id) %>% summarise(m=mean(tons_pc, na.rm=TRUE)) %>% ungroup %>% filter(!state_id%in% c("NV", "NY")) %>%  #because not full coverage
+  mutate(mean_m=mean(m, na.rm=TRUE)) %>% 
+  filter(m==max(m, na.rm=TRUE)|m==min(m, na.rm=TRUE)) %>% 
+  mutate(
+    (m-mean_m)/mean_m
+  )
+
+
+dt_anova %>% group_by(year) %>% summarise(m=mean(tons_pc, na.rm=TRUE))
 
 ```
 
