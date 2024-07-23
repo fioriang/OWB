@@ -1,0 +1,31 @@
+    1)  Arizona Department of Environmental Quality, Solid Waste Composting; \url{https://www.azdeq.gov/composting} \label{item:composting_inf_AZ}
+    2)  California's CalRecylce, SWIS Facility/Site Activity Search; \url{https://www2.calrecycle.ca.gov/SolidWaste/Activity}
+    3)  Colorado Department of Public Health \& Environment, Composting; \url{https://cdphe.colorado.gov/hm/composting} 
+    4)  Connecticut Department of Energy and Environmental Protection, Food Waste Composting Facilities; \url{https://portal.ct.gov/deep/waste-management-and-disposal/organics-recycling/food-residual-composting-facilities}
+    5)  Florida Department of Environmental Protection, Composting/Organics Recycling; \url{https://fldep.dep.state.fl.us/www_wacs/Reports/Yard_Trash_Processors_current_webupdates.asp}
+    6)  Georgia Environmental Protection Division, Composting; \url{https://epd.georgia.gov/document/document/permitted-commercial-composting-facilities-georgia/download}
+    7)  Illinois Environmental Protection Agency, Compost Facilities; \url{https://epa.illinois.gov/topics/waste-management/permitted-facilities/compost-facilities.html}
+    8)  Indiana Department of Environmental Management, Permitted, Registered, and Approved Facilities and Operations; \url{https://www.in.gov/idem/waste/resources/permits-registrations-approvals-and-closures/permitted-registered-and-approved-facilities-and-operations/}
+    9)  Iowa Department of Natural Resources, Solid Waste Permitting; \url{https://programs.iowadnr.gov/solidwaste/reports/facilitiesdirectory}
+    10) Kentucky public records request
+    11) Maryland Department of the Environment, Composting; \url{https://mde.maryland.gov/programs/land/RecyclingandOperationsprogram/Documents/Composting%20Facilities%20with%20Capacities%202023.pdf}
+    12) Maine public records request
+    13) Massachusetts Department of Environmental Protection, Massachusetts Food Waste Data; \url{https://www.mass.gov/guides/commercial-food-material-disposal-ban}
+    14) Michigan Department of Environment, Great Lakes, and Energy, Composting; \url{https://www.michigan.gov/egle/about/organization/materials-management/composting}
+    15) Minnesota Pollution Control Agency, Composting Facility Locator; \url{https://mpca.maps.arcgis.com/apps/webappviewer/index.html?id=b43da38bfca341258a3f00dabc9a3b2a}
+    16) Mississippi Department of Environmental Quality, Composting Facilities; \url{https://www.mdeq.ms.gov/wp-content/uploads/2017/06/MS-Composting-Facilities-July-2018.pdf}
+    17) Nevada Division of Environmental Protection, Solid Waste Facilities; \url{https://ndep.nv.gov/land/waste/solid-waste/facilities}
+    18) New Jersey Department of Environmental Protection, Class C Recycling Facilities; \url{https://www.nj.gov/dep/dshw/rrtp/classcfc.htm}
+    19) New York Department of Environmental Conservation, Composting - Solid Waste Management Facilities Map; \url{https://dec.ny.gov/environmental-protection/recycling-composting/organic-materials-management/technologies/composting}
+    20) North Carolina Environmental Quality Department, Permitted Compost Facilities; \url{https://ncdenr.maps.arcgis.com/apps/webappviewer/index.html?id=4f9f1720f4c74f0e82bda3bb3e8ce7b9}
+    21) Ohio Environmental Protection Agency, Composting Facilities;\url{https://geo.epa.ohio.gov/portal/apps/experiencebuilder/experience/?id=5d4668b3d3ca4462bed8758c75145f21}
+    22) Oklahoma Department of Environmental Quality, Solid Waste Facilities; \url{https://deq.maps.arcgis.com/home/webmap/viewer.html?webmap=828cd4dd8c8b494383ac825ad3347181}
+    23) Oregon Department of Environmental Quality, SWIFT Active Permitted Facilities; \url{https://deqapps.oregon.gov/common/Reports/?Report=%2FSWIFTReportProject%2FSWIFTActivePmtFacilities&rs%3ACommand=Render#P34bd5d1270124061839eb9103d8a6cd9_2_46iT0}
+    24) Pennsylvania Department of Environmental Protection, Composting; \url{https://www.dep.pa.gov/Business/Land/Waste/Recycling/Composting/Pages/default.aspx}
+    25) Rhode Island public records request
+    26) South Carolina Department of Commerce,  Recycling Markets Directory; \url{https://www.recyclinginsc.com/directory/}
+    27) Tennessee public records request 
+    28) Texas public records request
+    29) Utah Department of Environmental Quality, Solid Waste Annual Disposal Lists; \url{https://lf-public.deq.utah.gov/WebLink/DocView.aspx?id=20467&repo=Public&searchid=af86c326-1e51-4001-abcf-2835c23f7ab8}
+    30) Vermont Department of Environmental Conservation, Food Scrap Haulers; \url{https://dec.vermont.gov/waste-management/solid/materials-mgmt/organic-materials}
+    31) Washington Department of Ecology, Compost Facilities; \url{https://ecology.wa.gov/waste-toxics/reducing-recycling-waste/organics-and-food-waste/managing-organics-compost}\label{item:composting_inf_WA}
