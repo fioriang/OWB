@@ -1153,8 +1153,8 @@ write.csv(
 year_start = 2006
 year_end = 2018
 population_seattle <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/population_seattle.csv"))
-composting <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/composting.csv"))
-disposal <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/disposal.csv"))
+composting <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/seattle_composting.csv"))
+disposal <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/seattle_disposal.csv"))
 
 seattle <- 
   disposal %>%
@@ -1203,7 +1203,7 @@ seattle <-
     county_id = paste(county_name, state_id, sep = ""), 
   ) 
 
-waste <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/waste.csv"))
+waste <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/boulder_waste.csv"))
 boulder_population <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/boulder_population.csv"))
 
 colnames(waste) <- c("year", "sector", "disposal", "recycling", "organics","reuse", "total", "diversion", "notes")

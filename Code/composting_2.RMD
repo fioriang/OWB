@@ -722,10 +722,9 @@ write.csv(tr_res_state_multiple, "tr_res_state_multiple_composting.csv", row.nam
 ## Importing Data
 
 ```{r}
-
 population_seattle <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/population_seattle.csv"))
-composting <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/composting.csv"))
-disposal <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/disposal.csv"))
+composting <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/seattle_composting.csv"))
+disposal <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/seattle_disposal.csv"))
 
 
 seattle <- 
@@ -776,7 +775,7 @@ seattle <-
   ) 
 
 
-waste <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/waste.csv"))
+waste <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/boulder_waste.csv"))
 boulder_population <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/boulder_population.csv"))
 
 

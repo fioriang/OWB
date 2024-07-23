@@ -3491,7 +3491,7 @@ map_plot_county <-
 # print(map_plot_county)
 # dev.off()
 
-png(paste0(figure_path, "/map_plot_county_SC.png"), bg = "transparent", width = 15, height = 15, units = "in", res=300)
+png(paste0(figure_path, "/map_plot_county_SC.png"), bg = "transparent", width = 15, height = 15, units = "in", res=1200)
 print(map_plot_county)
 dev.off()
 ```
