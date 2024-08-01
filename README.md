@@ -48,17 +48,16 @@ These files include intermediate data that have been produced at midpoints in th
 # Code
 
 ## Primary analysis
-1. placebo_all.RMD: includes all the code for calculating the placebo confidence interval ("power") and estimating the average ATT ("treated") (Fig. S4, Fig. 2)
-2. xy.R: main results and plots for effects of the bans (Fig. 2, Fig. S5)
+1. placebo_all.RMD: includes all the code for calculating the placebo confidence interval ("power") (left panel of Fig. 2, left panel of Fig. S7, left panel of Fig. S9, Table S6)
+2. xy.R: main results and plots for effects of the bans (right panels of Fig. 2, Fig. S7)
 ## Robustness checks
-1. year_placebo: produces results for California-specific provision (Fig. S6)
-2. composting: all analyses regarding bans's effects on composting (Fig. S8)
-3. ghg: all analyses regarding emissions (Section B.1.6, Fig. S9, Table S7, Fig. S10)
-4. xy_passage: all analyses regarding bans's anticipation effects (Fig. S7)
-5. diff_in_diff: all analyses for difference in differences specification (Table S6)
+1. year_placebo: produces results for California-specific provision (Fig. S8)
+2. composting: all analyses regarding bans's effects on composting (Fig. S10)
+3. ghg: all analyses regarding emissions (Fig. S5, Fig. S6, Table S8)
+4. xy_passage: all analyses regarding bans's anticipation effects (right panel of Fig. S9)
+5. diff_in_diff: all analyses for difference in differences specification (Table S7)
 ## Data section
-1. data_section: producing all the data-related figures and tables (Fig. 1, Table S1, Fig. S1)
-2. WCS: contains all information regarding waste composition (Fig. S2, Fig. S3)
-3. cross_sectional_variation: all analyses regarding determinants of waste (Section A.1.1, Table S3)
-4. data_section_basic_manipulations: all manipulations to the raw data received from states (this produces the power2_impexp.csv file)
+1. data_section: producing all the data-related figures and tables (Fig. 1, Fig. S2, Fig. S3, Table S4)
+2. WCS: contains all information regarding waste composition and the expected effects of the bans (Table 1, Fig. S4, Fig. S1)
+2. data_section_basic_manipulations: all manipulations to the raw data received from states (this produces the power2_impexp.csv file)
 
