@@ -12,7 +12,7 @@ We include all the raw data and software we used to produce all tables and figur
 3. Food waste generators lists: (food_generators_MA.csv & food_generators_VT.csv)
 4. Food waste processors lists: (food_processors_list_MA.csv & food_processors_list_VT.csv, composting_infrastructure_all_states_gov.csv)
 5. Other data:   
-   a. Population of US counties: needed to create the per capita waste dispsosal (population.csv)\\
+   a. Population of US counties: needed to create the per capita waste dispsosal (population.csv)   
    b. US Cities: coordinates of US cities---needeed to estimate the minimum distance between generators and processors (uscities.csv)
 
 ## Intermediate data
