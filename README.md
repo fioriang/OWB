@@ -49,7 +49,7 @@ These files include intermediate data that have been produced at midpoints in th
 
 ## Primary analysis
 1. placebo_all.RMD: includes all the code for calculating the placebo confidence interval ("power") (left panel of Fig. 2, left panel of Fig. S7, left panel of Fig. S9, Table S6)
-2. xy.R: main results and plots for effects of the bans (right panels of Fig. 2, Fig. S7)
+2. xy.R: main results and plots for effects of the bans (right panel of Fig. 2, right panel of Fig. S7)
 ## Data section
 1. data_section: producing all the data-related figures and tables (Fig. 1, Fig. S2, Fig. S3, Table S4)
 2. WCS: contains all information regarding waste composition and the expected effects of the bans (Table 1, Fig. S1, Fig. S4)
