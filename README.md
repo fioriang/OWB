@@ -10,7 +10,7 @@ We include all the raw data and software we used to produce all tables and figur
 1. Waste data: includes all the data we use for our analysis (power2_impexp.csv) Note: in this file "disposal" refers to state-generated MSW for disposal. That is, we have (i) used only the MSW fraction of the total waste and (ii) excluded the imported waste and included waste exports. (For more details, please see sections A.1.2 and A.1.3 of the SM).
 2. Waste characterizations data:  (wcs_2.csv)
 3. Food waste generators lists: (food_generators_MA.csv & food_generators_VT.csv)
-4. Food waste processors lists: (food_processors_list_MA.csv & food_processors_list_VT.csv, composting_infrastructure_all_states_gov.csv)
+4. Food waste processors lists: (food_processors_list_MA.csv & food_processors_list_VT.csv, composting_infrastructure_all_states_gov.csv, composting_capacity_all_states.csv)
 5. Other data:   
    a. Population of US counties: needed to create the per capita waste dispsosal (population.csv)   
    b. US Cities: coordinates of US cities---needeed to estimate the minimum distance between generators and processors (uscities.csv)
@@ -50,14 +50,17 @@ These files include intermediate data that have been produced at midpoints in th
 ## Primary analysis
 1. placebo_all.RMD: includes all the code for calculating the placebo confidence interval ("power") (left panel of Fig. 2, left panel of Fig. S7, left panel of Fig. S9, Table S6)
 2. xy.R: main results and plots for effects of the bans (right panels of Fig. 2, Fig. S7)
+## Data section
+1. data_section: producing all the data-related figures and tables (Fig. 1, Fig. S2, Fig. S3, Table S4)
+2. WCS: contains all information regarding waste composition and the expected effects of the bans (Table 1, Fig. S4, Fig. S1)
+2. data_section_basic_manipulations: all manipulations to the raw data received from states (this produces the power2_impexp.csv file)
+## Mechanism
+1. infrastructure_gov.R: producing all the data-related figures and tables (Fig. 1, Fig. S2, Fig. S3, Table S4)
+
 ## Robustness checks
 1. year_placebo: produces results for California-specific provision (Fig. S8)
 2. composting: all analyses regarding bans's effects on composting (Fig. S10)
 3. ghg: all analyses regarding emissions (Fig. S5, Fig. S6, Table S8)
 4. xy_passage: all analyses regarding bans's anticipation effects (right panel of Fig. S9)
 5. diff_in_diff: all analyses for difference in differences specification (Table S7)
-## Data section
-1. data_section: producing all the data-related figures and tables (Fig. 1, Fig. S2, Fig. S3, Table S4)
-2. WCS: contains all information regarding waste composition and the expected effects of the bans (Table 1, Fig. S4, Fig. S1)
-2. data_section_basic_manipulations: all manipulations to the raw data received from states (this produces the power2_impexp.csv file)
 
