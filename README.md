@@ -55,7 +55,7 @@ These files include intermediate data that have been produced at midpoints in th
 2. WCS: contains all information regarding waste composition and the expected effects of the bans (Table 1, Fig. S4, Fig. S1)
 2. data_section_basic_manipulations: all manipulations to the raw data received from states (this produces the power2_impexp.csv file)
 ## Mechanism
-1. infrastructure_gov.R: producing all the data-related figures and tables (Fig. 1, Fig. S2, Fig. S3, Table S4)
+1. infrastructure_gov.R: producing all the data-related figures and tables (Fig. 3, Fig. 4, Table S9)
 
 ## Robustness checks
 1. year_placebo: produces results for California-specific provision (Fig. S8)
