@@ -44,9 +44,6 @@ These files include intermediate data that have been produced at midpoints in th
 8. Year Placebo [found in year_placebo.R] 
    year_placebo
 
-## Other data 
-1. Population (population.csv)
-2. Other controls for determining correlates of waste disposal [cross_sectional_variation_2.RMD]
 
 # Code
 
