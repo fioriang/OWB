@@ -2103,9 +2103,6 @@
 2018,"CO","yuma","disposal",4075.60766200488
 2019,"CO","yuma","disposal",4583.12875855566
 2020,"CO","yuma","disposal",4573.84319718055
-2006,"DE",NA,"disposal",823479
-2007,"DE",NA,"disposal",794984
-2008,"DE",NA,"disposal",741143
 2009,"DE",NA,"disposal",668353
 2010,"DE",NA,"disposal",706368
 2011,"DE",NA,"disposal",672761
@@ -18545,12 +18542,6 @@
 2019,"CO",NA,"composting",237358
 2020,"CO",NA,"composting",114115
 2021,"CO",NA,"composting",127929
-2006,"DE",NA,"generation",1071889
-2006,"DE",NA,"recycling",248410
-2007,"DE",NA,"generation",1172050
-2007,"DE",NA,"recycling",377066
-2008,"DE",NA,"generation",1059175
-2008,"DE",NA,"recycling",318032
 2009,"DE",NA,"generation",991990
 2009,"DE",NA,"recycling",323637
 2010,"DE",NA,"generation",1065515

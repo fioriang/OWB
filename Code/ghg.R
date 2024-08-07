@@ -1,9 +1,55 @@
+##### Emissions data ####
+
 ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/06. Emissions/GHG_Data"
+mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
+municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
+state_data_path <- paste0(mypathname,"/03. State_Data")
+base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
+
+
 facility <- read.csv(paste0(ghg_data_path,"/facility_info.csv"))%>% as_tibble
 msw_fac <- read.csv(paste0(ghg_data_path,"/msw_facilities.csv"))%>% as_tibble
 gas <- read.csv(paste0(ghg_data_path,"/gas_data.csv")) %>% as_tibble
 measurements <-read.csv(paste0(ghg_data_path,"/measure_data.csv")) %>% as_tibble
 captured_methane <-read.csv(paste0(ghg_data_path,"/captured_methane.csv")) %>% as_tibble
+
+##### Other data that are needed ####
+
+ut_colors <- c(
+  rgb(132, 59,14, max=255), # dark orange
+  rgb(255, 127, 21, max=255), # bright orange
+  rgb(191,87,0, max=255), # ut orange
+  rgb(51,73,72, max=255), # dark grey
+  rgb(156, 173, 183, max=255), #light grey
+  rgb(191,87,0,alpha=50, max=255))# ut orange
+
+# Population
+population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+population_2020 <- read.csv(paste0(state_data_path,"/00. Controls/Population/population_2020.csv"))
+population_2020 <- population_2020[population_2020$state_id !="DC",]
+population_2020$county_name[population_2020$county_name=="doña ana"] <- "dona ana"
+population <- rbind(population, population_2020)
+rm(population_2020)
+
+
+# Waste Data
+#power2 <- read.csv("power2_2.csv")
+power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv"))
+all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
+bans <- c(2014, 2014, 2016, 2014, 2016)
+#bans <- c(2014, 2014, 2016, 2014, 2016)
+bans_passage <- c(2012, 2013, 2014, 2011, 2014) #passage dates
+year_start <- 2006
+year_end <- 2018
+treated_counties_id <- all_treated
+
 
 ############### Data, Fig. S10 #############################
 #Check our data, with EPA's data
@@ -84,11 +130,19 @@ data_comparison <-
     legend.text = element_text(family = "Helvetica",size = 16, color= ut_colors[4])
   )
 
-ggsave(data_comparison, filename = "data_comparison.pdf", device = cairo_pdf,
-       path= figure_path,
-       width = 14, height = 13, dpi=320, units = "in")
+# ggsave(data_comparison, filename = "data_comparison.pdf", device = cairo_pdf,
+#        path= figure_path,
+#        width = 14, height = 13, dpi=320, units = "in")
 
 ############### SC Emissions pre-work #############################
+
+regions <-
+  tibble(
+    state_id = c("AL", "NY", "CT" ,"IN" ,"MN" ,"UT" ,"WI" ,"OR", "TX" ,"VT" ,"WA" ,"CA", "MI" ,"PA" ,"NJ", "FL" ,"MS" ,"NC" ,"OH" ,"SC", "IL", "MA", "GA", "IA", "KY", "TN" ,"MO" ,"CO" ,"DE","RI" ,"MD", "NM" ,"NV" ,"ME", "OK" ,"AZ") ,
+    region = c("Southeast", "Northeast", "Northeast", "Midwest", "Midwest", "West","Midwest","West", "Southwest", "Northeast", "West", "West","Midwest", "Northeast", "Northeast", "Southeast", "Southeast", "Southeast", "Midwest", "Southeast", "Midwest", "Northeast", "Southeast", "Midwest", "Southeast", "Southeast", "Midwest", "West", "Northeast", "Northeast", "Northeast", "Southwest", "West", "Northeast","Southwest", "Southwest")
+  )
+
+
 
 gas_fc <- 
   gas %>% 
@@ -197,9 +251,6 @@ gas_st <-
     population %>% group_by(state_id, year) %>% summarise(state_pop=sum(pop, na.rm = TRUE)), 
     by = c("state_id", "year")
   )
-
-
-
 
 
 do_many_times_gas <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
@@ -332,14 +383,14 @@ xy_plot_data_function <- function (treated_state, f, seed, treated_state_2)
     mutate(
       chosen_donor = colnames(x)[chosen_donor]
     )
+
+  #attempts <-all %>% filter(donor_number == "donor_1") %>% summarise(n= n()) %>%  pluck("n")
   
-  attempts <-all %>% filter(donor_number == "donor_1") %>% summarise(n= n()) %>%  pluck("n")
-  
-  all <- 
-    all %>%  
-    mutate(
-      attempt = rep(1:attempts, each= sample_size)
-    )
+  #all <- 
+  #  all %>%  
+  #  mutate(
+  #    attempt = rep(1:attempts, each= sample_size)
+  #  )
   
   
   all
@@ -348,29 +399,75 @@ xy_plot_data_function <- function (treated_state, f, seed, treated_state_2)
 }
 
 
-itrations = 10000
+iterations = 10000
 c<-1
 samp <- c(2,3,4,5,6,7,8,9, 10)
-sc_data_ma <-xy_plot_data_function("MA", f=1, seed=1, "MA")
-sc_data_ct <-xy_plot_data_function("CT", 1, 1, "CT")
-sc_data_ca <-xy_plot_data_function("CA", 3, 1, "CA") 
-sc_data_ri <-xy_plot_data_function("RI", 2, 1, "RI")
-sc_data_vt <-xy_plot_data_function("VT", 3, 1, "VT")
 
 
 power_gas <- function (i, treated_state_2, f, seed){
   xy_plot_data_function(donors[i], f, seed, treated_state_2) %>% as_tibble() %>% 
-    group_by(attempt) %>% 
-    summarise(att2=unique(att2), mape = mean(mape)) %>% 
+    #group_by(attempt) %>% 
+    filter(mape==min(mape)) %>% 
+    summarise(att2=mean(att2), mape = mean(mape)) %>% 
     mutate(treated_location=donors[i], treated_state_2=treated_state_2)
 }
 
 
-power_gas_res_ma <- lapply(1:29, power_gas, "MA",f=1, seed=2)
-power_gas_res_ct <- lapply(1:29, power_gas, "CT",f=1, seed=2)
-power_gas_res_ca <- lapply(1:29, power_gas, "CA",f=3, seed=1) 
-power_gas_res_ri <- lapply(1:29, power_gas, "RI",f=2, seed=1) # we have to use f=1 because
-power_gas_res_vt <- lapply(1:29, power_gas, "VT",f=3, seed=3) #power for f=1, f=2 is lower 
+power_gas_dist_fun_plac <- function (f_chosen)
+{
+  power_gas_res_ma <- lapply(1:28, power_gas, "MA",f=f_chosen, seed=2)
+  power_gas_res_ct <- lapply(1:28, power_gas, "CT",f=f_chosen, seed=2)
+  power_gas_res_ca <- lapply(1:28, power_gas, "CA",f=f_chosen, seed=1) 
+  power_gas_res_ri <- lapply(1:28, power_gas, "RI",f=f_chosen, seed=1) 
+  power_gas_res_vt <- lapply(1:28, power_gas, "VT",f=f_chosen, seed=2)
+  
+  power_gas_res <- 
+    rbind(
+      power_gas_res_ma %>% bind_rows,
+      power_gas_res_ca %>% bind_rows, 
+      power_gas_res_ct %>% bind_rows, 
+      power_gas_res_ri %>% bind_rows, 
+      power_gas_res_vt %>% bind_rows
+    ) %>% 
+    mutate(
+      sample_size=f_chosen+1
+    )
+  
+  power_gas_res
+}
+
+power_gas_dist_fun <- function(power_gas_dist_fun_res)
+{
+  power_gas_dist_fun_res %>% bind_rows %>% 
+    group_by(treated_state_2, treated_location, sample_size) %>%
+    filter(mape ==min(mape)) %>% 
+    summarise(mape=mean(mape), att=mean(att2)) %>% 
+    group_by(treated_state_2, sample_size) %>% 
+    filter(att!=min(att), att!=max(att)) %>% 
+    summarise(
+      min = min(att), 
+      max = max(att)) %>% 
+    group_by(
+      treated_state_2
+    ) %>% 
+    filter(min==max(min))
+}
+
+power_gas_dist_fun_res <- lapply(1:9, power_gas_dist_fun_plac)
+
+power_gas_dist_fun_res %>% power_gas_dist_fun #decide |S|
+
+#write.csv(power_gas_dist_fun_res %>% bind_rows(), "power_gas_res.csv", row.names=FALSE)
+#power_gas_res <- read.csv("power_gas_res.csv")
+
+power_gas_dist_fun_res%>% power_gas_dist_fun #decide |S|
+
+sc_data_ma <-xy_plot_data_function("MA", 1, 2, "MA")
+sc_data_ct <-xy_plot_data_function("CT", 1, 2, "CT")
+sc_data_ca <-xy_plot_data_function("CA", 3, 2, "CA")
+sc_data_ri <-xy_plot_data_function("RI", 2, 2, "RI")
+sc_data_vt <-xy_plot_data_function("VT", 6, 2, "VT")
+
 
 
 sc_data <- 
@@ -383,12 +480,12 @@ sc_data <-
   )  
 
 #write.csv(sc_data, "sc_data_ghg.csv", row.names = FALSE)
-sc_data <- read.csv("sc_data_ghg.csv")
+#sc_data <- read.csv("sc_data_ghg.csv")
 
 actual_effects <- 
   sc_data %>% 
   group_by(county_id) %>% 
-  filter(attempt==1)%>% 
+  filter(mape==min(mape)) %>% 
   summarise(actual=unique(att2)) %>% 
   rename(state_id=county_id) %>% 
   left_join(
@@ -398,22 +495,64 @@ actual_effects <-
     ), by = c("state_id")
   )
 
+ma_effect_ghg <- 100*actual_effects %>% filter(state_id=="MA") %>% pluck("actual") %>% abs
+figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+
+fileConn<-file(paste0(figure_path, "/ma_effect_ghg.txt"))
+writeLines(paste0(format(round(ma_effect_ghg,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+wcs <- read.csv(paste0(post_syp_path, "/03. Bans/wcs_2.csv"))
+
+wcs<-
+  wcs %>% as_tibble() %>% 
+  rename(
+    activity = Activity, 
+    jurisdiction = City
+  ) %>% 
+  mutate(
+    activity = activity %>% str_to_lower,
+    generator_category = generator_category %>% str_to_lower,
+    material = material %>% str_to_lower, 
+    tons = tons %>% as.numeric, 
+    need_to_find = need_to_find %>% as.numeric
+    
+  ) %>% 
+  filter(
+    year >= 2000, year <=2022
+  ) 
+
+
+ca_food_total <- wcs %>% filter(state_id=="CA", year==2014, generator_category=="all") %>%
+  filter(material=="food") %>% pluck("tons")/wcs %>% filter(state_id=="CA", year==2018, generator_category=="all") %>%  filter(material=="total") %>% pluck("tons")
+
+ct_food_total <- wcs %>% filter(state_id=="CT", year==2015, generator_category=="all") %>%
+  filter(material=="food") %>% pluck("tons")/wcs %>% filter(state_id=="CT", year==2015, generator_category=="all") %>%  filter(material=="total") %>% pluck("tons")
+
+ma_food_total <- wcs %>% filter(state_id=="MA", year==2013) %>%
+  filter(material=="food")%>% pluck("percentage")
+
+ri_food_total <- wcs %>% filter(state_id=="RI", year==2015, generator_category=="all") %>%
+  filter(material=="food") %>% pluck("tons")/wcs %>% filter(state_id=="RI", year==2015, generator_category=="all") %>%  filter(material=="total") %>% pluck("tons")
+
+vt_food_total <- wcs %>% filter(state_id=="VT", year==2013, generator_category=="all") %>%
+  filter(material=="food") %>% pluck("tons")/wcs %>% filter(state_id=="VT", year==2013, generator_category=="all") %>%  filter(material=="total") %>% pluck("tons")
+
+
 
 mfood <- 
-  wcs %>% 
-  filter(state_id%in% all_treated) %>% 
-  group_by(state_id, generator_category) %>% 
-  summarise(
-    mfood=mean(food_share)) %>% 
-  group_by(state_id) %>% 
-  summarise(mfood=sum(mfood)) %>% 
-  mutate(mfood=ifelse(state_id=="MA", 0.103/0.55, mfood), mfood=100*mfood) # from WCS, we need the thing for both commercial and organics
+  tibble(
+    state_id=c("CA", "CT", "MA", "RI", "VT"), 
+    mfood= c(ca_food_total, ct_food_total, ma_food_total, ri_food_total, vt_food_total)
+  )
 
 
+disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
 
 expected_effects <- 
   sc_data %>% 
-  group_by(county_id) %>% filter(mape==min(mape)) %>% filter(attempt==min(attempt)) %>% 
+  group_by(county_id) %>% 
+  filter(mape==min(mape)) %>% 
   left_join(dt_state %>% select(state_id, year, tons_pc), by = c("county_id" = "state_id")) %>% 
   select(-iterations) %>% 
   left_join(
@@ -421,13 +560,14 @@ expected_effects <-
       select(state_id, year, tons_pc, county_id) %>% 
       rename (y=tons_pc, donor_state_id = state_id),
     by = c("chosen_donor"="county_id", "year")) %>% 
-  group_by(year, county_id, intercept2, intercept, ban_year, attempt, tons_pc) %>% 
+  group_by(year, county_id, intercept2, intercept, ban_year, tons_pc) %>% 
   summarise(y=mean(y)) %>%
   mutate(
     y_0  = y+intercept2
   ) %>% 
   left_join(
-    disposal_effect_size %>% filter(effect_type== "lower_bound") %>%  select(year, state_id, effect_size), 
+    disposal_effect_size2 %>% 
+      select(year, state_id, effect_size), 
     by = c("year", "county_id" = 'state_id')
   ) %>%
   left_join(mfood, by = c("county_id"="state_id")) %>% 
@@ -441,42 +581,32 @@ expected_effects <-
   ) %>% 
   group_by(county_id) %>% 
   mutate(
-    effect_size = ifelse(county_id=="CA", effect_size *0.0778/(0.0787 + 0.0778+ 0.0279), effect_size), # because it covers many more materials other than food waste, we use only the food waste fraction for CA
-    reg_effect = ifelse(county_id=="CA", reg_effect *0.0778/(0.0787 + 0.0778+ 0.0279), reg_effect), # because it covers many more materials other than food waste
+    effect_size = ifelse(county_id=="CA", effect_size *0.6, effect_size), # because it covers many more materials other than food waste, we use only the food waste fraction for CA
+    reg_effect = ifelse(county_id=="CA", reg_effect *0.6, reg_effect), # because it covers many more materials other than food waste
     prior_to_the_ban = ifelse(year==ban_year-1, tons_pc, 0),
     prior_to_the_ban= ifelse(prior_to_the_ban==0, max(prior_to_the_ban, na.rm=TRUE), prior_to_the_ban),
     effect_size =1- (prior_to_the_ban*100*.58*(mfood-effect_size*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100), 
-    reg_effect =1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
-    
+    reg_effect =1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100), 
+    effect_size = effect_size/100
   ) %>% 
   select(-prior_to_the_ban) %>% 
   group_by(county_id,reg_effect) %>% 
   summarise(expected_effect = mean(effect_size, na.rm=TRUE))
 
-power_gas_res <- 
-  rbind(
-    power_gas_res_ma %>% bind_rows, 
-    power_gas_res_ca %>% bind_rows, 
-    power_gas_res_ct %>% bind_rows, 
-    power_gas_res_ri %>% bind_rows, 
-    power_gas_res_vt %>% bind_rows
-  )
 
-
-#write.csv(power_gas_res, "power_gas_res.csv", row.names=FALSE)
-#power_gas_res <- read.csv("power_gas_res.csv")
 
 power_gas_res_plot <- 
-  power_gas_res %>% 
-  group_by(treated_state_2, treated_location) %>%
-  filter(mape ==min(mape)) %>% 
-  summarise(mape=mean(mape), att=mean(att2)) %>% 
-  group_by(treated_state_2) %>% 
-  filter(att!=min(att), att!=max(att)) %>% 
-  summarise(
-    min = min(att), 
-    max = max(att)) %>%  
-  
+  # power_gas_res %>% 
+  # group_by(treated_state_2, treated_location) %>%
+  # filter(mape ==min(mape)) %>% 
+  # summarise(mape=mean(mape), att=mean(att2)) %>% 
+  # group_by(treated_state_2) %>% 
+  # filter(att!=min(att), att!=max(att)) %>% 
+  # summarise(
+  #   min = min(att), 
+  #   max = max(att)) %>%  
+  power_gas_dist_fun_res %>% 
+  power_gas_dist_fun %>% select(-sample_size) %>%  #decide |S|
   left_join(actual_effects, by = c("treated_state_2"="state_id")) %>% 
   rename(state_id=treated_state_2) %>% 
   mutate(
@@ -541,10 +671,12 @@ power_gas_res_plot <-
 
 
 
-xy_gas_plot_function <- function (chosen_attempt)
+xy_gas_plot_function <- function (i)
 {
   xy_gas_data <- 
-    sc_data %>% filter(attempt==chosen_attempt)%>% 
+    sc_data %>% group_by(county_id) %>% 
+    filter(mape==min(mape))%>% 
+    ungroup %>% 
     left_join(dt_state %>% select(state_id, year, tons_pc), by = c("county_id" = "state_id")) %>% 
     select(-iterations) %>% 
     left_join(
@@ -552,13 +684,13 @@ xy_gas_plot_function <- function (chosen_attempt)
         select(state_id, year, tons_pc, county_id) %>% 
         rename (y=tons_pc, donor_state_id = state_id),
       by = c("chosen_donor"="county_id", "year")) %>% 
-    group_by(year, county_id, intercept2, intercept, ban_year, attempt, tons_pc) %>% 
+    group_by(year, county_id, intercept2, intercept, ban_year, tons_pc) %>% 
     summarise(y=mean(y)) %>%
     mutate(
       y_0  = y+intercept2
     ) %>% 
     left_join(
-      disposal_effect_size %>% filter(effect_type== "lower_bound") %>%  select(year, state_id, effect_size), 
+      disposal_effect_size2  %>%  select(year, state_id, effect_size), 
       by = c("year", "county_id" = 'state_id')
     ) %>%
     left_join(mfood, by = c("county_id"="state_id")) %>% 
@@ -573,11 +705,11 @@ xy_gas_plot_function <- function (chosen_attempt)
     group_by(county_id) %>% 
     mutate(
       effect_size = ifelse(county_id=="CA", effect_size *0.6, effect_size), # because it covers many more materials other than food waste
-      
       reg_effect = ifelse(county_id=="CA", reg_effect *0.6, reg_effect), # because it covers many more materials other than food waste
       prior_to_the_ban = ifelse(year==ban_year-1, tons_pc, 0),
       prior_to_the_ban= ifelse(prior_to_the_ban==0, max(prior_to_the_ban, na.rm=TRUE), prior_to_the_ban),
       effect_size =1- (prior_to_the_ban*100*.58*(mfood-effect_size*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100), 
+      effect_size = 0.01*effect_size,
       reg_effect =1- (prior_to_the_ban*100*.58*(mfood-reg_effect*100)/mfood+prior_to_the_ban*100*(1-.58))/(prior_to_the_ban*100)
     ) %>% select(-prior_to_the_ban) %>% 
     mutate(
@@ -599,7 +731,7 @@ xy_gas_plot_function <- function (chosen_attempt)
       y_last =ifelse(year==2018 & location =="Actual", tons_pc%>% round(2)*1.0, NA)
     ) %>% 
     left_join(
-      tibble (xlab= c(2012, 2016-1, 2016+1), ylab = 0.29, label = c("Train", "Validation", "Evaluation"), treated_state = "CA"), 
+      tibble (xlab= c(2012, 2016-1, 2016+1), ylab = 0.29, label = c("Training", "Validation", "Evaluation"), treated_state = "CA"), 
       by =c ("treated_state", "year"="xlab")
     ) %>% 
     mutate(

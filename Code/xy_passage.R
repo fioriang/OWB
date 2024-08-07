@@ -253,7 +253,7 @@ xy_plot_fun_passage <- function (i)
       treated_state = factor(treated_state, levels = c("All", "CA", "CT", "MA", "RI", "VT", "Seattle, WA", "Boulder, CO", "San Francisco, CA"))
     ) %>% 
     left_join(
-      tibble (xlab= c(2010, pooled_ban_year-2, pooled_ban_year+2), ylab = 0.85, label = c("Train", "Validation", "Evaluation"), treated_state = "All"), 
+      tibble (xlab= c(2010, pooled_ban_year-2, pooled_ban_year+2), ylab = 0.85, label = c("Training", "Validation", "Evaluation"), treated_state = "All"), 
       by =c ("treated_state", "year"="xlab")
     ) %>% 
     mutate(

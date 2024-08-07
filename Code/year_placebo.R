@@ -450,7 +450,7 @@ xy_plot_year_data <-
     y_end_high_2 = ifelse(ban_year==2016, y_end_high_2+0.1, y_end_high_2)
   ) %>% 
   left_join(
-    tibble (year= c(2009, 2012, 2016), xlab_set= c(2010, 2014, 2017.5), ylab_set = 1, label = c("Train", "Validation", "Evaluation"), ban_year = 2016), 
+    tibble (year= c(2009, 2012, 2016), xlab_set= c(2010, 2014, 2017.5), ylab_set = 1, label = c("Training", "Validation", "Evaluation"), ban_year = 2016), 
     by =c ("year", "ban_year")
   ) 
 

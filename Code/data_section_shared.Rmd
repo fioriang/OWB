@@ -1,0 +1,1087 @@
+---
+title: "data_section_shared"
+author: "Fiorentia Zoi Anglou"
+date: "2023-02-09"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(tidyverse)
+library(extrafont)
+library(latex2exp)
+library(ggnewscale)
+library(data.table)
+library(ggpubr)
+
+state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
+post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+
+# state_data_path <- "/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/03. State_Data"
+# post_syp_path <- "/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/06. Post SYP"
+# figure_path <- "/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/Figures"
+
+# Population
+population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+ut_colors <- c(
+  rgb(132, 59,14, max=255), # dark orange
+  rgb(255, 127, 21, max=255), # bright orange
+  rgb(191,87,0, max=255), # ut orange
+  rgb(51,73,72, max=255), # dark grey
+  rgb(156, 173, 183, max=255), #light grey
+  rgb(191,87,0,alpha=50, max=255))# ut orange
+
+```
+
+
+# Outputs 
+
+## Importing the data 
+
+```{r}
+
+#setwd('/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/06. Post SYP/00. Code/')
+power2 <- read.csv("power2_impexp.csv")
+
+dt <- 
+  power2 %>%
+  filter(!is.na(county_name)) %>% 
+  left_join(
+    population, by =c("state_id", "county_name", "year")
+  )%>% 
+  rbind(
+    power2 %>%
+      filter(is.na(county_name)) %>% 
+      left_join(
+        (
+          population %>% 
+            group_by(state_id, year) %>% 
+            summarise(pop = sum(pop))
+        )
+        , by =c("state_id", "year")
+      )
+  ) %>% 
+  filter(!is.na(pop),!is.na(tons)) %>% 
+  mutate(
+    tons_pc = tons/pop, 
+    type = ifelse(type=="msw_generated", "generation", type),
+    type = ifelse(type=="msw_disposed", "disposal", type), 
+    type = ifelse(type == "msw_recycled", "recycling", type), 
+    type = ifelse(type == "organics", "composting", type)
+  ) %>%
+  group_by (year, state_id, type)%>% 
+  summarise(tons_pc = sum(tons, na.rm=TRUE)/ sum(pop))
+
+
+```
+
+
+
+
+
+## Fig. S2
+
+```{r}
+
+dates <- tibble (
+  state_id = c("VT", "MA", "CA", "CT", "RI"),# Never changes
+  ban_year  = c(2015, 2015, 2016, 2014, 2016),
+  passage_year = c(2012, 2013, 2014, 2011, 2014) #passage dates
+)
+
+regions <-
+  tibble(
+    state_id = c("CT" ,"IN" ,"MN" ,"UT" ,"WI" ,"OR", "TX" ,"VT" ,"WA" ,"CA", "MI" ,"PA" ,"NJ", "FL" ,"MS" ,"NC" ,"OH" ,"SC", "IL", "MA", "GA", "IA", "KY", "TN" ,"MO" ,"CO" ,"DE","RI" ,"MD", "NM" ,"NV" ,"ME", "OK" ,"AZ", "AL", "NY") ,
+    region = c("Northeast", "Midwest", "Midwest", "West","Midwest","West", "Southwest", "Northeast", "West", "West","Midwest", "Northeast", "Northeast", "Southeast", "Southeast", "Southeast", "Midwest", "Southeast", "Midwest", "Northeast", "Southeast", "Midwest", "Southeast", "Southeast", "Midwest", "West", "Northeast", "Northeast", "Northeast", "Southwest", "West", "Northeast","Southwest", "Southwest", "Southeast", "Northeast")
+  )
+
+data_availability <- function (chosen_region)
+{
+    concat_spaces <- function(num_spaces) {
+    if (num_spaces <= 0) {
+      return("")
+    } else {
+      return(paste0(" ", concat_spaces(num_spaces - 1)))
+    }
+  }
+  
+  dummies_counter <-
+    regions %>% 
+    group_by (region) %>%  
+    summarise(n = n()) %>%  
+    ungroup %>%  
+    mutate( def =max(n)-n) %>% 
+    filter(region == chosen_region) %>% 
+    select(def) %>%  pluck("def")
+  
+  
+  dt_in <- 
+    dt %>% 
+    filter(
+      year >= 1996, 
+      year <= 2019, 
+      !type %in% c("food_total", "food_donation"),
+      type == "disposal",
+      !is.na(tons_pc)
+      # food total is in Florida, there's another category for composting
+      # food donation is a field in TN, it is empty
+    ) %>% 
+    filter (
+      type != "generation"
+    ) %>%
+    mutate(
+      type = factor(
+        type,
+        levels = c("disposal", "recycling", "composting")
+      ),
+      type = type %>% 
+        forcats::fct_recode(
+          Disposal = "disposal", 
+          Recycling = "recycling", 
+          Composting = "composting"
+        )
+    ) %>% 
+    left_join(
+      dates, 
+      by = c("state_id")
+    ) %>% 
+    left_join(
+      regions, 
+      by = c("state_id")
+    ) %>% 
+    group_by(state_id, type) %>%  
+    mutate(
+      min_year = min(year), 
+      min_year = ifelse(year==min_year, tons_pc, 0), 
+      min_year = max(min_year), 
+      #tons_pc = 100*tons_pc %>%  {(. -first(.))/first(.)}, 
+      Implementation = ifelse(year==ban_year, tons_pc, NA),
+      Passage = ifelse(year==passage_year, tons_pc, NA)
+    ) %>%  ungroup %>%
+    pivot_longer(
+      cols = c("Implementation", "Passage"), 
+      names_to = "Type_Date", 
+      values_to = "Date"
+    ) %>% 
+    filter(region ==chosen_region) 
+  
+  if(dummies_counter > 0)
+  {
+    dummies <-
+      tibble(
+        year = 2005:2020, 
+        state_id ="",
+        type = "Disposal",
+        tons_pc = NA,
+        ban_year = NA, 
+        passage_year = NA, 
+        region = chosen_region, 
+        min_year = NA,
+        Type_Date = NA, 
+        Date =NA)
+    
+    
+    if(dummies_counter >1){
+      for (i in 2: dummies_counter)
+    {
+      dummies <- rbind(
+        dummies, 
+        tibble(
+          year = 2005:2020, 
+          state_id =concat_spaces(i),
+          type = "Disposal",
+          tons_pc = NA,
+          ban_year = NA, 
+          passage_year = NA, 
+          region = chosen_region, 
+          min_year = NA,
+          Type_Date = NA, 
+          Date =NA)
+      )
+    }
+    }
+    
+    dt_in <- 
+      dt_in %>% 
+      rbind(dummies)
+  }else{dt_in <- dt_in}
+  
+  dt_in %>% mutate(
+    Type_Date = factor(Type_Date, levels=c("Passage", "Implementation"))
+  ) %>% 
+    ggplot()+
+    aes(x=year, y=tons_pc, color = type,linetype = type)+
+    geom_line(linewidth = .5)+ geom_point(size = 0.5)+
+    #geom_point(aes(x=year, y=ban_cross), color = "#417c5b3")+
+    #geom_point(aes(x=year, y=passage_cross),color = "goldenrod")+
+    facet_grid(
+      cols = vars(state_id), 
+      rows  = vars(region)
+    ) + 
+    scale_colour_grey(start = 0.2, end =0.6)+
+    scale_linetype_manual(values = c("solid", "dotted", "solid"))+
+    labs(x="", y = "" ) + 
+    scale_x_continuous (breaks = c(2005, 2015), limits = c(1995, 2019))+
+    scale_y_continuous (breaks = c(0.5, 0.8, 1.1, 1.4), limits = c(0.4, 1.6))+
+    new_scale_color()+
+    
+    #geom_pointrange(aes(x=year, y=Date, color=Type_Date))+
+    geom_errorbar(aes(x=year, ymin = Date-0.1, ymax = Date+0.1, color =Type_Date), width = 0.2, size=0.8)+
+    scale_color_manual(values=c("goldenrod", "seagreen"), na.translate = FALSE)+
+    # geom_point(aes(x=year, y=Date, color=Type_Date), size =2)+
+    # scale_color_manual(values=c("goldenrod", "firebrick"), na.translate = FALSE)+
+    #scale_y_continuous (breaks = c(2005, 2015))+
+    theme(
+      panel.border = element_blank(),
+      legend.position = "none", 
+      panel.background = element_blank(),
+      #axis.ticks = element_blank(), 
+      #axis.text=element_blank(),
+      #plot.title = element_text(hjust = 0.5, size=10),
+      #plot.caption = element_text(hjust=0.5,size = 10), 
+      axis.line.x = element_blank(), 
+      axis.text.x = element_blank(),
+      axis.ticks.x= element_blank(),
+      text = element_text(family="Helvetica",size = 16), 
+      legend.title = element_blank(),
+      strip.background = element_blank(), 
+      legend.key = element_blank())
+  
+}
+
+data_availability_with_legend <- function (chosen_region)
+{
+  
+  concat_spaces <- function(num_spaces) {
+    if (num_spaces <= 0) {
+      return("")
+    } else {
+      return(paste0(" ", concat_spaces(num_spaces - 1)))
+    }
+  }
+  
+  dummies_counter <-
+    regions %>% 
+    group_by (region) %>%  
+    summarise(n = n()) %>%  
+    ungroup %>%  
+    mutate( def =max(n)-n) %>% 
+    filter(region == chosen_region) %>% 
+    select(def) %>%  pluck("def")
+  
+  
+  dt_in <- 
+    dt %>% 
+    filter(
+      year >= 1996, 
+      year <= 2019, 
+      !type %in% c("food_total", "food_donation"),
+      type == "disposal", 
+      !is.na(tons_pc)
+      # food total is in Florida, there's another category for composting
+      # food donation is a field in TN, it is empty
+    ) %>% 
+    filter (
+      type != "generation"
+    ) %>%
+    mutate(
+      type = factor(
+        type,
+        levels = c("disposal", "recycling", "composting")
+      ),
+      type = type %>% 
+        forcats::fct_recode(
+          Disposal = "disposal", 
+          Recycling = "recycling", 
+          Composting = "composting"
+        )
+    ) %>% 
+    left_join(
+      dates, 
+      by = c("state_id")
+    ) %>% 
+    left_join(
+      regions, 
+      by = c("state_id")
+    ) %>% 
+    group_by(state_id, type) %>%  
+    mutate(
+      min_year = min(year), 
+      min_year = ifelse(year==min_year, tons_pc, 0), 
+      min_year = max(min_year), 
+      #tons_pc = 100*tons_pc %>%  {(. -first(.))/first(.)}, 
+      Implementation = ifelse(year==ban_year, tons_pc, NA),
+      Passage = ifelse(year==passage_year, tons_pc, NA)
+    ) %>%  ungroup %>%
+    pivot_longer(
+      cols = c("Implementation", "Passage"), 
+      names_to = "Type_Date", 
+      values_to = "Date"
+    ) %>% 
+    filter(region ==chosen_region) 
+  
+  if(dummies_counter > 0)
+  {
+    dummies <-
+      tibble(
+        year = 2005:2020, 
+        state_id ="",
+        type = "Disposal",
+        tons_pc = NA,
+        ban_year = NA, 
+        passage_year = NA, 
+        region = chosen_region, 
+        min_year = NA,
+        Type_Date = NA, 
+        Date =NA)
+    
+    
+    if(dummies_counter >1){
+      for (i in 2: dummies_counter)
+    {
+      dummies <- rbind(
+        dummies, 
+        tibble(
+          year = 2005:2020, 
+          state_id =concat_spaces(i),
+          type = "Disposal",
+          tons_pc = NA,
+          ban_year = NA, 
+          passage_year = NA, 
+          region = chosen_region, 
+          min_year = NA,
+          Type_Date = NA, 
+          Date =NA)
+      )
+    }
+    }
+    
+    dt_in <- 
+      dt_in %>% 
+      rbind(dummies)
+  }else{dt_in <- dt_in}
+  
+
+  
+  dt_in %>%mutate(
+    Type_Date = factor(Type_Date, levels=c("Passage", "Implementation")) 
+    #Type_Date = ifelse(is.na(Date), NA, Type_Date)
+  ) %>%  
+    ggplot()+
+    aes(x=year, y=tons_pc, color = type)+
+    geom_line(linewidth = .5)+ geom_point(size = 0.5)+
+    facet_grid(
+      cols = vars(state_id), 
+      rows  = vars(region)
+    ) + 
+    #scale_colour_grey(start = 0.2, end =0.6)+
+    scale_color_manual(values=ut_colors[4])+
+    scale_linetype_manual(values = c("solid", "dotted", "solid"))+
+    labs(x="", y = "" ) + 
+    scale_x_continuous (breaks = c(2005, 2015), limits = c(1995, 2019))+
+    scale_y_continuous (breaks = c(0.5, 0.8, 1.1, 1.4), limits = c(0.4, 1.6))+
+    new_scale_color()+
+    
+    #geom_point(aes(x=year, y=Date, color=Type_Date))+
+    geom_errorbar(aes(x=year, ymin = Date-0.1, ymax = Date+0.1, color =Type_Date), width = 0.2, size=0.8)+
+    scale_color_manual(values=c("goldenrod", "seagreen"), na.translate = FALSE)+
+    
+    # geom_point(aes(x=year, y=Date, color=Type_Date), size=2)+
+    # scale_color_manual(values=c("goldenrod", "firebrick"), na.translate = FALSE)+
+    #scale_y_continuous (breaks = c(2005, 2015))+
+    theme(
+      panel.border = element_blank(),
+      legend.position = "top", 
+      panel.background = element_blank(),
+      axis.line.x = element_blank(), 
+      axis.text.x = element_blank(),
+      axis.ticks.x= element_blank(),
+      text = element_text(family="Helvetica",size = 16), 
+      legend.title = element_blank(),
+      strip.background = element_blank(), 
+      legend.key = element_blank())
+  
+}
+
+data_availability_with_axes <- function (chosen_region)
+{
+  
+  concat_spaces <- function(num_spaces) {
+    if (num_spaces <= 0) {
+      return("")
+    } else {
+      return(paste0(" ", concat_spaces(num_spaces - 1)))
+    }
+  }
+  
+  dummies_counter <-
+    regions %>% 
+    group_by (region) %>%  
+    summarise(n = n()) %>%  
+    ungroup %>%  
+    mutate( def =max(n)-n) %>% 
+    filter(region == chosen_region) %>% 
+    select(def) %>%  pluck("def")
+  
+  
+  dt_in <- 
+    dt %>% 
+    filter(
+      year >= 1996,
+      year <= 2019, 
+      !type %in% c("food_total", "food_donation"),
+      type == "disposal",
+      !is.na(tons_pc)
+      # food total is in Florida, there's another category for composting
+      # food donation is a field in TN, it is empty
+    ) %>% 
+    filter (
+      type != "generation"
+    ) %>%
+    mutate(
+      type = factor(
+        type,
+        levels = c("disposal", "recycling", "composting")
+      ),
+      type = type %>% 
+        forcats::fct_recode(
+          Disposal = "disposal", 
+          Recycling = "recycling", 
+          Composting = "composting"
+        )
+    ) %>% 
+    left_join(
+      dates, 
+      by = c("state_id")
+    ) %>% 
+    left_join(
+      regions, 
+      by = c("state_id")
+    ) %>% 
+    group_by(state_id, type) %>%  
+    mutate(
+      min_year = min(year), 
+      min_year = ifelse(year==min_year, tons_pc, 0), 
+      min_year = max(min_year), 
+      #tons_pc = 100* tons_pc %>%  {(. -first(.))/first(.)}, 
+      Implementation = ifelse(year==ban_year, tons_pc, NA),
+      Passage = ifelse(year==passage_year, tons_pc, NA)
+    ) %>%  ungroup %>%
+    pivot_longer(
+      cols = c("Implementation", "Passage"), 
+      names_to = "Type_Date", 
+      values_to = "Date"
+    ) %>% 
+    filter(region ==chosen_region) 
+  
+  if(dummies_counter > 0)
+  {
+    dummies <-
+      tibble(
+        year = 2005:2020, 
+        state_id ="",
+        type = "Disposal",
+        tons_pc = NA,
+        ban_year = NA, 
+        passage_year = NA, 
+        region = chosen_region, 
+        min_year = NA,
+        Type_Date = NA, 
+        Date =NA)
+    
+    
+    if(dummies_counter >1){
+      for (i in 2: dummies_counter)
+    {
+      dummies <- rbind(
+        dummies, 
+        tibble(
+          year = 2005:2020, 
+          state_id =concat_spaces(i),
+          type = "Disposal",
+          tons_pc = NA,
+          ban_year = NA, 
+          passage_year = NA, 
+          region = chosen_region, 
+          min_year = NA,
+          Type_Date = NA, 
+          Date =NA)
+      )
+    }
+    }
+    
+    dt_in <- 
+      dt_in %>% 
+      rbind(dummies)
+  }else{dt_in <- dt_in}
+  
+  
+  dt_in %>% mutate(
+    Type_Date = factor(Type_Date, levels=c("Passage", "Implementation"))
+  ) %>% 
+    ggplot()+
+    aes(x=year, y=tons_pc, color = type,linetype = type)+
+    geom_line(linewidth = .5)+ geom_point(size = 0.5)+
+    facet_grid(
+      cols = vars(state_id), 
+      rows  = vars(region)
+    ) + 
+    scale_colour_grey(start = 0.2, end =0.6)+
+    scale_linetype_manual(values = c("solid", "dotted", "solid"))+
+    new_scale_color()+
+    
+    geom_errorbar(aes(x=year, ymin = Date-0.1, ymax = Date+0.1, color =Type_Date), width = 0.2, size=0.8)+
+    scale_color_manual(values=c("goldenrod", "seagreen"), na.translate = FALSE)+
+    # geom_point(aes(x=year, y=Date, color=Type_Date), size=2)+
+    # scale_color_manual(values=c("goldenrod", "firebrick"), na.translate = FALSE)+
+    labs(x="", y = "" ) + 
+    scale_x_continuous (breaks = c(1997, 2007, 2017), limits = c(1995, 2019),labels = c("'97", "'07", "'17"))+
+    scale_y_continuous (breaks = c(0.5, 0.8, 1.1, 1.4), limits = c(0.4, 1.6))+
+    #scale_y_continuous (breaks = c(2005, 2015))+
+    theme(
+      panel.border = element_blank(),
+      legend.position = "none", 
+      panel.background = element_blank(),
+      #axis.ticks = element_blank(), 
+      #axis.text=element_blank(),
+      #plot.title = element_text(hjust = 0.5, size=10),
+      #plot.caption = element_text(hjust=0.5,size = 10)
+      text = element_text(family="Helvetica",size = 16), 
+      legend.title = element_blank(),
+      strip.background = element_blank(), 
+      legend.key = element_blank())
+  
+}
+  
+p1 <- data_availability_with_legend("Northeast")
+p2 <- data_availability("Southeast")
+p3 <- data_availability("West")
+p4 <- data_availability("Southwest")
+p5 <- data_availability_with_axes("Midwest")
+
+#library(egg)
+f <- ggpubr:: ggarrange(p1,p2,p3, p4, p5, nrow=5, widths = rep(14,5), heights = c(8,rep(6,4)))
+#library(latex2exp)
+
+f <- ggpubr::annotate_figure(f, left = ggpubr::text_grob(TeX(" Disposal (tons per capita) "), family= "Helvetica", rot = 90))
+
+ggsave(f, filename = "data_availability_disposal_only_all_years.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 14, height = 9, dpi=320, units = "in")
+
+```
+
+
+
+## Table S4: Data Availability
+
+```{r, eval=FALSE}
+install.packages("xtable")
+library(xtable)
+
+
+reporting_level <- 
+  power2 %>% 
+  mutate(
+    level = ifelse(is.na(county_name), "Facility", "County")
+  ) %>% 
+  filter(
+    type == "disposal"
+  )%>%
+  group_by(
+    state_id
+  ) %>% 
+  summarize(Level = unique(level)) %>% 
+  arrange(state_id) 
+
+
+dt %>% 
+  filter(
+    !is.na(tons_pc), 
+    type %in% c("disposal","recycling", "composting"), 
+    tons_pc > 0
+    ) %>%
+  group_by (state_id, type) %>% 
+  summarize(
+    min_year = min(year), 
+    max_year = max(year)) %>%
+  mutate(
+    period = paste0(min_year, "-", max_year)) %>% 
+  dplyr::select(state_id, type, period) %>%
+  left_join(
+    reporting_level, by =c("state_id")
+  ) %>% 
+  pivot_wider (
+    names_from = type, 
+    values_from = period) %>% 
+  left_join(
+    cbind (
+      state_id = state.abb, 
+      state_name = state.name
+    )%>% as_tibble, 
+    by = c("state_id")
+  ) %>% 
+  ungroup %>%
+  select(
+    state_name,Level, disposal, composting, recycling
+  ) %>% 
+  rename(
+    State = state_name,
+    Reporting_Level = Level,
+    Disposal = disposal, 
+    Composting = composting, 
+    Recycling = recycling
+  ) %>%
+  {
+    print(xtable(.), include.rownames=FALSE)
+  }
+
+remove.packages("xtable")
+```
+
+
+
+
+
+
+
+
+## Fig 1 
+
+
+```{r}
+#The code is more flexible and can generate the map for any year, but for Fig. 1 we only use 2018
+year1 <- 2018
+state_us <- map_data("state")
+
+
+avg_disp <- #creates the per capita mean disposal for year1
+  power2 %>% 
+  filter(type=="disposal") %>% 
+  group_by(state_id, year) %>% 
+  summarise(tons=sum(tons)) %>% 
+  left_join(
+    population %>% group_by(state_id, year) %>% summarise(pop=sum(pop)), 
+    by =  c("state_id", "year")) %>% 
+  filter(year %in% c(year1)) %>% 
+  group_by(year) %>% 
+  summarise(avg = sum(tons)/ sum(pop))
+  
+
+county_us <- 
+  map_data("county") %>% 
+  left_join(
+    tibble (
+      state_name = state.name %>% tolower,
+      state_id = state.abb
+    ), 
+    by = c("region" = "state_name")
+  ) %>% as_tibble() %>% cbind(year = c(year1)) %>% 
+  left_join(
+    power2 %>% 
+      filter(year %in%c(year1), !is.na(county_name), type == "disposal") %>% 
+      left_join(population, by = c("year", "county_name", "state_id")) %>% 
+      mutate(tons_pc = tons/pop) %>% 
+      select(county_name, tons_pc, state_id, year),
+    by = c("state_id", "year", "subregion" = "county_name")
+  ) %>% 
+  left_join(
+    power2 %>% 
+      filter(year %in% c(year1), is.na(county_name), type == "disposal") %>% 
+      left_join(population %>% group_by (state_id, year) %>% summarise(pop = sum(pop)), by = c("year", "state_id")) %>% 
+      mutate(tons_pc = tons/pop) %>%
+      select(tons_pc, state_id, year),
+    by = c("state_id", "year")
+  ) %>% 
+  mutate(
+    tons_pc = ifelse(is.na(tons_pc.x) & !is.na(tons_pc.y), tons_pc.y, NA),
+    tons_pc = ifelse(!is.na(tons_pc.x) & is.na(tons_pc.y), tons_pc.x, tons_pc)
+  ) %>% 
+  select(long, lat, group, order, region, subregion, state_id, tons_pc, year) %>% 
+  mutate(
+    tons_pc_frac = factor(
+      ifelse(is.na(tons_pc), "No data",
+             ifelse(tons_pc >= 1.1, ">1.1", 
+                    ifelse(tons_pc >= 0.9, "0.9-1.1", 
+                           ifelse(tons_pc >= 0.7, "0.7-0.9",
+                                  ifelse(tons_pc >= 0.5, "0.5-0.7", "< 0.5"))))),
+      levels = c("No data", "< 0.5", "0.5-0.7", "0.7-0.9", "0.9-1.1", ">1.1"))
+  )
+
+pop_coverage <- 
+  county_us %>% 
+  filter(!is.na(tons_pc)) %>% 
+  group_by(year, region, tons_pc) %>% 
+  summarise(subregion=unique(subregion)) %>% 
+  left_join(
+    tibble (
+      state_name = state.name %>% tolower,
+      state_id = state.abb
+    ), 
+    by = c("region" = "state_name")) %>% 
+  left_join(
+    population %>% 
+      group_by(year) %>% mutate(total_pop = sum(pop, na.rm=TRUE)), 
+    by = c("state_id", "subregion"= "county_name", "year")) %>% 
+  group_by(year) %>% 
+  summarise(
+    pop = 100*sum(pop/total_pop, na.rm=TRUE) %>% round(2)
+  ) %>% 
+  mutate(
+    pop = paste0(pop, "%"), 
+    pop= ifelse(year==min(year), paste0("Population coverage: ", pop), pop),
+    label_x = ifelse(year==min(year), -115, -112),
+    label_y = 28 
+  ) %>% 
+  rbind(
+    avg_disp %>% 
+      mutate(
+        pop = paste0("Mean disposal: ", round(avg, 2)), 
+        label_x = -115, 
+        label_y = 26.5
+      ) %>% 
+      select(-avg)
+  )
+
+
+borders  =c(
+      ">1.1" = "#8c8c8c",
+      "0.9-1.1" = "#a3a3a3",
+      "0.7-0.9" ="#c0c0c0",
+      "0.5-0.7" = "#d0d0d0",
+      "< 0.5" ="#e0e0e0",
+      "No data" = "white")
+
+
+
+
+
+transparent_color <- rgb(0, 0, 0, alpha = 0)
+
+map_plot_county <- 
+  ggplot() + 
+  geom_polygon(
+    data = county_us %>% filter(year %in% c(year1)), 
+    aes(x = long, y = lat, group = group, fill = as.factor(tons_pc_frac)), 
+    linewidth= 0.1
+  )+scale_fill_manual(
+    values =c(
+      ">1.1" = "#8c8c8c", 
+      "0.9-1.1" = "#a3a3a3", 
+      "0.7-0.9" ="#c0c0c0",
+      "0.5-0.7" = "#d0d0d0", 
+      "< 0.5" ="#e0e0e0",
+      "No data" = "white"), 
+    guide = guide_legend(override.aes = list(colour = c("black", "black", "black", "black", "black", "black"))))+
+  guides(fill = guide_legend(nrow = 1, override.aes = list(colour = borders)))+
+  labs (x="", y="", fill = "Disposal (tons per capita)")+
+  geom_path(
+    data = state_us, 
+    aes(x = long, y = lat, group = group), 
+    color = ut_colors[4], 
+    linewidth= 0.5
+  )+
+  #ggnewscale::new_scale_color()+
+  #facet_wrap(vars(year), ncol=2)+
+  theme(
+    panel.border = element_blank(),
+    legend.position = "top", 
+    panel.background = element_blank(),
+    axis.ticks = element_blank(), 
+    axis.text=element_blank(),
+    #text = element_text(size=25, element_text(family="Helvetica")), 
+    strip.background = element_blank(), 
+    #legend.title = element_text(vjust=.3),
+    panel.spacing = unit(2, "lines"),panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), axis.line = element_blank(), 
+    text = element_text(size=12, family="Helvetica", color = ut_colors[4]),
+    legend.text = element_text(size=12, family="Helvetica", color = ut_colors[4]),
+    
+  ) 
+
+
+
+map_plot_county <-
+  map_plot_county+
+  geom_path(
+    data = 
+      state_us %>% filter(region %in% c("connecticut", "vermont", "massachusetts", "rhode island", "new york", "maryland", "california", "washington", "new jersey")) %>% 
+      expand_grid(year = c(year1)) %>% 
+      left_join(
+        tibble(
+          region = c("connecticut", "vermont", "massachusetts", "rhode island", "new york", "maryland", "california", "washington", "new jersey"), 
+          ban_year = c(2014, 2014, 2014, 2016, 2022, 2023, 2016, 2024, 2021)
+        )) %>% filter(year %in% c(year1)) %>% 
+      mutate(ban = ifelse(ban_year < 2017, "In panel", "Out of panel")),
+    aes(x = long, y = lat, group = group, color = ban),
+    linewidth= 1.5
+  )+
+  scale_color_manual(values=c("#2c6846", "#8fbc8f"), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), vjust=1.5 ))+
+  labs(color="")+
+  geom_text(
+    data=pop_coverage %>% filter(year %in% c(year1)), 
+    family = "Helvetica", color = ut_colors[4], size=4,
+    aes(x=label_x, y=label_y, label = pop), family = "Helvetica", color = ut_colors[4])+
+  theme(
+    text = element_text(size=12, family="Helvetica", color = ut_colors[4]),
+    strip.text = element_text(vjust=0, size=12, family="Helvetica", color = ut_colors[4]),
+    legend.key = element_blank()
+  )+
+  coord_map()
+
+
+
+map_plot_county <-
+  ggplot() + 
+  geom_polygon(
+    data = county_us %>% filter(year %in% c(year1)), 
+    aes(x = long, y = lat, group = group, fill = as.factor(tons_pc_frac)), 
+    linewidth= 0.1
+  )+
+  geom_path(
+    data = state_us, 
+    aes(x = long, y = lat, group = group), 
+    color = ut_colors[4], 
+    linewidth= 0.5
+  )+
+  
+  geom_path(
+    data = 
+      state_us %>% filter(region %in% c("connecticut", "vermont", "massachusetts", "rhode island", "new york", "maryland", "california", "washington", "new jersey")) %>% 
+      expand_grid(year = c(year1)) %>% 
+      left_join(
+        tibble(
+          region = c("connecticut", "vermont", "massachusetts", "rhode island", "new york", "maryland", "california", "washington", "new jersey"), 
+          ban_year = c(2014, 2014, 2014, 2016, 2022, 2023, 2016, 2024, 2021)
+        )) %>% filter(year %in% c(year1)) %>% 
+      filter(ban_year <2017) %>% 
+      mutate(ban = ifelse(ban_year < 2017, "Ban in our sample", "Out of panel")
+      ),
+    aes(x = long, y = lat, group = group, color = ban),
+    linewidth= 1.5
+  )+
+  #scale_color_manual(values=c("seagreen", "#734e6c"), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), vjust=1.5 ))+
+  scale_color_manual(values=c("seagreen", "#734e6c"), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), vjust=1.5))+
+  scale_fill_manual(
+    values =c(
+      ">1.1" = "#8c8c8c", 
+      "0.9-1.1" = "#a3a3a3", 
+      "0.7-0.9" ="#c0c0c0",
+      "0.5-0.7" = "#d0d0d0", 
+      "< 0.5" ="#e0e0e0",
+      "No data" = "white"
+    ), 
+    guide = guide_legend(override.aes = list(colour = c("black", "black", "black", "black", "black", "black"))))+
+  guides(
+    fill = guide_legend(nrow = 1, override.aes = list(colour = borders), order =1), 
+    color = guide_legend(nrow=1, title.position = "bottom", title.hjust = 0.5, order = 2))+
+  labs (x="", y="", fill = "Disposal (tons per capita)")+
+  labs(color="")+
+  geom_text(
+    data=pop_coverage %>% filter(year %in% c(year1)), 
+    family = "Helvetica", color = ut_colors[4], size=4,
+    aes(x=label_x, y=label_y, label = pop), family = "Helvetica", color = ut_colors[4])+
+  theme(
+    panel.border = element_blank(),
+    legend.position = "top", 
+    panel.background = element_blank(),
+    axis.ticks = element_blank(), 
+    axis.text=element_blank(),
+    #text = element_text(size=25, element_text(family="Helvetica")), 
+    strip.background = element_blank(), 
+    #legend.title = element_text(vjust=.3),
+    panel.spacing = unit(2, "lines"),panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), axis.line = element_blank(), 
+    text = element_text(size=12, family="Helvetica", color = ut_colors[4]),
+    legend.text = element_text(size=12, family="Helvetica", color = ut_colors[4]),
+    legend.key = element_blank(), 
+    legend.box = "vertical", # Stacks legends vertically
+    legend.box.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"),  # Adjust the space around the entire set of legends
+    legend.box.spacing = unit(0, "lines") 
+  )
+
+# png(paste0(figure_path, "/map_plot_county_borders.png"), bg = "transparent", width = 12, height = 6, units = "in", res=300)
+# print(map_plot_county)
+# dev.off()
+
+# png(paste0(figure_path, "/map_plot_county_SC_only2018_alt2.png"), bg = "transparent", width = 11, height = 7, units = "in", res=600)
+# print(map_plot_county)
+# dev.off()
+```
+
+
+
+##  Fig. S3
+
+
+```{r}
+year1 <- 2008 #this is the first year for this figure
+year2 <- 2018 # this is the last year for this figure
+state_us <- map_data("state")
+
+
+county_us <- 
+  map_data("county") %>% 
+  left_join(
+    tibble (
+      state_name = state.name %>% tolower,
+      state_id = state.abb
+    ), 
+    by = c("region" = "state_name")
+  ) %>% as_tibble() %>% expand_grid(year = c(seq(year1,year2))) %>% 
+  left_join(
+    power2 %>% 
+      filter(year %in%c(seq(year1,year2)), !is.na(county_name), type == "disposal") %>% 
+      left_join(population, by = c("year", "county_name", "state_id")) %>% 
+      mutate(tons_pc = tons/pop) %>% 
+      select(county_name, tons_pc, state_id, year),
+    by = c("state_id", "year", "subregion" = "county_name")
+  ) %>% 
+  left_join(
+    power2 %>% 
+      filter(year %in% c(seq(year1,year2)), is.na(county_name), type == "disposal") %>% 
+      left_join(population %>% group_by (state_id, year) %>% summarise(pop = sum(pop)), by = c("year", "state_id")) %>% 
+      mutate(tons_pc = tons/pop) %>%
+      select(tons_pc, state_id, year),
+    by = c("state_id", "year")
+  ) %>% 
+  mutate(
+    tons_pc = ifelse(is.na(tons_pc.x) & !is.na(tons_pc.y), tons_pc.y, NA),
+    tons_pc = ifelse(!is.na(tons_pc.x) & is.na(tons_pc.y), tons_pc.x, tons_pc)
+  ) %>% 
+  select(long, lat, group, order, region, subregion, state_id, tons_pc, year) %>% 
+  mutate(
+    tons_pc_frac = factor(
+      ifelse(is.na(tons_pc), "No data",
+             ifelse(tons_pc >= 1.1, ">1.1", 
+                    ifelse(tons_pc >= 0.9, "0.9-1.1", 
+                           ifelse(tons_pc >= 0.7, "0.7-0.9",
+                                  ifelse(tons_pc >= 0.5, "0.5-0.7", "< 0.5"))))),
+      levels = c("No data", "< 0.5", "0.5-0.7", "0.7-0.9", "0.9-1.1", ">1.1"))
+  )
+
+
+pop_coverage <- 
+  county_us %>% 
+  filter(!is.na(tons_pc)) %>% 
+  group_by(year, region) %>% 
+  summarise(subregion=unique(subregion)) %>% 
+  left_join(
+    tibble (
+      state_name = state.name %>% tolower,
+      state_id = state.abb
+    ), 
+    by = c("region" = "state_name")) %>% 
+  left_join(
+    population %>% 
+      group_by(year) %>% mutate(total_pop = sum(pop, na.rm=TRUE)), 
+    by = c("state_id", "subregion"= "county_name", "year")) %>% 
+  group_by(year) %>% 
+  summarise(
+    pop = 100*sum(pop/total_pop, na.rm=TRUE) %>% round(2)
+  ) %>% 
+  mutate(
+    pop = paste0(pop, "%"), 
+    pop= ifelse(year==min(year), paste0("Population Coverage: ", pop), pop),
+    label_x = ifelse(year==min(year), -115, -112),
+    label_y = 28 
+  )
+
+
+
+
+
+
+map_plot_county <- 
+  ggplot() + 
+  geom_polygon(
+    data = county_us %>% filter(year %in% c(seq(year1,year2, by=2))), 
+    aes(x = long, y = lat, group = group, fill = as.factor(tons_pc_frac)), 
+    linewidth= 0.1
+  )+
+  scale_fill_manual(
+    values =c(
+      ">1.1" = "#626767", 
+      "0.9-1.1" = "#939797", 
+      "0.7-0.9" ="#adb0b0",
+      "0.5-0.7" = "#c8caca", 
+      "< 0.5" ="#e3e4e4",
+      "No data" = "grey100"), 
+  )+
+  guides(fill = guide_legend(nrow = 1, override.aes = list(colour = borders)))+
+  labs (x="", y="", fill = "Disposal (tons per capita)")+
+  geom_path(
+    data = state_us, 
+    aes(x = long, y = lat, group = group), 
+    color = "#9aa0a0", 
+    linewidth= 0.5
+  )+
+  #ggnewscale::new_scale_color()+
+  facet_wrap(vars(year), ncol=2)+
+  theme(
+    panel.border = element_blank(),
+    legend.position = "top", 
+    panel.background = element_blank(),
+    axis.ticks = element_blank(), 
+    axis.text=element_blank(),
+    #text = element_text(size=25, element_text(family="Helvetica")), 
+    strip.background = element_blank(), 
+    legend.title = element_text(vjust=.3),
+    panel.spacing = unit(2, "lines"),panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), axis.line = element_blank()
+  ) 
+
+
+
+map_plot_county <- 
+  map_plot_county+
+  geom_path(
+    data = 
+      state_us %>% filter(region %in% c("connecticut", "vermont", "massachusetts", "rhode island", "new york", "maryland", "california", "washington", "new jersey")) %>% 
+      expand_grid(year = c(seq(year1,year2))) %>% 
+      left_join(
+        tibble(
+          region = c("connecticut", "vermont", "massachusetts", "rhode island", "new york", "maryland", "california", "washington", "new jersey"), 
+          ban_year = c(2014, 2014, 2014, 2016, 2022, 2023, 2016, 2024, 2021)
+        )) %>% filter(year %in% c(seq(year1,year2, by =2))) %>% 
+      mutate(ban = ifelse(year>=ban_year, 1, 0)) %>% filter(ban==1),
+      #mutate(ban = ifelse(is.na(ban_year), 0, 1)) %>% filter (ban==1),
+    aes(x = long, y = lat, group = group),
+    color="#417c5b",
+    linewidth= 1.5
+  )+
+  #scale_color_manual(values="#417c5b", name="")+
+  #labs(x="", y="",color="" )+
+  geom_text(
+    data=pop_coverage %>% filter(year %in% c(seq(year1, year2, by =2))), 
+    family = "Helvetica", color = ut_colors[4], size=5.5,
+    aes(x=label_x, y=label_y, label = pop), family = "Helvetica", color = ut_colors[4])+
+  geom_line(
+    data = tibble(x=seq(-124, -122), y=52, year = year1), aes(x=x, y=y), color = "#417c5b", linewidth=2)+
+  geom_text(
+    data = tibble(x=-112, y=52, year = year1, lab = "Ban in our sample"), aes(x=x, y=y, label=lab), family = "Helvetica", color = ut_colors[4], size=5.5)+
+  theme(
+    text = element_text(size=19, family="Helvetica", color = ut_colors[4]),
+    strip.text = element_text(vjust=0, size=17, family="Helvetica", color = ut_colors[4]))
+
+
+# png(paste0(figure_path, "/map_plot_county_borders.png"), bg = "transparent", width = 12, height = 6, units = "in", res=300)
+# print(map_plot_county)
+# dev.off()
+
+png(paste0(figure_path, "/map_plot_county_SC.png"), bg = "transparent", width = 15, height = 15, units = "in", res=600)
+print(map_plot_county)
+dev.off()
+```
