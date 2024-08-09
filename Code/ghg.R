@@ -1,5 +1,6 @@
+library(tidyverse)
 ##### Emissions data ####
-
+post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
 ghg_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/06. Emissions/GHG_Data"
 mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
 municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
@@ -548,6 +549,8 @@ mfood <-
 
 
 disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
+vt_exp_effect <- disposal_effect_size2 %>% filter(state_id=="VT", year<2019) %>% summarise(m=mean(effect_size)) %>% pluck("m")
+reg_effect <- c(0.098, 0.185, 0.6*0.316/0.214*vt_exp_effect)
 
 expected_effects <- 
   sc_data %>% 
