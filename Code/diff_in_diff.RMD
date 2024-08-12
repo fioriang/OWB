@@ -7,17 +7,81 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(ggpubr)
+library(fixest)
+library(extrafont)
+#state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
+#post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
+#figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+#municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
+
+mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
+municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
+state_data_path <- paste0(mypathname,"/03. State_Data")
+base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
+figure_path <- mypathname
+
+```
+
+
+# Basic Data
+
+
+```{r, include=FALSE}
+loadfonts(device = "win")
+
+ut_colors <- c(
+  rgb(132, 59,14, max=255), # dark orange
+  rgb(255, 127, 21, max=255), # bright orange
+  rgb(191,87,0, max=255), # ut orange
+  rgb(51,73,72, max=255), # dark grey
+  rgb(156, 173, 183, max=255), #light grey
+  rgb(191,87,0,alpha=50, max=255))# ut orange
+
+# Population
+population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+population_2020 <- read.csv(paste0(state_data_path,"/00. Controls/Population/population_2020.csv"))
+population_2020 <- population_2020[population_2020$state_id !="DC",]
+population_2020$county_name[population_2020$county_name=="doña ana"] <- "dona ana"
+population <- rbind(population, population_2020)
+rm(population_2020)
+
+
+# Waste Data
+#power2 <- read.csv("power2_2.csv")
+power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv"))
+all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
+bans <- c(2014, 2014, 2016, 2014, 2016)
+#bans <- c(2014, 2014, 2016, 2014, 2016)
+bans_passage <- c(2012, 2013, 2014, 2011, 2014) #passage dates
+year_start <- 2006
+year_end <- 2018
+```
+
+
 # Pre-Processing
 
 ## County
 ```{r, include=FALSE}
 pre_processing_dt <- function(power2, year_start, year_cutoff)
 {
-  year_start <- year_start
+    year_start <- year_start
   year_cutoff <- year_cutoff
   year_end <- 2011
   
   dt <- power2
+  
   
   dt_ca <- 
     dt %>% 
@@ -29,8 +93,8 @@ pre_processing_dt <- function(power2, year_start, year_cutoff)
     ) %>% 
     group_by(county_name) %>% 
     mutate(
-      tons_high = quantile(tons, 0.95), 
-      tons_low = quantile(tons, 0.05), 
+      tons_high = quantile(tons, 0.975), 
+      tons_low = quantile(tons, 0.025), 
       tons = ifelse(tons> tons_high, tons_high, tons), 
       tons = ifelse(tons< tons_low, tons_low, tons)
     ) %>% 
@@ -48,7 +112,6 @@ pre_processing_dt <- function(power2, year_start, year_cutoff)
     filter(
       year >= year_start, 
       year <= year_cutoff, 
-      state_id != "DE",
       type %in% c("disposal", "msw_disposed")
     ) %>% 
     group_by (year, state_id, county_name) %>% 
@@ -74,14 +137,14 @@ pre_processing_dt <- function(power2, year_start, year_cutoff)
     as.data.frame(
       dt %>% 
         group_by(county_id) %>% 
-        filter(state_id != "CT", state_id != "RI") %>% 
+        #filter(state_id != "CT", state_id != "RI") %>% 
         summarize(
           m = mean(tons_pc), 
           min_year = min(year), 
           min_tons = min(tons_pc), 
           max_tons = max(tons_pc)) %>%
         filter(
-          m < 0.3 | min_year > year_start | max_tons > 2.5)
+          m < 0.3 | min_year > year_start )#| max_tons > 2.5)
     ) %>% as_tibble()
   
   dt <- dt[!(dt$county_id %in% exc$county_id),]
@@ -100,7 +163,8 @@ pre_processing_dt <- function(power2, year_start, year_cutoff)
   f <- 
     as.data.frame(
       dt %>% 
-        filter(state_id != "RI", state_id!="CA", !is.na(county_name)) %>% 
+        filter(#state_id != "RI", state_id!="CA", 
+               !is.na(county_name)) %>% 
         group_by(county_id) %>% 
         mutate(
           percentage = (tons-dplyr::lag(tons, n = 1, default = NA))/dplyr::lag(tons, n = 1, default = NA),
@@ -128,18 +192,21 @@ pre_processing_dt <- function(power2, year_start, year_cutoff)
 ## State
 
 ```{r}
+
 pre_processing_dt_state <- function (power2, year_start, year_cutoff)
 {
+  
   year_start <- year_start
   year_cutoff <- year_cutoff
   dt_state <- 
     power2 %>% 
+    mutate(county_id=paste0(county_name, state_id)) %>% 
+    #filter(!county_id%in%c(rural)) %>% 
     group_by (year, state_id, type) %>% 
     summarise(tons = sum(tons))%>% 
     filter(
       year >= year_start, 
-      year <= year_cutoff, 
-      state_id != "DE",
+      year <= year_cutoff,
       type %in% c("disposal", "msw_disposed")
     ) %>%
     group_by(state_id) %>% 
@@ -172,9 +239,14 @@ pre_processing_dt_state <- function (power2, year_start, year_cutoff)
 }
 ```
 
-
 ```{r}
 
+dates <-
+  tibble(
+    state_id = c("CA", "CT", "MA", "RI","VT"),
+    ban_year = c(2016, 2014, 2014, 2016, 2014), 
+    passage_year = c(2014, 2011, 2013, 2014, 2012)
+  )
 
 dt_did <- pre_processing_dt(power2,2006,2018)
 dt_did <- 
@@ -186,7 +258,7 @@ dt_did <-
     pass_ind = ifelse(is.na(pass_ind), 0, ban_ind)
   ) %>% ungroup %>% 
   filter(
-    county_name != "san francisco"
+    county_id != "san franciscoCA"
   ) 
 lm_counties <- feols(tons_pc ~ ban_ind|state_id+ year, dt_did)
 
@@ -236,9 +308,14 @@ lm_state_vt <- feols(tons_pc ~ ban_ind|state_id + year, dt_did_state %>% filter(
 
 fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,  tex= TRUE, digits = "r3", digits.stats = "r2")
 fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,  tex= FALSE, digits = "r3", digits.stats = "r2")
-fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,vcov="hetero",  tex= TRUE, digits = "r3", digits.stats = "r2")
+fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_state_ri,lm_state_vt,vcov="cluster",  tex= TRUE, digits = "r3", digits.stats = "r2")
 
 
+
+```
+
+# Parallel trend test
+```{r}
 
 dt_did_state <- 
   dt_did_state %>%
