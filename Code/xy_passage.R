@@ -2,13 +2,43 @@ disposal_effect_size <- read.csv("disposal_effect_size2.csv") %>% as_tibble() %>
 year_start = 2006
 year_cutoff = 2018
 pooled_ban_year = 2015
-
-
+offset = 3
+iterations = 100000
 dt_state_initial <- pre_processing_dt_state(power2)
+disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
+
+
 #dt_state_initial<- dt_state_initial %>% mutate(tons_pc = ifelse(state_id=="CT", tons_pc+0.15, tons_pc))
 treated_counties_id <- unique(dt_state_initial$county_id[dt_state_initial$state_id%in% all_treated])
 donors_state <- unique(dt_state_initial$county_id[!(dt_state_initial$state_id%in% all_treated)])
 donors <- donors_state
+
+do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,
+                                         y_train, y_test, y_att, n_don, sample_size)
+{
+  #Approach 2- Only Intercept
+  samples <- sample(n_don, sample_size)
+  x <- rowMeans(x[, samples])
+  n <- length(y_train)+ length(y_test) + length(y_att)
+  
+  intercept <- mean(y_train-x[1:test_ind_end1])
+  
+  ss_res <- sum((y_train-x[1:test_ind_end1] - intercept)^2) #calculating the in-sample R-squared
+  ss_tot <- sum((y_train-mean(y_train))^2)
+  r <- 1- ss_res/ss_tot
+  
+  MA  <- (intercept + x[(test_ind_end1+1):test_ind_end2] - y_test )/(intercept + x[(test_ind_end1+1):test_ind_end2]) 
+  MA <- MA %>% abs %>%  mean
+  
+  att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% sum
+  cf <- (x[(test_ind_end2+1):n]+intercept) %>% sum
+  intercept2 <-  mean(c(y_train, y_test)-x[1:test_ind_end2])
+  att2 <- ((y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum)/(x[(test_ind_end2+1):n]+intercept2) %>% sum
+  
+  c(r, MA, att, cf,intercept,att2, intercept2, c(samples))
+  
+} # this is the function that creates the SC
+
 xy_plot_data_function <- function (treated_state, f, seed)
 {
   set.seed(seed)
@@ -149,15 +179,13 @@ xy_plot_data_function <- function (treated_state, f, seed)
     )
 }
 
-dt_initial <- dt_municipal_initial
-donors_cities <- unique(dt_initial$county_id[!(dt_initial$state_id%in% all_treated)])
-treated_counties_id_cities <- unique(dt_initial$county_id[dt_initial$state_id%in% all_treated])
 samp= c(3:10)
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2012, 2013, 2014, 2011, 2014)
 year_start = 2006
 year_cutoff = 2018
-
+vt_exp_effect <- disposal_effect_size2 %>% filter(state_id=="VT", year<2019) %>% summarise(m=mean(effect_size)) %>% pluck("m")
+reg_effect <- c(0.098, 0.185, 0.6*0.316/0.214*vt_exp_effect)
 
 xy_plot_fun_passage <- function (i)
 {
@@ -379,11 +407,11 @@ xy_plot_fun_passage <- function (i)
 
 xy_plot_data_passage <-
   rbind(
-    xy_plot_data_function("CA",2,1),
-    xy_plot_data_function("CT",4,1),
-    xy_plot_data_function("MA",5,1),
-    xy_plot_data_function("RI",1,1),
-    xy_plot_data_function("VT",5,1)
+    xy_plot_data_function("CA",7,1),
+    xy_plot_data_function("CT",1,1),
+    xy_plot_data_function("MA",4,1),
+    xy_plot_data_function("RI",7,1),
+    xy_plot_data_function("VT",4,1)
  )
 
 #write.csv(xy_plot_data_passage, "xy_plot_data_passage.csv", row.names=FALSE)
@@ -400,14 +428,21 @@ xy_plot <-
 
 
 passage_spec <- rbind(
-  read.csv("power_state_p.csv"))
+  read.csv("power_state_p.csv")) %>% 
+  rename(
+    tstate_id
+  )
 
 chosen_sample_size <-
-  bt_with_power_data %>% 
-  select(state_id, sample_size) %>% 
+  passage_spec %>% 
+  group_by(treated_state) %>%
+  filter(att_min ==max(att_min)) %>% 
   rename(
     chosen_sample_size=sample_size 
-  ) 
+  ) %>% 
+  select(
+    treated_state, chosen_sample_size
+  )
 
 bt_with_power_data_passage <- 
   passage_spec %>% 
@@ -421,10 +456,9 @@ bt_with_power_data_passage <-
     power_high=100*power_high) %>% 
   group_by(specification, treated_state, ban_year) %>% 
   right_join(
-    chosen_sample_size, by = c("treated_state"="state_id", "sample_size"="chosen_sample_size")
+    chosen_sample_size, by = c("treated_state", "sample_size"="chosen_sample_size")
   ) %>% 
   ungroup %>% 
-  filter(specification == "State") %>%
   left_join(
     xy_plot_data_passage %>% 
       mutate(county_id=ifelse(county_id == "sanfranciscoM3", "san franciscoM3", county_id)) %>% 
@@ -439,13 +473,18 @@ bt_with_power_data_passage <-
   ) %>% 
   rename(state_id=treated_state)
 
+bt_with_power_data <- read.csv("bt_with_power_data.csv")
 
 bt_with_power_data_passage <-
   bt_with_power_data_passage %>% 
   left_join(
     bt_with_power_data %>% 
       select(state_id, mean_effect, reg_effect), 
-    by = "state_id")
+    by = "state_id") %>% 
+  mutate(
+    state_id = factor(state_id, levels =c("VT", "RI", "MA", "CT", "CA"))
+  ) %>% 
+  arrange(state_id)
 
 
 
@@ -463,7 +502,7 @@ bt_with_power_passage2 <-
     #state_id = factor(state_id, levels = c("California","Connecticut", "Massachusetts", "Rhode Island", "Vermont"))
   )%>% 
   ggplot()+
-  aes(y= state_id, x= 100*actual_treatment_effect, group = 1)+
+  aes(y= as.factor(state_id), x= 100*actual_treatment_effect, group = 1)+
   geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), width = 0.2, size=0.5)+
   scale_color_manual(breaks = c("Placebo"), values = c(ut_colors[5]), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), byrow=TRUE ))+
   geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+

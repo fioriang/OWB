@@ -1165,7 +1165,7 @@ rm(mape_ma_upper, mape_ma_lower, mape_ca_upper, mape_ca_lower, mape_ct_upper, ma
 ### State
 
 ```{r}
-
+samp <- c(3:10)
 dt_state_initial <- pre_processing_dt_state(power2)
 treated_counties_id <- unique(dt_state_initial$county_id[dt_state_initial$state_id%in% all_treated])
 donors_state <- unique(dt_state_initial$county_id[!(dt_state_initial$state_id%in% all_treated)])
@@ -1202,14 +1202,15 @@ power_state_p5 <- power_state_fun2(power_state_pass_data %>% filter(treated_stat
 
 
 write.csv(
-  rbind(
-    power_state_p1%>%  bind_rows(), 
-    power_state_p2%>%  bind_rows(), 
-    power_state_p3%>%  bind_rows(), 
-    power_state_p4%>%  bind_rows(), 
-    power_state_p5%>%  bind_rows()
-  ),
+rbind(
+  power_state_p1%>%  bind_rows(),
+  power_state_p2%>%  bind_rows(),
+  power_state_p3%>%  bind_rows(),
+  power_state_p4%>%  bind_rows(),
+  power_state_p5%>%  bind_rows()
+),
   "power_state_p.csv", row.names = FALSE)
+
 ```
 
 
