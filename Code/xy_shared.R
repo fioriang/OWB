@@ -1370,6 +1370,213 @@ xy_plot_fun_sf <- function (i) #same as above but for SF
     )
 }
 
+xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulder. The cities are also included in 
+{
+  ###
+  # These cities are also included in the xy_plot_fun, but the following will allow to have the fig. i prefer (i.e., no axis on the left)
+  ###
+  
+  reg_expect <- 
+    tibble(
+      state_id=c("MA", "CA", "VT"), 
+      reg_effect = reg_effect
+    )
+  
+  all <-  
+    xy_plot_data %>% filter(attempt ==i, treated_state %in% c("CA", "CT","MA", "VT", "RI")) %>% 
+    group_by(year, attempt) %>% 
+    summarise(
+      tons_pc = mean(tons_pc), 
+      y=mean(y), 
+      y_0 = mean(y_0), 
+    ) %>%
+    left_join(
+      disposal_effect_size2 %>%
+        select(year, state_id, effect_size) %>% 
+        group_by(year) %>% 
+        summarise(effect_size=mean(effect_size, na.rm=TRUE)), 
+      by = "year"
+    ) %>% 
+    mutate(
+      y_0_effect = y_0*(1-effect_size),
+      ban_year = 2014, 
+      treated_state= "All"
+    ) %>% 
+    select(
+      year, treated_state, ban_year, attempt, tons_pc, y, y_0, y_0_effect
+    )
+  
+  all_plot_data <- 
+    xy_plot_data %>% 
+    filter(attempt==i) %>% 
+    rename(
+      Synthetic = y_0, 
+      Actual = tons_pc, 
+      `Our Exp.` = y_0_effect
+    ) %>%
+    left_join(reg_expect, by = c("county_id"="state_id")) %>% 
+    mutate(
+      `Regulators' Exp.` = ifelse(!is.na(effect_size), Synthetic*(1-reg_effect), NA)
+    ) %>% 
+    pivot_longer(
+      cols = c("Synthetic", "Actual", "Our Exp.", `Regulators' Exp.`), 
+      names_to = "location", 
+      values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year) %>% 
+    rbind(
+      all%>% 
+        rename(
+          Synthetic = y_0, 
+          Actual = tons_pc, 
+          `Our Exp.` = y_0_effect
+        ) %>% 
+        pivot_longer(
+          cols = c("Synthetic", "Actual", "Our Exp."), 
+          names_to = "location", 
+          values_to = "tons_pc") %>% select(year, attempt, location, tons_pc, treated_state, ban_year)
+    ) %>%
+    left_join(
+      rbind(xy_plot_data%>% select(year, treated_state, ban_year, attempt, tons_pc, y, y_0, y_0_effect), all) %>% 
+        group_by(treated_state) %>% 
+        filter(year >= ban_year-3, year < ban_year, attempt==i) %>%
+        mutate(
+          year=mean(year), # i duplicate so i join and then also keep the xlab_mae
+          xlab_mae=mean(year)+0.5,  
+          xlab_mae=ifelse(treated_state%in%c("Boulder, CO"), xlab_mae+0.3, xlab_mae),
+          ylab_mae=ifelse(treated_state%in%c("All", "CA", "CT"), mean(tons_pc)-0.05, mean(tons_pc)-0.06), 
+          ylab_mae=ifelse(treated_state%in%c("Seattle, WA"), ylab_mae-0.01, ylab_mae), 
+          #ylab_mae=ifelse(treated_state%in%c("CT"), ylab_mae+0.01, ylab_mae), 
+          ylab_mae=ifelse(treated_state%in%c("CA"), ylab_mae+0.01, ylab_mae), 
+          ylab_mae=ifelse(treated_state%in%c("San Francisco, CA"), ylab_mae-0.07, ylab_mae), 
+          
+          xlab_mae=ifelse(treated_state%in%c("All", "Seattle, WA"), xlab_mae-2.5, xlab_mae), 
+          xlab_mae=ifelse(treated_state%in%c("CA"), xlab_mae+0.2, xlab_mae)) %>% 
+        group_by(treated_state, xlab_mae, ylab_mae, year) %>% 
+        summarise(MAE = abs((tons_pc-y_0)/tons_pc) %>% {.*100} %>%  mean %>% round(2)) %>% 
+        mutate(MAE= scales::number(MAE, accuracy = 0.01)), 
+      by = c("treated_state", "year")
+    ) %>% 
+    mutate(
+      treated_state = factor(treated_state, levels = c("All", "CA", "CT", "MA", "RI", "VT", "Seattle, WA", "Boulder, CO", "San Francisco, CA"))
+    ) %>% 
+    left_join(
+      tibble (xlab= c(2009, 2012, 2016), ylab = 0.85, label = c("Training", "Validation", "Evaluation"), treated_state = "All"), 
+      by =c ("treated_state", "year"="xlab")
+    ) %>% 
+    mutate(
+      xlab = ifelse(!is.na(ylab), year, NA),
+      xlab = ifelse(!is.na(ylab) & year==2012, 2012.5, xlab), 
+      MAE = ifelse(treated_state%in%c("All", "Seattle, WA"), paste0("Mean absolute percentage error (%): ", MAE), MAE), 
+      y_first = ifelse(year==2006 & location =="Actual", tons_pc %>% round(2), NA), 
+      y_last =ifelse(year==2018 & location =="Actual", tons_pc%>% round(2)*1.0, NA), 
+      y_first = ifelse(treated_state== "San Francisco, CA"& year==1996 & location =="Actual", tons_pc %>% round(2), NA), 
+      y_last = ifelse(treated_state== "San Francisco, CA"& year==2014 & location =="Actual", tons_pc %>% round(2), NA)
+    ) 
+  
+  
+  all_plot_data <- 
+    all_plot_data %>% 
+    left_join(
+      #for end points to get rid of geom_vline
+      all_plot_data %>% 
+        group_by(treated_state, ban_year) %>% 
+        mutate(y_min = min(tons_pc, na.rm=TRUE), ymax=max(tons_pc, na.rm=TRUE)) %>% 
+        filter(year==ban_year, location %in% c("Actual", "Synthetic")) %>% 
+        mutate(
+          y_end_low = min(tons_pc, na.rm=TRUE),
+          y_end_high = max(tons_pc, na.rm=TRUE)
+        ) %>% select(treated_state, y_end_low, y_min, y_end_high, ymax) %>% 
+        mutate(
+          y_end_low = ifelse(y_min < y_end_low-0.02, y_end_low-0.02, y_min), 
+          y_end_high = ifelse(ymax <y_end_high+0.03, y_end_low+0.13, y_end_high+0.05)
+        ) %>% 
+        group_by(treated_state, ban_year) %>% 
+        summarise(
+          y_end_low = unique(y_end_low), 
+          y_end_high = unique(y_end_high)
+        ) %>% 
+        mutate(
+          location= "Actual", 
+          y_end_low = ifelse(location=="Boulder, CO", y_end_low-0.4, y_end_low), 
+          y_end_high = ifelse(location=="Boulder, CO", y_end_high+0.35, y_end_high)), 
+      by = c("year"="ban_year", "treated_state", "location")
+    ) %>% 
+    left_join(
+      #for end points to get rid of geom_vline
+      all_plot_data %>% 
+        group_by(treated_state, ban_year) %>% 
+        mutate(y_min = min(tons_pc, na.rm=TRUE), ymax=max(tons_pc, na.rm=TRUE)) %>% 
+        filter(year==ban_year-3, location %in% c("Actual", "Synthetic")) %>% 
+        mutate(
+          y_end_low = min(tons_pc, na.rm=TRUE),
+          y_end_high = max(tons_pc, na.rm=TRUE)
+        ) %>% select(treated_state, y_end_low, y_min, y_end_high, ymax) %>% 
+        mutate(
+          y_end_low = ifelse(y_min < y_end_low-0.02, y_end_low-0.02, y_min), 
+          y_end_high = ifelse(ymax <y_end_high+0.03, y_end_low+0.13, y_end_high+0.05)
+        ) %>% 
+        group_by(treated_state, ban_year) %>% 
+        summarise(
+          year=ban_year-3,
+          y_end_low_2 = unique(y_end_low), 
+          y_end_high_2 = unique(y_end_high)
+        ) %>% 
+        mutate(
+          location= "Actual", 
+          y_end_low_2 = ifelse(location=="Boulder, CO", y_end_low_2-0.35, y_end_low_2),
+          y_end_high_2 = ifelse(location=="Boulder, CO", y_end_high_2+0.35, y_end_high_2)
+        )%>% 
+        ungroup %>% 
+        select(-ban_year), 
+      by = c("year", "treated_state", "location")
+    )
+  
+  p <- 
+    all_plot_data %>% 
+    filter(location != "Regulators' Exp.") %>% 
+    filter(treated_state %in% c("Seattle, WA", "Boulder, CO")) %>% 
+    ggplot(
+      aes(x=year, y=tons_pc, color =location, linetype= location, size=location)
+    )+
+    geom_segment(
+      aes(x=ban_year, xend=ban_year, y=y_end_low, yend  = y_end_high),
+      linetype = "dotted", linewidth = 0.2, color = ut_colors[4])+
+    geom_segment(
+      aes(x=ban_year-3, xend=ban_year-3, y=y_end_low_2, yend  = y_end_high_2),
+      linetype = "dotted", linewidth = 0.2, color = ut_colors[4])+
+    
+    geom_line()+
+    facet_grid(
+      rows=vars(factor(treated_state, levels = c("All", "CA", "CT", "MA", "RI", "VT", "Seattle, WA", "Boulder, CO", "San Francisco, CA"))),
+      scales="free_y"
+    )+
+    geom_text(aes(x=xlab, y=ylab-0.01, label = label), color=ut_colors[5], size=3, family="Helvetica")+
+    geom_text(aes(x=2005.5, y = y_first, label=y_first ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
+    geom_text(aes(x=2018.5, y = y_last %>% as.numeric, label=scales::number(y_last, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
+    
+    geom_text(aes(x=xlab_mae,y=ylab_mae, label = MAE), color =ut_colors[5], size=3, family="Helvetica")+
+    scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen"), name = "")+
+    scale_linetype_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c("solid", "solid", "solid"), name = "")+
+    scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c(0.5, 0.5, 1.0), name = "")+
+    scale_y_continuous(expand = c(0.05,0.05))+
+    scale_x_continuous(breaks=c(seq(2006, 2018, 2)), limits=c(2005, 2019), expand = c(0,0))+
+    labs(y="", x= "")+
+    theme_classic()+
+    theme(
+      legend.position = "top",
+      strip.background = element_rect(color = "white", fill = "white"),
+      panel.grid.major.x = element_blank() ,
+      panel.grid.major.y = element_blank(), 
+      text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]), 
+      axis.line.x = element_blank(),
+      axis.line.y = element_blank(), 
+      axis.ticks.y = element_blank(), 
+      axis.text.y= element_blank(),
+      axis.ticks.x = element_line(size = 0.1), 
+      legend.text = element_text(family = "Helvetica", color = ut_colors[4],size = 10),
+      panel.spacing = unit(1.1, "cm")
+    )
+}
+
 ######## Fig.2: left panel ##############
 
 seattle_number=which(treated_counties_id_cities=="seattleM1")
@@ -1391,16 +1598,16 @@ xy_plot_data <-
 
   )
 
-
-xy_plot_data_function_donors("CA",1,1)# get the donors of each treated states
-xy_plot_data_function_donors("CT",1,1)
-xy_plot_data_function_donors("MA",8,1)
-xy_plot_data_function_donors("RI",1,1)
-xy_plot_data_function_donors("VT",4,1)
+# 
+# xy_plot_data_function_donors("CA",1,1)# get the donors of each treated states
+# xy_plot_data_function_donors("CT",1,1)
+# xy_plot_data_function_donors("MA",8,1)
+# xy_plot_data_function_donors("RI",1,1)
+# xy_plot_data_function_donors("VT",4,1)
 
 # this is to save and load the datasets. for exact reproduction of the paper's figures please load the "xy_plot_data.csv"
 # 
-#xy_plot_data <- write.csv(xy_plot_data, "xy_plot_data.csv", row.names = FALSE)
+# xy_plot_data <- write.csv(xy_plot_data, "xy_plot_data.csv", row.names = FALSE)
 #xy_plot_data <- read.csv("xy_plot_data.csv")
 
 
@@ -1413,6 +1620,11 @@ xy_plot <-
     plot.title = element_text(family = "Helvetica", color = ut_colors[4],size = 10, hjust=0.5))
 
 xy_plot_sf <- xy_plot_fun_sf(1)
+xy_plot_cities <- xy_plot_fun_cities(1)+
+  labs(x="", y = "", title = "Disposal (tons per capita)") + 
+  theme(
+    strip.text = element_blank(),
+    plot.title = element_text(family = "Helvetica", color = ut_colors[4],size = 10, hjust=0.5))
 
 
 ######## Fig.2: right panel ##############
@@ -1647,14 +1859,13 @@ xy_and_power_2
 xy_and_power_2_cities <- 
   ggpubr::ggarrange(
     ggpubr::ggarrange(
-      xy_plot %+% 
-        subset(subset(xy_plot$data, treated_state %in% c("Boulder, CO", "Seattle, WA")), location!= "Regulators' Exp.")+
-        geom_point(data = xy_plot$data %>% filter(treated_state %in%  c("Boulder, CO", "Seattle, WA"), location != "Regulators' Exp."))+
+      xy_plot_cities  %+% 
         scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
         theme(
           panel.spacing = unit(1.0, "cm")
         ), 
-      xy_plot_sf+ geom_point(data = subset(xy_plot_sf$data %>% filter(location!="Regulators' Exp."), location %in% c("Actual", "Synthetic"))), 
+      xy_plot_sf+ 
+        geom_point(data = subset(xy_plot_sf$data %>% filter(location!="Regulators' Exp."), location %in% c("Actual", "Synthetic"))), 
       nrow=2, 
       heights = c(2, 1)), 
     
@@ -1667,7 +1878,10 @@ xy_and_power_2_cities <-
           "Seattle, WA" = "Seattle, WA"
         ))%>% 
       filter(state_id %in% c( "San Francisco, CA", "Boulder, CO", "Seattle, WA")) %>% 
-      ggplot()+
+      mutate(
+        state_id = factor(state_id, levels = c("San Francisco, CA", "Boulder, CO", "Seattle, WA"))
+      ) %>% 
+      ggplot()+ labs(title="Average treatment effect on the treated (%)")+
       aes(y= state_id, x= 100*actual_treatment_effect, group = 1)+
       geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), width = 0.2, size=0.5)+
       scale_color_manual(breaks = c("Placebo"), values = c(ut_colors[5]), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), byrow=TRUE ))+
@@ -1701,13 +1915,15 @@ xy_and_power_2_cities <-
         legend.key = element_rect(colour = NA, fill = NA, size = 5),
         legend.spacing.x = unit(-1, "pt"),
         axis.ticks.x = element_line(size = 0.1), 
-        legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
+        legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]), 
+        plot.title = element_text(hjust=0.6, size = 9, color=ut_colors[4])
+        
       ), 
     heights = c(0.5, 1))
 
 ggsave(xy_and_power_2_cities, filename = "xy_and_power_2_cities.pdf", device = cairo_pdf,
        path= figure_path,
        width = 11, height = 6, units = "in")
-
-
+# 
+# 
 
