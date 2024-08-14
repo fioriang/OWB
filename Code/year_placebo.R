@@ -242,25 +242,20 @@ do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_tr
 xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
 {
 
-  end_year = placebo_ban_year+3
-  year_start = placebo_ban_year-10
-  dt_initial <- pre_processing_dt(power2, year_start, end_year)
-  dt <-  
-    dt_initial %>% 
-    filter(county_name != "san francisco") %>% 
-    mutate(
-      tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
-    ) %>% as.data.frame
-  
+  end_year = placebo_ban_year+3 # the final year of the evaluation period
+  year_start = placebo_ban_year-10 # the starting year of the training period
+  dt_initial <- pre_processing_dt(power2, year_start, end_year) # get the data (from the start to the end of the analysis window)
+
   dt <- 
     dt_initial %>% as_tibble %>% 
     filter(
       state_id == "CA", 
       year >= year_start, 
       year <=end_year, 
-      county_name != "san francisco"
+      county_name != "san francisco" #remove SF because it has its own OWB
     ) %>% 
     mutate(
+      #re-center the time series
       tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)),
       state_id = "CA1"
     )
@@ -275,6 +270,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
   
   in_sample_R2_xy <- function (k, dt, donors, iterations, offset, samp)
   {
+    #this function is the same as xy_plot_data_function
     treated_state <- str_sub(treated_counties_id[k],start=-2)
     ban_year <- bans[which(all_treated == treated_state)]
     year_end <- ban_year-offset
@@ -395,7 +391,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
   effect_size = 
     disposal_effect_size2 %>% 
     select(year, state_id, effect_size) %>% 
-    filter(state_id=="CA", year <=2019) %>% 
+    filter(state_id=="CA", year <=2019) %>% #the effect size is different because this is the mean until 2019
     summarise(effect_size= mean(effect_size)) %>% pluck("effect_size")
   
   
