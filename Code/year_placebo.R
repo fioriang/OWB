@@ -1,3 +1,65 @@
+##### Libraries and Paths ####
+
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(fixest)
+library(purrr)
+library(extrafont)
+state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
+post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
+
+ mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
+# municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
+# state_data_path <- paste0(mypathname,"/03. State_Data")
+ base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
+# figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+
+##### Basic Data ####
+
+
+loadfonts(device = "win")
+
+ut_colors <- c(
+  rgb(132, 59,14, max=255), # dark orange
+  rgb(255, 127, 21, max=255), # bright orange
+  rgb(191,87,0, max=255), # ut orange
+  rgb(51,73,72, max=255), # dark grey
+  rgb(156, 173, 183, max=255), #light grey
+  rgb(191,87,0,alpha=50, max=255))# ut orange
+
+# Population
+population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+population_2020 <- read.csv(paste0(state_data_path,"/00. Controls/Population/population_2020.csv"))
+population_2020 <- population_2020[population_2020$state_id !="DC",]
+population_2020$county_name[population_2020$county_name=="doña ana"] <- "dona ana"
+population <- rbind(population, population_2020)
+rm(population_2020)
+
+
+# Waste Data
+#power2 <- read.csv("power2_2.csv")
+power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv"))
+all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
+bans <- c(2014, 2014, 2016, 2014, 2016)
+#bans <- c(2014, 2014, 2016, 2014, 2016)
+bans_passage <- c(2012, 2013, 2014, 2011, 2014) #passage dates
+
+#Bans' effects
+disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
+
+
+##### Pre-processing ####
+
 pre_processing_dt <- function(power2, year_start, year_cutoff)
 {
   year_start <- year_start
@@ -84,11 +146,11 @@ pre_processing_dt <- function(power2, year_start, year_cutoff)
   rm(f, exc,exclude2)
   
   dt_initial <- dt
+  dt_initial<- dt_initial %>% filter(county_id!="lakeCA") # exclude lake county because for some of the placebo years it does not pass the "pre processing tests" and is excluded from the donors list
   return(dt_initial)
 }
-
 dt_initial <- pre_processing_dt(power2, 2006, 2019)
-# Results
+##### Preparing the data ####
 
 donors <- unique(dt_initial$county_id[!(dt_initial$state_id%in% all_treated)])
 treated_counties_id_in <- unique(dt_initial$county_id[dt_initial$state_id%in% all_treated])
@@ -101,22 +163,21 @@ treated_counties_names_in <- unique(dt_initial$county_name[dt_initial$state_id%i
 #treated_counties_id <- treated_counties_id[treated_counties_id %in% chosen_counties_all]#needed for matching
 
 
-treated_counties_id <- 
+treated_counties_id <- #the ids of the treated counties
   treated_counties_id_in[
     treated_counties_id_in %in% 
       c(
         dt_initial %>%  
           filter(
             state_id == "CA",
-            county_name != "san francisco",
-            county_name!="lake",
+            county_name != "san francisco",# exclude SF because it has its own law
             year == 2016, 
             pop > 70000
           ) %>% 
           pluck("county_id"))
   ]
 
-treated_counties <- 
+treated_counties <- #the names of the treated counties
   treated_counties_names_in[
     treated_counties_names_in %in% 
       c(
@@ -124,7 +185,6 @@ treated_counties <-
           filter(
             state_id == "CA",
             county_name != "san francisco",
-            county_name!="lake",
             year == 2016, 
             pop > 70000
           ) %>% 
@@ -134,7 +194,8 @@ treated_counties <-
 donors <- 
   dt_initial %>% 
   filter(
-    !county_id%in% treated_counties_id, county_name != "san francisco", #county_name!="del norte", county_name!="lake", 
+    !county_id%in% treated_counties_id, 
+    county_name != "san francisco",
     state_id=="CA"
     #county_id %in% chosen_counties_all #needed for matching
   ) %>% 
@@ -143,19 +204,19 @@ donors <-
   pluck("county_id")
 
 
-year_placebo <- read.csv("year_placebo.csv")
+#year_placebo <- read.csv("year_placebo.csv")
 
 mean_effect = 
   disposal_effect_size2 %>% 
   filter(state_id=="CA", year <=2019) %>% 
   summarise(mean_effect=100*mean(effect_size)) %>% pluck("mean_effect")
 
-fileConn<-file(paste0(figure_path, "/ca_expected_year_placebo.txt"))
-writeLines(paste0(format(scales::number(mean_effect %>% round(1), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
+# fileConn<-file(paste0(figure_path, "/ca_expected_year_placebo.txt"))
+# writeLines(paste0(format(scales::number(mean_effect %>% round(1), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+# close(fileConn)
 
-
-set.seed(2)
+##### Placebo functions ####
+set.seed(1)
 do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
 {
   #Approach 2- Only Intercept
@@ -178,7 +239,7 @@ do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_tr
   c(r, MA, att, cf,intercept,att2, intercept2, c(samples))
 }
 
-xy_plot_data_function_pl_year <- function (placebo_ban_year)
+xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
 {
 
   end_year = placebo_ban_year+3
@@ -197,7 +258,6 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
       state_id == "CA", 
       year >= year_start, 
       year <=end_year, 
-      #county_name !="del norte", #oti na nai noumera
       county_name != "san francisco"
     ) %>% 
     mutate(
@@ -211,7 +271,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
   bans <- c(2014, 2014, placebo_ban_year, 2014, 2016)
   
   offset = 3
-  iterations = 5000
+  iterations = 5000 #provides the same power as using 50,000 iterations, but better overall performance (i.e., better MAPEs for the placebo SC) (donors are very few)
   
   in_sample_R2_xy <- function (k, dt, donors, iterations, offset, samp)
   {
@@ -321,7 +381,8 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
       mutate(
         treated_state = treated_state, 
         #y_0_effect = ifelse(year>=ban_year, y_0*(1-effect), ifelse(year == ban_year-1, y_0, NA))
-        y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA)
+        y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA), 
+        sample_size=samp
       )
     
     
@@ -329,7 +390,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
     
   }
 
-  all <- lapply(1:length(treated_counties), in_sample_R2_xy, dt,donors, iterations, offset, c(2))
+  all <- lapply(1:length(treated_counties), in_sample_R2_xy, dt,donors, iterations, offset, c(chosen_sample_size))
   
   effect_size = 
     disposal_effect_size2 %>% 
@@ -352,19 +413,103 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year)
       y_0 = sum(weight*y_0)
     ) %>% 
     mutate(
-      y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA)
+      y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA), 
+      sample_size=chosen_sample_size
     )
 
 }
 
-res <- lapply (2007:2016, xy_plot_data_function_pl_year)
+##### Placebo & Actual results ####
 
-#write.csv(res %>% bind_rows(), "year_placebo.csv", row.names=FALSE)
-year_placebo <- read.csv("year_placebo.csv")
+year_placebo_many_sizes <- function (chosen_sample_size)
+{
+  res <- lapply (2007:2016, xy_plot_data_function_pl_year, chosen_sample_size) # iterate over the placebo years
+  year_placebo <- res %>% bind_rows()
+  year_placebo
+}
 
-#year_placebo <- res %>% bind_rows()
+res_all <- lapply(2:7, year_placebo_many_sizes) #iterate over the sample size
+year_placebo <- res_all %>% bind_rows()
+#write.csv(year_placebo, "year_placebo.csv", row.names=FALSE)
+#year_placebo <- read.csv("year_placebo.csv")
+
+
+# Regulators' expectations
+vt_exp_effect <- disposal_effect_size2 %>% filter(state_id=="VT", year<2019) %>% summarise(m=mean(effect_size)) %>% pluck("m")
+reg_effect <- c(0.098, 0.185, 0.6*0.316/0.214*vt_exp_effect)
+reg_expect <- 
+  tibble(
+    state_id=c("MA", "CA", "VT"), 
+    reg_effect = reg_effect
+  )
 ca_reg_expect =reg_expect %>% filter(state_id=="CA") %>% pluck("reg_effect")
 
+
+#choosing the optimal sample size
+optimal_sample_size <- 
+  year_placebo %>%
+  as_tibble() %>% 
+  group_by(ban_year, attempt, sample_size) %>%
+  mutate(
+    tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
+    tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
+    
+    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    
+    att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
+    att = ifelse(year == ban_year +3, att, NA), 
+    
+    mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
+    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae_choice = mean(mae, na.rm=TRUE),
+    
+    reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)
+  ) %>%  
+  group_by(ban_year,sample_size) %>% 
+  filter(mae_choice==min(mae_choice, na.rm=TRUE)) %>% 
+  filter(attempt==min(attempt)) %>% #keep only one of the min mapes
+  ungroup %>% 
+  rename(
+    Synthetic = y_0, 
+    Actual = tons_pc, 
+    Expected = y_0_effect, 
+    `Regulators' Exp.`=reg_expect_tons
+  ) %>% 
+  mutate(
+    Expected = ifelse(ban_year==2016, Expected, NA), 
+    `Regulators' Exp.` = ifelse(ban_year == 2016, `Regulators' Exp.`, NA)
+  ) %>%
+  pivot_longer(
+    cols = c("Synthetic", "Actual", "Expected", `Regulators' Exp.` ), 
+    names_to = "location", 
+    values_to = "tons_pc") %>% 
+  mutate(
+    ban_year_fac = factor(ban_year, levels= c(seq(2016, 2006))), 
+    att = ifelse(location == "Actual", att, NA), 
+    att = round(att*100, 1)) %>% 
+  filter(!is.na(att)) %>% 
+  group_by(sample_size) %>% 
+  summarise(power =min(att), power_high=max(att)) %>% 
+  ungroup %>% 
+  filter(power==max(power)) %>% pluck("sample_size")
+
+
+
+year_placebo <- #only keep the optimal sizer
+  year_placebo %>% 
+  bind_rows() %>% 
+  filter(sample_size==optimal_sample_size)
+
+
+
+
+
+##### Plot ####
+
+
+
+# Preparing the data for the plot 
 xy_plot_year_data <- 
   year_placebo %>% 
   group_by(ban_year, attempt) %>%
@@ -454,6 +599,7 @@ xy_plot_year_data <-
     by =c ("year", "ban_year")
   ) 
 
+#Plot
 xy_plot_year <- 
   xy_plot_year_data %>% 
   ggplot()+
@@ -508,13 +654,13 @@ xy_plot_year <-
 
 # Remove line type from legend
 
+#### Save figure and numbers ##### 
 
 ggsave(xy_plot_year, filename = "xy_plot_year.pdf", device = cairo_pdf,
        path= figure_path,
        width = 5.5, height = 7, units = "in")
 
 
-## Save numbers
 
 att_pl_year <- 
   year_placebo %>% 
@@ -671,5 +817,5 @@ p_value_year <-
   ) %>% pluck("p")
 
 fileConn<-file(paste0(figure_path, "/p_value_year.txt"))
-writeLines(paste0(format(round(p_value_year,2),big.mark=",",scientific=FALSE),'%'), fileConn)
+writeLines(paste0(format(scales::number(p_value_year, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
 close(fileConn)

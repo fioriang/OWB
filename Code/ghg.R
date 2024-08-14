@@ -52,7 +52,7 @@ year_end <- 2018
 treated_counties_id <- all_treated
 
 
-############### Data, Fig. S10 #############################
+############### Data, Fig. S6 #############################
 #Check our data, with EPA's data
 data_comparison <-
   power2 %>% 
@@ -213,7 +213,7 @@ vt <-fixest::feols (recovered_pg ~ treated| facility_id+cluster, gas_fc%>% filte
 fixest::etable (all, ca, ct, ma, ri, vt, vcov="twoway", tex=TRUE, digits = "r3", digits.stats = "r2")
 
 
-############### SC Emissions Fig. S9 #############################
+############### SC Emissions Fig. s5 #############################
 
 gas_st <- gas_fc %>% group_by(year, state_id, treated) %>% summarise(waste = sum(waste), gas_per_facility = mean(gas), gas=sum(gas))
 gas_st <- 
@@ -459,11 +459,11 @@ power_gas_dist_fun_res <- lapply(1:9, power_gas_dist_fun_plac)
 power_gas_dist_fun_res %>% power_gas_dist_fun #decide |S|
 
 #write.csv(power_gas_dist_fun_res %>% bind_rows(), "power_gas_res.csv", row.names=FALSE)
-#power_gas_res <- read.csv("power_gas_res.csv")
+#power_gas_dist_fun_res <- read.csv("power_gas_res.csv")
 
 power_gas_dist_fun_res%>% power_gas_dist_fun #decide |S|
 
-sc_data_ma <-xy_plot_data_function("MA", 1, 2, "MA")
+sc_data_ma <-xy_plot_data_function("MA", 1, 2, "MA") #f is sample size -1
 sc_data_ct <-xy_plot_data_function("CT", 1, 2, "CT")
 sc_data_ca <-xy_plot_data_function("CA", 3, 2, "CA")
 sc_data_ri <-xy_plot_data_function("RI", 2, 2, "RI")
@@ -481,7 +481,7 @@ sc_data <-
   )  
 
 #write.csv(sc_data, "sc_data_ghg.csv", row.names = FALSE)
-#sc_data <- read.csv("sc_data_ghg.csv")
+sc_data <- read.csv("sc_data_ghg.csv")
 
 actual_effects <- 
   sc_data %>% 
@@ -499,9 +499,9 @@ actual_effects <-
 ma_effect_ghg <- 100*actual_effects %>% filter(state_id=="MA") %>% pluck("actual") %>% abs
 figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
 
-fileConn<-file(paste0(figure_path, "/ma_effect_ghg.txt"))
-writeLines(paste0(format(round(ma_effect_ghg,1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
+# fileConn<-file(paste0(figure_path, "/ma_effect_ghg.txt"))
+# writeLines(paste0(format(round(ma_effect_ghg,1),big.mark=",",scientific=FALSE),'%'), fileConn)
+# close(fileConn)
 
 wcs <- read.csv(paste0(post_syp_path, "/03. Bans/wcs_2.csv"))
 
