@@ -1859,7 +1859,8 @@ xy_and_power_2
 xy_and_power_2_cities <- 
   ggpubr::ggarrange(
     ggpubr::ggarrange(
-      xy_plot_cities  %+% 
+      xy_plot_cities  + 
+        geom_point()+
         scale_y_continuous(expand = expansion(mult = c(.1, .1)))+
         theme(
           panel.spacing = unit(1.0, "cm")
