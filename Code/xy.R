@@ -1468,8 +1468,8 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
       MAE = ifelse(treated_state%in%c("All", "Seattle, WA"), paste0("Mean absolute percentage error (%): ", MAE), MAE), 
       y_first = ifelse(year==2006 & location =="Actual", tons_pc %>% round(2), NA), 
       y_last =ifelse(year==2018 & location =="Actual", tons_pc%>% round(2)*1.0, NA), 
-      y_first = ifelse(treated_state== "San Francisco, CA"& year==1996 & location =="Actual", tons_pc %>% round(2), NA), 
-      y_last = ifelse(treated_state== "San Francisco, CA"& year==2014 & location =="Actual", tons_pc %>% round(2), NA)
+      y_first = ifelse(treated_state== "San Francisco, CA"& year==1996 & location =="Actual", tons_pc %>% round(2), y_first), 
+      y_last = ifelse(treated_state== "San Francisco, CA"& year==2014 & location =="Actual", tons_pc %>% round(2), y_last)
     ) 
   
   
@@ -1550,8 +1550,8 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
       scales="free_y"
     )+
     geom_text(aes(x=xlab, y=ylab-0.01, label = label), color=ut_colors[5], size=3, family="Helvetica")+
-    geom_text(aes(x=2005.5, y = y_first, label=y_first ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
-    geom_text(aes(x=2018.5, y = y_last %>% as.numeric, label=scales::number(y_last, accuracy = 0.01) ), color=rgb(90,90,90, maxColorValue = 255), size=3, family="Helvetica")+
+    geom_text(aes(x=2005.5, y = y_first, label=y_first ), color=ut_colors[4], size=3, family="Helvetica")+
+    geom_text(aes(x=2018.5, y = y_last %>% as.numeric, label=scales::number(y_last, accuracy = 0.01) ), color=ut_colors[4], size=3, family="Helvetica")+
     
     geom_text(aes(x=xlab_mae,y=ylab_mae, label = MAE), color =ut_colors[5], size=3, family="Helvetica")+
     scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp."), values = c(ut_colors[4],ut_colors[5],"seagreen"), name = "")+
