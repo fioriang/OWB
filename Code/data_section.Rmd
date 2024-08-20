@@ -653,11 +653,6 @@ remove.packages("xtable")
 
 
 
-
-
-
-
-
 ## Fig 1 
 
 

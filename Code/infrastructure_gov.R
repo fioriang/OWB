@@ -96,6 +96,23 @@ ut_colors <- c(
   rgb(156, 173, 183, max=255), #light grey
   rgb(191,87,0,alpha=50, max=255))# ut orange
 
+mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
+state_data_path <- paste0(mypathname,"/03. State_Data")
+population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+population_2020 <- read.csv(paste0(state_data_path,"/00. Controls/Population/population_2020.csv"))
+population_2020 <- population_2020[population_2020$state_id !="DC",]
+population_2020$county_name[population_2020$county_name=="doña ana"] <- "dona ana"
+population <- rbind(population, population_2020)
+rm(population_2020)
+
+
 #### Minimum distance functions ####
 
 
@@ -417,11 +434,11 @@ infrastructure_plot_2 <-
 
 map_and_densities <-  ggpubr::ggarrange(composting_facilities_map, infrastructure_plot_2, nrow=1, widths = c(2, 1))
 ################### Fig 4: saving ############################
-ggsave(
-  map_and_densities, filename = "map_and_densities.pdf", device = cairo_pdf,
-  path= figure_path,
-  width = 17, height = 6.5, units = "in")
-
+# ggsave(
+#   map_and_densities, filename = "map_and_densities.pdf", device = cairo_pdf,
+#   path= figure_path,
+#   width = 17, height = 6.5, units = "in")
+# 
 
 # ggsave(
 #   infrastructure_plot_2, filename = "densities_for_pres.pdf", device = cairo_pdf,
@@ -640,11 +657,11 @@ mech1_plot <-
   ))
 
 
-ggsave(
-  mech1_plot, filename = "effects_mechanismalt3.pdf", device = cairo_pdf,
-  path= figure_path,
-  width = 11, height = 4, units = "in")
-
+# ggsave(
+#   mech1_plot, filename = "effects_mechanismalt3.pdf", device = cairo_pdf,
+#   path= figure_path,
+#   width = 11, height = 4, units = "in")
+# 
 
 
 # 
