@@ -32,7 +32,7 @@ mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
 municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
 state_data_path <- paste0(mypathname,"/03. State_Data")
 base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
-figure_path <- mypathname
+figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
 
 ```
 
@@ -204,7 +204,7 @@ in_sample_R2_v2 <- function (k, dt, donors,iterations_scale, option, ban_year, o
     all <- 
       all %>% 
       as_tibble %>%
-      filter(r_sq > 0) %>% #from the SC that have in sample R_sq >0 
+      #filter(r_sq > 0) %>% #from the SC that have in sample R_sq >0 
       arrange(mape) %>% 
       slice(1:100) %>% # keep the 100 that have the lowest MAPE
       mutate(
@@ -733,7 +733,8 @@ dt_initial <- pre_processing_dt (power2)
 donors <- unique(dt_initial$county_id[!(dt_initial$state_id%in% all_treated)])
 treated_counties_id <- unique(dt_initial$county_id[dt_initial$state_id%in% all_treated])
 
-plac_for_histogram4 <- power_county_for_hist("CA", dt_initial, 1)
+plac_for_histogram4 <- power_county_for_hist("CA", dt_initial, 1) #for county-level SCs we want to keep only the SCs with R-sq>0. To do so in_sample_R2_v2 needs to change. Go to line 207 and uncomment command: "#filter(r_sq > 0) %>% #from the SC that have in sample R_sq >0" 
+
 
 
 all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2")
@@ -743,8 +744,8 @@ all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
 
 
-write.csv(plac_for_histogram4 %>% bind_rows(), "plac_for_histogram4.csv", row.names=FALSE)
-write.csv(plac_for_histogram6 %>% bind_rows(), "plac_for_histogram6.csv", row.names=FALSE)
+# write.csv(plac_for_histogram4 %>% bind_rows(), "plac_for_histogram4.csv", row.names=FALSE)
+# write.csv(plac_for_histogram6 %>% bind_rows(), "plac_for_histogram6.csv", row.names=FALSE)
 
 #rm(plac_for_histogram4, plac_for_histogram6)
 ```
@@ -838,10 +839,10 @@ plac_for_histogram6 <- read.csv("plac_for_histogram6.csv")
 power_county4 <- power_county(plac_for_histogram4 %>% bind_rows(), "CA")
 power_county6 <- power_county(plac_for_histogram6 %>% bind_rows(), "M1")
 
-write.csv(rbind(
-  power_county4 %>%  bind_rows(),
-  power_county6 %>%  bind_rows()
-), "power_county.csv", row.names=FALSE)
+# write.csv(rbind(
+#   power_county4 %>%  bind_rows(),
+#   power_county6 %>%  bind_rows()
+# ), "power_county.csv", row.names=FALSE)
 
 ```
 
