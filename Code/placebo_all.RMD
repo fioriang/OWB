@@ -1075,8 +1075,8 @@ plac_for_histogram4 %>% power_county(., "RI")
 
 plac_for_histogram6 %>% power_county(., "M1")
 
-write.csv(plac_for_histogram4 %>% bind_rows(), "plac_for_histogram4_seed5.csv", row.names=FALSE)
-write.csv(plac_for_histogram6 %>% bind_rows(), "plac_for_histogram6_seed5.csv", row.names=FALSE)
+write.csv(plac_for_histogram4 %>% bind_rows(), "plac_for_histogram4.csv", row.names=FALSE)
+write.csv(plac_for_histogram6 %>% bind_rows(), "plac_for_histogram6.csv", row.names=FALSE)
 
 #rm(plac_for_histogram4, plac_for_histogram6)
 
@@ -1085,8 +1085,8 @@ write.csv(plac_for_histogram6 %>% bind_rows(), "plac_for_histogram6_seed5.csv", 
 ### County MAE
 
 ```{r}
-plac_for_histogram4 <- read.csv("plac_for_histogram4_seed5.csv")
-plac_for_histogram6 <- read.csv("plac_for_histogram6_seed5.csv")
+plac_for_histogram4 <- read.csv("plac_for_histogram4.csv")
+plac_for_histogram6 <- read.csv("plac_for_histogram6.csv")
 mae_placebo <- 
   rbind(
     plac_for_histogram4 %>% 
@@ -1161,8 +1161,8 @@ close(fileConn)
 The following chunk takes as input plac_for_histogram4 and plac_for_histogram6 (also saved as csvs) and produces the power specification for the city level bans. 
 ```{r}
 
-plac_for_histogram4 <- read.csv("plac_for_histogram4_seed5.csv")
-plac_for_histogram6 <- read.csv("plac_for_histogram6_seed5.csv")
+plac_for_histogram4 <- read.csv("plac_for_histogram4.csv")
+plac_for_histogram6 <- read.csv("plac_for_histogram6.csv")
 
 power_county4 <- power_county(plac_for_histogram4 %>% bind_rows(), "RI")
 power_county6 <- power_county(plac_for_histogram6 %>% bind_rows(), "M1")
