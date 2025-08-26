@@ -4,12 +4,12 @@ library(claudeR)
 library(tidyverse)
 
 #needs API KEY to be able to run
-api_key <- "xxxxxxxx"
+api_key <- add your api key here
 # Load packages
-library(httr)
+#library(httr)
 library(pdftools)
-library(jsonlite)
-library(tm)
+#library(jsonlite)
+#library(tm)
 
 
 pdf_text_ca <- pdf_text("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/CA_4.pdf") %>% paste(collapse = " ")
@@ -17,6 +17,7 @@ pdf_text_ma <- pdf_text("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SY
 pdf_text_ct <- pdf_text("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/CT.pdf") %>% paste(collapse = " ")
 pdf_text_vt <- pdf_text("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/VT2.pdf") %>% paste(collapse = " ")
 pdf_text_ri <- pdf_text("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/RI.pdf") %>% paste(collapse = " ")
+pdf_text_wa <- pdf_text("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity/WA_2.pdf") %>% paste(collapse = " ")
 
 
 
@@ -29,13 +30,13 @@ pdf_text_ri <- pdf_text("C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SY
 
 claude_res_function <- function(i)
 {
-  Sys.sleep(30)
+  #Sys.sleep(30)
   summary_prompt <- 
     list(
       list(
         role = "user", 
-        content = paste("Read the following texts (texts 1-5) and assign a grade on each of these laws based on the complexity of the regulation, where 10 is the most complex. Focus only on organic waste (Not other materials). Focus on the part about organic waste generators (Not other facilities). The degree of complexity has to do with how clear it is for businesses to implement. Just give me a grade from 1-10 for each of the regulations."
-                        ,"Text 1: ", pdf_text_ca, "Text 2: ", pdf_text_ct, "Text 3: ", pdf_text_ma, "Text 4: ", pdf_text_vt, "Text 5: ", pdf_text_ri)
+        content = paste("Read the following texts (texts 1-6) and assign a grade on each of these laws based on the complexity of the regulation, where 10 is the most complex. Focus only on organic waste (Not other materials). Focus on the part about organic waste generators (Not other facilities). The degree of complexity has to do with how clear it is for businesses to implement. Just give me a grade from 1-10 for each of the regulations."
+                        ,"Text 1: ", pdf_text_ca, "Text 2: ", pdf_text_ct, "Text 3: ", pdf_text_ma, "Text 4: ", pdf_text_vt, "Text 5: ", pdf_text_ri, "Text 6: ", pdf_text_wa)
       ))
   
   # Using the claudeR function defined earlier
@@ -51,7 +52,9 @@ claude_res_function <- function(i)
 }
 
 
-claude_res_bans <- lapply(1:20, claude_res_function)
+
+
+claude_res_bans <- lapply(1:5, claude_res_function)
 #claude_res_reg <- claude_res_bans
 
 #claude_res_bans <- claude_res_bans %>% unlist %>% c(claude_res_reg)

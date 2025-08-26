@@ -1,12 +1,95 @@
+library(tidyverse)
 disposal_effect_size <- read.csv("disposal_effect_size2.csv") %>% as_tibble() %>% rename(effect = effect_size)
-year_start = 2006
-year_cutoff = 2018
+# Since we are shifting the ban_year in the time series, we also have to shift it here, in the expected effect to best reflect the expected effects of the bans. 
+disposal_effect_size <- disposal_effect_size %>% mutate(
+  year = ifelse(state_id %in% c("CA", "MA", "VT"), year+1, year)
+)
+#### Paths and basic data and functions ####
+mypathname <-"/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans"
+municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
+state_data_path <- paste0(mypathname,"/03. State_Data")
+base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
+figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections"
+
+
+ut_colors <- c(
+  rgb(132, 59,14, max=255), # dark orange
+  rgb(255, 127, 21, max=255), # bright orange
+  rgb(191,87,0, max=255), # ut orange
+  rgb(51,73,72, max=255), # dark grey
+  rgb(156, 173, 183, max=255), #light grey
+  rgb(191,87,0,alpha=50, max=255))# ut orange
+
+# Population
+population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+population_2020 <- read.csv(paste0(state_data_path,"/00. Controls/Population/population_2020.csv"))
+population_2020 <- population_2020[population_2020$state_id !="DC",]
+population_2020$county_name[population_2020$county_name=="doña ana"] <- "dona ana"
+population <- rbind(population, population_2020)
+rm(population_2020)
+
+
+# Waste Data
+#power2 <- read.csv("power2_2.csv")
+power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv"))
+all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
+bans <- c(2014, 2014, 2016, 2014, 2016)
+#bans <- c(2014, 2014, 2016, 2014, 2016)
+bans_passage <- c(2012, 2013, 2014, 2011, 2014) #passage dates
+year_start <- 2006
+year_end <- 2018
+
+
+pre_processing_dt_state <- function (power2)
+{
+  
+  year_start <- 2006
+  year_cutoff <- 2018
+  dt_state <- 
+    power2 %>% 
+    mutate(county_id=paste0(county_name, state_id)) %>% 
+    #filter(!county_id%in%c(rural)) %>% 
+    group_by (year, state_id, type) %>% 
+    summarise(tons = sum(tons))%>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff,
+      type %in% c("disposal", "msw_disposed")
+    ) %>%
+    group_by(state_id) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    group_by(state_id, year) %>% 
+    mutate(
+      tons_pc = (tons/state_pop), 
+      county_id = state_id
+    ) %>% 
+    group_by(state_id) %>% 
+    mutate(n=n()) %>% 
+    filter(n == year_cutoff - year_start+1) %>% 
+    select(-n) %>% 
+    ungroup() 
+  
+
+  dt_state_initial <- dt_state
+  return(dt_state_initial)
+  
+}
+
 pooled_ban_year = 2015
 offset = 3
 iterations = 100000
 dt_state_initial <- pre_processing_dt_state(power2)
 disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
-
 
 #dt_state_initial<- dt_state_initial %>% mutate(tons_pc = ifelse(state_id=="CT", tons_pc+0.15, tons_pc))
 treated_counties_id <- unique(dt_state_initial$county_id[dt_state_initial$state_id%in% all_treated])
@@ -42,29 +125,28 @@ do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,
 xy_plot_data_function <- function (treated_state, f, seed)
 {
   set.seed(seed)
+  ban_year <- bans[which(all_treated == treated_state)]
   if(treated_state == "MA")
   {
     dt_state <- dt_state_initial %>% group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*0.25 + .75*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.25 + 0.75*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "VT")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        lag =lag(tons_pc, n=1, default = NA),
-        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "CA")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.75 + 0.25*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else {dt_state <- dt_state_initial} 
   
   dt <- dt_state %>% as.data.frame()
-  ban_year <- bans[which(all_treated == treated_state)]
   year_end <- ban_year-offset
   treated_location <- treated_state
   don_new <- donors[donors!=treated_location]
@@ -114,14 +196,7 @@ xy_plot_data_function <- function (treated_state, f, seed)
     paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
   )
   
-  if(treated_location%in% c("VT", "CA", "MA"))
-  {
-    all <-
-      all %>%
-      as_tibble %>%
-      filter(r_sq > 0)
-  }
-  
+
   all <- 
     all %>% 
     as_tibble %>% 
@@ -252,9 +327,9 @@ xy_plot_fun_passage <- function (i)
     left_join(
       rbind(xy_plot_data_passage%>% select(year, treated_state, ban_year, attempt, tons_pc, y, y_0, y_0_effect), all) %>% 
         group_by(treated_state) %>% 
-        filter(year >= ban_year-3, year < ban_year) %>%
+        filter(year > ban_year-3, year < ban_year) %>%
         mutate(
-          year=mean(year), # i duplicate so i join and then also keep the xlab_mae
+          year=ceiling(round(mean(year), 0)), # i duplicate so i join and then also keep the xlab_mae
           xlab_mae = 2010,
           xlab_mae = ifelse(treated_state=="CA", 2010, xlab_mae),
           xlab_mae = ifelse(treated_state=="CT", 2009.5, xlab_mae),
@@ -403,15 +478,29 @@ xy_plot_fun_passage <- function (i)
   
 }
 
+#### Left side ####
+passage_spec <- rbind(
+  read.csv("power_state_p.csv"))
+
+chosen_sample_size <-
+  passage_spec %>% 
+  group_by(treated_state) %>%
+  filter(att_min ==max(att_min)) %>% 
+  rename(
+    chosen_sample_size=sample_size 
+  ) %>% 
+  select(
+    treated_state, chosen_sample_size
+  ) %>% ungroup
 
 
 xy_plot_data_passage <-
   rbind(
-    xy_plot_data_function("CA",7,1),
-    xy_plot_data_function("CT",1,1),
-    xy_plot_data_function("MA",4,1),
-    xy_plot_data_function("RI",7,1),
-    xy_plot_data_function("VT",4,1)
+    xy_plot_data_function("CA",chosen_sample_size %>% filter(treated_state=="CA") %>% pluck("chosen_sample_size")-2,2),
+    xy_plot_data_function("CT",chosen_sample_size %>% filter(treated_state=="CT") %>% pluck("chosen_sample_size")-2,2),
+    xy_plot_data_function("MA",chosen_sample_size %>% filter(treated_state=="MA") %>% pluck("chosen_sample_size")-2,2),
+    xy_plot_data_function("RI",chosen_sample_size %>% filter(treated_state=="RI") %>% pluck("chosen_sample_size")-2,2),
+    xy_plot_data_function("VT",chosen_sample_size %>% filter(treated_state=="VT") %>% pluck("chosen_sample_size")-2,2)
  )
 
 #write.csv(xy_plot_data_passage, "xy_plot_data_passage.csv", row.names=FALSE)
@@ -426,23 +515,9 @@ xy_plot <-
     strip.text = element_blank(),
     plot.title = element_text(family = "Helvetica", color = ut_colors[4],size = 10, hjust=0.5))
 
+#### Right side ####
 
-passage_spec <- rbind(
-  read.csv("power_state_p.csv")) %>% 
-  rename(
-    tstate_id
-  )
 
-chosen_sample_size <-
-  passage_spec %>% 
-  group_by(treated_state) %>%
-  filter(att_min ==max(att_min)) %>% 
-  rename(
-    chosen_sample_size=sample_size 
-  ) %>% 
-  select(
-    treated_state, chosen_sample_size
-  )
 
 bt_with_power_data_passage <- 
   passage_spec %>% 
@@ -456,7 +531,7 @@ bt_with_power_data_passage <-
     power_high=100*power_high) %>% 
   group_by(specification, treated_state, ban_year) %>% 
   right_join(
-    chosen_sample_size, by = c("treated_state", "sample_size"="chosen_sample_size")
+    chosen_sample_size %>% ungroup, by = c("treated_state", "sample_size"="chosen_sample_size")
   ) %>% 
   ungroup %>% 
   left_join(
@@ -473,7 +548,7 @@ bt_with_power_data_passage <-
   ) %>% 
   rename(state_id=treated_state)
 
-bt_with_power_data <- read.csv("bt_with_power_data.csv")
+bt_with_power_data <- read.csv("bt_with_power_data.csv") #from bt_with_power_data we need the expected effect and the regulators' expectation.
 
 bt_with_power_data_passage <-
   bt_with_power_data_passage %>% 
@@ -489,7 +564,7 @@ bt_with_power_data_passage <-
 
 
 bt_with_power_passage2 <- 
-  bt_with_power_data_passage %>% #filter(state_id!="San Francisco, CA") %>% 
+  bt_with_power_data_passage %>% 
   mutate(
     state_id = fct_recode(
       state_id,
@@ -498,65 +573,74 @@ bt_with_power_passage2 <-
       "Massachusetts" = "MA",
       "Connecticut" = "CT",
       "California" = "CA"
-    )#, 
-    #state_id = factor(state_id, levels = c("California","Connecticut", "Massachusetts", "Rhode Island", "Vermont"))
+    ) 
   )%>% 
-  ggplot()+
-  aes(y= as.factor(state_id), x= 100*actual_treatment_effect, group = 1)+
-  geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), width = 0.2, size=0.5)+
-  scale_color_manual(breaks = c("Placebo"), values = c(ut_colors[5]), guide = guide_legend(order = 2, legend.spacing.x=unit(-1, "cm"), byrow=TRUE ))+
-  geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5])+
-  labs(y="", x = "", color = "")+
-  ggnewscale::new_scale_color()+
-  geom_point(aes(color = "Estimate"),size=1.5)+
-  scale_color_manual(breaks = c("Estimate"), values = c(ut_colors[4]),guide = guide_legend(order = 1,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
-  labs(y="", x = "", color = "")+
-  ggnewscale::new_scale_color()+
-  geom_errorbar(aes(xmin=-100*mean_effect, xmax=-100*mean_effect, color = "Our Exp."), linewidth=1, width=0.2)+
-  scale_color_manual(breaks = c("Our Exp."), values = c("seagreen" ),guide = guide_legend(order = 3,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
-  labs(y="", x = "", color = "")+
-  ggnewscale::new_scale_color()+
+  ggplot() +
+  aes(y= state_id, x= 100*actual_treatment_effect, group = 1)+
+  # All geoms with their color aesthetics
+  geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), 
+                width = 0.2, size = 0.5) +
+  geom_point(aes(color = "Estimate"), size = 1.5) +
+  geom_errorbar(aes(xmin = -100*mean_effect, xmax = -100*mean_effect, color = "Our Exp."), 
+                linewidth = 1, width = 0.2) +
+  geom_errorbar(aes(xmin = -100*reg_effect, xmax = -100*reg_effect, color = "Regulators' Exp."), 
+                linewidth = 1, width = 0.2) +
   
-  geom_errorbar(aes(xmin=-100*reg_effect, xmax=-100*reg_effect, color = "Regulators' Exp."), linewidth=1, width=0.2)+
-  scale_color_manual(breaks = c("Regulators' Exp."), values = c("#bad9c6" ),guide = guide_legend(order = 4,  legend.spacing.x=unit(-1, "cm"), byrow=TRUE))+
-  labs(y="", x = "", color = "")+
+  # Single color scale for all elements
+  scale_color_manual(
+    name = "",
+    values = c(
+      "Placebo" = ut_colors[5],
+      "Estimate" = ut_colors[4], 
+      "Our Exp." = "seagreen",
+      "Regulators' Exp." = "#bad9c6"
+    ),
+    breaks = c("Estimate", "Placebo", "Our Exp.", "Regulators' Exp."),
+    guide = guide_legend(order = 1)
+  ) +
   
-  ggnewscale::new_scale_color()+
-  scale_x_continuous(limits=c(-20, 20), breaks = c(seq(-15, 15, by =5)))+
-  scale_y_discrete(position= "right", expand=c(0.02,0.15))+
+  # Non-aesthetic elements
+  geom_vline(xintercept = 0, lty = "dotted", color = ut_colors[5]) +
+  
+  labs(y = "", x = "", color = "")+
+  
+  #scale_x_continuous(breaks = c(seq(-25, 25, by = 5)), limits = c(-30, 25))+ 
+  scale_x_continuous(breaks = c(seq(-35, 35, by = 10)), limits = c(-40, 40))+ 
+  scale_y_discrete(position= "left", expand=c(0.02,0.01))+
   theme(
     legend.position = "top",  # Keep the legend at the top
+    legend.justification = c(1, 2),
     legend.box.margin = margin(t = 0, r = 0, b = 0, l = 70),
     strip.background = element_rect(color = "white", fill = "white"),
     panel.grid.major.x = element_blank() ,
     panel.grid.major.y = element_blank(),
-    panel.background = element_blank(), 
-    text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]), 
-    strip.text = element_text(angle = 0, hjust = 1), 
+    panel.background = element_blank(),
+    text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]),
+    strip.text = element_text(angle = 0, hjust = 1),
     strip.placement = "outside",
-    #axis.text.y = element_blank(), 
-    axis.ticks.y = element_blank(), 
+    axis.ticks.y = element_blank(),
     legend.key = element_rect(colour = NA, fill = NA, size = 5),
     legend.spacing.x = unit(-1, "pt"),
-    axis.ticks.x = element_line(size = 0.1), 
+    axis.ticks.x = element_line(size = 0.1),
     legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
   )
 
 
+#### Save plot #### 
 xy_and_power_placebo <-
   ggpubr::ggarrange(
     xy_plot %+% 
       subset(xy_plot$data, !treated_state %in% c("All", "Boulder, CO", "Seattle, WA"))+
-      geom_point(data = subset(xy_plot$data %>% filter(!treated_state %in%  c("All", "Boulder, CO", "Seattle, WA")), location %in% c("Actual", "Synthetic"))), 
+      geom_point(data = subset(xy_plot$data %>% filter(!treated_state %in%  c("All", "Boulder, CO", "Seattle, WA")), location %in% c("Actual", "Synthetic")))+
+      labs(x="Year", y = "Disposal (tons per capita)", title = ""), 
     bt_with_power_passage2+
-      labs(x="", title = "Average treatment effect on the treated (%)")+
+      labs(x="Ban effect on disposal (%)", title = "")+
       scale_x_continuous(limits=c(-20, 20), breaks = c(seq(-15, 15, by =5)))+
       theme (
         plot.title = element_text(hjust=0.6, size = 10, color=ut_colors[4])), 
     heights = c(0.5, 1))
 
 xy_and_power_placebo
-
 
 ggsave(
   xy_and_power_placebo, filename = "xy_and_power_placebo_passage.pdf", device = cairo_pdf,

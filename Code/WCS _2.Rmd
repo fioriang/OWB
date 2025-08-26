@@ -18,7 +18,7 @@ library(data.table)
 #Set this directory to your desired path
 ##########################################
 #mypathname = '/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/'
-mypathname = 'C:/Users/fa24575/Dropbox/Organic Waste Bans/'
+mypathname = '/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/'
 
 base_path <- paste0(mypathname,"/06. Post SYP/00. Code")
 post_syp_path <- paste0(mypathname,"/06. Post SYP")
@@ -264,9 +264,6 @@ For this set of WCS, we have the fraction of several waste streams
  res vs non-res we do the following:  
 
 ```{r}
-
-
-
 wcs_ntf <- 
   wcs %>% 
   filter(!is.na(need_to_find), need_to_find!="") %>% 
@@ -768,7 +765,7 @@ disposal_effect_size2 <-
   #) #%>% filter(year<=2018) %>% group_by(state_id) %>% summarise(mean(exp_effect))
 
 
-write.csv(disposal_effect_size2, "disposal_effect_size2.csv", row.names=FALSE) 
+#write.csv(disposal_effect_size2, "disposal_effect_size2.csv", row.names=FALSE) 
 
 ```
 

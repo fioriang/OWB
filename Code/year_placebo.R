@@ -3,19 +3,19 @@
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
-library(fixest)
+# library(fixest)
 library(purrr)
 library(extrafont)
-state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
-post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
-figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
-municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
+state_data_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03. State_Data"
+post_syp_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+municipal_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03.1. Municipal Data"
 
- mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
+mypathname <-"/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans"
 # municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
 # state_data_path <- paste0(mypathname,"/03. State_Data")
- base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
-# figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
+figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections"
 
 ##### Basic Data ####
 
@@ -211,12 +211,15 @@ mean_effect =
   filter(state_id=="CA", year <=2019) %>% 
   summarise(mean_effect=100*mean(effect_size)) %>% pluck("mean_effect")
 
-# fileConn<-file(paste0(figure_path, "/ca_expected_year_placebo.txt"))
-# writeLines(paste0(format(scales::number(mean_effect %>% round(1), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
-# close(fileConn)
+fileConn<-file(paste0(figure_path, "/ca_expected_year_placebo.txt"))
+writeLines(paste0(format(scales::number(mean_effect %>% round(1), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
 
 ##### Placebo functions ####
-set.seed(1)
+actual_ban_year = 2016
+evaluation_years = 3
+offset =3
+
 do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
 {
   #Approach 2- Only Intercept
@@ -234,18 +237,21 @@ do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_tr
   att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% sum
   cf <- (x[(test_ind_end2+1):n]+intercept) %>% sum
   intercept2 <-  mean(c(y_train, y_test)-x[1:test_ind_end2])
-  att2 <- ((y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum)/(x[(test_ind_end2+1):n]+intercept2) %>% sum
+  #att2 <- ((y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum)/(x[(test_ind_end2+1):n]+intercept2) %>% sum
+  att <- (y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum
+  cf <- (x[(test_ind_end2+1):n]+intercept2) %>% sum
   
   c(r, MA, att, cf,intercept,att2, intercept2, c(samples))
 }
 
 xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
 {
-
-  end_year = placebo_ban_year+3 # the final year of the evaluation period
+  seed=5
+  set.seed(seed)
+  end_year = placebo_ban_year+evaluation_years # the final year of the evaluation period
   year_start = placebo_ban_year-10 # the starting year of the training period
   dt_initial <- pre_processing_dt(power2, year_start, end_year) # get the data (from the start to the end of the analysis window)
-
+  
   dt <- 
     dt_initial %>% as_tibble %>% 
     filter(
@@ -256,7 +262,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
     ) %>% 
     mutate(
       #re-center the time series
-      tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)),
+      tons_pc = tons_pc*0.75 + 0.25*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)),
       state_id = "CA1"
     )
   
@@ -266,10 +272,11 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
   bans <- c(2014, 2014, placebo_ban_year, 2014, 2016)
   
   offset = 3
-  iterations = 5000 #provides the same power as using 50,000 iterations, but better overall performance (i.e., better MAPEs for the placebo SC) (donors are very few)
+  iterations = 50000 #provides the same power as using 50,000 iterations, but better overall performance (i.e., better MAPEs for the placebo SC) (donors are very few)
   
-  in_sample_R2_xy <- function (k, dt, donors, iterations, offset, samp)
+  in_sample_R2_xy <- function (k, dt, donors, iterations, offset, samp, seed)
   {
+    set.seed(seed)
     #this function is the same as xy_plot_data_function
     treated_state <- str_sub(treated_counties_id[k],start=-2)
     ban_year <- bans[which(all_treated == treated_state)]
@@ -310,7 +317,7 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
     donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
     
     all <- all %>% sapply(c) %>% t
-  
+    
     colnames(all) <- c(
       "r_sq",
       "mape", 
@@ -385,8 +392,8 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
     return(all)
     
   }
-
-  all <- lapply(1:length(treated_counties), in_sample_R2_xy, dt,donors, iterations, offset, c(chosen_sample_size))
+  
+  all <- lapply(1:length(treated_counties), in_sample_R2_xy, dt,donors, iterations, offset, c(chosen_sample_size), seed)
   
   effect_size = 
     disposal_effect_size2 %>% 
@@ -395,7 +402,8 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
     summarise(effect_size= mean(effect_size)) %>% pluck("effect_size")
   
   
-  all %>%  bind_rows %>% 
+  all %>%  
+    bind_rows %>% 
     left_join(
       dt %>%  select(county_id, year, pop), 
       by = c("year", "county_id")
@@ -412,21 +420,21 @@ xy_plot_data_function_pl_year <- function (placebo_ban_year, chosen_sample_size)
       y_0_effect = ifelse(year>=ban_year, y_0*(1-effect_size), NA), 
       sample_size=chosen_sample_size
     )
-
+  
 }
 
 ##### Placebo & Actual results ####
 
 year_placebo_many_sizes <- function (chosen_sample_size)
 {
-  res <- lapply (2007:2016, xy_plot_data_function_pl_year, chosen_sample_size) # iterate over the placebo years
+  res <- lapply (2007:actual_ban_year, xy_plot_data_function_pl_year, chosen_sample_size) # iterate over the placebo years
   year_placebo <- res %>% bind_rows()
   year_placebo
 }
 
 res_all <- lapply(2:7, year_placebo_many_sizes) #iterate over the sample size
 year_placebo <- res_all %>% bind_rows()
-#write.csv(year_placebo, "year_placebo.csv", row.names=FALSE)
+write.csv(year_placebo, "year_placebo.csv", row.names=FALSE)
 #year_placebo <- read.csv("year_placebo.csv")
 
 
@@ -440,7 +448,6 @@ reg_expect <-
   )
 ca_reg_expect =reg_expect %>% filter(state_id=="CA") %>% pluck("reg_effect")
 
-
 #choosing the optimal sample size
 optimal_sample_size <- 
   year_placebo %>%
@@ -450,14 +457,14 @@ optimal_sample_size <-
     tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
     tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
     
-    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
-    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    tons_pc_for_mae = ifelse(year >ban_year-offset & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >ban_year-offset & year < ban_year, y_0, 0) ,
     
     att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
-    att = ifelse(year == ban_year +3, att, NA), 
+    att = ifelse(year == ban_year +evaluation_years, att, NA), 
     
     mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
-    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae = ifelse(year == ban_year -2, mae, NA), 
     mae_choice = mean(mae, na.rm=TRUE),
     
     reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)
@@ -469,26 +476,28 @@ optimal_sample_size <-
   rename(
     Synthetic = y_0, 
     Actual = tons_pc, 
-    Expected = y_0_effect, 
+    `Our Exp.` = y_0_effect, 
     `Regulators' Exp.`=reg_expect_tons
   ) %>% 
   mutate(
-    Expected = ifelse(ban_year==2016, Expected, NA), 
-    `Regulators' Exp.` = ifelse(ban_year == 2016, `Regulators' Exp.`, NA)
+    `Our Exp.` = ifelse(ban_year==actual_ban_year, `Our Exp.`, NA), 
+    `Regulators' Exp.` = ifelse(ban_year == actual_ban_year, `Regulators' Exp.`, NA)
   ) %>%
   pivot_longer(
-    cols = c("Synthetic", "Actual", "Expected", `Regulators' Exp.` ), 
+    cols = c("Synthetic", "Actual", "Our Exp.", `Regulators' Exp.` ), 
     names_to = "location", 
-    values_to = "tons_pc") %>% 
+    values_to = "tons_pc"
+  ) %>% 
   mutate(
-    ban_year_fac = factor(ban_year, levels= c(seq(2016, 2006))), 
+    ban_year_fac = factor(ban_year, levels= c(seq(actual_ban_year, 2006))), 
     att = ifelse(location == "Actual", att, NA), 
     att = round(att*100, 1)) %>% 
   filter(!is.na(att)) %>% 
   group_by(sample_size) %>% 
+  filter(ban_year!=actual_ban_year) %>% 
   summarise(power =min(att), power_high=max(att)) %>% 
   ungroup %>% 
-  filter(power==max(power)) %>% pluck("sample_size")
+  filter(power==max(power)) %>% pluck("sample_size") %>% min()
 
 
 
@@ -513,49 +522,49 @@ xy_plot_year_data <-
     tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
     tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
     
-    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
-    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    tons_pc_for_mae = ifelse(year >ban_year-offset & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >ban_year-offset & year < ban_year, y_0, 0) ,
     
     att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
-    att = ifelse(year == ban_year +3, att, NA), 
+    att = ifelse(year == ban_year +evaluation_years, att, NA), 
     
     mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
-    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae = ifelse(year == ban_year -2, mae, NA), 
     mae_choice = mean(mae, na.rm=TRUE),
     
-    reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)
+    reg_expect_tons = ifelse(year >=actual_ban_year, y_0*(1-ca_reg_expect), NA)
   ) %>%  
   group_by(ban_year) %>% 
   filter(mae_choice==min(mae_choice, na.rm=TRUE)) %>% 
   filter(attempt==min(attempt)) %>% 
-
+  
   ungroup %>% 
   #filter(attempt==3) %>% 
   rename(
     Synthetic = y_0, 
     Actual = tons_pc, 
-    Expected = y_0_effect, 
+    `Our Exp.` = y_0_effect, 
     `Regulators' Exp.`=reg_expect_tons
   ) %>% 
   mutate(
-    Expected = ifelse(ban_year==2016, Expected, NA), 
-    `Regulators' Exp.` = ifelse(ban_year == 2016, `Regulators' Exp.`, NA)
+    `Our Exp.` = ifelse(ban_year==actual_ban_year, `Our Exp.`, NA), 
+    `Regulators' Exp.` = ifelse(ban_year == actual_ban_year, `Regulators' Exp.`, NA)
   ) %>%
   pivot_longer(
-    cols = c("Synthetic", "Actual", "Expected", `Regulators' Exp.` ), 
+    cols = c("Synthetic", "Actual", "Our Exp.", `Regulators' Exp.` ), 
     names_to = "location", 
     values_to = "tons_pc") %>% 
   mutate(
-    ban_year_fac = factor(ban_year, levels= c(seq(2016, 2006))), 
+    ban_year_fac = factor(ban_year, levels= c(seq(actual_ban_year, 2006))), 
     att = ifelse(location == "Actual", att, NA), 
     att = round(att*100, 1), 
     att= scales::number(att, accuracy = 0.1),
     att = ifelse(!is.na(att), paste0(att, "%"), NA),
-    att = ifelse(!is.na(att) & ban_year==2016, paste0("Avg. treatment effect on the treated (%): ", att), att), 
+    att = ifelse(!is.na(att) & ban_year==actual_ban_year, paste0("Avg. treatment effect on the treated (%): ", att), att), 
     
     mae = ifelse(location == "Actual", mae %>% round(2), NA),
     mae= scales::number(mae, accuracy = 0.01),
-    mae = ifelse(year==2013 & ban_year==2016 & location == "Actual", paste0("Mean absolute percentage error (%): ", mae), mae), 
+    mae = ifelse(year==2014 & ban_year==actual_ban_year & location == "Actual", paste0("Mean absolute percentage error (%): ", mae), mae), 
     
   ) %>% 
   select(year, ban_year, attempt, att, mae, location, ban_year_fac, tons_pc) %>%
@@ -564,14 +573,14 @@ xy_plot_year_data <-
     xlab = ifelse(year==ban_year-10 & location == "Actual", year, NA ),
     ylab = ifelse(year==ban_year-10 & location == "Actual", tons_pc, NA ), 
     tons_lab = ifelse(year==ban_year-10 & location == "Actual",tons_pc %>% round(2), NA),
-    xlab2 = ifelse(year==ban_year+3 & location == "Actual", year, NA ),
-    ylab2 = ifelse(year==ban_year+3 & location == "Actual", tons_pc, NA ),
-    tons_lab2 = ifelse(year==ban_year+3 & location == "Actual",tons_pc %>% round(2), NA), 
+    xlab2 = ifelse(year==ban_year+evaluation_years & location == "Actual", year, NA ),
+    ylab2 = ifelse(year==ban_year+evaluation_years & location == "Actual", tons_pc, NA ),
+    tons_lab2 = ifelse(year==ban_year+evaluation_years & location == "Actual",tons_pc %>% round(2), NA), 
     
     ylab_att = max(tons_pc, na.rm=TRUE), 
     ylab_att = ifelse(ban_year==2006, ylab_att+0.09, ylab_att),
     ylab_att = ifelse(ban_year>=2008 & ban_year <=2015, ylab_att-0.15, ylab_att),
-    ylab_att = ifelse(ban_year==2016, ylab_att-0.03, ylab_att),
+    ylab_att = ifelse(ban_year==2015, ylab_att-0.07, ylab_att),
     
     ylab_mae = min(tons_pc, na.rm=TRUE),
     ylab_mae = ifelse(ban_year>=2010, ylab_mae-0.07, ylab_mae),
@@ -584,14 +593,14 @@ xy_plot_year_data <-
     y_end_low_2 = ifelse(year==ban_year-3&location=="Actual", tons_pc-0.1, NA), 
     y_end_high_2 = ifelse(year==ban_year-3&location=="Actual", tons_pc+0.1, NA),
     
-    y_end_low = ifelse(ban_year==2016, y_end_low-0.1, y_end_low), 
-    y_end_high = ifelse(ban_year==2016, y_end_high+0.1, y_end_high), 
+    y_end_low = ifelse(ban_year==actual_ban_year, y_end_low-0.1, y_end_low), 
+    y_end_high = ifelse(ban_year==actual_ban_year, y_end_high+0.1, y_end_high), 
     
-    y_end_low_2 = ifelse(ban_year==2016, y_end_low_2-0.1, y_end_low_2), 
-    y_end_high_2 = ifelse(ban_year==2016, y_end_high_2+0.1, y_end_high_2)
+    y_end_low_2 = ifelse(ban_year==actual_ban_year, y_end_low_2-0.1, y_end_low_2), 
+    y_end_high_2 = ifelse(ban_year==actual_ban_year, y_end_high_2+0.1, y_end_high_2)
   ) %>% 
   left_join(
-    tibble (year= c(2009, 2012, 2016), xlab_set= c(2010, 2014, 2017.5), ylab_set = 1, label = c("Training", "Validation", "Evaluation"), ban_year = 2016), 
+    tibble (year= c(2009, 2012, actual_ban_year), xlab_set= c(2010, 2014, 2017.5), ylab_set = 1, label = c("Training", "Validation", "Evaluation"), ban_year = actual_ban_year), 
     by =c ("year", "ban_year")
   ) 
 
@@ -604,23 +613,21 @@ xy_plot_year <-
     aes(x=ban_year, xend=ban_year, y=y_end_low, yend  = y_end_high, color= location), 
     linetype = "dotted", linewidth = 0.1, color =ut_colors[5])+
   geom_segment(
-    aes(x=ban_year-3, xend=ban_year-3, y=y_end_low_2, yend  = y_end_high_2, color=location), 
+    aes(x=ban_year-offset, xend=ban_year-offset, y=y_end_low_2, yend  = y_end_high_2, color=location), 
     linetype = "dotted", linewidth = 0.1, color =ut_colors[5])+
   
   geom_line()+
   geom_point(data = subset(xy_plot_year_data, location %in% c("Actual", "Synthetic")), size = .1)+
   
   facet_grid(vars(ban_year_fac), scales="free_y")+
-  scale_color_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"#417c5b", "#bad9c6"), name = "")+
-  scale_size_manual(breaks= c("Actual", "Synthetic", "Expected", "Regulators' Exp."), values = c(0.2, 0.2, 0.6, 0.6), name = "")+
+  scale_color_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(ut_colors[4],ut_colors[5],"#417c5b", "#bad9c6"), name = "")+
+  scale_size_manual(breaks= c("Actual", "Synthetic", "Our Exp.", "Regulators' Exp."), values = c(0.2, 0.2, 0.6, 0.6), name = "")+
   scale_y_continuous(expand = c(0.1, 0.1))+
   scale_x_continuous(breaks = c(seq(1996, 2019, by =2)))+
-  ggnewscale::new_scale_color()+
-  ggnewscale::new_scale_color()+
   #att
-  geom_text (aes(x=ifelse(ban_year==2016, ban_year-1, ban_year+1.5), y = ylab_att, label = att), color = "#417c5b", size=2, family="Helvetica")+
+  geom_text (aes(x=ifelse(ban_year==actual_ban_year, ban_year-1, ban_year+1.5), y = ylab_att, label = att), color = "#417c5b", size=2, family="Helvetica")+
   #mae
-  geom_text (aes(x=ifelse(ban_year==2016, ban_year-4, ban_year-1.5), y = ylab_mae, label = mae), color = ut_colors[5], size=2, family="Helvetica")+
+  geom_text (aes(x=ifelse(ban_year==actual_ban_year, ban_year-4, ban_year-1.5), y = ylab_mae, label = mae), color = ut_colors[5], size=2, family="Helvetica")+
   #first tons
   geom_text (aes(x=xlab-0.8, y = ylab, label = scales::number(tons_lab, accuracy = 0.01) ), color = ut_colors[4], size=2, family="Helvetica")+
   #last tons
@@ -651,9 +658,9 @@ xy_plot_year <-
 # Remove line type from legend
 
 #### Save figure and numbers ##### 
-
+xy_plot_year
 ggsave(xy_plot_year, filename = "xy_plot_year.pdf", device = cairo_pdf,
-       path= figure_path,
+       path= paste0(figure_path),
        width = 5.5, height = 7, units = "in")
 
 
@@ -665,14 +672,14 @@ att_pl_year <-
     tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
     tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
     
-    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
-    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    tons_pc_for_mae = ifelse(year >ban_year-3 & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >ban_year-3 & year < ban_year, y_0, 0) ,
     
     att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
     att = ifelse(year == ban_year +3, att, NA), 
     
     mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
-    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae = ifelse(year == ban_year -2, mae, NA), 
     mae_choice = mean(mae, na.rm=TRUE),
     
     reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)
@@ -692,14 +699,14 @@ att_pl_year_min <-
     tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
     tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
     
-    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
-    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    tons_pc_for_mae = ifelse(year >ban_year-3 & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >ban_year-3 & year < ban_year, y_0, 0) ,
     
     att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
     att = ifelse(year == ban_year +3, att, NA), 
     
     mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
-    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae = ifelse(year == ban_year -2, mae, NA), 
     mae_choice = mean(mae, na.rm=TRUE),
     
     reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)
@@ -719,14 +726,14 @@ att_pl_year_max <-
     tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
     tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
     
-    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
-    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    tons_pc_for_mae = ifelse(year >ban_year-3 & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >ban_year-3 & year < ban_year, y_0, 0) ,
     
     att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
     att = ifelse(year == ban_year +3, att, NA), 
     
     mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
-    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae = ifelse(year == ban_year -2, mae, NA), 
     mae_choice = mean(mae, na.rm=TRUE),
     
     reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)
@@ -744,14 +751,14 @@ mean_pl_year <-
     tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
     tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
     
-    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
-    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    tons_pc_for_mae = ifelse(year >ban_year-3 & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >ban_year-3 & year < ban_year, y_0, 0) ,
     
     att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
     att = ifelse(year == ban_year +3, att, NA), 
     
     mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
-    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae = ifelse(year == ban_year -2, mae, NA), 
     mae_choice = mean(mae, na.rm=TRUE),
     
     reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)
@@ -789,14 +796,14 @@ p_value_year <-
     tons_pc_for_att = ifelse(year >=ban_year, tons_pc, 0),
     tons_0_for_att = ifelse(year >=ban_year, y_0, 0) ,
     
-    tons_pc_for_mae = ifelse(year >=ban_year-3 & year < ban_year, tons_pc, 0),
-    tons_0_for_mae = ifelse(year >=ban_year-3 & year < ban_year, y_0, 0) ,
+    tons_pc_for_mae = ifelse(year >ban_year-3 & year < ban_year, tons_pc, 0),
+    tons_0_for_mae = ifelse(year >ban_year-3 & year < ban_year, y_0, 0) ,
     
     att = (sum(tons_pc_for_att)- sum(tons_0_for_att)) / sum(tons_0_for_att), 
     att = ifelse(year == ban_year +3, att, NA), 
     
     mae = ifelse(tons_pc_for_mae!=0, abs((tons_pc_for_mae-tons_0_for_mae)/tons_pc_for_mae) %>% mean(na.rm=TRUE) %>% {.*100}, NA), 
-    mae = ifelse(year == ban_year -3, mae, NA), 
+    mae = ifelse(year == ban_year -2, mae, NA), 
     mae_choice = mean(mae, na.rm=TRUE),
     
     reg_expect_tons = ifelse(year >=ban_year, y_0*(1-ca_reg_expect), NA)

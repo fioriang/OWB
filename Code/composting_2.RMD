@@ -10,21 +10,12 @@ editor_options:
 
 ```{r, include=FALSE}
 library(ggplot2)
-library(dplyr)
 library(tidyverse)
-library(ggpubr)
-library(stringr)
-library(fixest)
-library(knitr)
-library(zoo)
-library(tidyr)
-library(tictoc)
-library(purrr)
 library(extrafont)
-state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
-post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
-figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
-municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
+state_data_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03. State_Data"
+post_syp_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections"
+municipal_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03.1. Municipal Data"
 ```
 
 # Basic Data
@@ -123,23 +114,25 @@ do_many_times_v3 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test
 power_county_for_hist_composting <- function(treated_state, dt_initial, seed)
 {
   set.seed(seed)
+    ban_year <- bans[which(all_treated == treated_state)]
+
   if(treated_state=="MA")
   {
     dt <- dt_initial %>%group_by(county_id) %>% 
       mutate(
-        tons_pc = tons_pc*0.25 + .75*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.75 + 0.25*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "VT")
   {
     dt <- dt_initial %>%group_by(county_id) %>% 
       mutate(
-        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "CA")
   {
     dt <- dt_initial %>%group_by(county_id) %>% 
       mutate(
-        tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.75 + 0.25*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else {dt <- dt_initial}
   
@@ -148,7 +141,6 @@ power_county_for_hist_composting <- function(treated_state, dt_initial, seed)
   dt <- dt[!(dt$state_id %in% all_treated),] %>% as.data.frame
   donors <- unique(dt$county_id[!(dt$state_id%in% all_treated)])
   
-  ban_year <- bans[which(all_treated == treated_state)]
   
   plac <- lapply(seq(1:length(donors)),in_sample_R2_v2_composting,dt, donors=donors, iterations_scale=1000, option="V2", ban_year=ban_year, offset=2, samp =samp)
   
@@ -288,23 +280,25 @@ power_county_composting <- function(plac, treated_state)
 
 power_state_plac_composting <- function(treated_state, dt_state_initial, seed)
 {
+  ban_year <- bans[which(all_treated == treated_state)]
+
   if(treated_state == "MA")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*0.25 + .75*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.25 + 0.75*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "VT")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.5 +0.5*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "CA")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.75 + 0.25*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else{dt_state <- dt_state_initial}
   
@@ -314,7 +308,6 @@ power_state_plac_composting <- function(treated_state, dt_state_initial, seed)
   dt_state <- dt_state[!(dt_state$state_id %in% all_treated),] %>% as.data.frame
   donors_state <- unique(dt_state$county_id[!(dt_state$state_id%in% all_treated)])
   
-  ban_year <- bans[which(all_treated == treated_state)]
   
   plac <- lapply(seq(1:length(donors_state)),in_sample_R2_v2_for_log,dt_state, donors=donors_state, iterations_scale=1000, option="V2", ban_year=ban_year, offset=2, samp =samp, seed=seed)
 
@@ -325,23 +318,26 @@ power_state_plac_composting <- function(treated_state, dt_state_initial, seed)
 
 power_state_plac_composting_tr <- function(treated_state, dt_state_initial, seed)
 {
+  set.seed(seed)
+  ban_year <- bans[which(all_treated == treated_state)]
+  
   if(treated_state == "MA")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*0.25 + .75*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.25 + 0.75*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "VT")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "CA")
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*.75 + .25*ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.75 + 0.25*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else{dt_state <- dt_state_initial}
   
@@ -350,10 +346,9 @@ power_state_plac_composting_tr <- function(treated_state, dt_state_initial, seed
   #dt_state <- dt_state[!(dt_state$state_id %in% all_treated),] %>% as.data.frame
   #donors_state <- unique(dt_state$county_id[!(dt_state$state_id%in% treated_state)])
   samp = seq(3,7)
-  ban_year <- bans[which(all_treated == treated_state)]
   
   plac <- lapply(which(treated_counties_id==treated_state),in_sample_R2_v2_tr_for_log,dt_state, donors=donors_state, iterations_scale=1000, option="V2", ban_year=ban_year, offset=2, samp =samp, seed=seed)
-
+  
   return(plac)
   
 }
@@ -761,6 +756,26 @@ f <- as.data.frame(
 f <- f[!is.na(f$percentage),]
 threshold <- 3
 exclude2 <- unique(f$county_id[f$percentage > threshold | f$percentage < -threshold | f$percentage_1 > threshold | f$percentage_1 < -threshold])
+
+counties_that_exclude_threshold <- exclude2
+instances_that_catch_threshold <- (f %>% filter(percentage_1 > threshold | percentage_1 < -threshold)%>% nrow())/(f %>% filter(!(percentage_1 > threshold | percentage_1 < -threshold)) %>% nrow() + f %>% filter(percentage_1 > threshold | percentage_1 < -threshold)%>% nrow())
+pct_of_total_disposal <- dt %>% filter(county_id %in% counties_that_exclude_threshold) %>% ungroup %>% summarise(t=sum(tons)) %>% pluck("t") / 
+dt %>% filter(!county_id %in% counties_that_exclude_threshold) %>% ungroup %>%  summarise(t=sum(tons))%>% pluck("t")
+
+fileConn<-file(paste0(figure_path, "/number_of_excluded_counties_due_to_thershold_composting.txt"))
+writeLines(paste0(format(scales::number(counties_that_exclude_threshold %>% length(), accuracy = 1),big.mark=",",scientific=FALSE),''), fileConn)
+close(fileConn)
+
+
+fileConn<-file(paste0(figure_path, "/county_years_that_threshold_catches_composting.txt"))
+writeLines(paste0(format(scales::number(100*instances_that_catch_threshold, accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/pct_of_total_disposal_composting.txt"))
+writeLines(paste0(format(scales::number(100*pct_of_total_disposal, accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+
 dt <- dt[!dt$county_id %in% exclude2,]
 
 donors <- unique(dt$county_id)
@@ -786,29 +801,28 @@ samp = c(3:10)
 donors <- unique(dt_initial$county_id[!(dt_initial$state_id%in% all_treated)])
 treated_counties_id <- unique(dt_initial$county_id[dt_initial$state_id%in% all_treated])
 
-plac_for_histogram4_composting <- power_county_for_hist_composting("CA", dt_initial, 2)
+plac_for_histogram4_composting <- power_county_for_hist_composting("RI", dt_initial, 2)
 all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2")
 bans <- c(2014, 2014, 2016, 2014, 2016, 2015, 2016)
 plac_for_histogram6_composting <- power_county_for_hist_composting("M1", dt_initial, 2)
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
 
-# write.csv(plac_for_histogram4_composting %>% bind_rows(), "plac_for_histogram4_composting.csv", row.names=FALSE)
-# write.csv(plac_for_histogram6_composting %>% bind_rows(), "plac_for_histogram6_composting.csv", row.names=FALSE)
+write.csv(plac_for_histogram4_composting %>% bind_rows(), "plac_for_histogram4_composting.csv", row.names=FALSE)
+write.csv(plac_for_histogram6_composting %>% bind_rows(), "plac_for_histogram6_composting.csv", row.names=FALSE)
 ```
 
 
 ### Specs
 
 ```{r}
-
-power_county4_composting <- power_county_composting(plac_for_histogram4_composting %>% bind_rows(), "CA")
+power_county4_composting <- power_county_composting(plac_for_histogram4_composting %>% bind_rows(), "RI")
 power_county6_composting <- power_county_composting(plac_for_histogram6_composting %>% bind_rows(), "M1")
 
-# write.csv(rbind(
-#   power_county4_composting %>%  bind_rows(),
-#   power_county6_composting %>%  bind_rows()
-# ), "power_county_composting.csv", row.names=FALSE)
+write.csv(rbind(
+  power_county4_composting %>%  bind_rows(),
+  power_county6_composting %>%  bind_rows()
+), "power_county_composting.csv", row.names=FALSE)
 ```
 
 
@@ -817,8 +831,6 @@ power_county6_composting <- power_county_composting(plac_for_histogram6_composti
 ## Pre processing 
 
 ```{r}
-
-#power2 <- read.csv("power2_2.csv")
 
 year_start <-2010
 year_cutoff <- 2018
@@ -872,7 +884,7 @@ donors <- unique(dt$county_id[!(dt$state_id%in% all_treated)])
 ```{r}
 all_treated <- c("VT", "MA", "CA", "CT", "RI", "All")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016, 2015)
-samp=seq(3,8)
+samp=seq(3,7)
 power_state_plac3_composting <- power_state_plac_composting("CT", dt_state_initial, 1)
 power_state_plac5_composting <- power_state_plac_composting("VT", dt_state_initial, 1)
 
@@ -889,10 +901,10 @@ power_state3 <- power_state_fun2_composting(power_state_plac_data_composting %>%
 power_state5 <- power_state_fun2_composting(power_state_plac_data_composting %>% filter(treated_state=="VT"), "VT")
 
 write.csv(
-  rbind(
-    power_state3,
-    power_state5
-  ), "power_state_composting.csv", row.names=FALSE
+ rbind(
+   power_state3,
+   power_state5
+ ), "power_state_composting.csv", row.names=FALSE
 )
 ```
 
@@ -902,7 +914,7 @@ write.csv(
 
 ```{r}
 dt_state <- dt_state_initial
-samp = seq(3,8)
+samp = seq(3,7)
 treated_counties_id <- unique(dt_state$county_id[dt_state$state_id%in% all_treated])
 donors_state <- unique(dt_state$county_id)
 treated_counties_id <- c("CT", "VT")
@@ -933,7 +945,9 @@ tr_res_state_multiple %>%
   group_by(state_id, sample_size) %>% 
   filter(mape==min(mape)) %>% 
   summarise(unique(att))
-#write.csv(tr_res_state_multiple, "tr_res_state_multiple_composting.csv", row.names=FALSE)
+
+
+write.csv(tr_res_state_multiple, "tr_res_state_multiple_composting.csv", row.names=FALSE)
   
 ```
 
@@ -1063,8 +1077,8 @@ dt_municipal_initial <- dt_municipal
 ## Applying on the treated
 
 ```{r}
-all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2")# Never changes
-bans <- c(2015, 2015, 2016, 2014, 2016, 2015, 2016)
+all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2")
+bans <- c(2014, 2014, 2016, 2014, 2016, 2015, 2016)
 
 donors <- unique(dt_municipal$county_id[!(dt_municipal$state_id%in% all_treated)])
 treated_counties_id <- unique(dt_municipal$county_id[dt_municipal$state_id%in% all_treated])
@@ -1098,7 +1112,7 @@ write.csv(tr_res_municipal_multiple %>% bind_rows, "tr_res_municipal_multiple_co
 # Plot: Composting 
 
 ```{r}
-#tr_res_state_multiple <- read.csv("tr_res_state_multiple_composting.csv")
+tr_res_state_multiple <- read.csv("tr_res_state_multiple_composting.csv")
 composting_effect <- 
   rbind(
     read.csv("municipal_effect.csv") %>% 
@@ -1178,7 +1192,7 @@ bt_with_power_composting_data <-
           filter(att_max==min(att_max)) %>% 
           select(sample_size, ban_year, att_min, att_max, treated_state) %>%
           mutate(
-            treated_state = ifelse(treated_state=="CA", "boulderM2", "seattleM1")
+            treated_state = ifelse(treated_state=="RI", "boulderM2", "seattleM1")
           ),
         by = c("sample_size", "ban_year", "state_id"="treated_state")) %>% 
       select(state_id, ban_year, sample_size, type,att_min, att_max, att) %>% 
@@ -1195,7 +1209,8 @@ bt_with_power_composting_data <-
         power_low = 100*power_low,
         power_high = 100*power_high,
         att=100*att
-      )) %>% 
+      )
+    ) %>% 
   mutate(
     state_id = ifelse(state_id=="CT", "Connecticut", state_id),
     state_id = ifelse(state_id=="VT", "Vermont", state_id),
@@ -1342,7 +1357,7 @@ p_se_comp <-
 
 
 
-figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+
 
 fileConn<-file(paste0(figure_path, "/p_vt_comp.txt"))
 writeLines(paste0(format(scales::number(p_vt_comp, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)

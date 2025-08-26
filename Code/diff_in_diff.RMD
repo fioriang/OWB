@@ -19,7 +19,7 @@ library(extrafont)
 #figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
 #municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
 
-mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
+mypathname <-"/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans"
 municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
 state_data_path <- paste0(mypathname,"/03. State_Data")
 base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
@@ -317,6 +317,23 @@ fixest::etable(lm_state,lm_counties, lm_state_ca, lm_state_ct, lm_state_ma,lm_st
 # Parallel trend test
 ```{r}
 
+
+dt_did <- 
+  dt_did %>% 
+  filter(
+    county_id != "san franciscoCA"
+  ) %>% 
+  filter(year>=2006) %>% 
+  group_by(state_id) %>% 
+  mutate(
+    cat = max(ban_ind), 
+    seq = 1:n(), 
+    cat = seq*cat
+  )
+
+pa_trend_all_c <- feols(tons_pc~ seq+cat |state_id, dt_did %>% filter(year<2014)) 
+
+
 dt_did_state <- 
   dt_did_state %>%
   #mutate(
@@ -330,9 +347,9 @@ dt_did_state <-
     cat = seq*cat
   )
 
-feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2014)) %>% etable()
+pa_trend_all <- feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2014)) 
 
-feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2014, !state_id %in% c("CA", "RI"))) %>% etable(vcov=)
+
 feols(tons_pc~ seq+cat |state_id, dt_did_state %>% filter(year<2016, !state_id %in% c("CT", "MA", "VT"))) %>% etable(vcov="cluster")
 
 pa_trend_ca <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CT", "MA", "RI", "VT"), year < 2016))
@@ -341,7 +358,19 @@ pa_trend_ma <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter
 pa_trend_ri <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "MA", "VT"), year < 2016))
 pa_trend_vt <- fixest::feols(tons_pc ~ seq+cat|state_id, dt_did_state %>% filter(!state_id %in% c("CA", "CT", "MA", "RI"), year < 2014))
 
-etable(pa_trend_ca,pa_trend_ct, pa_trend_ma, pa_trend_ri, pa_trend_vt) #parallel trends assumption really holds only for MA
+etable(pa_trend_all, pa_trend_all_c, pa_trend_ca,pa_trend_ct, pa_trend_ma, pa_trend_ri, pa_trend_vt, vcov = "cluster", tex= TRUE, digits = "r3", digits.stats = "r2") #parallel trends assumption really holds only for MA
+
+
+
+# in the text, we write: 
+#Fourth, our results replicate with a simple two-way fixed effects difference-in-differences analysis (Table \ref{tab:did}). For Connecticut, although we cannot reject parallel trends in the pre-treatment period, we also cannot rule out a spurious sizable treatment effect stemming from non-parallel trends. Specifically, to check for parallel trends before the bans, we regress the log of disposal on a common linear trend, $\delta$, (for the treatment and the control group), and a treatment-group linear trend, $\omega$. We find that $\delta=-0.0344^{***}$ (with st. error 0.0034) and $\omega=-0.0012$ (with st. error $0.0034$). A back-of-the-envelope calculation reveals that this difference in trends over five years (2014--2018) could produce spurious treatment effects similar to the estimates ($(-0.0012-0.0034\cdot2)\cdot 5=-4\%$).
+
+delta = pa_trend_ct$coefficients[1] %>% round(4)
+
+omega = pa_trend_ct$coefficients[2] %>% round(4)
+omega_std = pa_trend_ct$sigma2 %>% round(4)
+
+(omega - omega_std*2)*5
 
 ```
 

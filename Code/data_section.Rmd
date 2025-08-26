@@ -18,9 +18,9 @@ library(ggnewscale)
 library(data.table)
 library(ggpubr)
 
-state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
-post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
-figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+state_data_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03. State_Data"
+post_syp_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections/"
 
 # state_data_path <- "/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/03. State_Data"
 # post_syp_path <- "/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/06. Post SYP"
@@ -911,9 +911,9 @@ map_plot_county <-
 # print(map_plot_county)
 # dev.off()
 
-# png(paste0(figure_path, "/map_plot_county_SC_only2018_alt2.png"), bg = "transparent", width = 11, height = 7, units = "in", res=600)
-# print(map_plot_county)
-# dev.off()
+png(paste0(figure_path, "/map_plot_county_SC_only2018_alt2.png"), bg = "transparent", width = 11, height = 7, units = "in", res=600)
+print(map_plot_county)
+dev.off()
 ```
 
 

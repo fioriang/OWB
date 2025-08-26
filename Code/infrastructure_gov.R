@@ -1,9 +1,10 @@
 #### Data ####
-
-composting_inf_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.1.Composting Infrastructure"
-controls_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data/00. Controls"
-figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"  
-
+library(tidyverse)
+composting_inf_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP/03.1.Composting Infrastructure"
+controls_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03. State_Data/00. Controls"
+post_syp_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP"
+figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections"  
+power2 <- read.csv("power2_impexp.csv")
 #packages <- c("gridExtra","reshape2","data.table","Hmisc","poibin","MASS","knitr","stargazer","e1071","akima","plotly","bayesm",'lfe','plm','pglm',
 #              "broom","webshot","plyr",'extrafont'
 #              ,'tidyverse','RColorBrewer','scales','gsubfn',"gridExtra","reshape2","data.table","Hmisc","poibin","MASS","knitr","stargazer","e1071","akima","plotly",
@@ -24,15 +25,6 @@ figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figure
 composting_all_facilities <- read.csv(paste0(composting_inf_path,"/composting_infrastructure_all_states_gov.csv")) %>% as_tibble() %>%  filter(data_type=="gov")
 composting_capacities <- read.csv(paste0(composting_inf_path,"/composting_capacity_all_states.csv")) %>% as_tibble()
 
-#Convert the above both data tables
-library(data.table)
-
-composting_all_facilities <- data.table(composting_all_facilities)
-composting_capacities <- data.table(composting_capacities)
-
-
-
-
 cities <- 
   read.csv(
     paste0(controls_path,"/uscities.csv")
@@ -42,12 +34,6 @@ cities <-
     city = str_to_lower(city),
   ) %>% 
   select(city, state_id, county_name, lat, lng, population)
-
-#make cities a data table
-
-cities <- data.table(cities)
-
-
 
 state_area <- #these data come from an R library, we use this for the "coverage" metric of composting infrastructure
   tibble(
@@ -96,7 +82,7 @@ ut_colors <- c(
   rgb(156, 173, 183, max=255), #light grey
   rgb(191,87,0,alpha=50, max=255))# ut orange
 
-mypathname <-"C:/Users/fa24575/Dropbox/Organic Waste Bans"
+mypathname <-"/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans"
 state_data_path <- paste0(mypathname,"/03. State_Data")
 population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
 population <- cbind(population[1:2], stack(population[3:31]))
@@ -359,7 +345,7 @@ composting_facilities_map <-
   ) 
 
 
-
+# 
 ggsave(
   #this is just the map, used in presentations
   composting_facilities_map, filename = "composting_facilities_map.pdf", device = cairo_pdf,
@@ -434,32 +420,41 @@ infrastructure_plot_2 <-
 
 map_and_densities <-  ggpubr::ggarrange(composting_facilities_map, infrastructure_plot_2, nrow=1, widths = c(2, 1))
 ################### Fig 4: saving ############################
-# ggsave(
-#   map_and_densities, filename = "map_and_densities.pdf", device = cairo_pdf,
-#   path= figure_path,
-#   width = 17, height = 6.5, units = "in")
-# 
+ggsave(
+  map_and_densities, filename = "map_and_densities.pdf", device = cairo_pdf,
+  path= figure_path,
+  width = 17, height = 6.5, units = "in")
 
-# ggsave(
-#   infrastructure_plot_2, filename = "densities_for_pres.pdf", device = cairo_pdf,
-#   path= figure_path,
-#   width = 8, height = 7, units = "in")
+
+ggsave(
+  infrastructure_plot_2, filename = "densities_for_pres.pdf", device = cairo_pdf,
+  path= figure_path,
+  width = 8, height = 7, units = "in")
 
 
 #MA is % higher than the second highest, Vermont: 
-(infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance") - infrastructure_plot_data %>% filter(state_id=="VT") %>% pluck("min_distance"))/ infrastructure_plot_data %>% filter(state_id=="VT") %>% pluck("min_distance")
+ma_inf_comparison = (infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance") - infrastructure_plot_data %>% filter(state_id=="VT") %>% pluck("min_distance"))/ infrastructure_plot_data %>% filter(state_id=="VT") %>% pluck("min_distance")
+fileConn<-file(paste0(figure_path, "/ma_inf_comparison_with_second_highest.txt"))
+writeLines(paste0(format(round(ma_inf_comparison*100,0),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
 
-(infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance") - infrastructure_plot_data %>% ungroup %>% summarise(m=mean(min_distance)) %>% pluck("m"))/ infrastructure_plot_data %>% ungroup %>% summarise(m=mean(min_distance)) %>% pluck("m")
+ma_inf_comparison = (infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance") - infrastructure_plot_data %>% ungroup %>% summarise(m=mean(min_distance)) %>% pluck("m"))/ infrastructure_plot_data %>% ungroup %>% summarise(m=mean(min_distance)) %>% pluck("m")
+fileConn<-file(paste0(figure_path, "/ma_inf_comparison_with_mean.txt"))
+writeLines(paste0(format(round(ma_inf_comparison*100,0),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
 
 #MI is % less than the Massachusetts: 
-(infrastructure_plot_data %>% filter(state_id=="MI") %>% pluck("min_distance") - infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance"))/ infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance")
+mi_inf_compared_MA <- (infrastructure_plot_data %>% filter(state_id=="MI") %>% pluck("min_distance") - infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance"))/ infrastructure_plot_data %>% filter(state_id=="MA") %>% pluck("min_distance")
+fileConn<-file(paste0(figure_path, "/mi_inf_compared_MA.txt"))
+writeLines(paste0(format(round(abs(mi_inf_compared_MA)*100,0),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
 
 (infrastructure_plot_data %>% filter(state_id=="MI") %>% pluck("min_distance") - infrastructure_plot_data %>% ungroup %>% summarise(m=mean(min_distance)) %>% pluck("m"))/ infrastructure_plot_data %>% ungroup %>% summarise(m=mean(min_distance)) %>% pluck("m")
 
 
 
 
-#### Fig. 3: Mechanism plot ####
+#### Fig. 3: Pre-work ####
 
 bt_with_power_data <- read.csv("bt_with_power_data.csv") %>% as_tibble()
 
@@ -474,7 +469,38 @@ effect =
 food_generators_MA <-  read.csv(paste0(post_syp_path, "/03. Bans/food_generators_MA.csv"))
 food_generators_VT <-  read.csv(paste0(post_syp_path,"/03. Bans/food_generators_VT.csv"))
 
-##################### Enforcement ###############################
+##################### Fig. 3: Enforcement ###############################
+
+## MA enforcement 
+
+
+ma_enforcements <- read.csv(paste0(post_syp_path, "/03. Bans/MA/wb_enforcements.csv"))
+
+ma_enforcements_sum <- 
+  ma_enforcements %>% as_tibble() %>% 
+  mutate(
+    with_fine = ifelse(PenaltyCashAssessed>0, 1, 0)
+  ) %>% 
+  mutate(
+    is_organic = 0, 
+    is_organic = 
+      case_when(
+        str_detect(Comment, "ORGANIC") ~ 1, 
+        str_detect(Comment, "FOOD") ~ 1, 
+        str_detect(Comment, "ORGAIN") ~ 1, 
+        str_detect(SiteName, "COSTCO")~1, 
+        str_detect(SiteName, "NEW ENGLAND COMMISSARY, INC.") ~ 1
+      )
+  ) %>% 
+  filter(
+    DocumentNumber!=164032 #exclude Costco that is expliticly only for Cardboard
+  ) %>% 
+  filter(is_organic==1) %>% 
+  summarise(total_penalty = sum(PenaltyCashAssessed), total_actions = n())
+
+
+## CA Enforcement 
+
 enforcement_counties <- 
   c("alamedaCA", "butteCA", "contra costaCA", "el doradoCA", "humboldtCA", "kernCA", "kingsCA", "lakeCA", 
     "maderaCA", "mendocinoCA", "montereyCA", "napaCA", "nevadaCA", "riversideCA", "sacramentoCA", "san diegoCA", 
@@ -500,16 +526,19 @@ ca_gen <-
   pluck("generators")
 
 
-# fines_al_food <- 2400*0.19/5  #2400 is the total citations that they have had, 0.19 the fraction of organic, 5 the total years for data
-# #food waste actions = total fines in 19-20 * fraction of organics violations OR total fines * fraction of organics / 5
-# monetary_fines_alameda_food <- fines_al_food*100
-# 
-# 
-# monetary_fines_massachusetts_food <- 31544 # from FOIA between 2016 and 2021
-# monetary_fines_massachusetts_food/ma_gen/(2021-2016+1)
+fines_al_food <- 2400*0.19/5  #2400 is the total citations that they have had, 0.19 the fraction of organic, 5 the total years for data
+#food waste actions = total fines in 19-20 * fraction of organics violations OR total fines * fraction of organics / 5
+monetary_fines_alameda_food <- fines_al_food*100
+monetary_fines_alameda_food/ca_gen
+
+monetary_fines_massachusetts_food <- ma_enforcements_sum %>% pluck("total_penalty") # from FOIA between 2016 and 2021
+#monetary_fines_massachusetts_food <- 31544 # from FOIA between 2016 and 2021
+monetary_fines_massachusetts_food/ma_gen/(2021-2016+1)
 
 
-enforcement <- 
+
+
+enforcement_old <- 
   c(
     (3000*0.19+36/0.19)/ ca_gen, # from Alameda report (3,000 inspections, 0.19 fraction of organics-related violations), there are 3,000 inspections in 2019 (approx 19% of those refer to organics) + 36 violations (divide by 19% to find the number of inspections, 19% is the inspection to violation ratio in Alameda, we assume it is the same) 
     0,
@@ -518,11 +547,41 @@ enforcement <-
     (432)/vt_gen/(2020-2014+1) # from FOIA, 432 total inspections between 2020 and 2014
   )
 
+
+
+enforcement <- 
+  c(
+    (3000*0.19+36/0.19)/ ca_gen, # from Alameda report (3,000 inspections, 0.19 fraction of organics-related violations), there are 3,000 inspections in 2019 (approx 19% of those refer to organics) + 36 violations (divide by 19% to find the number of inspections, 19% is the inspection to violation ratio in Alameda, we assume it is the same) 
+    0,
+    45000/(2023-2014+1)/ ma_gen*(ma_enforcements_sum %>% pluck("total_actions")/933), # from FOIA: 45,000 is the total inspections between 2014--2023, 95 is the total number of organics citations/violations and 933 is the total number of waste related violations
+    0,
+    (432)/vt_gen/(2020-2014+1) # from FOIA, 432 total inspections between 2020 and 2014
+  )
+
+
+#Table S10
+
+tibble(
+  state_id  = c("CA", "CT", "MA", "RI", "VT"), 
+  inspections_per_year = c(3000*0.19+36/0.19, # from Alameda report (3,000 inspections, 0.19 fraction of organics-related violations), there are 3,000 inspections in 2019 (approx 19% of those refer to organics) + 36 violations (divide by 19% to find the number of inspections, 19% is the inspection to violation ratio in Alameda, we assume it is the same) 
+                           0, 
+                           45000/(2023-2014+1)*(ma_enforcements_sum %>% pluck("total_actions")/933), 
+                           0, 
+                           (432)/(2020-2014+1)
+                           ), 
+  inspections_per_generator = enforcement, 
+  fines_per_generator = c(monetary_fines_alameda_food/ca_gen, 0, monetary_fines_massachusetts_food/ma_gen/(2021-2016+1), 0,0), 
+)
+
 # MA's enforcement xx % higher than the second best
 
-(45000/(2023-2014+1)/ ma_gen*(95/933)-(432)/vt_gen/(2020-2014+1))/((432)/vt_gen/(2020-2014+1))
+ma_enf_compared_to_second_highest <- (45000/(2023-2014+1)/ ma_gen*(ma_enforcements_sum %>% pluck("total_actions")/933)-(432)/vt_gen/(2020-2014+1))/((432)/vt_gen/(2020-2014+1))
+fileConn<-file(paste0(figure_path, "/ma_enf_compared_to_second_highest.txt"))
+writeLines(paste0(format(round(ma_enf_compared_to_second_highest*100,0),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
 
 
+##################### Fig. 3: Mechanism Plot ###############################
 
 
 mech1 <- 
@@ -597,18 +656,18 @@ mech1_plot <-
   geom_text(
     aes(label = state_id,
         color = ind, 
-        vjust = 
-          case_when(
-            state_id=="CA"~ +1.5,
-            state_id=="CT"~ -0.3,
-            state_id=="RI"~ 0
-          ),
+        # vjust = 
+        #   case_when(
+        #     #state_id=="CA"~ +1.5,
+        #     #state_id=="CT"~ -0.3,
+        #     state_id=="RI"~ 0
+        #   ),
           
           #ifelse(state_id%in%c("CA"), -0.5, ifelse(state_id=="CT", -1.2,0)), 
         hjust = 
           case_when(
-            state_id=="CA"~ +1,
-            state_id=="CT"~ -0.5,
+            state_id=="CA"~ -0.3,
+            state_id=="CT"~ -0.3,
             state_id=="RI"~ -0.3,
             state_id=="MA"~ -0.3,
             state_id=="VT"~ -0.3,
@@ -630,7 +689,7 @@ mech1_plot <-
   labs(x="", y="", color="Average treatment effect on the treated:")+
   geom_hline(yintercept = 0, linetype = "dotted", color = ut_colors[5]) +
   labs(y="Average treatment effect on the treated (%)")+
-  scale_y_continuous(limits = c(-8,2.5), breaks= seq(-8,3, by =2))+
+  scale_y_continuous(limits = c(-11,3), breaks= seq(-12,3, by =2))+
   theme(
     legend.position = "top",
     strip.background = element_rect(color = "white", fill = "white"),
@@ -657,11 +716,11 @@ mech1_plot <-
   ))
 
 
-# ggsave(
-#   mech1_plot, filename = "effects_mechanismalt3.pdf", device = cairo_pdf,
-#   path= figure_path,
-#   width = 11, height = 4, units = "in")
-# 
+ggsave(
+  mech1_plot, filename = "effects_mechanismalt3.pdf", device = cairo_pdf,
+  path= figure_path,
+  width = 11, height = 4, units = "in")
+
 
 
 # 
