@@ -57,10 +57,9 @@ These files include intermediate data that have been produced at midpoints in th
 	c. (Robustness check) Effects of the bans on composting (composting_effect.csv)   
 
 2. Time series of actual and synthetic disposal    
-	a. Detailed results of the time series for state-level and city-level bans (xy_plot_data.csv)   
 	a. Summarised results of the ATT estimates for state-level and city-level bans (bt_with_power_data.csv)   
-	c. (Robustness check) Detailed results of the time series for state-level bans (xy_plot_data_passage.csv)   
-	c. (Robustness check) Detailed results of the time series when using methane emissions as the main outcome (sc_data_ghg.csv)   
+	b. (Robustness check) Detailed results of the time series for state-level bans (xy_plot_data_passage.csv)   
+	c. (Robustness check) Detailed results of the time series when using methane emissions as the main outcome, three files for three different specications (sc_data_ghg_spec1.csv through sc_data_ghg_spec3.csv)   
 	d. (Robustness check) Detailed results of the California provision placebo distribution (year_placebo.csv)   
 	e. (Robustness check) Summarised results of the estimates of the ATT when using composting as the main outcome for state-level (tr_res_state_multiple_composting.csv) & for the city-level bans (tr_res_municipal_multiple_composting.csv)   
 
