@@ -65,7 +65,8 @@ These files include intermediate data that have been produced at midpoints in th
 	e. (Robustness check) Summarised results of the estimates of the ATT when using composting as the main outcome for state-level (tr_res_state_multiple_composting.csv) & for the city-level bans (tr_res_municipal_multiple_composting.csv)   
 
 3. Placebo distributions results 
-	a. Detailed results of the state-level placebo distribution (power_state_plac_2025_seed1--seed10.csv) for 10 different input seeds 
+	a. Detailed results of the state-level placebo distribution (power_state_plac_2025_seed1--seed10.csv) for 10 different input seeds
+
 	b. (Robustness check) Detailed results of the couty-level placebo distribution (plac_for_histogram4.csv, plac_for_histogram6.csv)   
 	c. (Robustness check) Summarised results of the county-level placebo distribution (power_county.csv)   
 	d. (Robustness check) Detailed results of the SF placebo distribution (plac_sf.csv)   
