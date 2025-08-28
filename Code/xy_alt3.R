@@ -474,7 +474,7 @@ power_state_fun2 <- function(plac, treated_state)
       att_min = sort(att)[2], #because our sample is not super large the quantile 0.025 averages across observations and gives us an att that does not exist. We could choose either the largest or the 2nd largest att as our quantile. Given that the round(0.025*(22)+1) gives us 2 we choose the 2nd observation (that is because 22 is the sample size)
       att_max = sort(att, decreasing = TRUE)[2],
       att_median = mean(att)
-    ) 
+    )
   
   
   specs <-
@@ -518,7 +518,7 @@ pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
     ) %>% 
     group_by(county_id) %>% 
     mutate(
-      pools = sample(nrow(donors),n) %>% list()
+      pools = sample(nrow(donors),n) %>% list(), .groups = "drop"
     )%>% 
     ungroup #choose at random five states and consider them treated
   
@@ -542,15 +542,54 @@ pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
       att=mean(att), # the mean serves two purposes: 1) if there's two SC with the same MAPE take the avg of the two 2) because of the way that the dataset is structured for each chosen donor in the SC there's one line (where the ATT, R_sq and MAPE are the same ofc) to collapse these lines we use the mean 
       r_sq=mean(r_sq), 
       mape=mean(mape), 
-      cf= mean(cf)) %>% 
+      cf= mean(cf), 
+      .groups = "drop") %>% 
     group_by(sample_size, ban_year) %>% 
     summarise(
       att = sum(att*cf)/sum(cf), #and finally, to find the ATT of the aggregate case, take the mean of the five chosen states. 
       mape = mean(mape), 
       r_sq = mean(r_sq), 
-      i
+      i, 
+      .groups = "drop"
     ) %>% 
     ungroup
+}
+
+disposal_spec_states_function <- function(file_name)
+{
+  power_state_plac_data <- read.csv(filename)
+  power_state1 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="MA"), "MA") 
+  power_state2 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CA"), "CA")
+  power_state3 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CT"), "CT")
+  power_state4 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="RI"), "RI")
+  power_state5 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="VT"), "VT")
+  power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
+  pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , 
+                           r_threshold = 0, mape_threshold = Inf, n =5, seed=5)
+  power_state6 <- 
+    pool_estimates %>% 
+    bind_rows %>%  
+    group_by(sample_size, ban_year) %>% 
+    summarise(
+      att_min = sort(att)[2],
+      att_max = sort(att, decreasing = TRUE)[2],
+      att_median = median(att)
+    ) %>% mutate(
+      specification = "State Pooled", year = 2015, treated_state="All"
+    )
+  
+  rbind(
+    power_state1%>%  bind_rows(),
+    power_state2%>%  bind_rows(),
+    power_state3%>%  bind_rows(),
+    power_state4%>%  bind_rows(),
+    power_state5%>%  bind_rows(),
+    power_state6%>%  bind_rows()
+  ) %>% 
+    group_by(treated_state) %>% 
+    filter(att_min == max(att_min))
+  
+  
 }
 
 
@@ -1863,41 +1902,6 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
   return(p)
 }
 
-disposal_spec_states_function <- function(file_name)
-{
-  power_state_plac_data <- read.csv(filename)
-  power_state1 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="MA"), "MA") 
-  power_state2 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CA"), "CA")
-  power_state3 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CT"), "CT")
-  power_state4 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="RI"), "RI")
-  power_state5 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="VT"), "VT")
-  power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
-  pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , r_threshold = 0, mape_threshold = Inf, n =5, seed=7)
-  power_state6 <- 
-    pool_estimates %>% 
-    bind_rows %>%  
-    group_by(sample_size, ban_year) %>% 
-    summarise(
-      att_min = sort(att)[2],
-      att_max = sort(att, decreasing = TRUE)[2],
-      att_median = median(att)
-    ) %>% mutate(
-      specification = "State Pooled", year = 2015, treated_state="All"
-    )
-  
-  rbind(
-    power_state1%>%  bind_rows(),
-    power_state2%>%  bind_rows(),
-    power_state3%>%  bind_rows(),
-    power_state4%>%  bind_rows(),
-    power_state5%>%  bind_rows(),
-    power_state6%>%  bind_rows()
-  ) %>% 
-    group_by(treated_state) %>% 
-    filter(att_min == max(att_min))
-  
-  
-}
 
 ######## Fig.2: left panel ##############
 filename = "power_state_plac_2025_seed_1_alt3.csv"
@@ -1930,7 +1934,7 @@ xy_plot_data <-
   )
 # 
 
-pooled_seed=2
+pooled_seed=1
 xy_plot_data_uncentered <-
   rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
     xy_plot_data_uncentered_function("CA",pooled_sample_size,pooled_seed), # f is the chosen sample size -2
@@ -1942,11 +1946,11 @@ xy_plot_data_uncentered <-
 
 # 
 #   # get the donors of each treated states
-donors_CA <- xy_plot_data_function_donors("CA",chosen_sample_size_CA,1) # f is the chosen sample size -2
-donors_CT <- xy_plot_data_function_donors("CT",chosen_sample_size_CT,1)
-donors_MA <- xy_plot_data_function_donors("MA",chosen_sample_size_MA,1)
-donors_RI <- xy_plot_data_function_donors("RI",chosen_sample_size_RI,1)
-donors_VT <- xy_plot_data_function_donors("VT",chosen_sample_size_VT,1)
+# donors_CA <- xy_plot_data_function_donors("CA",chosen_sample_size_CA,1) # f is the chosen sample size -2
+# donors_CT <- xy_plot_data_function_donors("CT",chosen_sample_size_CT,1)
+# donors_MA <- xy_plot_data_function_donors("MA",chosen_sample_size_MA,1)
+# donors_RI <- xy_plot_data_function_donors("RI",chosen_sample_size_RI,1)
+# donors_VT <- xy_plot_data_function_donors("VT",chosen_sample_size_VT,1)
 
 # this is to save and load the datasets. for exact reproduction of the paper's figures please load the "xy_plot_data.csv"
 # 
@@ -2217,8 +2221,7 @@ xy_and_power_2
 ##### Fig.2: all together #####
 bt_with_power_data
 
-# ggsave(
-#   xy_and_power_2, filename = "xy_and_power_2025.pdf", device = cairo_pdf,
-#   path= figure_path,
-#   width = 10, height = 9, units = "in")
-# 
+ggsave(
+  xy_and_power_2, filename = "xy_and_power_2025_alt3.pdf", device = cairo_pdf,
+  path= figure_path,
+  width = 10, height = 9, units = "in")

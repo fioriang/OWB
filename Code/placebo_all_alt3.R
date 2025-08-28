@@ -222,7 +222,7 @@ in_sample_R2_v2 <- function (k, dt, donors,iterations_scale, option, ban_year, o
     all <- 
       all %>% 
       as_tibble %>%
-      filter(r_sq>0) %>% 
+      #filter(r_sq>0) %>% 
       arrange(mape) %>% 
       slice(1:50) %>% # keep the 100 that have the lowest MAPE
       mutate(

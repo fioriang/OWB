@@ -689,7 +689,7 @@ mech1_plot <-
   labs(x="", y="", color="Average treatment effect on the treated:")+
   geom_hline(yintercept = 0, linetype = "dotted", color = ut_colors[5]) +
   labs(y="Average treatment effect on the treated (%)")+
-  scale_y_continuous(limits = c(-11,3), breaks= seq(-12,3, by =2))+
+  scale_y_continuous(limits = c(-10.6,3), breaks= seq(-12,3, by =2))+
   theme(
     legend.position = "top",
     strip.background = element_rect(color = "white", fill = "white"),
@@ -755,7 +755,7 @@ ggsave(
 
 #############  Fig. S11: Simplicity ################
 
-complexity_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity"
+complexity_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP/03.2.Complexity"
 summaries_complexity_claude <- read.csv(paste0(complexity_path, "/complexity_claude.csv"))
 set.seed(4)
 epsilon <- rnorm(750, 0, 0.001) # to resolve same rank

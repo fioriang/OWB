@@ -781,7 +781,7 @@ writeLines(paste0(format(scales::number(att_pl_year_min*100, accuracy = 0.01),bi
 close(fileConn)
 
 
-reject_year <- -att_pl_year +att_pl_year_max + mean_pl_year %>% abs()
+reject_year <- abs(att_pl_year) +att_pl_year_max + abs(mean_pl_year) %>% abs()
 
 fileConn<-file(paste0(figure_path, "/reject_year.txt"))
 writeLines(paste0(format(scales::number(reject_year*100, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)

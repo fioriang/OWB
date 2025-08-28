@@ -474,7 +474,7 @@ power_state_fun2 <- function(plac, treated_state)
       att_min = sort(att)[2], #because our sample is not super large the quantile 0.025 averages across observations and gives us an att that does not exist. We could choose either the largest or the 2nd largest att as our quantile. Given that the round(0.025*(22)+1) gives us 2 we choose the 2nd observation (that is because 22 is the sample size)
       att_max = sort(att, decreasing = TRUE)[2],
       att_median = mean(att)
-    ) 
+    )
   
   
   specs <-
@@ -518,7 +518,7 @@ pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
     ) %>% 
     group_by(county_id) %>% 
     mutate(
-      pools = sample(nrow(donors),n) %>% list()
+      pools = sample(nrow(donors),n) %>% list(), .groups = "drop"
     )%>% 
     ungroup #choose at random five states and consider them treated
   
@@ -542,18 +542,55 @@ pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
       att=mean(att), # the mean serves two purposes: 1) if there's two SC with the same MAPE take the avg of the two 2) because of the way that the dataset is structured for each chosen donor in the SC there's one line (where the ATT, R_sq and MAPE are the same ofc) to collapse these lines we use the mean 
       r_sq=mean(r_sq), 
       mape=mean(mape), 
-      cf= mean(cf)) %>% 
+      cf= mean(cf), 
+      .groups = "drop") %>% 
     group_by(sample_size, ban_year) %>% 
     summarise(
       att = sum(att*cf)/sum(cf), #and finally, to find the ATT of the aggregate case, take the mean of the five chosen states. 
       mape = mean(mape), 
       r_sq = mean(r_sq), 
-      i
+      i, 
+      .groups = "drop"
     ) %>% 
     ungroup
 }
 
-
+disposal_spec_states_function <- function(file_name)
+{
+  power_state_plac_data <- read.csv(filename)
+  power_state1 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="MA"), "MA") 
+  power_state2 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CA"), "CA")
+  power_state3 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CT"), "CT")
+  power_state4 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="RI"), "RI")
+  power_state5 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="VT"), "VT")
+  power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
+  pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , 
+                           r_threshold = 0, mape_threshold = Inf, n =5, seed=5)
+  power_state6 <- 
+    pool_estimates %>% 
+    bind_rows %>%  
+    group_by(sample_size, ban_year) %>% 
+    summarise(
+      att_min = sort(att)[2],
+      att_max = sort(att, decreasing = TRUE)[2],
+      att_median = median(att)
+    ) %>% mutate(
+      specification = "State Pooled", year = 2015, treated_state="All"
+    )
+  
+  rbind(
+    power_state1%>%  bind_rows(),
+    power_state2%>%  bind_rows(),
+    power_state3%>%  bind_rows(),
+    power_state4%>%  bind_rows(),
+    power_state5%>%  bind_rows(),
+    power_state6%>%  bind_rows()
+  ) %>% 
+    group_by(treated_state) %>% 
+    filter(att_min == max(att_min))
+  
+  
+}
 do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,
                                           y_train, y_test, y_att, n_don, sample_size)
 {
@@ -1035,14 +1072,7 @@ xy_plot_data_function_cities <- function (k, f, seed) #this function creates the
     paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
   )
   
-  if(treated_location%in% c("VT", "CA", "MA"))
-  {
-    all <-
-      all %>%
-      as_tibble %>%
-      filter(r_sq > 0)
-  }
-  
+
   all <- 
     all %>% 
     as_tibble %>% 
@@ -1899,44 +1929,10 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
   return(p)
 }
 
-disposal_spec_states_function <- function(file_name)
-{
-  power_state_plac_data <- read.csv(filename)
-  power_state1 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="MA"), "MA") 
-  power_state2 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CA"), "CA")
-  power_state3 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="CT"), "CT")
-  power_state4 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="RI"), "RI")
-  power_state5 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="VT"), "VT")
-  power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
-  pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , r_threshold = 0, mape_threshold = Inf, n =5, seed=7)
-  power_state6 <- 
-    pool_estimates %>% 
-    bind_rows %>%  
-    group_by(sample_size, ban_year) %>% 
-    summarise(
-      att_min = sort(att)[2],
-      att_max = sort(att, decreasing = TRUE)[2],
-      att_median = median(att)
-    ) %>% mutate(
-      specification = "State Pooled", year = 2015, treated_state="All"
-    )
-  
-  rbind(
-    power_state1%>%  bind_rows(),
-    power_state2%>%  bind_rows(),
-    power_state3%>%  bind_rows(),
-    power_state4%>%  bind_rows(),
-    power_state5%>%  bind_rows(),
-    power_state6%>%  bind_rows()
-  ) %>% 
-    group_by(treated_state) %>% 
-    filter(att_min == max(att_min))
-  
-  
-}
+
 
 ######## Fig.2: left panel ##############
-filename = "power_state_plac_2025_seed2.csv"
+filename = "power_state_plac_2025_seed5.csv"
 chosen_sample_size = disposal_spec_states_function(filename)
 
 chosen_sample_size_CA <- chosen_sample_size %>% filter(treated_state=="CA") %>% pluck("sample_size")-2
@@ -1953,20 +1949,20 @@ set.seed(2)
 
 xy_plot_data <-
   rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
-    xy_plot_data_function("CA",chosen_sample_size_CA,1), # f is the chosen sample size -2
+    xy_plot_data_function("CA",chosen_sample_size_CA,5), # f is the chosen sample size -2
     xy_plot_data_function("CT",chosen_sample_size_CT,1),
     xy_plot_data_function("MA",chosen_sample_size_MA,1),
     xy_plot_data_function("RI",chosen_sample_size_RI,1),
-    xy_plot_data_function("VT",chosen_sample_size_VT,1),
+    xy_plot_data_function("VT",chosen_sample_size_VT,5),
 
-    xy_plot_data_function_cities(seattle_number, 2, 7) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
-    xy_plot_data_function_cities(boulder_number, 2, 7) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    xy_plot_data_function_cities(seattle_number, 4, 1) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
+    xy_plot_data_function_cities(boulder_number, 2, 1) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
     xy_plot_data_function_sf(2,1 )  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
 
   )
 # 
 
-pooled_seed=2
+pooled_seed=3
 xy_plot_data_uncentered <-
   rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
     xy_plot_data_uncentered_function("CA",pooled_sample_size,pooled_seed), # f is the chosen sample size -2
@@ -2159,11 +2155,11 @@ bt_with_power_2 <-
   # All geoms with their color aesthetics
   geom_errorbar(aes(xmin = power_low, xmax = power_high, color = "Placebo"), 
                 width = 0.2, size = 0.5) +
-  geom_point(aes(color = "Estimate"), size = 1.5) +
   geom_errorbar(aes(xmin = -100*mean_effect, xmax = -100*mean_effect, color = "Our Exp."), 
                 linewidth = 1, width = 0.2) +
   geom_errorbar(aes(xmin = -100*reg_effect, xmax = -100*reg_effect, color = "Regulators' Exp."), 
                 linewidth = 1, width = 0.2) +
+  geom_point(aes(color = "Estimate"), size = 1.5) +
   
   # Single color scale for all elements
   scale_color_manual(
@@ -2667,7 +2663,7 @@ mc_function_all_inclusive <- function(filename){
         xy_plot_data_uncentered_function("RI",pooled_sample_size,seed),
         xy_plot_data_uncentered_function("VT",pooled_sample_size,seed)
       )
-  
+    
     
     res_pooled <- 
       xy_plot_data_uncentered %>% 
@@ -2687,12 +2683,12 @@ mc_function_all_inclusive <- function(filename){
     
     
     return(res)
-    }
-    
+  }
+  
   f <- lapply(1:200,monte_carlo_function)
-    
+  
   return(f %>% bind_rows())
-    
+  
 }
 pl_seed = 1
 
@@ -2700,10 +2696,10 @@ pl_seed = 1
 p_values_for_mc <- function(filename, f) # f is the monte_carlo_plseed_lead_pl_seed.csv results, aka the different ATTs
 {
   chosen_sample_size = disposal_spec_states_function(filename) 
-  
+  power_state_plac_data = read.csv(filename)
   # for the aggregate case
   power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
-  pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , r_threshold = 0, mape_threshold = Inf, n =5, seed=7)
+  pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , r_threshold = 0, mape_threshold = Inf, n =5, seed=5)
   
   
   
@@ -2769,7 +2765,7 @@ mc_summary <- function(filename, f, pl_seed) # f is the monte_carlo_plseed_lead_
 
 
 # this runs the different experiments and saves them--takes a lot of time
-for (pl_seed in 1:10)
+for (pl_seed in c(1:4))
 {
   filename=paste0("power_state_plac_2025_seed", pl_seed,".csv")
   f <- mc_function_all_inclusive(filename)
@@ -2790,7 +2786,7 @@ for (pl_seed in 1:10)
 mc <- mc %>% filter(county_id!=0)
 
 mc_summary_res <- 
-  mc %>%  filter(pl_seed==2) %>%  
+  mc %>%  filter(pl_seed==5) %>%  
   group_by(county_id) %>% 
   summarise(
     med_att = median(actual_treatment_effect), 
@@ -2903,14 +2899,14 @@ close(fileConn)
 #### MC for cities ####
 monte_carlo_function_for_cities <- function(seed)
 {
-  xy_plot_data = 
+  xy_plot_data1 = 
     rbind(
-      xy_plot_data_function_cities(seattle_number, 2, seed) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
+      xy_plot_data_function_cities(seattle_number, 4, seed) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
       xy_plot_data_function_cities(boulder_number, 2, seed) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
     )
   
   res <- 
-    xy_plot_data %>% 
+    xy_plot_data1 %>% 
     group_by(county_id, attempt) %>%
     filter(
       attempt==1,
@@ -2933,5 +2929,6 @@ monte_carlo_function_for_cities <- function(seed)
   return(res)
 }
 
-f <- lapply(1:100, monte_carlo_function_for_cities)
+f <- lapply(1:10, monte_carlo_function_for_cities)
 
+f %>% bind_rows()

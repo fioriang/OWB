@@ -206,7 +206,7 @@ in_sample_R2_v2 <- function (k, dt, donors,iterations_scale, option, ban_year, o
     all <- 
       all %>% 
       as_tibble %>%
-      filter(r_sq>0) %>% 
+      #filter(r_sq>0) %>% 
       arrange(mape) %>% 
       slice(1:50) %>% # keep the 100 that have the lowest MAPE
       mutate(
@@ -478,7 +478,7 @@ power_state_plac <- function(treated_state, dt_state_initial, seed)
   {
     dt_state <- dt_state_initial %>%group_by(state_id) %>% 
       mutate(
-        tons_pc = tons_pc*.5 + .5*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
+        tons_pc = tons_pc*0.5 + 0.5*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
       )
   }else if(treated_state == "CA")
   {
@@ -1187,6 +1187,9 @@ The SC outcomes are saved in file: power_state_plac_data,csv (which is comprised
 The placebo distributions are saved in file: power_state.csv (which is comprised by power_state1, power_state2, power_state3, power_state4, power_state5, power_state6). 
 
 ```{r}
+
+#### CHECK in_sample function, need to exclude r_sq>0 filter!! 
+
 dt_state_initial <- pre_processing_dt_state(power2) #state-level disposal
 treated_counties_id <- unique(dt_state_initial$county_id[dt_state_initial$state_id%in% all_treated]) # treated states id 
 donors_state <- unique(dt_state_initial$county_id[!(dt_state_initial$state_id%in% all_treated)]) # all donor states
@@ -1200,7 +1203,7 @@ samp=seq(3,10) # possible values of |S|
 # This function returns: for each sample_size, the 100 best SCs
 #####
 seed=10
-for (seed in 1:10)
+for (seed in 6:10)
 {
   power_state_plac1 <- power_state_plac("MA", dt_state_initial, seed) # SC outcomes for MA's ban
   power_state_plac2 <- power_state_plac("CA", dt_state_initial, seed) # SC outcomes for CA's ban
@@ -1209,6 +1212,8 @@ for (seed in 1:10)
   power_state_plac5 <- power_state_plac("VT", dt_state_initial, seed)# SC outcomes for VT's ban
   power_state_plac6 <- power_state_plac("All", dt_state_initial,seed) #needed for the aggregate case
   
+  
+  power_state_fun2(power_state_plac3 %>% bind_rows() %>% mutate(treated_state=="CT"), "CT")
   
   write.csv(
     rbind(
@@ -1403,13 +1408,13 @@ Because we only have 22 available ATTs in each placebo distribution and 1/22=0.0
 Below we look at the optimal |S|, as well as the confidence intervals 
 
 ```{r}
-filename = "power_state_plac_2025_seed2.csv"
+filename = "power_state_plac_2025_seed5.csv"
 power_state_plac_data <- read.csv(filename)
-power_state1_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="MA"), "MA") %>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors remains the same (9)
+power_state1_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="MA"), "MA") %>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 9 to 4 (ATT = -9.8)
 power_state2_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="CA"), "CA")%>% ungroup %>% filter(att_min == max(att_min))  # the optimal number of donors remains the same (10)
-power_state3_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="CT"), "CT")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 3 to 5 (ATT is: -5.43)
-power_state4_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="RI"), "RI")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 3 to 8 (ATT is: -4.31)
-power_state5_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="VT"), "VT")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors remains the same (5)
+power_state3_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="CT"), "CT")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 3 to 8 (ATT is: -2.73) (calc with seed = 2) (based on seed it kind of changes largest is -5.1 smallest is -2)
+power_state4_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="RI"), "RI")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 10 to 6 (ATT is: -3.28)
+power_state5_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="VT"), "VT")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors remains the same 8 
 
 # all the results continue to hold
 ```
@@ -1418,7 +1423,7 @@ power_state5_alt <- power_state_fun2_alternative(power_state_plac_data %>% filte
 ### P values
 Make sure that the filename you choose here is the same as the filename chosen in the xy plot, used to generate the ATTs
 ```{r}
-filename = "power_state_plac_2025_seed2.csv"
+filename = "power_state_plac_2025_seed5.csv"
 power_state_plac_data <- read.csv(filename)
 bt_with_power_data = read.csv("bt_with_power_data.csv")
 
@@ -1448,7 +1453,7 @@ p_values_fun <- function (plac, treated_state)
     group_by(sample_size, county_id,treated_state) %>% 
     filter(mape==min(mape), donor_number=="donor_1") %>% 
     group_by(mape, county_id, sample_size, treated_state) %>% 
-    summarise(att=unique(att)) %>% 
+    summarise(att=mean(att)) %>% 
     ungroup %>% 
     left_join(
       effects_att, by = c("treated_state" = "state_id")
