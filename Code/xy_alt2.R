@@ -1903,7 +1903,7 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
 }
 
 ######## Fig.2: left panel ##############
-filename = "power_state_plac_2025_seed_1_alt2.csv"
+filename = "power_state_plac_2025_seed_5_alt2.csv"
 chosen_sample_size = disposal_spec_states_function(filename)
 
 chosen_sample_size_CA <- chosen_sample_size %>% filter(treated_state=="CA") %>% pluck("sample_size")-2

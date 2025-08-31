@@ -99,7 +99,7 @@ do_many_times_v3 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test
 
   att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% sum
   cf <- (x[(test_ind_end2+1):n]+intercept) %>% sum
-  c(r, MA, att, cf, c(samples))
+  #c(r, MA, att, cf, c(samples))
   intercept2 <-  mean(c(y_train, y_test)-x[1:test_ind_end2])
   att <- (y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum
   cf <- (x[(test_ind_end2+1):n]+intercept2) %>% sum
@@ -1203,7 +1203,7 @@ samp=seq(3,10) # possible values of |S|
 # This function returns: for each sample_size, the 100 best SCs
 #####
 seed=10
-for (seed in 6:10)
+for (seed in 1:4)
 {
   power_state_plac1 <- power_state_plac("MA", dt_state_initial, seed) # SC outcomes for MA's ban
   power_state_plac2 <- power_state_plac("CA", dt_state_initial, seed) # SC outcomes for CA's ban
@@ -1410,11 +1410,35 @@ Below we look at the optimal |S|, as well as the confidence intervals
 ```{r}
 filename = "power_state_plac_2025_seed5.csv"
 power_state_plac_data <- read.csv(filename)
-power_state1_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="MA"), "MA") %>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 9 to 4 (ATT = -9.8)
-power_state2_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="CA"), "CA")%>% ungroup %>% filter(att_min == max(att_min))  # the optimal number of donors remains the same (10)
-power_state3_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="CT"), "CT")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 3 to 8 (ATT is: -2.73) (calc with seed = 2) (based on seed it kind of changes largest is -5.1 smallest is -2)
-power_state4_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="RI"), "RI")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors changes from 10 to 6 (ATT is: -3.28)
-power_state5_alt <- power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="VT"), "VT")%>% ungroup %>% filter(att_min == max(att_min)) # the optimal number of donors remains the same 8 
+
+new_power <- 
+  rbind(
+    power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="MA"), "MA") %>% ungroup %>% filter(att_min == max(att_min)), 
+    power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="CA"), "CA") %>% ungroup %>% filter(att_min == max(att_min)),
+    power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="CT"), "CT") %>% ungroup %>% filter(att_min == max(att_min)), 
+    power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="RI"), "RI") %>% ungroup %>% filter(att_min == max(att_min)), 
+    power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="VT"), "VT") %>% ungroup %>% filter(att_min == max(att_min))
+  )
+
+new_sample_size <- 
+
+new_xy_data <- 
+  # need to load functions from xy.R
+  rbind(
+    xy_plot_data_function("CA",new_power %>% filter(treated_state=="CA") %>% pluck("sample_size")-2,1), 
+    xy_plot_data_function("CT",new_power %>% filter(treated_state=="CT") %>% pluck("sample_size")-2,2),
+    xy_plot_data_function("MA",new_power %>% filter(treated_state=="MA") %>% pluck("sample_size")-2,3),
+    xy_plot_data_function("RI",new_power %>% filter(treated_state=="RI") %>% pluck("sample_size")-2,4),
+    xy_plot_data_function("VT",new_power %>% filter(treated_state=="VT") %>% pluck("sample_size")-2,5)
+  )
+
+new_xy_data %>% 
+  filter(attempt==1) %>% 
+  group_by(treated_state) %>% 
+  filter(year>=ban_year) %>% 
+  summarise(actual_treatment_effect = sum(tons_pc - y_0)/sum(y_0))
+
+
 
 # all the results continue to hold
 ```

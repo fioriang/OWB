@@ -389,27 +389,24 @@ all_treated <- c("VT", "MA", "CA", "CT", "RI", "All")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016, 2015) #we assume that the aggregate ban is implemented in 2015
 samp=seq(3,10) # possible values of |S|
 
-seed=1
-for (seed in 1:1)
-{
-  power_state_plac1 <- power_state_plac("MA", dt_state_initial, seed) # SC outcomes for MA's ban
-  power_state_plac2 <- power_state_plac("CA", dt_state_initial, seed) # SC outcomes for CA's ban
-  power_state_plac3 <- power_state_plac("CT", dt_state_initial, seed)# SC outcomes for CT's ban
-  power_state_plac4 <- power_state_plac("RI", dt_state_initial, seed)# SC outcomes for RI's ban
-  power_state_plac5 <- power_state_plac("VT", dt_state_initial, seed)# SC outcomes for VT's ban
-  power_state_plac6 <- power_state_plac("All", dt_state_initial,seed) #needed for the aggregate case
-  
-  
-  write.csv(
-    rbind(
-      power_state_plac1 %>% bind_rows %>% mutate(treated_state="MA"),
-      power_state_plac2 %>% bind_rows %>% mutate(treated_state="CA"),
-      power_state_plac3 %>% bind_rows %>% mutate(treated_state="CT"),
-      power_state_plac4 %>% bind_rows %>% mutate(treated_state="RI"),
-      power_state_plac5 %>% bind_rows %>% mutate(treated_state="VT"),
-      power_state_plac6 %>% bind_rows %>% mutate(treated_state="All")
-    ),
-    paste0("power_state_plac_2025_seed_", seed, "_alt3.csv"), row.names=FALSE
-  )
-  
-}
+seed=5
+power_state_plac1 <- power_state_plac("MA", dt_state_initial, seed) # SC outcomes for MA's ban
+power_state_plac2 <- power_state_plac("CA", dt_state_initial, seed) # SC outcomes for CA's ban
+power_state_plac3 <- power_state_plac("CT", dt_state_initial, seed)# SC outcomes for CT's ban
+power_state_plac4 <- power_state_plac("RI", dt_state_initial, seed)# SC outcomes for RI's ban
+power_state_plac5 <- power_state_plac("VT", dt_state_initial, seed)# SC outcomes for VT's ban
+power_state_plac6 <- power_state_plac("All", dt_state_initial,seed) #needed for the aggregate case
+
+
+write.csv(
+  rbind(
+    power_state_plac1 %>% bind_rows %>% mutate(treated_state="MA"),
+    power_state_plac2 %>% bind_rows %>% mutate(treated_state="CA"),
+    power_state_plac3 %>% bind_rows %>% mutate(treated_state="CT"),
+    power_state_plac4 %>% bind_rows %>% mutate(treated_state="RI"),
+    power_state_plac5 %>% bind_rows %>% mutate(treated_state="VT"),
+    power_state_plac6 %>% bind_rows %>% mutate(treated_state="All")
+  ),
+  paste0("power_state_plac_2025_seed_", seed, "_alt3.csv"), row.names=FALSE
+)
+

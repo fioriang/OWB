@@ -1,0 +1,1226 @@
+---
+title: "wcs_2"
+author: "Fiori Anglou"
+date: "2024-06-05"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Data
+
+```{r}
+library(tidyverse)
+post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
+wcs <- read.csv(paste0(post_syp_path, "/03. Bans/wcs_2.csv"))
+food_generators_MA <-  read.csv(paste0(post_syp_path, "/03. Bans/food_generators_MA.csv"))
+food_generators_VT <-  read.csv(paste0(post_syp_path,"/03. Bans/food_generators_VT.csv"))
+bans_thresholds <-  read.csv(paste0(post_syp_path,"/03. Bans/bans_thresholds.csv"))
+processors <-read.csv(paste0(post_syp_path,"/03. Bans/food_processors_list_MA.csv"))
+processors_VT <- read.csv(paste0(post_syp_path,"/03. Bans/food_processors_list_VT.csv"))
+towns_coordinates_VT <- read.csv(paste0(post_syp_path,"/03. Bans/towns_coordinates_VT.csv"))
+
+```
+
+
+Exclude Oregon because (1) they report clean tons which is something that no other states does and (2) because their streams are also very different from everyone elses' and i do not know how to assign them 
+
+# Setup 
+
+## Function
+
+```{r}
+pre_processing_dt_state <- function (power2, year_cutoff)
+{
+  year_start <- 2006
+  dt_state <- 
+    power2 %>% 
+    group_by (year, state_id, type) %>% 
+    summarise(tons = sum(tons, na.rm=TRUE))%>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed", "composting")
+    ) %>%
+    group_by(state_id) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    group_by(state_id, year, type) %>% 
+    mutate(
+      tons_pc = (tons/state_pop), 
+      county_id = state_id
+    ) %>% 
+    group_by(state_id) %>% 
+    mutate(n=n()) %>% 
+    #filter(n == year_cutoff - year_start+1) %>% 
+    select(-n) %>% 
+    ungroup() 
+
+  dt_state_initial <- dt_state
+  return(dt_state_initial)
+  
+}
+```
+
+
+```{r}
+
+wcs<-
+  wcs %>% as_tibble() %>% 
+  rename(
+    activity = Activity, 
+    jurisdiction = City
+  ) %>% 
+  mutate(
+    activity = activity %>% str_to_lower,
+    generator_category = generator_category %>% str_to_lower,
+    material = material %>% str_to_lower, 
+    tons = tons %>% as.numeric, 
+    need_to_find = need_to_find %>% as.numeric
+
+  ) %>% 
+  filter(
+  year >= 2000, year <=2022
+  ) %>% 
+  filter(
+    state_id!="OR",
+    !(state_id=="VT" & year==2013)
+  )
+# For Seattle, WA (state_id = M1) I have 1 residential WCS in 2014 and one commercial in 2016. I will have to use them both. I use year == 2015 
+
+
+wcs <- wcs %>% mutate(year = ifelse(state_id == "M1", 2015, year)) 
+```
+
+
+### Total 
+
+```{r}
+
+wcs %>% 
+  filter(generator_category=="all") %>% 
+  filter(is.na(percentage)) %>% 
+  group_by(year, state_id) %>% 
+  pivot_wider(names_from=material, values_from=tons) %>% 
+  mutate(
+    compostable_paper = ifelse(is.na(compostable_paper), 0, compostable_paper),
+    m=(food+yard_waste+compostable_paper)/total) %>% 
+  select(m, state_id, year) %>% 
+  filter(year>2005) %>% 
+  ggplot(
+    aes(x=year, y =m, color = state_id)
+  ) +
+  geom_line()+
+  geom_point()
+
+wcs %>% 
+  filter(generator_category=="all") %>% 
+  filter(!is.na(percentage)) %>% 
+  group_by(year, state_id) %>% 
+  pivot_wider(names_from=material, values_from=percentage) %>% 
+  mutate(
+    compostable_paper = ifelse(is.na(compostable_paper), 0, compostable_paper),
+    m=(food+yard_waste+compostable_paper)) %>% 
+  select(m, state_id, year) %>% 
+  filter(year>2005) %>% 
+  ggplot(
+    aes(x=year, y =m, color = state_id)
+  ) +
+  geom_line()+
+  geom_point()
+
+```
+
+
+## Need to find the percentage between commercial and residential
+
+```{r}
+
+wcs_ntf <- 
+  wcs %>% 
+  filter(!is.na(need_to_find), need_to_find!="") %>% 
+  mutate(
+    com_percentage = ifelse(state_id=="MA", 0.55, NA)
+  ) %>% 
+  filter(is.na(com_percentage)) %>% 
+  select(
+    state_id, year, generator_category, material, percentage, jurisdiction
+  ) %>% 
+  group_by(state_id, year, jurisdiction) %>% 
+  pivot_wider(
+    names_from = generator_category, 
+    values_from = percentage
+  ) %>% 
+  mutate(
+    implied_percentage = 1- (commercial-all)/(commercial-residential), 
+    implied_percentage = ifelse(is.infinite(implied_percentage), 0.4, implied_percentage),
+    implied_percentage = ifelse(implied_percentage>.9, 0.5, implied_percentage), 
+    implied_percentage = ifelse(implied_percentage<0, 0.5, implied_percentage)
+  ) %>% #filter(state_id=="WI") %>% 
+  group_by(year, state_id, jurisdiction) %>% 
+  summarise(
+    implied_total = sum(all), 
+    implied_com = sum(commercial*implied_percentage)/implied_total
+  ) %>% 
+  rbind(
+    tibble(
+      year= c(2010, 2013, 2016, 2019), 
+      state_id = "MA", 
+      jurisdiction = "Statewide", 
+      implied_total = 1, 
+      implied_com = 0.55
+    )) %>% 
+  select(-implied_total)
+
+```
+
+### Percentages 
+
+```{r}
+wcs_per <- 
+  wcs %>%  
+  filter(need_to_find!=1| is.na(need_to_find)) %>%
+  filter(!is.na(percentage)) %>% 
+  left_join(
+    wcs_ntf, by = c("state_id", "year", "jurisdiction")
+  ) %>% 
+  filter(generator_category == "commercial"| state_id == "MA") %>% 
+  mutate(
+    final_percentage = implied_com * percentage
+  ) %>% 
+  select(state_id, year, jurisdiction, material, final_percentage, implied_com) %>% 
+  pivot_wider(
+    names_from=material, values_from = final_percentage) %>% 
+  rename(
+    total_com = implied_com
+  )
+```
+
+### Tonnages 
+
+```{r}
+
+vt_food_total <- wcs %>% filter(state_id=="VT", year==2018, generator_category=="all") %>%
+  filter(material=="food") %>% pluck("tons")/wcs %>% filter(state_id=="VT", year==2018, generator_category=="all") %>%  filter(material=="total") %>% pluck("tons")
+  
+
+wcs_tn <- 
+  wcs %>%  
+  filter(need_to_find!=1 | is.na(need_to_find)) %>%
+  filter(!is.na(tons)) %>% 
+  select(state_id, year, jurisdiction, generator_category, material, tons) %>% 
+  mutate(
+    generator_category_ind = ifelse(generator_category=="all", 1, 0)
+  ) %>% 
+  group_by(state_id, year, jurisdiction) %>%
+  filter(n_distinct(generator_category)>1) %>% 
+  group_by(state_id, year, jurisdiction, generator_category) %>%
+  mutate(
+    total_category = max(tons)
+  ) %>% 
+  group_by(state_id, year, jurisdiction) %>%
+  mutate(
+    total_all = max(tons)
+  ) %>% 
+  filter(generator_category %in% c("commercial", "self_haul")) %>% 
+  group_by(state_id, year, jurisdiction, material) %>% 
+  summarise(
+    total_com = sum(total_category)/mean(total_all), 
+    per = sum(tons) / mean(total_all)
+  ) %>% 
+  select(
+    state_id, year, jurisdiction, per, total_com, material
+  ) %>% 
+  filter(material!="total") %>% 
+  pivot_wider(
+    names_from = material, values_from = per
+  )
+```
+
+### Bargraph 
+
+```{r}
+wcs_plot <- 
+  rbind(
+    wcs_tn, 
+    wcs_per
+  )%>% filter(state_id!="M1")%>%
+  select(
+    state_id, year, jurisdiction, total_com, compostable_paper, yard_waste, food
+  ) %>% 
+  mutate(
+    total_com = total_com - ifelse(is.na(compostable_paper), 0, compostable_paper)-food-yard_waste
+  ) %>% 
+  pivot_longer(
+    cols = c("total_com" , "compostable_paper", "food", "yard_waste"), 
+    names_to = "share", 
+    values_to = "percentage"
+  ) %>% 
+  mutate(
+    share = factor(
+      share,
+      levels = c("total_com","compostable_paper", "yard_waste", "food")
+    ),
+    share = share %>% 
+      fct_recode(
+        `Other` = "total_com", 
+        Food = "food", 
+        `Yard Waste` = "yard_waste", 
+        `Compostable Paper` = "compostable_paper"
+      )
+  ) %>% 
+  filter(
+    year >=2006, year <2020#, state_id!="M1"
+  ) %>% 
+  group_by(
+    state_id, share
+  ) %>% 
+  summarise(
+    percentage = mean(percentage), 
+    year= 1
+  ) %>% 
+  #filter(share!="Other") %>% 
+  ggplot()+
+  aes(fill=share, y=100*percentage, x= as.factor(year))+
+  geom_bar(position="stack", stat="identity") +
+  facet_grid(cols = vars(state_id))+
+  scale_fill_grey(start = 0.9, end =0.3, guide = guide_legend(reverse = TRUE))+
+  scale_y_continuous(breaks=c(seq(0,60, by =10)))+
+  labs (x="", y="Fraction of total landfilled MSW (%)", fill = "Commercial:")+
+  theme(
+    panel.border = element_blank(),
+    legend.position = "bottom", 
+    panel.background = element_blank(),
+    axis.ticks.x = element_blank(), 
+    axis.text.x=element_blank(),
+    text = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    legend.title = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    legend.text = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    strip.background = element_blank(), 
+    legend.key = element_blank())
+
+
+
+ggsave(wcs_plot, filename = "wcs_plot.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 12, height = 5, units = "in")
+
+
+
+rbind(
+  wcs_tn, 
+  wcs_per
+)%>% 
+  filter(jurisdiction=="Statewide") %>% 
+  select(
+    state_id, year, jurisdiction, total_com, compostable_paper, yard_waste, food
+  ) %>% 
+  mutate(
+    total_com = total_com - ifelse(is.na(compostable_paper), 0, compostable_paper)-food-yard_waste
+  ) %>% 
+  pivot_longer(
+    cols = c("total_com" , "compostable_paper", "food", "yard_waste"), 
+    names_to = "share", 
+    values_to = "percentage"
+  ) %>% 
+  mutate(
+    share = factor(
+      share,
+      levels = c("total_com","compostable_paper", "yard_waste", "food")
+    ),
+    share = share %>% 
+      fct_recode(
+        `Other` = "total_com", 
+        Food = "food", 
+        `Yard Waste` = "yard_waste", 
+        `Compostable Paper` = "compostable_paper"
+      )
+  ) %>% 
+  filter(
+    year >=2006, year <2022#, state_id!="M1"
+  ) %>% 
+  group_by(
+    year, share
+  ) %>% 
+  summarise(
+    percentage=mean(percentage, na.rm=TRUE), 
+    state_id=1
+  ) %>% 
+  filter(share!="Other") %>% 
+  ggplot()+
+  aes(fill=share, y=100*percentage, x= as.factor(state_id))+
+  geom_bar(position="stack", stat="identity") +
+  facet_grid(cols = vars(year))+
+  scale_fill_grey(start = 0.9, end =0.3, guide = guide_legend(reverse = TRUE))+
+  scale_y_continuous(breaks=c(seq(0,60, by =10)))+
+  labs (x="", y="Fraction of total landfilled MSW (%)", fill = "Commercial:")+
+  theme(
+    panel.border = element_blank(),
+    legend.position = "bottom", 
+    panel.background = element_blank(),
+    axis.ticks.x = element_blank(), 
+    axis.text.x=element_blank(),
+    text = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    legend.title = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    legend.text = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    strip.background = element_blank(), 
+    legend.key = element_blank())
+```
+
+
+
+```{r}
+rbind(
+  wcs_tn, 
+  wcs_per
+)%>% 
+  filter(jurisdiction=="Statewide") %>% 
+  select(
+    state_id, year, jurisdiction, total_com, compostable_paper, yard_waste, food
+  ) %>% 
+  mutate(
+    total_com = total_com - ifelse(is.na(compostable_paper), 0, compostable_paper)-food-yard_waste
+  ) %>% 
+  pivot_longer(
+    cols = c("total_com" , "compostable_paper", "food", "yard_waste"), 
+    names_to = "share", 
+    values_to = "percentage"
+  ) %>% 
+  mutate(
+    share = factor(
+      share,
+      levels = c("total_com","compostable_paper", "yard_waste", "food")
+    ),
+    share = share %>% 
+      fct_recode(
+        `Other` = "total_com", 
+        Food = "food", 
+        `Yard Waste` = "yard_waste", 
+        `Compostable Paper` = "compostable_paper"
+      )
+  ) %>% 
+  filter(
+    year >=2006, year <2020#, state_id!="M1"
+  ) %>% 
+  group_by(
+    state_id, share
+  ) %>% 
+  mutate(
+    n = n()
+  ) %>% 
+  group_by(state_id, share) %>% 
+  mutate(
+    n_wcs = 1:n()#ifelse(year/min(year)==1, 1, 2)
+  ) %>% 
+  filter(share!="Other") %>% 
+  ggplot()+
+  aes(fill=share, y=100*percentage, x= as.factor(n_wcs))+
+  geom_bar(position="stack", stat="identity") +
+  facet_grid(cols = vars(state_id), rows=vars(n))+
+  scale_fill_grey(start = 0.9, end =0.3, guide = guide_legend(reverse = TRUE))+
+  scale_y_continuous(breaks=c(seq(0,60, by =10)))+
+  labs (x="", y="Fraction of total landfilled MSW (%)", fill = "Commercial:")+
+  theme(
+    panel.border = element_blank(),
+    legend.position = "bottom", 
+    panel.background = element_blank(),
+    axis.ticks.x = element_blank(), 
+    axis.text.x=element_blank(),
+    text = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    legend.title = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    legend.text = element_text(family="Helvetica",size = 14, color = ut_colors[4]), 
+    strip.background = element_blank(), 
+    legend.key = element_blank())
+```
+
+
+
+
+
+
+
+
+```{r}
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+group_by(year) %>% 
+  summarise(
+    mean(food+yard_waste+compostable_paper, na.rm = TRUE), 
+    n()
+  )
+
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+group_by(year) %>% 
+  summarise(
+    mean(food, na.rm = TRUE), 
+    n()
+  )
+
+
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+  filter(year>=2020)
+
+
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+  filter(state_id=="WA")
+```
+
+# Expected effects 
+
+## Covered materials
+```{r}
+
+rbind(
+  rbind(
+    wcs_tn, 
+    wcs_per
+  ) %>% 
+    filter(state_id=="CA", year==2014) %>% 
+    mutate(covered = food+compostable_paper  +yard_waste), 
+  rbind(
+    wcs_tn, 
+    wcs_per
+  ) %>% 
+    filter(state_id=="MA", year==2013) %>% 
+    mutate(covered = food), 
+  rbind(
+    wcs_tn, 
+    wcs_per
+  ) %>% 
+    filter(state_id=="CT", year==2015) %>% 
+    mutate(covered = food+compostable_paper  ), 
+  rbind(
+    wcs_tn, 
+    wcs_per
+  ) %>% 
+    filter(state_id=="VT", year==2018)%>% 
+    mutate(covered = food),
+  rbind(
+    wcs_tn, 
+    wcs_per
+  ) %>% 
+    filter(state_id=="RI", year==2015) %>% 
+    mutate(covered = food)
+) %>% 
+  ungroup %>% 
+  select(state_id, covered)
+
+
+
+```
+
+## Thresholds & Covered Percentages
+
+```{r}
+
+#Thresholds
+disposal_effect_size2 <- 
+  rbind(
+  tibble(
+    year = seq(2014,2022), 
+    state_id = "VT",
+    threshold = c(104, 52, 26, rep(18, 3), rep(0,3)), 
+  ) %>% 
+    mutate(distance_threshold = ifelse(year<2020, 20, Inf)), 
+  tibble(
+    year = seq(2014,2022), 
+    state_id = "CT",
+    threshold = c(rep(104,6), rep(52, 3)), 
+  ) %>% 
+    mutate(distance_threshold = ifelse(year<2023, 20, Inf)), 
+  tibble(
+    year = seq(2014,2022), 
+    state_id = "MA",
+    threshold = c(rep(52,8), 26), 
+    distance_threshold = Inf
+  ) ,
+  tibble(
+    year = seq(2016,2022), 
+    state_id = "RI",
+    threshold = c(rep(104,2), rep(52, 4), 30), 
+    distance_threshold = 15
+  ),
+  tibble(
+    year = seq(2016,2022), 
+    state_id = "CA",
+    threshold = c(rep(52,1), rep(26, 2), rep(13, 4)), 
+    distance_threshold = Inf
+  ) 
+) %>% 
+  left_join(
+    #Covered percentages
+    food_generators_MA %>% as_tibble %>% 
+      expand_grid(threshold = c(104, 52,30,  26, 18, 13, 0)) %>% 
+      mutate(
+        cover = ifelse(tons >= threshold, 1, 0)
+      ) %>% 
+      filter(!is.na(tons)) %>% 
+      group_by(Type, cover,threshold) %>%
+      summarise(tons = sum(tons)) %>% 
+      mutate(total_tons_category = sum(tons)) %>% 
+      ungroup %>% group_by(cover, threshold) %>% 
+      mutate(total_tons_covered = sum(tons)) %>% 
+      ungroup %>% group_by(threshold) %>% 
+      mutate(total_tons = sum(tons), percentage = total_tons_covered/total_tons) %>%  filter(cover==1) %>% group_by(threshold) %>% 
+      summarise(pc = mean(percentage)) %>% 
+      cbind(  
+        food_generators_VT %>% as_tibble %>% 
+          mutate(tons = TonsPerWeek*52, town_name = str_to_lower(Town)) %>% 
+          select(ID, town_name, tons) %>% 
+          expand_grid(threshold = c(104, 52,30,  26, 18, 13, 0)) %>% 
+          filter(!is.na(tons)) %>%        
+          mutate(
+            cover = ifelse(tons >= threshold, 1, 0)
+          ) %>% group_by(cover, threshold) %>% 
+          summarise(tons = sum(tons)) %>% 
+          group_by(threshold) %>%
+          mutate(total_tons = sum(tons)) %>% 
+          filter(cover==1) %>% 
+          mutate(pc=tons/total_tons) %>% 
+          ungroup %>%  select(pc) %>% rename(pc_VT=pc)
+      ), 
+    by ="threshold"
+  ) %>% 
+  #Distance thresholds
+  rowwise %>% 
+  mutate(
+    distance_MA = exempt_MA(distance_threshold, threshold), 
+    distance_VT = exempt_VT(distance_threshold, threshold)
+  ) %>% 
+  ungroup %>% 
+  mutate(
+    pc = pc*distance_MA,
+    pc2 = pc_VT*distance_VT
+    # effect_2 = effect_2 * distance_MA,
+    # effect_VT = effect_VT * distance_VT 
+    # #effect_2 = ifelse(state_id=="VT", effect_VT, effect2)
+  ) 
+
+
+
+food_generators_MA %>% as_tibble() %>% filter(str_detect(Name, "Whole Foods")) %>% summarise(median(tons, na.rm=TRUE))
+
+food_generators_MA %>% as_tibble() %>% filter(str_detect(Name, "Starbucks")) %>% summarise(median(tons, na.rm=TRUE))
+
+food_generators_MA %>% as_tibble() %>% filter(str_detect(Name, "Applebee")) %>% summarise(median(tons, na.rm=TRUE))
+```
+
+
+## Expected Effects
+
+```{r}
+disposal_effect_size2 <- 
+  rbind(
+    rbind(
+      wcs_tn, 
+      wcs_per
+    ) %>% 
+      filter(state_id=="CA", year==2014) %>% 
+      mutate(covered = food+compostable_paper  +yard_waste), 
+    rbind(
+      wcs_tn, 
+      wcs_per
+    ) %>% 
+      filter(state_id=="MA", year==2013) %>% 
+      mutate(covered = food), 
+    rbind(
+      wcs_tn, 
+      wcs_per
+    ) %>% 
+      filter(state_id=="CT", year==2015) %>% 
+      mutate(covered = food+compostable_paper  ), 
+    rbind(
+      wcs_tn, 
+      wcs_per
+    ) %>% 
+      filter(state_id=="VT", year==2018)%>% 
+      mutate(covered = food),
+    rbind(
+      wcs_tn, 
+      wcs_per
+    ) %>% 
+      filter(state_id=="RI", year==2015) %>% 
+      mutate(covered = food)
+  ) %>% 
+  ungroup %>% 
+  select(state_id, covered) %>% 
+  left_join(
+    disposal_effect_size2, by = "state_id"
+  ) %>% 
+  mutate(
+    covered = ifelse(state_id=="VT" & year > 2019, vt_food_total, covered)
+  ) %>% 
+  mutate(
+    effect_size = covered * pc
+  ) #%>% 
+  #select(
+  #  state_id, year, threshold, pc, effect_size
+  #) #%>% filter(year<=2018) %>% group_by(state_id) %>% summarise(mean(exp_effect))
+
+
+#write.csv(disposal_effect_size2, "disposal_effect_size2.csv", row.names=FALSE) 
+
+```
+### CT's robustness check
+```{r}
+
+state_id_given <- "VT"
+distance_threshold <- 20
+cities %>% 
+  filter(
+    state_id==state_id_given
+  ) %>% 
+  group_by(city, state_id, population) %>% 
+  summarise(
+    long_gen = unique(lng),
+    lat_gen = unique(lat)
+  ) %>%
+  rename (
+    pop_city = population
+  ) %>% 
+  left_join(
+    power2 %>% 
+      as_tibble() %>% 
+      filter(
+        type=="disposal", 
+        year==2014, 
+        state_id == state_id_given) %>% group_by(year, state_id, type) %>% summarise(tons = sum(tons)),
+    by= c("state_id")) %>% 
+  group_by(state_id) %>%  
+  mutate(
+    total_pop = sum(pop_city), 
+    weight = tons * pop_city/total_pop) %>% expand_grid(
+      composting_all_facilities %>% 
+        filter(state_id==state_id_given) %>%
+        select(composting_facility, long, lat) %>% 
+        rename(
+          long_pro = long, 
+          lat_pro = lat
+        )) %>% 
+  mutate(
+    lat_gen = lat_gen*pi/180,
+    long_gen = long_gen*pi/180,
+    lat_pro = lat_pro*pi/180,
+    long_pro = long_pro*pi/180, 
+    delta_lat = lat_gen-lat_pro, 
+    delta_long = long_gen - long_pro, 
+    a = sin(delta_lat / 2)^2 + cos(lat_gen) * cos(lat_pro) * sin(delta_long / 2)^2, 
+    c = 2 * atan2(sqrt(a), sqrt(1 - a)), 
+    distance = 3959*c
+  ) %>% 
+  select(year, state_id, weight, distance) %>% 
+  group_by(weight) %>% 
+  summarise(
+    min_distance = min(distance, na.rm=TRUE)) %>% 
+  ungroup %>% 
+  filter(!is.na(weight)) %>%
+  filter(min_distance < 100) %>% 
+  mutate(ind = ifelse(min_distance <= distance_threshold, 1, 0)) %>% 
+  group_by(ind) %>% 
+  summarise(weight=sum(weight)) %>% 
+  ungroup %>% 
+  mutate(
+    total = sum(weight),
+    frac = weight/total) %>% 
+  filter(ind ==1) %>% 
+  mutate(
+    covered=disposal_effect_size2 %>% filter(state_id==state_id_given, year <=2018) %>% summarise(covered=unique(covered)) %>%  pluck("covered"), 
+    pc = disposal_effect_size2 %>% filter(state_id==state_id_given, year <=2018) %>% summarise(pc=mean(pc/distance_MA)) %>%  pluck("pc"),
+    effect= covered*pc*frac
+  )
+  
+
+```
+
+
+
+## Municipal
+
+```{r}
+
+
+wcs_tn_muni <- 
+  wcs %>%  
+  filter(need_to_find!=1 | is.na(need_to_find)) %>%
+  filter(!is.na(tons)) %>% 
+  select(state_id, year, jurisdiction, generator_category, material, tons) %>% 
+  mutate(
+    generator_category_ind = ifelse(generator_category=="all", 1, 0)
+  ) %>% 
+  group_by(state_id, year, jurisdiction) %>%
+  filter(n_distinct(generator_category)>1) %>% 
+  group_by(state_id, year, jurisdiction, generator_category) %>%
+  mutate(
+    total_category = max(tons)
+  ) %>% 
+  group_by(state_id, year, jurisdiction) %>%
+  mutate(
+    total_all = max(tons)
+  ) %>% 
+  filter(generator_category %in% c("commercial", "self_haul", "residential")) %>% 
+  group_by(state_id, year, jurisdiction, material) %>% 
+  summarise(
+    total_com = sum(total_category)/mean(total_all), 
+    per = sum(tons) / mean(total_all)
+  ) %>% 
+  select(
+    state_id, year, jurisdiction, per, total_com, material
+  ) %>% 
+  filter(material!="total") %>% 
+  pivot_wider(
+    names_from = material, values_from = per
+  ) %>% 
+  filter(jurisdiction %in% c("Boulder", "Seattle"))
+
+
+municipal <- read.csv("municipal_effect.csv")
+
+#Covers residents and 
+municipal <- 
+  rbind(
+    seattle %>%  
+      filter(
+        year == 2014 #year before the ban
+      ) %>%  
+      select(year, state_id, county_id, tons_pc, tons, type), 
+    boulder %>%  
+      filter(
+        year == 2015 #year before the ban
+      ) %>%  
+      select(year, state_id, county_id, tons_pc, tons, type)
+  ) %>% 
+  left_join(
+    wcs_tn_muni %>%
+      group_by(state_id) %>% 
+      filter(year ==max(year)) %>% 
+      select(-year) %>%  
+      filter(state_id %in% c("M1")| jurisdiction == "Boulder") %>% 
+      mutate(state_id = ifelse(jurisdiction == "Boulder", "M2", state_id)), #basically assume that percentages hold
+    by = c("state_id")
+  ) %>% 
+  filter(type %in% c("disposal", "composting")) %>% 
+  mutate(
+    compostable_paper = tons*(compostable_paper+food+yard_waste),
+    food = tons*food
+  ) %>% 
+  group_by(year, state_id, type) %>% 
+  summarise(
+    tons= mean(tons),
+    compostable_paper = sum(compostable_paper), 
+    food = sum(food)
+  ) %>% ungroup %>% 
+  mutate(
+    compostable_paper = compostable_paper/tons,
+    food = food/tons, 
+    disposal_effect = ifelse(state_id == "M1", food, compostable_paper)
+    #in seattle the law covers foods 
+    #in Boulder (M2) it covers composting materials: here I use compostable paper + food
+  ) %>% 
+  select(year, state_id, type, disposal_effect, tons) %>% 
+  pivot_wider(names_from = type, values_from = tons) %>% 
+  group_by(year, state_id) %>% 
+  summarise(disposal_effect=mean(disposal_effect), composting = mean(composting, na.rm=TRUE), disposal = mean(disposal, na.rm=TRUE)) %>% 
+  mutate(
+    composting_effect = disposal_effect* disposal*0.5/ composting
+  ) %>% 
+  pivot_longer(
+    cols = c("composting", "disposal"), 
+    names_to = "type", 
+    values_to = "tons"
+  ) %>% 
+  mutate(
+    effect = ifelse(type == "disposal", -disposal_effect, composting_effect)
+  ) %>% 
+  ungroup %>% 
+  select(
+    state_id, type, effect
+  ) %>% rbind(tibble(state_id = "M3", type="disposal", effect = -0.268-0.094))
+
+write.csv(municipal, "municipal_effect.csv", row.names = FALSE)
+
+```
+
+
+## Composting effect
+
+```{r}
+
+disposal_effect_size <- read.csv("disposal_effect_size2.csv")
+
+
+composting_effect <- 
+  disposal_effect_size %>% 
+  as_tibble %>% 
+  left_join(
+    power2 %>% group_by(state_id, year, type) %>% summarise(tons = sum(tons)) %>%  filter(type=="composting") %>% select(tons, year, state_id), by = c("year", "state_id")) %>%
+  filter(!is.na(tons)) %>% rename(composting =tons) %>% 
+  left_join(
+    power2 %>%  group_by(state_id, year, type) %>% summarise(tons = sum(tons)) %>% filter(type=="disposal") %>% select(tons, year, state_id), by = c("year", "state_id")) %>%
+  group_by(state_id) %>% select(state_id, year, composting, tons, effect_size) %>% 
+  mutate(
+    tons = ifelse(year==2014, tons, NA), 
+    composting = ifelse(year==2014, composting, NA), 
+    tons = mean(tons, na.rm=TRUE),
+    composting = mean(composting, na.rm=TRUE),
+    composting_effect = effect_size* tons*0.5/ composting
+  ) %>% ungroup %>% select(state_id, year, effect_size, composting_effect)
+  
+
+write.csv(composting_effect, "composting_effect.csv", row.names = FALSE)
+```
+
+
+## Plot
+```{r}
+
+disposal_effect_size2 <- read.csv("disposal_effect_size2.csv")
+
+disposal_effect_size_plot <-
+  disposal_effect_size2 %>% 
+  group_by(state_id) %>% 
+  mutate(
+    effect_size = ifelse(is.na(effect_size), max(effect_size, na.rm=TRUE), effect_size),
+    label_x = ifelse(year== max(year), year+0.2, NA),
+    label_y = ifelse(year== max(year), effect_size, NA),
+    label_y = ifelse(state_id == "MA", label_y-0.01, label_y),
+    label_y = ifelse(state_id == "CT", label_y+0.01, label_y)
+  ) %>%
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+  
+  geom_line(size=0.5)+
+  labs(x="", y = "Expected Effect Size (%)", subtitle = "State-Level")+
+  geom_text(aes(x=label_x, y = -100*label_y, label = state_id), family="Helvetica", size = 3)+
+  geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -20, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -30, color = ut_colors[5], linetype="dotted", size =0.3)+
+  scale_color_manual(values=rep('seagreen', 5))+
+  scale_x_continuous(breaks = c(2014:2022))+
+  scale_y_continuous(breaks = c(seq(0, -40, by = -10)), limits= c(-45,0))+
+  theme(
+    legend.position = "none", 
+    panel.background = element_blank(),
+    legend.text=element_text(family = "Helvetica",size=12, color = ut_colors[4]),
+    text = element_text(family = "Helvetica", size = 12, color = ut_colors[4]), 
+    plot.title = element_text(hjust = 0.5, family = "Helvetica", size = 12, color = ut_colors[4]),
+    axis.ticks.x = element_line(size = 0.1)
+  ) 
+
+
+disposal_effect_size_plot_muni <- 
+  municipal %>% #this comes from the WCS script
+  filter(type == "disposal") %>%
+  expand_grid(year= 2009:2022)%>%
+  mutate(
+    effect_size = ifelse(state_id =="M1" & year < 2015, NA, ifelse(state_id == "M2" & year < 2016, NA, effect)),
+    state_id = ifelse(state_id == "M1", "Seattle, WA", ifelse(state_id=="M2","Boulder, CO", "San Francisco, CA")),
+    label_x = ifelse(year== max(year), year-2, NA),
+    label_y = ifelse(year== max(year), effect_size- 0.02, NA), 
+    effect_size = - effect_size
+  ) %>%
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+    
+  geom_line(size=0.5)+
+  labs(x="", y = "", subtitle = "City-Level")+
+  geom_text(aes(x=label_x, y = 100*label_y, label = state_id), family="Helvetica", size = 3)+
+  geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -20, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -30, color = ut_colors[5], linetype="dotted", size =0.3)+
+  scale_color_manual(values=rep('seagreen', 3))+
+  scale_x_continuous(breaks = c(seq(2009,2022, by = 2)))+
+  scale_y_continuous(breaks = c(seq(0, -40, by = -5)), limits= c(-45,0))+
+  theme(
+    legend.position = "none", 
+    panel.background = element_blank(),
+    #plot.title = element_text(hjust = 0.5, size=10),
+    legend.text=element_text(family = "Helvetica",size=12, color = ut_colors[4]),
+    #plot.caption = element_text(hjust=0.5,size = 10)
+    text = element_text(family = "Helvetica", size = 12, color = ut_colors[4]), 
+    plot.title = element_text(hjust = 0.5, family = "Helvetica", size = 12, color = ut_colors[4]), 
+    axis.ticks.y = element_blank(), 
+    axis.text.y =  element_blank(),
+    axis.ticks.x = element_line(size = 0.1)
+  )  
+
+
+disposal_effect_size_plot <- ggpubr::ggarrange(disposal_effect_size_plot, disposal_effect_size_plot_muni, ncol=2, widths = c(1, 1))
+
+ggsave(disposal_effect_size_plot, filename = "disposal_effect_size.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 9, height = 3.25, units = "in")
+
+disposal_effect_size_plot <-
+  disposal_effect_size2 %>% 
+  group_by(state_id) %>% 
+  mutate(
+    effect_size = ifelse(is.na(effect_size), max(effect_size, na.rm=TRUE), effect_size),
+    label_x = ifelse(year== max(year), year+0.2, NA),
+    label_y = ifelse(year== max(year), effect_size, NA),
+    label_y = ifelse(state_id == "MA", label_y-0.01, label_y),
+    label_y = ifelse(state_id == "CT", label_y+0.01, label_y)
+  ) %>%
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id, size=state_id))+
+  geom_line()+
+  labs(x="", y = "Expected Effect Size (%)", subtitle = "State-Level")+
+  geom_text(aes(x=label_x, y = -100*label_y, label = state_id), family="Helvetica", size = 3)+
+  geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -20, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -30, color = ut_colors[5], linetype="dotted", size =0.3)+
+  scale_color_manual(values=c(rep(ut_colors[5], 4), "seagreen"))+
+  scale_size_manual(values=c(rep(0.5, 4),1))+
+  scale_x_continuous(breaks = c(2014:2022))+
+  scale_y_continuous(breaks = c(seq(0, -40, by = -10)), limits= c(-45,0))+
+  theme(
+    legend.position = "none", 
+    panel.background = element_blank(),
+    legend.text=element_text(family = "Helvetica",size=12, color = ut_colors[4]),
+    text = element_text(family = "Helvetica", size = 12, color = ut_colors[4]), 
+    plot.title = element_text(hjust = 0.5, family = "Helvetica", size = 12, color = ut_colors[4]),
+    axis.ticks.x = element_line(size = 0.1)
+  ) 
+
+
+disposal_effect_size_plot_muni <- 
+  municipal %>% #this comes from the WCS script
+  filter(type == "disposal") %>%
+  expand_grid(year= 2009:2022)%>%
+  mutate(
+    effect_size = ifelse(state_id =="M1" & year < 2015, NA, ifelse(state_id == "M2" & year < 2016, NA, effect)),
+    state_id = ifelse(state_id == "M1", "Seattle, WA", ifelse(state_id=="M2","Boulder, CO", "San Francisco, CA")),
+    label_x = ifelse(year== max(year), year-2, NA),
+    label_y = ifelse(year== max(year), effect_size- 0.02, NA), 
+    effect_size = - effect_size
+  ) %>%
+  ggplot(aes(x=year, y=-100*effect_size, color = state_id))+
+  geom_line(size=0.5)+
+  labs(x="", y = "", subtitle = "City-Level")+
+  geom_text(aes(x=label_x, y = 100*label_y, label = state_id), family="Helvetica", size = 3)+
+  geom_hline(yintercept = -10, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -20, color = ut_colors[5], linetype="dotted", size =0.3)+
+  geom_hline(yintercept = -30, color = ut_colors[5], linetype="dotted", size =0.3)+
+  scale_color_manual(values=rep(ut_colors[5], 3))+
+  scale_x_continuous(breaks = c(seq(2009,2022, by = 2)))+
+  scale_y_continuous(breaks = c(seq(0, -40, by = -5)), limits= c(-45,0))+
+  theme(
+    legend.position = "none", 
+    panel.background = element_blank(),
+    #plot.title = element_text(hjust = 0.5, size=10),
+    legend.text=element_text(family = "Helvetica",size=12, color = ut_colors[4]),
+    #plot.caption = element_text(hjust=0.5,size = 10)
+    text = element_text(family = "Helvetica", size = 12, color = ut_colors[4]), 
+    plot.title = element_text(hjust = 0.5, family = "Helvetica", size = 12, color = ut_colors[4]), 
+    axis.ticks.y = element_blank(), 
+    axis.text.y =  element_blank(),
+    axis.ticks.x = element_line(size = 0.1))
+
+disposal_effect_size_plot <- ggpubr::ggarrange(disposal_effect_size_plot, disposal_effect_size_plot_muni, ncol=2, widths = c(1, 1))
+
+ggsave(disposal_effect_size_plot, filename = "disposal_effect_size_VT.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 9, height = 3.25, units = "in")
+```
+
+
+# Rob Checks for R4
+## Smallest detectable share
+
+```{r}
+disposal_effect_size2 %>%
+  select(
+    state_id, year, threshold, pc, covered, effect_size
+  ) %>% 
+  left_join(
+    bt_with_power_data %>% select(state_id, power_low) %>% 
+      filter(state_id%in% c("CA", "CT", "MA", "VT", "RI")), 
+      by = c("state_id")
+  ) %>% 
+  filter(year < 2019) %>% 
+  group_by(state_id, covered, power_low) %>% 
+  summarise(
+    mean_coverage = mean(pc), 
+    avg_exp_effect =mean(effect_size)
+    ) %>% 
+  mutate(
+    power_low = -power_low/100, 
+    min_fraction = power_low/mean_coverage, 
+    percent_difference = (covered-min_fraction)/covered,
+    pp_difference = covered-min_fraction
+  )
+```
+
+
+
+## Do other states change as much? 
+
+```{r}
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+  filter(jurisdiction == "Statewide") %>% 
+  filter(year<2021) %>% 
+  group_by(
+    state_id
+  ) %>% 
+  filter(n_distinct(year)>1, n_distinct(jurisdiction)==1) %>% 
+  mutate(
+    food = food +compostable_paper+yard_waste, 
+    food_lag = lag(food, n=1), 
+    year_lag = lag(year, n=1)
+  ) %>% 
+  select(state_id, year, food, food_lag, year_lag) %>% 
+  filter(!is.na(food_lag), year_lag-year <= 10) %>% 
+  mutate(
+    per_change = (food-food_lag)/food_lag, 
+    pp_change = food-food_lag
+  ) %>% ungroup%>% 
+  #filter(per_change==min(per_change))
+filter(abs(pp_change)==max(abs(pp_change)))
+
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+  #filter(jurisdiction == "Statewide") %>% 
+  filter(year<2021) %>% filter(!state_id %in%c("MA", "VT")) %>%
+  group_by(
+    state_id
+  ) %>% 
+  filter(n_distinct(year)>1, n_distinct(jurisdiction)==1) %>% 
+  mutate(
+    food = food , 
+    food_lag = lag(food, n=1), 
+    year_lag = lag(year, n=1)
+  ) %>% 
+  select(state_id, year, food, food_lag, year_lag) %>% 
+  filter(!is.na(food_lag), year_lag-year <= 10) %>% 
+  mutate(
+    per_change = (food-food_lag)/food_lag, 
+    pp_change = food-food_lag
+  ) %>% ungroup%>% 
+  #filter(per_change==min(per_change))
+filter(abs(pp_change)==max(abs(pp_change)))
+
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+  #filter(jurisdiction == "Statewide") %>% 
+  filter(year<2021) %>% 
+  group_by(
+    state_id
+  ) %>% 
+  filter(n_distinct(year)>1, n_distinct(jurisdiction)==1) %>% 
+  mutate(
+    food = food +compostable_paper, 
+    food_lag = lag(food, n=1), 
+    year_lag = lag(year, n=1)
+  ) %>% 
+  select(state_id, year, food, food_lag, year_lag) %>% 
+  filter(!is.na(food_lag), year_lag-year <= 10) %>% 
+  mutate(
+    per_change = (food-food_lag)/food_lag, 
+    pp_change = food-food_lag
+  ) %>% ungroup%>% 
+  #filter(per_change==min(per_change))
+filter(abs(pp_change)==max(abs(pp_change)))
+  
+```
+
+### Year on Year changes 
+
+```{r}
+yty_wcs <- function (n_c)
+{
+  rbind(
+    wcs_tn, 
+    wcs_per
+  ) %>% 
+    filter(year>2005, year<2021)%>%
+    filter(jurisdiction == "Statewide") %>% 
+    mutate(
+      compostable_paper = compostable_paper %>% {ifelse(is.na(.), 0, .)}
+    ) %>% 
+    group_by(year) %>% 
+    summarise(
+      food = mean(food), 
+      food_comp = mean(food+compostable_paper),
+      comp = mean(food+compostable_paper+yard_waste)
+    ) %>% 
+    pivot_longer(cols = c("food", "food_comp", "comp"), names_to = "materials", values_to = "per") %>% 
+    group_by(materials) %>% 
+    mutate(
+      lag = lag(per, n=n_c)
+    ) %>% 
+    filter(!is.na(lag)) %>% 
+    mutate(
+      per_chane = 100*(per-lag)/lag, 
+      pp_change = 100*(per-lag)
+    ) %>% 
+    #filter(year<2021) %>% 
+    filter(abs(pp_change)==max(abs(pp_change)))
+}
+
+yty_wcs(n_c=1)
+yty_wcs(n_c=2)
+yty_wcs(n_c=3)
+yty_wcs(n_c=4)
+yty_wcs(n_c=5)
+
+```
+
+### Within year
+
+```{r}
+
+  rbind(
+    wcs_tn, 
+    wcs_per
+  ) %>% 
+    filter(year>2005, year<2021)%>%
+    filter(jurisdiction == "Statewide") %>% 
+    mutate(
+      compostable_paper = compostable_paper %>% {ifelse(is.na(.), 0, .)}
+    ) %>% 
+    group_by(year) %>% 
+    summarise(
+      food = food%>% {max(.)-min(.)}, 
+      food_comp = (food+compostable_paper)%>% {max(.)-min(.)},
+      comp = (food+compostable_paper+yard_waste)%>% {max(.)-min(.)}
+    ) %>% 
+    pivot_longer(cols = c("food", "food_comp", "comp"), names_to = "materials", values_to = "per") %>% 
+    group_by(materials) %>% 
+    mutate(
+      lag = lag(per, n=n_c)
+    ) %>% 
+    filter(!is.na(lag)) %>% 
+    mutate(
+      per_chane = 100*(per-lag)/lag, 
+      pp_change = 100*(per-lag)
+    ) %>% 
+    #filter(year<2021) %>% 
+    filter(abs(pp_change)==max(abs(pp_change)))
+```
+
+
+
+### Other WCS
+
+```{r}
+rbind(
+  wcs_tn, 
+  wcs_per
+) %>% 
+  filter(state_id %in% c("CA", "CT", "MA", "RI", "VT"))
+```
+

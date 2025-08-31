@@ -555,7 +555,7 @@ pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
     ungroup
 }
 
-disposal_spec_states_function <- function(file_name)
+disposal_spec_states_function <- function(filename)
 {
   power_state_plac_data <- read.csv(filename)
   power_state1 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="MA"), "MA") 
@@ -1955,8 +1955,8 @@ xy_plot_data <-
     xy_plot_data_function("RI",chosen_sample_size_RI,1),
     xy_plot_data_function("VT",chosen_sample_size_VT,5),
 
-    xy_plot_data_function_cities(seattle_number, 4, 1) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
-    xy_plot_data_function_cities(boulder_number, 2, 1) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    xy_plot_data_function_cities(seattle_number, 5, 7) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
+    xy_plot_data_function_cities(boulder_number, 8, 7) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
     xy_plot_data_function_sf(2,1 )  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
 
   )
@@ -1974,11 +1974,11 @@ xy_plot_data_uncentered <-
 
 # 
 #   # get the donors of each treated states
-donors_CA <- xy_plot_data_function_donors("CA",chosen_sample_size_CA,1) # f is the chosen sample size -2
+donors_CA <- xy_plot_data_function_donors("CA",chosen_sample_size_CA,5) # f is the chosen sample size -2
 donors_CT <- xy_plot_data_function_donors("CT",chosen_sample_size_CT,1)
 donors_MA <- xy_plot_data_function_donors("MA",chosen_sample_size_MA,1)
 donors_RI <- xy_plot_data_function_donors("RI",chosen_sample_size_RI,1)
-donors_VT <- xy_plot_data_function_donors("VT",chosen_sample_size_VT,1)
+donors_VT <- xy_plot_data_function_donors("VT",chosen_sample_size_VT,5)
 
 # this is to save and load the datasets. for exact reproduction of the paper's figures please load the "xy_plot_data.csv"
 # 
@@ -2008,7 +2008,7 @@ disposal_spec <- rbind( #power_results from placebo_all.RMD
   read.csv(file=paste0(base_path,"power_county.csv")), # power_county for Seattle and Boulder  
   chosen_sample_size, # this replaces the power_state.csv in the previous version (this is better because we have dynamically calucalted this, instead of loading manually a csv)
   read.csv(file=paste0(base_path,"sf_power.csv")))%>% #sf_power for SF
-  filter((treated_state=="All" & specification == "State Pooled")| treated_state!="All") 
+  filter((treated_state=="All" & specification == "State Pooled")| treated_state!="All") %>% as_tibble()
 
 
 
@@ -2765,7 +2765,7 @@ mc_summary <- function(filename, f, pl_seed) # f is the monte_carlo_plseed_lead_
 
 
 # this runs the different experiments and saves them--takes a lot of time
-for (pl_seed in c(1:4))
+for (pl_seed in c(6:10))
 {
   filename=paste0("power_state_plac_2025_seed", pl_seed,".csv")
   f <- mc_function_all_inclusive(filename)
@@ -2901,8 +2901,8 @@ monte_carlo_function_for_cities <- function(seed)
 {
   xy_plot_data1 = 
     rbind(
-      xy_plot_data_function_cities(seattle_number, 4, seed) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
-      xy_plot_data_function_cities(boulder_number, 2, seed) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+      xy_plot_data_function_cities(seattle_number, 5, seed) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
+      xy_plot_data_function_cities(boulder_number, 8, seed) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
     )
   
   res <- 
