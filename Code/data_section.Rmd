@@ -53,7 +53,7 @@ ut_colors <- c(
 ```{r}
 
 #setwd('/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/06. Post SYP/00. Code/')
-power2 <- read.csv("power2_impexp.csv")
+power2 <- read.csv("power2_impexp_final_20sep.csv")
 
 dt <- 
   power2 %>%

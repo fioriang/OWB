@@ -38,7 +38,7 @@ rm(population_2020)
 
 # Waste Data
 #power2 <- read.csv("power2_2.csv")
-power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv"))
+power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv"))
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
 #bans <- c(2014, 2014, 2016, 2014, 2016)
@@ -56,10 +56,11 @@ pre_processing_dt_state <- function (power2)
   
   year_start <- 2006
   year_cutoff <- 2018
+  
+  
   dt_state <- 
     power2 %>% 
     mutate(county_id=paste0(county_name, state_id)) %>% 
-    #filter(!county_id%in%c(rural)) %>% 
     group_by (year, state_id, type) %>% 
     summarise(tons = sum(tons))%>% 
     filter(
@@ -95,6 +96,7 @@ pre_processing_dt_state <- function (power2)
   return(dt_state_initial)
   
 }
+
 
 ##### Functions ####
 do_many_times_v3 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
@@ -390,26 +392,35 @@ bans <- c(2014, 2014, 2016, 2014, 2016, 2015) #we assume that the aggregate ban 
 samp=seq(3,10) # possible values of |S|
 
 seed=5
+# for (seed in 1:10)
+# {
 power_state_plac1 <- power_state_plac("MA", dt_state_initial, seed) # SC outcomes for MA's ban
 power_state_plac2 <- power_state_plac("CA", dt_state_initial, seed) # SC outcomes for CA's ban
 power_state_plac3 <- power_state_plac("CT", dt_state_initial, seed)# SC outcomes for CT's ban
-power_state_plac4 <- power_state_plac("RI", dt_state_initial, seed)# SC outcomes for RI's ban
-power_state_plac5 <- power_state_plac("VT", dt_state_initial, seed)# SC outcomes for VT's ban
+#power_state_plac4 <- power_state_plac("RI", dt_state_initial, seed)# SC outcomes for RI's ban
+#power_state_plac5 <- power_state_plac("VT", dt_state_initial, seed)# SC outcomes for VT's ban
 power_state_plac6 <- power_state_plac("All", dt_state_initial,seed) #needed for the aggregate case
 
 
 write.csv(
   rbind(
     power_state_plac1 %>% bind_rows %>% mutate(treated_state="MA"),
-    power_state_plac2 %>% bind_rows %>% mutate(treated_state="CA"),
+    power_state_plac2 %>% bind_rows %>% mutate(treated_state="CA"), # CA and RI will be the same in this case
     power_state_plac3 %>% bind_rows %>% mutate(treated_state="CT"),
-    power_state_plac4 %>% bind_rows %>% mutate(treated_state="RI"),
-    power_state_plac5 %>% bind_rows %>% mutate(treated_state="VT"),
+    power_state_plac2 %>% bind_rows %>% mutate(treated_state="RI"),
+    power_state_plac1 %>% bind_rows %>% mutate(treated_state="VT"), # MA and VT will be the same in this case
     power_state_plac6 %>% bind_rows %>% mutate(treated_state="All")
   ),
   paste0("power_state_plac_2025_seed_", seed, "_alt2.csv"), row.names=FALSE
 )
+#}
 
-
-
+power_state_plac1 %>% bind_rows() %>% mutate(treated_state="MA", s=5) %>% 
+  group_by(treated_state, county_id, sample_size, s) %>% 
+  filter(mape == min (mape), sample_size!=0) %>% 
+  summarise(att=mean(att)) %>% 
+  group_by(treated_state, sample_size, s) %>% #filter(sample_size==9, treated_state=="MA")
+  summarise(p = sort(att)[2], p2 = sort(att, decreasing = TRUE)[2], min= min(att), max=max(att)) %>% #filter(treated_state=="VT")
+  group_by(treated_state, s) %>% 
+  filter(p==max(p)) %>% arrange(treated_state,s) %>% print(n=100)
 

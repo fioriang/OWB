@@ -4,7 +4,7 @@ composting_inf_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Was
 controls_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03. State_Data/00. Controls"
 post_syp_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP"
 figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections"  
-power2 <- read.csv("power2_impexp.csv")
+power2 <- read.csv("power2_impexp_final_20sep.csv")
 #packages <- c("gridExtra","reshape2","data.table","Hmisc","poibin","MASS","knitr","stargazer","e1071","akima","plotly","bayesm",'lfe','plm','pglm',
 #              "broom","webshot","plyr",'extrafont'
 #              ,'tidyverse','RColorBrewer','scales','gsubfn',"gridExtra","reshape2","data.table","Hmisc","poibin","MASS","knitr","stargazer","e1071","akima","plotly",
@@ -656,19 +656,19 @@ mech1_plot <-
   geom_text(
     aes(label = state_id,
         color = ind, 
-        # vjust = 
-        #   case_when(
-        #     #state_id=="CA"~ +1.5,
-        #     #state_id=="CT"~ -0.3,
-        #     state_id=="RI"~ 0
-        #   ),
+        vjust =
+          case_when(
+            #state_id=="CA"~ +1.5,
+            state_id=="RI"~ +1.7,
+            state_id=="CT"~ -1
+          ),
           
           #ifelse(state_id%in%c("CA"), -0.5, ifelse(state_id=="CT", -1.2,0)), 
         hjust = 
           case_when(
             state_id=="CA"~ -0.3,
-            state_id=="CT"~ -0.3,
-            state_id=="RI"~ -0.3,
+            state_id=="CT"~ +0.5,
+            state_id=="RI"~ +0.5,
             state_id=="MA"~ -0.3,
             state_id=="VT"~ -0.3,
           )

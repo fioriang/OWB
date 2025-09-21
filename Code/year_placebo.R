@@ -48,7 +48,7 @@ rm(population_2020)
 
 # Waste Data
 #power2 <- read.csv("power2_2.csv")
-power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv"))
+power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv"))
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
 #bans <- c(2014, 2014, 2016, 2014, 2016)
@@ -219,6 +219,7 @@ close(fileConn)
 actual_ban_year = 2016
 evaluation_years = 3
 offset =3
+samp = 
 
 do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
 {
@@ -237,7 +238,7 @@ do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,y_tr
   att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% sum
   cf <- (x[(test_ind_end2+1):n]+intercept) %>% sum
   intercept2 <-  mean(c(y_train, y_test)-x[1:test_ind_end2])
-  #att2 <- ((y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum)/(x[(test_ind_end2+1):n]+intercept2) %>% sum
+  att2 <- ((y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum)/(x[(test_ind_end2+1):n]+intercept2) %>% sum
   att <- (y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum
   cf <- (x[(test_ind_end2+1):n]+intercept2) %>% sum
   
@@ -434,7 +435,7 @@ year_placebo_many_sizes <- function (chosen_sample_size)
 
 res_all <- lapply(2:7, year_placebo_many_sizes) #iterate over the sample size
 year_placebo <- res_all %>% bind_rows()
-write.csv(year_placebo, "year_placebo.csv", row.names=FALSE)
+#write.csv(year_placebo, "year_placebo.csv", row.names=FALSE)
 #year_placebo <- read.csv("year_placebo.csv")
 
 

@@ -1,0 +1,39 @@
+    1)  Alabama Department of Environmental Management, Solid Waste Biennial Report; \url{https://adem.alabama.gov/programs/land/landforms/SolidWasteReport10-12.pdf}\label{item:msw_AL}
+    2)  Arizona public records request
+    3)  California's CalRecylce, Multi-year Countywide Origin Summary; \url{https://www2.calrecycle.ca.gov/LGCentral/DisposalReporting/Origin/CountywideSummary}
+    4)  Colorado Department of Public Health \& Environment, Landfill disposal statistics; \url{https://cdphe.colorado.gov/hm/landfill-disposal-statistics}
+    5)  Connecticut public records request 
+    6)  Delaware Solid Waste Authority, Annual Reports; \url{https://dswa.com/about-us/annual-reports/}
+    7)  Florida Department of Environmental Protection, Annual Solid Waste Reports \url{https://floridadep.gov/waste/waste-reduction/content/recycling}
+    8)  Georgia Environmental Protection Division, Regulated Solid Waste Facilities; \url{https://epd.georgia.gov/about-us/land-protection-branch/solid-waste/regulated-solid-waste-facilities}
+    9)  Illinois public records request 
+    10) Indiana Department of Environmental Management, Solid Waste Reporting; \url{https://www.in.gov/idem/waste/resources/solid-waste-reporting/}
+    11) Iowa Department of Natural Resources, Solid Waste Section; \url{https://www.iowadnr.gov/Environmental-Protection/Land-Quality/Solid-Waste}
+    12) Kentucky public records request
+    13) Maine Department of Environmental Protection, Waste Generation and Disposal Capacity Reports; \url{https://www.maine.gov/dep/publications/reports/index.html}
+    14) Maryland Department of the Environment, Annual Report on the Management of Solid Waste in Maryland \url{https://mde.maryland.gov/programs/land/pages/landpublications.aspx}
+    15) Massachusetts Department of Environmental Protection, Solid Waste Data Annual Updates; \url{https://www.mass.gov/lists/massdep-solid-waste-policies-guidance-fact-sheets}
+    16) Michigan Department of Environment, Great Lakes, and Energy, Annual Reports of Solid Waste Landfilled in Michigan; \url{https://www.michigan.gov/egle/about/organization/materials-management/solid-waste/solid-waste-disposal-areas/annual-reports-of-solid-waste-landfilled-in-michigan}
+    17) Minnesota Pollution Control Agency, Solid Waste Reporting; \url{https://www.pca.state.mn.us/business-with-us/solid-waste-reporting}
+    18) Mississippi public records request 
+    19) Missouri public records request
+    20) Nevada public records request 
+    21) New Jersey Department of Environmental Protection, Generation, Disposal, and Recycling Rates by County; \url{https://www.nj.gov/dep/dshw/recycling/stats.htm}
+    22) New Mexico Environment Department, Solid Waste Annual Reports; \url{https://www.env.nm.gov/solid-waste/solid-waste-management-plan-and-reports/}
+    23) New York public records request
+    24) North Carolina Environmental Quality Department, Solid Waste Management Annual Report; \url{https://www.deq.nc.gov/about/divisions/waste-management/solid-waste-section/resources-and-data/solid-waste-management-annual-reports}
+    25) Ohio public records request
+    26) Oklahoma Department of Environmental Quality, Annual Solid Waste Tonnage Report; \url{https://www.deq.ok.gov/land-protection-division/waste-management/solid-waste/solid-waste-reporting-forms/}
+    27) Oregon public records request 
+    28) Pennsylvania public records request 
+    29) Rhode Island public records request
+    30) South Carolina Department of Environmental Services, Solid Waste and Recycling Reports; \url{https://scdhec.gov/environment/recycling-waste-reduction/solid-waste-recycling-reports}
+    31) Tennessee public records request
+    32) Texas public records request
+    33) Utah public records request
+    34) Vermont Department of Environmental Conservation, Solid Waste Diversion \& Disposal Reports; \url{https://dec.vermont.gov/document-categories/solid-waste-diversion-disposal-reports}
+    35) Washington Department of Ecology, Solid waste \& recycling data; \url{https://ecology.wa.gov/research-data/data-resources/solid-waste-recycling-data}
+    36) Wisconsin Department of Natural Resources, Landfill Tonnage Reports \url{https://dnr.wisconsin.gov/topic/Landfills/Fees.html}\label{item:msw_WI}
+    
+    37) Seattle Public Utilities, Annual Waste Prevention and Recycling Reports; \url{https://www.seattle.gov/utilities/about/reports/solid-waste#annual}\label{item:msw_seattle}
+    38) City of Boulder, Zero Waste Data Dashboard; \url{https://bouldercolorado.gov/zero-waste-data-dashboard} \label{item:msw_Boulder}

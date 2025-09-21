@@ -44,7 +44,7 @@ rm(population_2020)
 
 # Waste Data
 #power2 <- read.csv("power2_2.csv")
-power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv"))
+power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv"))
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
 #bans <- c(2014, 2014, 2016, 2014, 2016)
@@ -133,9 +133,9 @@ data_comparison <-
     legend.text = element_text(family = "Helvetica",size = 16, color= ut_colors[4])
   )
 
-# ggsave(data_comparison, filename = "data_comparison.pdf", device = cairo_pdf,
-#        path= figure_path,
-#        width = 14, height = 13, dpi=320, units = "in")
+ggsave(data_comparison, filename = "data_comparison.pdf", device = cairo_pdf,
+       path= figure_path,
+       width = 14, height = 13, dpi=320, units = "in")
 
 ############### SC Emissions pre-work #############################
 

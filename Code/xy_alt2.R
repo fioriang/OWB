@@ -138,10 +138,9 @@ pre_processing_dt_state <- function (power2)
   
   year_start <- 2006
   year_cutoff <- 2018
-  dt_state <- 
-    power2 %>% 
+  
+  dt_state <- power2%>% 
     mutate(county_id=paste0(county_name, state_id)) %>% 
-    #filter(!county_id%in%c(rural)) %>% 
     group_by (year, state_id, type) %>% 
     summarise(tons = sum(tons))%>% 
     filter(
@@ -165,6 +164,13 @@ pre_processing_dt_state <- function (power2)
     select(-n) %>% 
     ungroup() 
   
+  # dt_state <- 
+  #   dt_state %>% 
+  #   group_by(state_id) %>% 
+  #   mutate(
+  #     lag = ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)), 
+  #     tons_pc = 100*(tons_pc - lag)/lag
+  #   ) 
   
   dt_state_initial <- dt_state
   return(dt_state_initial)
@@ -299,7 +305,7 @@ figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organ
 ######### Other data that are needed ######### 
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
-power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv")) 
+power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv")) 
 disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
 population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
 population <- cbind(population[1:2], stack(population[3:31]))
@@ -564,7 +570,7 @@ disposal_spec_states_function <- function(file_name)
   power_state5 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="VT"), "VT")
   power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
   pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , 
-                           r_threshold = 0, mape_threshold = Inf, n =5, seed=5)
+                           r_threshold = 0, mape_threshold = Inf, n =5, seed=1)
   power_state6 <- 
     pool_estimates %>% 
     bind_rows %>%  
@@ -1916,20 +1922,21 @@ pooled_sample_size <- chosen_sample_size %>% filter(treated_state=="All") %>% pl
 seattle_number=which(treated_counties_id_cities=="seattleM1")
 boulder_number=which(treated_counties_id_cities=="boulderM2")
 
+chosen_sample_size_counties <- 
+  read.csv(file=paste0(base_path,"power_county.csv")) %>% as_tibble() %>% group_by(treated_state) %>% filter(att_min == max(att_min))
+
+chosen_sample_size_boulder <- chosen_sample_size_counties %>% filter(treated_state == "RI") %>% pluck("sample_size")-2
+chosen_sample_size_seattle <- chosen_sample_size_counties %>% filter(treated_state == "M1") %>% pluck("sample_size")-2
+
 set.seed(2)
 
 xy_plot_data <-
   rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
-    xy_plot_data_function("CA",chosen_sample_size_CA,1), # f is the chosen sample size -2
-    xy_plot_data_function("CT",chosen_sample_size_CT,1),
-    xy_plot_data_function("MA",chosen_sample_size_MA,1),
-    xy_plot_data_function("RI",chosen_sample_size_RI,1),
-    xy_plot_data_function("VT",chosen_sample_size_VT,1),
-    
-    xy_plot_data_function_cities(seattle_number, 2, 7) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
-    xy_plot_data_function_cities(boulder_number, 2, 7) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
-    xy_plot_data_function_sf(2,1 )  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
-    
+    xy_plot_data_function("CA",chosen_sample_size_CA,6), # f is the chosen sample size -2
+    xy_plot_data_function("CT",chosen_sample_size_CT,6),
+    xy_plot_data_function("MA",chosen_sample_size_MA,6),
+    xy_plot_data_function("RI",chosen_sample_size_RI,6),
+    xy_plot_data_function("VT",chosen_sample_size_VT,6)
   )
 # 
 

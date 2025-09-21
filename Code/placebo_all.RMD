@@ -976,7 +976,7 @@ counties_with_low_disposal <- counties_with_low_disposal[!counties_with_low_disp
 counties_with_low_avg_disposal<- counties_with_low_avg_disposal[!counties_with_low_avg_disposal %in% c(counties_with_incomplete_panels %>% pluck("county_id"), counties_with_late_year_start)] %>% length()
 
 
-
+# 
 # 
 # fileConn<-file(paste0(figure_path, "/counties_excluded_because_of_low_disposal.txt"))
 # writeLines(paste0(format(scales::number(counties_with_low_disposal, accuracy = 1),big.mark=",",scientific=FALSE),''), fileConn)
@@ -998,7 +998,7 @@ counties_with_low_avg_disposal<- counties_with_low_avg_disposal[!counties_with_l
 # fileConn<-file(paste0(figure_path, "/pct_of_total_disposal.txt"))
 # writeLines(paste0(format(scales::number(100*pct_of_total_disposal, accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
 # close(fileConn)
-
+# 
 
 ```
 
@@ -1012,10 +1012,10 @@ pre_processing_dt_state <- function (power2)
   
   year_start <- 2006
   year_cutoff <- 2018
+
   dt_state <- 
     power2 %>% 
     mutate(county_id=paste0(county_name, state_id)) %>% 
-    #filter(!county_id%in%c(rural)) %>% 
     group_by (year, state_id, type) %>% 
     summarise(tons = sum(tons))%>% 
     filter(
@@ -1202,8 +1202,8 @@ samp=seq(3,10) # possible values of |S|
 # power_state_plac function creates the SCs (i.e., applies our identification method for each non-treated state)
 # This function returns: for each sample_size, the 100 best SCs
 #####
-seed=10
-for (seed in 1:4)
+seed=4
+for (seed in c(5:3))
 {
   power_state_plac1 <- power_state_plac("MA", dt_state_initial, seed) # SC outcomes for MA's ban
   power_state_plac2 <- power_state_plac("CA", dt_state_initial, seed) # SC outcomes for CA's ban
@@ -1211,9 +1211,9 @@ for (seed in 1:4)
   power_state_plac4 <- power_state_plac("RI", dt_state_initial, seed)# SC outcomes for RI's ban
   power_state_plac5 <- power_state_plac("VT", dt_state_initial, seed)# SC outcomes for VT's ban
   power_state_plac6 <- power_state_plac("All", dt_state_initial,seed) #needed for the aggregate case
+
   
   
-  power_state_fun2(power_state_plac3 %>% bind_rows() %>% mutate(treated_state=="CT"), "CT")
   
   write.csv(
     rbind(
@@ -1224,7 +1224,7 @@ for (seed in 1:4)
       power_state_plac5 %>% bind_rows %>% mutate(treated_state="VT"),
       power_state_plac6 %>% bind_rows %>% mutate(treated_state="All")
     ),
-    paste0("power_state_plac_2025_seed", seed, ".csv"), row.names=FALSE
+    paste0("power_state_plac_2025_seed", seed, "_20sep.csv"), row.names=FALSE
   )
   
 }
@@ -1408,7 +1408,7 @@ Because we only have 22 available ATTs in each placebo distribution and 1/22=0.0
 Below we look at the optimal |S|, as well as the confidence intervals 
 
 ```{r}
-filename = "power_state_plac_2025_seed5.csv"
+filename = "power_state_plac_2025_seed5_20sep.csv"
 power_state_plac_data <- read.csv(filename)
 
 new_power <- 
@@ -1420,34 +1420,62 @@ new_power <-
     power_state_fun2_alternative(power_state_plac_data %>% filter(treated_state=="VT"), "VT") %>% ungroup %>% filter(att_min == max(att_min))
   )
 
-new_sample_size <- 
-
 new_xy_data <- 
   # need to load functions from xy.R
   rbind(
-    xy_plot_data_function("CA",new_power %>% filter(treated_state=="CA") %>% pluck("sample_size")-2,1), 
-    xy_plot_data_function("CT",new_power %>% filter(treated_state=="CT") %>% pluck("sample_size")-2,2),
-    xy_plot_data_function("MA",new_power %>% filter(treated_state=="MA") %>% pluck("sample_size")-2,3),
-    xy_plot_data_function("RI",new_power %>% filter(treated_state=="RI") %>% pluck("sample_size")-2,4),
-    xy_plot_data_function("VT",new_power %>% filter(treated_state=="VT") %>% pluck("sample_size")-2,5)
+    xy_plot_data_function("CA",new_power %>% filter(treated_state=="CA") %>% pluck("sample_size")-2,6), 
+    xy_plot_data_function("CT",new_power %>% filter(treated_state=="CT") %>% pluck("sample_size")-2,6),
+    xy_plot_data_function("MA",new_power %>% filter(treated_state=="MA") %>% pluck("sample_size")-2,6),
+    xy_plot_data_function("RI",new_power %>% filter(treated_state=="RI") %>% pluck("sample_size")-2,6),
+    xy_plot_data_function("VT",new_power %>% filter(treated_state=="VT") %>% pluck("sample_size")-2,6)
   )
 
-new_xy_data %>% 
+new_ATTs = 
+  new_xy_data %>% 
   filter(attempt==1) %>% 
   group_by(treated_state) %>% 
   filter(year>=ban_year) %>% 
   summarise(actual_treatment_effect = sum(tons_pc - y_0)/sum(y_0))
 
+fileConn<-file(paste0(figure_path, "/ca_att_wide.txt"))
+writeLines(paste0(format(scales::number(
+  new_ATTs %>% filter(treated_state=="CA") %>% pull("actual_treatment_effect")*100
+  , accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/ct_att_wide.txt"))
+writeLines(paste0(format(scales::number(
+  new_ATTs %>% filter(treated_state=="CT") %>% pull("actual_treatment_effect")*100
+  , accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/ma_att_wide.txt"))
+writeLines(paste0(format(scales::number(
+  new_ATTs %>% filter(treated_state=="MA") %>% pull("actual_treatment_effect")*100
+  , accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/ri_att_wide.txt"))
+writeLines(paste0(format(scales::number(
+  new_ATTs %>% filter(treated_state=="RI") %>% pull("actual_treatment_effect")*100
+  , accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+fileConn<-file(paste0(figure_path, "/vt_att_wide.txt"))
+writeLines(paste0(format(scales::number(
+  new_ATTs %>% filter(treated_state=="VT") %>% pull("actual_treatment_effect")*100
+  , accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
 
 
-# all the results continue to hold
+# all the results continue to hold, with CT moving much closer to 0, at -0.8%
 ```
 
 
 ### P values
 Make sure that the filename you choose here is the same as the filename chosen in the xy plot, used to generate the ATTs
 ```{r}
-filename = "power_state_plac_2025_seed5.csv"
+filename = "power_state_plac_2025_seed5_20sep.csv"
 power_state_plac_data <- read.csv(filename)
 bt_with_power_data = read.csv("bt_with_power_data.csv")
 
@@ -1466,7 +1494,7 @@ effects_att <-
   )
 
 power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
-pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , r_threshold = 0, mape_threshold = Inf, n =5, seed=7)
+pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , r_threshold = 0, mape_threshold = Inf, n =5, seed=1)
 
 
 p_values_fun <- function (plac, treated_state)

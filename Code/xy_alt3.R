@@ -138,10 +138,30 @@ pre_processing_dt_state <- function (power2)
   
   year_start <- 2006
   year_cutoff <- 2018
-  dt_state <- 
+  
+  dt_ca <- 
     power2 %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed"),
+      state_id=="CA" | state_id=="FL"
+    ) %>% 
+    group_by(county_name, state_id) %>% 
+    mutate(
+      tons_high = sort(tons, decreasing=TRUE)[2], # this takes the 2nd largest and 2nd smallest values
+      tons_low = sort(tons)[2],
+      tons= ifelse(tons>= tons_high, tons_high, tons),
+      tons = ifelse(tons<= tons_low, tons_low, tons)
+    ) %>% 
+    select(-tons_high) %>% select(-tons_low) %>% ungroup
+  
+  
+  dt_state <- 
+    rbind(
+      power2 %>% filter(!state_id %in% c("CA", "FL")), 
+      dt_ca) %>% 
     mutate(county_id=paste0(county_name, state_id)) %>% 
-    #filter(!county_id%in%c(rural)) %>% 
     group_by (year, state_id, type) %>% 
     summarise(tons = sum(tons))%>% 
     filter(
@@ -165,11 +185,19 @@ pre_processing_dt_state <- function (power2)
     select(-n) %>% 
     ungroup() 
   
-
+  # dt_state <- 
+  #   dt_state %>% 
+  #   group_by(state_id) %>% 
+  #   mutate(
+  #     lag = ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)), 
+  #     tons_pc = 100*(tons_pc - lag)/lag
+  #   ) 
+  
   dt_state_initial <- dt_state
   return(dt_state_initial)
   
 }
+
 
 pre_processing_dt_sf <- function(power2)
 {
@@ -299,7 +327,7 @@ figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organ
 ######### Other data that are needed ######### 
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
-power2 <- read.csv(file=paste0(base_path,"power2_impexp.csv")) 
+power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv")) 
 disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
 population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
 population <- cbind(population[1:2], stack(population[3:31]))
@@ -1917,6 +1945,12 @@ pooled_sample_size <- chosen_sample_size %>% filter(treated_state=="All") %>% pl
 seattle_number=which(treated_counties_id_cities=="seattleM1")
 boulder_number=which(treated_counties_id_cities=="boulderM2")
 
+chosen_sample_size_counties <- 
+  read.csv(file=paste0(base_path,"power_county.csv")) %>% as_tibble() %>% group_by(treated_state) %>% filter(att_min == max(att_min))
+
+chosen_sample_size_boulder <- chosen_sample_size_counties %>% filter(treated_state == "RI") %>% pluck("sample_size")-2
+chosen_sample_size_seattle <- chosen_sample_size_counties %>% filter(treated_state == "M1") %>% pluck("sample_size")-2
+
 set.seed(2)
 
 xy_plot_data <-
@@ -1926,11 +1960,11 @@ xy_plot_data <-
     xy_plot_data_function("MA",chosen_sample_size_MA,1),
     xy_plot_data_function("RI",chosen_sample_size_RI,1),
     xy_plot_data_function("VT",chosen_sample_size_VT,1),
-
-    xy_plot_data_function_cities(seattle_number, 2, 7) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
-    xy_plot_data_function_cities(boulder_number, 2, 7) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    
+    xy_plot_data_function_cities(seattle_number, chosen_sample_size_seattle, 5) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
+    xy_plot_data_function_cities(boulder_number, chosen_sample_size_boulder, 5) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
     xy_plot_data_function_sf(2,1 )  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
-
+    
   )
 # 
 
@@ -2220,7 +2254,7 @@ xy_and_power_2
 
 ##### Fig.2: all together #####
 bt_with_power_data
-
+# 
 ggsave(
   xy_and_power_2, filename = "xy_and_power_2025_alt3.pdf", device = cairo_pdf,
   path= figure_path,

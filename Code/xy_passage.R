@@ -52,10 +52,11 @@ pre_processing_dt_state <- function (power2)
   
   year_start <- 2006
   year_cutoff <- 2018
+  
+
   dt_state <- 
-    power2 %>% 
+power2 %>% 
     mutate(county_id=paste0(county_name, state_id)) %>% 
-    #filter(!county_id%in%c(rural)) %>% 
     group_by (year, state_id, type) %>% 
     summarise(tons = sum(tons))%>% 
     filter(
@@ -79,11 +80,19 @@ pre_processing_dt_state <- function (power2)
     select(-n) %>% 
     ungroup() 
   
-
+  # dt_state <- 
+  #   dt_state %>% 
+  #   group_by(state_id) %>% 
+  #   mutate(
+  #     lag = ifelse(is.na(lag(tons_pc, n=1, default = NA)), tons_pc, lag(tons_pc, n=1, default = NA)), 
+  #     tons_pc = 100*(tons_pc - lag)/lag
+  #   ) 
+  
   dt_state_initial <- dt_state
   return(dt_state_initial)
   
 }
+
 
 pooled_ban_year = 2015
 offset = 3
