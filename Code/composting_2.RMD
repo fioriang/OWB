@@ -52,7 +52,7 @@ rm(population_2020)
 
 # Waste Data#
 #power2 <- read.csv("power2_2.csv")
-power2 <- read.csv("power2_impexp_final_20sep.csv")
+power2 <- read.csv("final_checks/power2_impexp_spec2_ut_nmsw.csv")
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 #bans <- c(2015, 2015, 2016, 2014, 2016)
 #bans <- c(2014, 2014, 2016, 2014, 2016)

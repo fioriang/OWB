@@ -1,4 +1,6 @@
 ############### File description ###########
+data_file ="final_checks/power2_impexp_spec2_ut_nmsw.csv" # this should not be changed, this is the data file
+power_file ="power_state_plac_2025_seed_10_alt2.csv" # this is the placebo file, can be changed to check robustness across different randomness factors
 
 # In this code there are xx parts 
 
@@ -139,7 +141,28 @@ pre_processing_dt_state <- function (power2)
   year_start <- 2006
   year_cutoff <- 2018
   
-  dt_state <- power2%>% 
+  dt_ca <- 
+    power2 %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed"),
+      state_id=="CA" | state_id=="FL"
+    ) %>% 
+    group_by(county_name, state_id) %>% 
+    mutate(
+      tons_high = sort(tons, decreasing=TRUE)[2], # this takes the 2nd largest and 2nd smallest values
+      tons_low = sort(tons)[2],
+      tons= ifelse(tons>= tons_high, tons_high, tons),
+      tons = ifelse(tons<= tons_low, tons_low, tons)
+    ) %>% 
+    select(-tons_high) %>% select(-tons_low) %>% ungroup
+  
+  
+  dt_state <- 
+    rbind(
+      power2 %>% filter(!state_id %in% c("CA", "FL")), 
+      dt_ca) %>% 
     mutate(county_id=paste0(county_name, state_id)) %>% 
     group_by (year, state_id, type) %>% 
     summarise(tons = sum(tons))%>% 
@@ -176,6 +199,7 @@ pre_processing_dt_state <- function (power2)
   return(dt_state_initial)
   
 }
+
 
 pre_processing_dt_sf <- function(power2)
 {
@@ -305,7 +329,7 @@ figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organ
 ######### Other data that are needed ######### 
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
-power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv")) 
+power2 <- read.csv(file=paste0(base_path, data_file)) 
 disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
 population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
 population <- cbind(population[1:2], stack(population[3:31]))
@@ -456,6 +480,7 @@ reg_effect <- c(0.098, 0.185, 0.6*0.316/0.214*vt_exp_effect)
 
 
 ######### Functions######### 
+
 power_state_fun2 <- function(plac, treated_state)
 {
   #### 
@@ -560,7 +585,7 @@ pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
     ungroup
 }
 
-disposal_spec_states_function <- function(file_name)
+disposal_spec_states_function <- function(filename)
 {
   power_state_plac_data <- read.csv(filename)
   power_state1 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="MA"), "MA") 
@@ -576,9 +601,8 @@ disposal_spec_states_function <- function(file_name)
     bind_rows %>%  
     group_by(sample_size, ban_year) %>% 
     summarise(
-      att_min = sort(att)[2],
-      att_max = sort(att, decreasing = TRUE)[2],
-      att_median = median(att)
+      att_min = sort(att)[1],
+      att_max = sort(att, decreasing = TRUE)[1]
     ) %>% mutate(
       specification = "State Pooled", year = 2015, treated_state="All"
     )
@@ -598,7 +622,7 @@ disposal_spec_states_function <- function(file_name)
 }
 
 do_many_times_v3_with_inter <- function (i, x, test_ind_end1, test_ind_end2,
-                                         y_train, y_test, y_att, n_don, sample_size)
+                                          y_train, y_test, y_att, n_don, sample_size)
 {
   #Approach 2- Only Intercept
   samples <- sample(n_don, sample_size)
@@ -636,7 +660,6 @@ xy_plot_data_function <- function (treated_state, f, seed)#this function creates
   # we recenter the time series of the treated states based on when the ban went into effect, i.e., for VT it went into effect in July so we recenter the time series so it starts in July
   ####
   ban_year <- bans[which(all_treated == treated_state)]
-  if(treated_state %in% c("MA", "VT")){ban_year=ban_year + 1}
   dt_state <- dt_state_initial
   
   dt <- dt_state %>% as.data.frame()
@@ -880,7 +903,6 @@ xy_plot_data_function_donors <- function (treated_state, f, seed) #what are the 
 {
   set.seed(seed)
   ban_year <- bans[which(all_treated == treated_state)]
-  if(treated_state %in% c("MA", "VT")){ban_year=ban_year + 1}
   dt_state <- dt_state_initial
   
   dt <- dt_state %>% as.data.frame()
@@ -1151,7 +1173,7 @@ xy_plot_data_function_sf <- function (f, seed) #this function creates the SC and
   donors <- unique(dt$county_id[!(dt$state_id%in% all_treated)])
   treated_state = "M3"
   ban_year <- bans[which(all_treated == treated_state)]
-  
+
   year_end <- ban_year-offset
   treated_location <- "san franciscoM3"
   
@@ -1364,7 +1386,7 @@ xy_plot_fun <- function (i) #this fn takes as input the xy_plot_data output and 
           ylab_mae=ifelse(treated_state%in%c("RI"), ylab_mae-0.01, ylab_mae), 
           xlab_mae=ifelse(treated_state%in%c("Seattle, WA"), xlab_mae-2.5, xlab_mae), 
           xlab_mae=ifelse(treated_state%in%c("All"), xlab_mae-3.5, xlab_mae), 
-        ) %>% 
+          ) %>% 
         group_by(treated_state, xlab_mae, ylab_mae, year) %>% 
         summarise(
           MAE = abs((tons_pc-y_0)/tons_pc) %>%{.*100} %>%  mean %>% round(2)) %>% 
@@ -1764,7 +1786,7 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
       rbind(
         xy_plot_data%>% select(year, treated_state, ban_year, attempt, tons_pc, y, y_0, y_0_effect), 
         all
-      ) %>% 
+        ) %>% 
         group_by(treated_state) %>% 
         filter(year > ban_year-3, year < ban_year, attempt==i) %>%
         mutate(
@@ -1908,8 +1930,9 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
   return(p)
 }
 
+
 ######## Fig.2: left panel ##############
-filename = "power_state_plac_2025_seed_5_alt2.csv"
+filename = power_file
 chosen_sample_size = disposal_spec_states_function(filename)
 
 chosen_sample_size_CA <- chosen_sample_size %>% filter(treated_state=="CA") %>% pluck("sample_size")-2
@@ -1932,11 +1955,11 @@ set.seed(2)
 
 xy_plot_data <-
   rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
-    xy_plot_data_function("CA",chosen_sample_size_CA,6), # f is the chosen sample size -2
-    xy_plot_data_function("CT",chosen_sample_size_CT,6),
-    xy_plot_data_function("MA",chosen_sample_size_MA,6),
-    xy_plot_data_function("RI",chosen_sample_size_RI,6),
-    xy_plot_data_function("VT",chosen_sample_size_VT,6)
+    xy_plot_data_function("CA",chosen_sample_size_CA,1), # f is the chosen sample size -2
+    xy_plot_data_function("CT",chosen_sample_size_CT,1),
+    xy_plot_data_function("MA",chosen_sample_size_MA,1),
+    xy_plot_data_function("RI",chosen_sample_size_RI,1),
+    xy_plot_data_function("VT",chosen_sample_size_VT,1)
   )
 # 
 
@@ -2160,24 +2183,24 @@ bt_with_power_2 <-
   #scale_x_continuous(breaks = c(seq(-25, 25, by = 5)), limits = c(-30, 25))+ 
   scale_x_continuous(breaks = c(seq(-35, 35, by = 10)), limits = c(-40, 40))+ 
   scale_y_discrete(position= "left", expand=c(0.02,0.01))+
-  theme(
-    legend.position = "top",  # Keep the legend at the top
-    legend.justification = c(1, 2),
-    legend.box.margin = margin(t = 0, r = 0, b = 0, l = 70),
-    strip.background = element_rect(color = "white", fill = "white"),
-    panel.grid.major.x = element_blank() ,
-    panel.grid.major.y = element_blank(),
-    panel.background = element_blank(),
-    text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]),
-    strip.text = element_text(angle = 0, hjust = 1),
-    strip.placement = "outside",
-    axis.ticks.y = element_blank(),
-    legend.key = element_rect(colour = NA, fill = NA, size = 5),
-    legend.spacing.x = unit(-1, "pt"),
-    axis.ticks.x = element_line(size = 0.1),
-    legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
-  )
-
+    theme(
+      legend.position = "top",  # Keep the legend at the top
+      legend.justification = c(1, 2),
+      legend.box.margin = margin(t = 0, r = 0, b = 0, l = 70),
+      strip.background = element_rect(color = "white", fill = "white"),
+      panel.grid.major.x = element_blank() ,
+      panel.grid.major.y = element_blank(),
+      panel.background = element_blank(),
+      text = element_text(family = "Helvetica",size = 10, color= ut_colors[4]),
+      strip.text = element_text(angle = 0, hjust = 1),
+      strip.placement = "outside",
+      axis.ticks.y = element_blank(),
+      legend.key = element_rect(colour = NA, fill = NA, size = 5),
+      legend.spacing.x = unit(-1, "pt"),
+      axis.ticks.x = element_line(size = 0.1),
+      legend.text = element_text(family = "Helvetica",size = 10, color= ut_colors[4])
+    )
+  
 
 
 
@@ -2226,9 +2249,20 @@ xy_and_power_2
 
 ##### Fig.2: all together #####
 bt_with_power_data
-
-ggsave(
-  xy_and_power_2, filename = "xy_and_power_2025_alt2.pdf", device = cairo_pdf,
-  path= figure_path,
-  width = 10, height = 9, units = "in")
 # 
+# ggsave(
+#   xy_and_power_2, filename = "xy_and_power_2025_alt2.pdf", device = cairo_pdf,
+#   path= figure_path,
+#   width = 10, height = 9, units = "in")
+
+
+#With seed =1 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =2 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =3 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =4 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =5 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =6 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =7 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =8 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =9 : MA is sig, CA, CT, RI, VT are non-sig
+#With seed =10: MA is sig, CA, CT, RI, VT are non-sig

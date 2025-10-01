@@ -1,5 +1,6 @@
 ############### File description ###########
-
+data_file = "final_checks/power2_impexp_spec2_ut_nmsw.csv"
+power_file = "final_checks/power_state_plac_spec2_ut_nmsw.csv"
 # In this code there are xx parts 
 
 # Part 1: Loading the data, paths, pre-processing and functions 
@@ -302,7 +303,7 @@ figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organ
 ######### Other data that are needed ######### 
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
-power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv")) 
+power2 <- read.csv(file=paste0(base_path,data_file)) 
 disposal_effect_size2 <- read.csv("disposal_effect_size2.csv") %>% as_tibble() #needed to caclulate the expected effects
 population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
 population <- cbind(population[1:2], stack(population[3:31]))
@@ -492,21 +493,9 @@ power_state_fun2 <- function(plac, treated_state)
   
 }
 
-pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
+pool_function <-function(seed, i, data, donors, r_threshold,mape_threshold,n)
 {
-  
-  # data =
-  # data %>% filter(sample_size!=0) %>% 
-  # group_by(sample_size, county_id, ban_year) %>% 
-  # filter(mape==min(mape)) %>% 
-  # summarise(
-  #   att = mean(att),
-  #   r_sq = mean(r_sq),
-  #   mape = mean(mape), 
-  #   cf = mean(cf)
-  # )
-  
-  
+
   set.seed(seed)
   donors <- tibble(
     county_id =donors, 
@@ -558,6 +547,7 @@ pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
     ungroup
 }
 
+
 disposal_spec_states_function <- function(filename)
 {
   power_state_plac_data <- read.csv(filename)
@@ -567,16 +557,17 @@ disposal_spec_states_function <- function(filename)
   power_state4 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="RI"), "RI")
   power_state5 <- power_state_fun2(power_state_plac_data %>% filter(treated_state=="VT"), "VT")
   power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
+
   pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), donors = donors_state , 
-                           r_threshold = 0, mape_threshold = Inf, n =5, seed=5)
+                               r_threshold = 0, mape_threshold = Inf, n =5, seed=1)
+      
   power_state6 <- 
     pool_estimates %>% 
     bind_rows %>%  
     group_by(sample_size, ban_year) %>% 
     summarise(
-      att_min = sort(att)[2],
-      att_max = sort(att, decreasing = TRUE)[2],
-      att_median = median(att)
+      att_min = sort(att)[2], #(sort(att)[2]+ sort(att)[1])/2,
+      att_max = sort(att, decreasing = TRUE)[2]#(sort(att, decreasing = TRUE)[1]+sort(att, decreasing = TRUE)[2])/2
     ) %>% mutate(
       specification = "State Pooled", year = 2015, treated_state="All"
     )
@@ -1022,7 +1013,7 @@ municipal_effect <- read.csv("municipal_effect.csv")
 xy_plot_data_function_cities <- function (k, f, seed) #this function creates the SC and returns the disposal per capita of the actual and the synthetic state for cities
 {
   set.seed(seed)
-  dt <- dt_initial %>% as.data.frame()
+  dt <- dt_initial %>% as.data.frame() 
   treated_state <- str_sub(treated_counties_id_cities[k],start=-2)
   ban_year <- bans[which(all_treated == treated_state)]
   year_end <- ban_year-offset
@@ -1059,7 +1050,8 @@ xy_plot_data_function_cities <- function (k, f, seed) #this function creates the
   )
   
   sample_size <- samp[f]
-  all <- lapply(seq(1:50000),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+  iterations = 100000#*sample_size
+  all <- lapply(seq(1:iterations),do_many_times_v3_with_inter,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
   donor_cols <- paste0(rep("V", sample_size), paste0("", c(4:(4+sample_size-1))))
   
   all <- all %>% sapply(c) %>% t
@@ -1135,7 +1127,7 @@ xy_plot_data_function_cities <- function (k, f, seed) #this function creates the
     summarise(y=mean(y)) %>%
     mutate(
       y_0  = y+intercept2
-    ) %>% #filter(attempt %in% c(1,7,19)) %>% 
+    ) %>% 
     ungroup %>%  
     mutate(
       treated_state = treated_state, 
@@ -1935,7 +1927,7 @@ xy_plot_fun_cities <- function (i) #same as above but for the Seattle and Boulde
 
 
 ######## Fig.2: left panel ##############
-filename = "power_state_plac_2025_seed10_20sep.csv"
+filename = power_file
 chosen_sample_size = disposal_spec_states_function(filename)
 
 chosen_sample_size_CA <- chosen_sample_size %>% filter(treated_state=="CA") %>% pluck("sample_size")-2
@@ -1955,24 +1947,29 @@ chosen_sample_size_boulder <- chosen_sample_size_counties %>% filter(treated_sta
 chosen_sample_size_seattle <- chosen_sample_size_counties %>% filter(treated_state == "M1") %>% pluck("sample_size")-2
   
 
+chosen_sample_size_sf <- 
+  read.csv(file=paste0(base_path,"sf_power.csv")) %>% as_tibble() %>% filter(sample_size!=0) %>% group_by(treated_state) %>% filter(att_min == max(att_min)) %>% pluck("sample_size")-2
+
+
 set.seed(2)
 
 xy_plot_data <-
   rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
-    xy_plot_data_function("CA",chosen_sample_size_CA,6), # f is the chosen sample size -2
-    xy_plot_data_function("CT",chosen_sample_size_CT,6),
-    xy_plot_data_function("MA",chosen_sample_size_MA,6),
-    xy_plot_data_function("RI",chosen_sample_size_RI,6),
-    xy_plot_data_function("VT",chosen_sample_size_VT,6),
+    xy_plot_data_function("CA",chosen_sample_size_CA,1), # f is the chosen sample size -2
+    xy_plot_data_function("CT",chosen_sample_size_CT,1),
+    xy_plot_data_function("MA",chosen_sample_size_MA,1),
+    xy_plot_data_function("RI",chosen_sample_size_RI,1),
+    xy_plot_data_function("VT",chosen_sample_size_VT,1),
 
-    xy_plot_data_function_cities(seattle_number, chosen_sample_size_seattle, 8) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
-    xy_plot_data_function_cities(boulder_number, chosen_sample_size_boulder, 8) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
-    xy_plot_data_function_sf(2,1 )  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+    # I pick seed =2 for Seattle and Boulder because that is closer to the median values. for seed =1 Seattle's ATT = -20.3% and Boulder's ATT =-2.7%
+    xy_plot_data_function_cities(seattle_number, chosen_sample_size_seattle, 2) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    xy_plot_data_function_cities(boulder_number, chosen_sample_size_boulder, 2) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect),
+    xy_plot_data_function_sf(chosen_sample_size_sf,1)  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
 
   )
-# 
+#
 
-pooled_seed=5
+pooled_seed=1
 xy_plot_data_uncentered <-
   rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
     xy_plot_data_uncentered_function("CA",pooled_sample_size,pooled_seed), # f is the chosen sample size -2
@@ -1983,12 +1980,12 @@ xy_plot_data_uncentered <-
   )
 
 # 
-#   # get the donors of each treated states
-donors_CA <- xy_plot_data_function_donors("CA",chosen_sample_size_CA,6) # f is the chosen sample size -2
-donors_CT <- xy_plot_data_function_donors("CT",chosen_sample_size_CT,6)
-donors_MA <- xy_plot_data_function_donors("MA",chosen_sample_size_MA,6)
-donors_RI <- xy_plot_data_function_donors("RI",chosen_sample_size_RI,6)
-donors_VT <- xy_plot_data_function_donors("VT",chosen_sample_size_VT,6)
+  # get the donors of each treated states
+# donors_CA <- xy_plot_data_function_donors("CA",chosen_sample_size_CA,1) # f is the chosen sample size -2
+# donors_CT <- xy_plot_data_function_donors("CT",chosen_sample_size_CT,1)
+# donors_MA <- xy_plot_data_function_donors("MA",chosen_sample_size_MA,1)
+# donors_RI <- xy_plot_data_function_donors("RI",chosen_sample_size_RI,1)
+# donors_VT <- xy_plot_data_function_donors("VT",chosen_sample_size_VT,1)
 
 # this is to save and load the datasets. for exact reproduction of the paper's figures please load the "xy_plot_data.csv"
 # 
@@ -2258,15 +2255,17 @@ xy_and_power_2
 
 ##### Fig.2: all together #####
 bt_with_power_data
-read.csv("bt_with_power_data.csv") %>% as_tibble()
+
+bt_with_power_data %>% select(power_low, power_high, state_id, actual_treatment_effect) %>% mutate(rej=100*actual_treatment_effect-power_high) %>% filter(state_id %in% c("MA", "CA", "CT", "RI", "VT", "All States"))
+
+#write.csv(bt_with_power_data, "bt_with_power_data.csv", row.names=FALSE)
 
 ggsave(
   xy_and_power_2, filename = "xy_and_power_2025.pdf", device = cairo_pdf,
   path= figure_path,
   width = 10, height = 9, units = "in")
-# 
 
-write.csv(bt_with_power_data, "bt_with_power_data.csv", row.names=FALSE)
+
 
 ############################## Fig. S7: City-level bans ########################################
 xy_and_power_2_cities <- 
@@ -2404,7 +2403,7 @@ power_sf <- bt_with_power_data %>% filter(state_id=="San Francisco, CA") %>% plu
 reject_ca <-  abs(100*bt_with_power_data %>% filter(state_id=="CA") %>% pluck("actual_treatment_effect") - bt_with_power_data %>% filter(state_id=="CA") %>% pluck("power_high"))
 reject_vt <-  abs(100*bt_with_power_data %>% filter(state_id=="VT") %>% pluck("actual_treatment_effect") - bt_with_power_data %>% filter(state_id=="VT") %>% pluck("power_high"))
 reject_ri <-  abs(100*bt_with_power_data %>% filter(state_id=="RI") %>% pluck("actual_treatment_effect") - bt_with_power_data %>% filter(state_id=="RI") %>% pluck("power_high"))
-reject_ct <-  abs(100*bt_with_power_data %>% filter(state_id=="CT") %>% pluck("actual_treatment_effect") - bt_with_power_data %>% filter(state_id=="VT") %>% pluck("power_high"))
+reject_ct <-  abs(100*bt_with_power_data %>% filter(state_id=="CT") %>% pluck("actual_treatment_effect") - bt_with_power_data %>% filter(state_id=="CT") %>% pluck("power_high"))
 
 
 mae_all <- xy_plot$data %>% filter(treated_state=="All", location == "Actual") %>% select(MAE) %>% mutate(MAE = str_extract(MAE, "\\d+\\.\\d+")) %>% filter(!is.na(MAE)) %>% pluck("MAE") %>% as.numeric
@@ -2620,308 +2619,6 @@ rm(mae_all, mae_ca, mae_ct, mae_ma, mae_ri, mae_vt, reject_all, reject_ca, rejec
 rm(power_all, power_all_upper, power_ca, power_ct, power_vt, power_ma, power_ri, power_se, power_sf, power_bo, power_ri_upper, power_vt_upper, last_year_effect)
 
 
-############################## Monte Carlo Checks ############################## 
-
-## We want to iterate over 2 different things: 
-# 1) the pl_seed (placebo seed: the input seed, randomizer, for creating the placebo distributions. This is important because it might change the optimal |S^*|) 
-# 2) the seed that is the randomizer that is used in creating the ATTs
-
-# For 1) we have 10 different values, we need to load the different datasets that give us the results of the placebos. we do so by this;   filename=paste0("power_state_plac_2025_seed", pl_seed,".csv")
-# For 2) we basically run the xy_plot_data_function 200 times to create, potentially, different instances--> this is done with the mc_function_all_inclusive function
-
-# Once we have the effects, from the mc_function_all_inclusive function, we 
-
-mc_function_all_inclusive <- function(filename){
-  #given a file name choose the optimal sample_Size for each state
-  chosen_sample_size = disposal_spec_states_function(filename) 
-  
-  chosen_sample_size_CA <- chosen_sample_size %>% filter(treated_state=="CA") %>% pluck("sample_size")-2
-  chosen_sample_size_CT <- chosen_sample_size %>% filter(treated_state=="CT") %>% pluck("sample_size")-2
-  chosen_sample_size_MA <- chosen_sample_size %>% filter(treated_state=="MA") %>% pluck("sample_size")-2
-  chosen_sample_size_RI <- chosen_sample_size %>% filter(treated_state=="RI") %>% pluck("sample_size")-2
-  chosen_sample_size_VT <- chosen_sample_size %>% filter(treated_state=="VT") %>% pluck("sample_size")-2
-  pooled_sample_size <- chosen_sample_size %>% filter(treated_state=="All") %>% pluck("sample_size")-2
-  
-  # iterate over the seed
-  monte_carlo_function <- function(seed)
-  {
-    xy_plot_data <-
-      rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
-        xy_plot_data_function("CA",chosen_sample_size_CA,seed), # f is the chosen sample size -2
-        xy_plot_data_function("CT",chosen_sample_size_CT,seed),
-        xy_plot_data_function("MA",chosen_sample_size_MA,seed),
-        xy_plot_data_function("RI",chosen_sample_size_RI,seed),
-        xy_plot_data_function("VT",chosen_sample_size_VT,seed)
-      )
-    
-    
-    res <- 
-      xy_plot_data %>% 
-      group_by(county_id) %>%
-      filter(
-        attempt==1,
-        year>=ban_year,
-      ) %>%
-      summarise(actual_treatment_effect = 100*sum(tons_pc - y_0)/sum(y_0)) %>% 
-      mutate(seed=seed)
-    
-    #do the same for the aggregate case
-    xy_plot_data_uncentered <-
-      rbind( # we choose the sample size from the power calculations, see placebo_all.RMD or power_state.csv
-        xy_plot_data_uncentered_function("CA",pooled_sample_size,seed), # f is the chosen sample size -2
-        xy_plot_data_uncentered_function("CT",pooled_sample_size,seed),
-        xy_plot_data_uncentered_function("MA",pooled_sample_size,seed),
-        xy_plot_data_uncentered_function("RI",pooled_sample_size,seed),
-        xy_plot_data_uncentered_function("VT",pooled_sample_size,seed)
-      )
-    
-    
-    res_pooled <- 
-      xy_plot_data_uncentered %>% 
-      filter(attempt==1, treated_state %in% c("CA","CT", "VT", "MA", "RI")) %>% 
-      group_by(year, attempt) %>% 
-      summarise(
-        Synthetic = mean(y_0), 
-        Actual = mean(tons_pc)) %>% 
-      ungroup %>%  filter(year>=pooled_ban_year) %>% 
-      summarise(actual_treatment_effect=100*sum(Actual-Synthetic)/sum(Synthetic), county_id="All")  %>% 
-      mutate(seed=seed) %>% 
-      select(county_id, actual_treatment_effect, seed)
-    
-    res = 
-      rbind(res, res_pooled)
-    
-    
-    
-    return(res)
-  }
-  
-  f <- lapply(1:200,monte_carlo_function)
-  
-  return(f %>% bind_rows())
-  
-}
-pl_seed = 1
-
-
-p_values_for_mc <- function(filename, f) # f is the monte_carlo_plseed_lead_pl_seed.csv results, aka the different ATTs
-{
-  chosen_sample_size = disposal_spec_states_function(filename) 
-  power_state_plac_data = read.csv(filename)
-  # for the aggregate case
-  power_state_plac6 <- power_state_plac_data %>% filter(treated_state=="All")
-  pool_estimates <- lapply(seq(1:length(donors_state)), pool_function, data = power_state_plac6 %>% bind_rows(), 
-                           donors = donors_state , r_threshold = 0, mape_threshold = Inf, n =5, seed=1)
-
-  
-  
-  p_values = 
-    read.csv(filename) %>% 
-    group_by(treated_state, county_id, sample_size) %>% 
-    filter(mape == min(mape)) %>% 
-    summarise(att= mean(att)) %>% 
-    filter(treated_state!="All") %>% ungroup %>% 
-    rbind(
-      pool_estimates %>% bind_rows() %>% 
-        group_by(i, sample_size) %>% 
-        filter(mape == min(mape)) %>%
-        summarise(att=mean(att)) %>% 
-        mutate(
-          treated_state = "All", 
-          county_id = i
-        ) %>% 
-        ungroup %>% 
-        select(treated_state, county_id, sample_size, att)
-    ) %>% 
-    inner_join(
-      chosen_sample_size %>% select(treated_state, sample_size), 
-      by = c("treated_state", "sample_size")
-    ) %>% as_tibble() %>% 
-    left_join(
-      f,
-      by = c("treated_state"= "county_id")
-    ) %>% 
-    group_by(seed, treated_state) %>% 
-    summarise(
-      p = mean(abs(100*att)> abs(actual_treatment_effect))
-    )
-  list_return = list(p= p_values, chosen_sample_size = chosen_sample_size)
-  return(list_return)
-}
-
-mc_summary <- function(filename, f, pl_seed) # f is the monte_carlo_plseed_lead_pl_seed.csv results, aka the different ATTs
-{
-  p = p_values_for_mc(filename, f)
-  chosen_sample_size = p$chosen_sample_size
-  p = p$p
-  
-  f %>% as_tibble() %>%  
-    bind_rows() %>%
-    ungroup %>% 
-    left_join(
-      chosen_sample_size %>% select(att_min, treated_state),
-      by = c("county_id"="treated_state")
-    ) %>% 
-    mutate(
-      sig = ifelse(actual_treatment_effect < 100*att_min, 1, 0)
-    ) %>% 
-    left_join(
-      p %>% group_by(treated_state), 
-      by = c("county_id"= "treated_state", "seed")
-    ) %>% 
-    mutate(
-      pl_seed=pl_seed
-    )
-  
-}
-
-
-# this runs the different experiments and saves them--takes a lot of time
-for (pl_seed in c(1:10))
-{
-  filename=paste0("power_state_plac_2025_seed", pl_seed,"_ia.csv")
-  f <- mc_function_all_inclusive(filename)
-  write.csv(f %>% bind_rows(), paste0("monte_carlo_plseed_lead_", pl_seed, ".csv"), row.names=FALSE)
-  
-}
-
-# this loads the saved runs
-mc <- rep(0,7)
-for (pl_seed in 1:10)
-{
-  filename=paste0("power_state_plac_2025_seed", pl_seed,"_20sep.csv")
-  f <- read.csv(paste0("monte_carlo_plseed_lead_", pl_seed, ".csv"))
-  mc1 <- mc_summary(filename, f, pl_seed)
-  mc<- rbind(mc, mc1)
-}
-
-mc <- mc %>% filter(county_id!=0)
-
-mc_summary_res <- 
-  mc %>%  
-  filter(pl_seed==5) %>%  
-  group_by(county_id) %>% 
-  summarise(
-    med_att = median(actual_treatment_effect), 
-    p=median(p), 
-    sig = 100*mean(sig)
-    
-  )
-
-
-
-
-fileConn<-file(paste0(figure_path, "/all_att_med_mc.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="All") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/all_sig_med_mc.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="All") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ca_att_med_mc.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="CA") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ca_sig_med_mc.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="CA") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ct_att_med_mc.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="CT") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ct_sig_med_mc.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="CT") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ma_att_med_mc.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="MA") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ma_sig_med_mc.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="MA") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ri_att_med_mc.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="RI") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ri_sig_med_mc.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="RI") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/vt_att_med_mc.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="VT") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/vt_sig_med_mc.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="VT") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-mc_summary_res <- 
-  mc %>%  
-  group_by(county_id, pl_seed) %>% 
-  summarise(
-    med_att = mean(actual_treatment_effect), 
-    p=mean(p), 
-    sig = 100*mean(sig)
-  ) %>% 
-  group_by(county_id) %>% 
-  summarise(
-    med_att = median(med_att), 
-    p=median(p), 
-    sig = median(sig)
-  )  
-  
-
-fileConn<-file(paste0(figure_path, "/all_att_med_mc_all.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="All") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/all_sig_med_mc_all.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="All") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ca_att_med_mc_all.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="CA") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ca_sig_med_mc_all.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="CA") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ct_att_med_mc_all.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="CT") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ct_sig_med_mc_all.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="CT") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ma_att_med_mc_all.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="MA") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ma_sig_med_mc_all.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="MA") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/ri_att_med_mc_all.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="RI") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/ri_sig_med_mc_all.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="RI") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
-
-fileConn<-file(paste0(figure_path, "/vt_att_med_mc_all.txt"))
-writeLines(paste0(format(scales::number(mc_summary_res %>% filter(county_id=="VT") %>% pluck("med_att"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-fileConn<-file(paste0(figure_path, "/vt_sig_med_mc_all.txt"))
-writeLines(paste0(format(round(mc_summary_res %>% filter(county_id=="VT") %>% pluck("sig"),0),big.mark=",",scientific=FALSE),'%'), fileConn)
-close(fileConn)
-
 #### MC for cities ####
 monte_carlo_function_for_cities <- function(seed)
 {
@@ -2929,6 +2626,14 @@ monte_carlo_function_for_cities <- function(seed)
     rbind(
       xy_plot_data_function_cities(seattle_number, chosen_sample_size_seattle, seed) %>% mutate(treated_state = "Seattle, WA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect), 
       xy_plot_data_function_cities(boulder_number, chosen_sample_size_boulder, seed) %>% mutate(treated_state = "Boulder, CO") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+    )
+  
+  xy_plot_data2 = xy_plot_data_function_sf(chosen_sample_size_sf,seed)  %>% mutate(treated_state = "San Francisco, CA") %>% select(year, county_id, intercept2, intercept, ban_year,attempt, tons_pc, y, y_0, effect_size, treated_state, y_0_effect)
+  
+  xy_plot_data1 = 
+    rbind(
+      xy_plot_data1, 
+      xy_plot_data2
     )
   
   res <- 
@@ -2941,20 +2646,119 @@ monte_carlo_function_for_cities <- function(seed)
     summarise(actual_treatment_effect = 100*sum(tons_pc - y_0)/sum(y_0)) %>% 
     mutate(seed=seed) %>% 
     left_join(
-      xy_plot_data %>% 
+      xy_plot_data1 %>% 
         group_by(county_id, attempt) %>%
         filter(
           attempt==1,
           year>ban_year-3,
           year< ban_year
         )%>%
-        summarise(mape = abs((tons_pc-y_0)/tons_pc) %>% {.*100} %>%  mean %>% round(2)), 
+        summarise(mape = abs((tons_pc-y_0)/tons_pc) %>% {.*100} %>%  mean %>% round(4)), 
       by = c("attempt", "county_id")
     )
   
   return(res)
 }
 
-f <- lapply(1:10, monte_carlo_function_for_cities)
+f <- lapply(1:100, monte_carlo_function_for_cities)
+write.csv(f %>% bind_rows, "mc_for_cities.csv", row.names = FALSE)
 
-f %>% bind_rows()
+
+plac_for_histogram6 = read.csv("plac_for_histogram6.csv")
+plac_for_histogram4 = read.csv("plac_for_histogram4.csv")
+plac_sf = read.csv("plac_sf.csv")
+
+mc_cities_p_values = 
+  rbind(
+  # p values for Seattle, WA
+  plac_for_histogram6 %>% as_tibble %>% 
+    filter(
+      sample_size == chosen_sample_size_seattle+2
+    ) %>% 
+    group_by(county_id) %>% 
+    filter(mape==min(mape)) %>%
+    summarise(att=mean(att)) %>% 
+    expand_grid(
+      read.csv("mc_for_cities.csv") %>% as_tibble() %>% 
+        filter(county_id=="seattleM1") %>% 
+        select(attempt, actual_treatment_effect) %>% 
+        mutate(attempt=1:n(), actual_treatment_effect=actual_treatment_effect/100)
+    ) %>% 
+    group_by(attempt, actual_treatment_effect) %>% 
+    mutate(att = abs(att)) %>% 
+    summarise(p=mean(att >= abs(actual_treatment_effect))) %>% 
+    mutate(county_id="seattleM1"), 
+  
+  # p values for Boulder, CO
+  
+  plac_for_histogram4 %>% as_tibble %>% 
+    filter(
+      sample_size == chosen_sample_size_boulder+2
+    ) %>% 
+    group_by(county_id) %>% 
+    filter(mape==min(mape)) %>%
+    summarise(att=mean(att)) %>% 
+    expand_grid(
+      read.csv("mc_for_cities.csv") %>% as_tibble() %>% 
+        filter(county_id=="boulderM2") %>% 
+        select(attempt, actual_treatment_effect) %>% 
+        mutate(attempt=1:n(), actual_treatment_effect=actual_treatment_effect/100)
+    ) %>% 
+    group_by(attempt, actual_treatment_effect) %>% 
+    mutate(att = abs(att)) %>% 
+    summarise(p=mean(att >= abs(actual_treatment_effect))) %>% 
+    mutate(county_id="boulderM2"), 
+  
+  plac_sf %>% as_tibble %>% 
+    filter(
+      sample_size == chosen_sample_size_sf+2
+    ) %>% 
+    group_by(county_id) %>% 
+    filter(mape==min(mape)) %>%
+    summarise(att=mean(att)) %>% 
+    expand_grid(
+      read.csv("mc_for_cities.csv") %>% as_tibble() %>% 
+        filter(county_id=="sanfranciscoM3") %>% 
+        select(attempt, actual_treatment_effect) %>% 
+        mutate(attempt=1:n(), actual_treatment_effect=actual_treatment_effect/100)
+    ) %>% 
+    group_by(attempt, actual_treatment_effect) %>% 
+    mutate(att = abs(att)) %>% 
+    summarise(p=mean(att >= abs(actual_treatment_effect))) %>% 
+    mutate(county_id="sanfranciscoM3")
+  
+)
+
+
+mc_cities_p_values_sum <- 
+  mc_cities_p_values %>% 
+  group_by(county_id) %>% 
+  summarise(
+    ATT= 100*median(actual_treatment_effect), 
+    p = median(p)
+  )
+
+
+fileConn<-file(paste0(figure_path, "/boulder_att_med_mc_all.txt"))
+writeLines(paste0(format(scales::number(mc_cities_p_values_sum %>% filter(county_id=="boulderM2") %>% pluck("ATT"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+fileConn<-file(paste0(figure_path, "/boulder_p_med_mc_all.txt"))
+writeLines(paste0(format(scales::number(mc_cities_p_values_sum %>% filter(county_id=="boulderM2") %>% pluck("p"), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+
+fileConn<-file(paste0(figure_path, "/seattle_att_med_mc_all.txt"))
+writeLines(paste0(format(scales::number(mc_cities_p_values_sum %>% filter(county_id=="seattleM1") %>% pluck("ATT"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+fileConn<-file(paste0(figure_path, "/seattle_p_med_mc_all.txt"))
+writeLines(paste0(format(scales::number(mc_cities_p_values_sum %>% filter(county_id=="seattleM1") %>% pluck("p"), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+
+fileConn<-file(paste0(figure_path, "/sf_att_med_mc_all.txt"))
+writeLines(paste0(format(scales::number(mc_cities_p_values_sum %>% filter(county_id=="sanfranciscoM3") %>% pluck("ATT"), accuracy = 0.1),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+fileConn<-file(paste0(figure_path, "/sf_p_med_mc_all.txt"))
+writeLines(paste0(format(scales::number(mc_cities_p_values_sum %>% filter(county_id=="sanfranciscoM3") %>% pluck("p"), accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+

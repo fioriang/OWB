@@ -4,7 +4,7 @@ composting_inf_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Was
 controls_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/03. State_Data/00. Controls"
 post_syp_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans/06. Post SYP"
 figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections"  
-power2 <- read.csv("power2_impexp_final_20sep.csv")
+power2 <- read.csv("power2_impexp.csv")
 #packages <- c("gridExtra","reshape2","data.table","Hmisc","poibin","MASS","knitr","stargazer","e1071","akima","plotly","bayesm",'lfe','plm','pglm',
 #              "broom","webshot","plyr",'extrafont'
 #              ,'tidyverse','RColorBrewer','scales','gsubfn',"gridExtra","reshape2","data.table","Hmisc","poibin","MASS","knitr","stargazer","e1071","akima","plotly",
@@ -689,7 +689,7 @@ mech1_plot <-
   labs(x="", y="", color="Average treatment effect on the treated:")+
   geom_hline(yintercept = 0, linetype = "dotted", color = ut_colors[5]) +
   labs(y="Average treatment effect on the treated (%)")+
-  scale_y_continuous(limits = c(-10.6,3), breaks= seq(-12,3, by =2))+
+  scale_y_continuous(limits = c(-10.6,5.5), breaks= seq(-12,4, by =2))+
   theme(
     legend.position = "top",
     strip.background = element_rect(color = "white", fill = "white"),

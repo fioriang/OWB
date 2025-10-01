@@ -53,7 +53,7 @@ ut_colors <- c(
 ```{r}
 
 #setwd('/Users/robertsanders/Dropbox/Desktop/A UC San Diego/Research/Active Research/Organic Waste Bans/06. Post SYP/00. Code/')
-power2 <- read.csv("power2_impexp_final_20sep.csv")
+power2 <- read.csv("final_checks/power2_impexp_spec2_ut_nmsw.csv")
 
 dt <- 
   power2 %>%
@@ -743,7 +743,7 @@ pop_coverage <-
   rbind(
     avg_disp %>% 
       mutate(
-        pop = paste0("Mean disposal: ", round(avg, 2)), 
+        pop = paste0("Mean disposal: ", sprintf("%.2f", avg)), 
         label_x = -115, 
         label_y = 26.5
       ) %>% 

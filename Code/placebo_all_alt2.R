@@ -1,10 +1,11 @@
 ######### 
-# This is the exact same as placebo_all.R with one key difference: instead of creating ban-calendar years, we shift the ban's implementation date to the closest calendar year, 
-# that is for CA (actual month of implementation 04/2016) --> 2016, for VT (actual month of implementation 07/2014) --> 2015, for MA (actual month of implementation 10/2014) --> 2015
+# This is the exact same as placebo_all.R with one key difference: instead of creating ban-calendar years, we shift the ban's implementation date to the nominal calendar year, 
+# that is for CA (actual month of implementation 04/2016) --> 2016, for VT (actual month of implementation 07/2014) --> 2014, for MA (actual month of implementation 10/2014) --> 2014
 #########
 
 library(tidyverse)
 library(extrafont)
+library(future.apply)
 
 mypathname <-"/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans"
 municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
@@ -38,7 +39,7 @@ rm(population_2020)
 
 # Waste Data
 #power2 <- read.csv("power2_2.csv")
-power2 <- read.csv(file=paste0(base_path,"power2_impexp_final_20sep.csv"))
+power2 <- read.csv(file=paste0(base_path,"final_checks/power2_impexp_spec2_ut_nmsw.csv"))
 all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016)
 #bans <- c(2014, 2014, 2016, 2014, 2016)
@@ -57,7 +58,7 @@ pre_processing_dt_state <- function (power2)
   year_start <- 2006
   year_cutoff <- 2018
   
-  
+
   dt_state <- 
     power2 %>% 
     mutate(county_id=paste0(county_name, state_id)) %>% 
@@ -101,7 +102,6 @@ pre_processing_dt_state <- function (power2)
 ##### Functions ####
 do_many_times_v3 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
 {
-  #Approach 2- Only Intercept
   samples <- sample(n_don, sample_size)
   x <- rowMeans(x[, samples]) # This is for sample size > 1
   #x=x[, samples] # This is for sample size equal to 1
@@ -117,36 +117,15 @@ do_many_times_v3 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test
   
   att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% sum
   cf <- (x[(test_ind_end2+1):n]+intercept) %>% sum
-  c(r, MA, att, cf, c(samples))
+  #c(r, MA, att, cf, c(samples))
   intercept2 <-  mean(c(y_train, y_test)-x[1:test_ind_end2])
   att <- (y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum
   cf <- (x[(test_ind_end2+1):n]+intercept2) %>% sum
   c(r, MA, att, cf, c(samples))
   
   
-  # 
-  # samples <- sample(n_don, sample_size)
-  # x <- rowMeans(x[, samples])
-  # n <- length(y_train)+ length(y_test) + length(y_att)
-  # 
-  # x_train <- x[1:test_ind_end1]
-  # x_test <-  x[(test_ind_end1+1):test_ind_end2]
-  # x_att <- x[(test_ind_end2+1):n]
-  # 
-  # coef <- sum((x_train - mean(x_train)) * (y_train - mean(y_train))) / sum((x_train - mean(x_train))^2)
-  # intercept <- mean(y_train)-coef * mean(x_train)
-  # 
-  # MA <- mean(abs((intercept + x_test * coef - y_test) / y_test))
-  # #att <- sum(intercept + x_att * coef - y_att)
-  # cf <-(intercept + x_att * coef ) %>% sum
-  # att <- (y_att - intercept - x_att * coef) %>% sum
-  # #ss_res <- sum((y_train - intercept - x_train * coef)^2)
-  # #ss_tot <- sum((y_train - mean(y_train))^2)
-  # r <- 1 - sum((y_train - intercept - x_train * coef)^2) /  sum((y_train - mean(y_train))^2)
-  # c(r, MA, att, cf, c(samples))
   
 }
-
 in_sample_R2_v2 <- function (k, dt, donors,iterations_scale, option, ban_year, offset, samp, seed)
 {
   set.seed(seed)
@@ -205,47 +184,44 @@ in_sample_R2_v2 <- function (k, dt, donors,iterations_scale, option, ban_year, o
     chosen_donor=0
   )
   
-  for ( f in 1:length(samp)) #for each potential value of |S| (in our case |S| can be between 3 and 10)
-  {
+  results_list <- vector("list", length(samp))
+  
+  for (f in seq_along(samp)) {
     sample_size <- samp[f]
-    iterations <- iterations_scale #min(iterations_scale* sample_size, 15000)
+    iterations  <- 100000
     
-    all <- lapply(seq(1:iterations),do_many_times_v3,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
-    all <- all %>% sapply(c) %>% t
-    
-    colnames(all) <- c(
-      "r_sq",
-      "mape", 
-      "att",
-      "cf",
-      paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+    # Run iterations into a matrix directly (fast!)
+    all <- replicate(
+      iterations,
+      do_many_times_v3(1, x, test_ind_end1, test_ind_end2,
+                       y_train, y_test, y_att,
+                       n_don, sample_size),
+      simplify = "matrix"
     )
+    all <- t(all)
     
-    all <- 
-      all %>% 
-      as_tibble %>%
-      #filter(r_sq>0) %>% 
-      arrange(mape) %>% 
-      slice(1:50) %>% # keep the 100 that have the lowest MAPE
+    # Build column names
+    colnames(all) <- c("r_sq","mape","att","cf",
+                       paste0("donor_", seq_len(sample_size)))
+    
+    # Convert to tibble and filter best 50
+    top <- as_tibble(all) %>% 
+      arrange(mape) %>%
+      slice(1:50) %>%
       mutate(
-        sample_size = samp[f], 
-        county_id = treated_location, 
-        iterations = iterations, 
-        ban_year = ban_year,
-        att = att/cf
-      ) %>%  
-      pivot_longer(
-        cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
-        names_to = "donor_number", 
-        values_to = "chosen_donor"
+        sample_size = sample_size,
+        county_id   = treated_location,
+        iterations  = iterations,
+        ban_year    = ban_year,
+        att         = att / cf  # normalize ATT
       )
     
-    res <- rbind(res, all)
+    results_list[[f]] <- top
   }
-  res %>% 
-    as_tibble 
+  
+  res <- bind_rows(results_list)
+  
 }
-
 power_state_plac <- function(treated_state, dt_state_initial, seed)
 {
   ###
@@ -257,8 +233,8 @@ power_state_plac <- function(treated_state, dt_state_initial, seed)
   ####
   # we recenter the time series of the treated states based on when the ban went into effect, i.e., for VT it went into effect in July so we recenter the time series so it starts in July
   ####
-  if(treated_state == "MA" | treated_state == "VT"){ban_year = ban_year+1}
   dt_state <- dt_state_initial
+  
   #all_treated <- all_treated[which(all_treated != treated_state)]
   
   dt_state <- dt_state %>%  as.data.frame()
@@ -273,115 +249,25 @@ power_state_plac <- function(treated_state, dt_state_initial, seed)
   # the 100 best SCs. 
   ###
   
-  plac <- lapply(seq(1:length(donors_state)),in_sample_R2_v2,dt_state, donors=donors_state, iterations_scale=100000, option="V2", ban_year=ban_year, offset=3, samp =samp, seed)
+  plan(multisession, workers = parallel::detectCores() - cores_left)
+  
+  plac <- future_lapply(
+    seq_along(donors_state),
+    in_sample_R2_v2,
+    dt_state,
+    donors = donors_state,
+    iterations_scale = 100000,
+    option = "V2",
+    ban_year = ban_year,
+    offset = 3,
+    samp = samp,
+    seed = seed,
+    future.seed = TRUE
+  )  
   
   return(plac)
   
 }
-
-power_state_fun2 <- function(plac, treated_state)
-{
-  #### 
-  # This function creates the placebo intervals
-  # In this function, plac (the input) is the result of the placebo runs (i.e., the ATT, the mape etc)
-  
-  # For the state-level specification we use the SC with the lowest MAPE and create the placebo intervals (the output of the function)
-  
-  ####
-  
-  spec4 <- 
-    plac %>% 
-    bind_rows() %>% 
-    filter(sample_size!=0) %>% 
-    mutate(county_id = as.character(county_id)) %>% 
-    group_by(sample_size, ban_year, county_id ) %>% 
-    filter(mape==min(mape)) %>% #choose the SC with the minimum MAPE
-    summarise(att = mean(att)) %>% # if there are mulptiple SC wth the same min MAPE take the mean of their ATTs
-    group_by(sample_size, ban_year) %>%     
-    summarise(
-      att_min = sort(att)[2], #because our sample is not super large the quantile 0.025 averages across observations and gives us an att that does not exist. We could choose either the largest or the 2nd largest att as our quantile. Given that the round(0.025*(22)+1) gives us 2 we choose the 2nd observation (that is because 22 is the sample size)
-      att_max = sort(att, decreasing = TRUE)[2],
-      att_median = mean(att)
-    ) 
-  
-  
-  specs <-
-    rbind(
-      spec4 %>%  mutate (specification = "State") 
-    ) %>% mutate(
-      year = ban_year, 
-      treated_state = treated_state
-    )
-  
-  return(specs)
-  
-}
-
-pool_function <-function(i, data, donors, r_threshold,mape_threshold,n, seed)
-{
-  
-  # data =
-  # data %>% filter(sample_size!=0) %>% 
-  # group_by(sample_size, county_id, ban_year) %>% 
-  # filter(mape==min(mape)) %>% 
-  # summarise(
-  #   att = mean(att),
-  #   r_sq = mean(r_sq),
-  #   mape = mean(mape), 
-  #   cf = mean(cf)
-  # )
-  
-  
-  set.seed(seed)
-  donors <- tibble(
-    county_id =donors, 
-    num_id = 1:length(donors)
-  )
-  
-  pooled <- 
-    data %>%
-    left_join(
-      donors, 
-      by = c("county_id")
-    ) %>% 
-    group_by(county_id) %>% 
-    mutate(
-      pools = sample(nrow(donors),n) %>% list()
-    )%>% 
-    ungroup #choose at random five states and consider them treated
-  
-  
-  pooled %>%
-    mutate(
-      num_id = num_id %>% as.integer
-    ) %>% 
-    filter(
-      num_id %in% (
-        pooled%>% 
-          filter(num_id==i) %>% 
-          slice(1) %>% 
-          pluck("pools") %>% 
-          unlist
-      )
-    ) %>% 
-    group_by(sample_size, ban_year, county_id) %>%
-    filter(mape==min(mape)) %>% # of these five states choose the SC that has the min mape
-    summarise(
-      att=mean(att), # the mean serves two purposes: 1) if there's two SC with the same MAPE take the avg of the two 2) because of the way that the dataset is structured for each chosen donor in the SC there's one line (where the ATT, R_sq and MAPE are the same ofc) to collapse these lines we use the mean 
-      r_sq=mean(r_sq), 
-      mape=mean(mape), 
-      cf= mean(cf)) %>% 
-    group_by(sample_size, ban_year) %>% 
-    summarise(
-      att = sum(att*cf)/sum(cf), #and finally, to find the ATT of the aggregate case, take the mean of the five chosen states. 
-      mape = mean(mape), 
-      r_sq = mean(r_sq), 
-      i
-    ) %>% 
-    ungroup
-}
-
-
 #### Power ####
 
 dt_state_initial <- pre_processing_dt_state(power2) #state-level disposal
@@ -391,12 +277,10 @@ all_treated <- c("VT", "MA", "CA", "CT", "RI", "All")# Never changes
 bans <- c(2014, 2014, 2016, 2014, 2016, 2015) #we assume that the aggregate ban is implemented in 2015
 samp=seq(3,10) # possible values of |S|
 
-seed=5
-# for (seed in 1:10)
-# {
+for (seed in 1:10){
 power_state_plac1 <- power_state_plac("MA", dt_state_initial, seed) # SC outcomes for MA's ban
 power_state_plac2 <- power_state_plac("CA", dt_state_initial, seed) # SC outcomes for CA's ban
-power_state_plac3 <- power_state_plac("CT", dt_state_initial, seed)# SC outcomes for CT's ban
+#power_state_plac3 <- power_state_plac("CT", dt_state_initial, seed)# SC outcomes for CT's ban
 #power_state_plac4 <- power_state_plac("RI", dt_state_initial, seed)# SC outcomes for RI's ban
 #power_state_plac5 <- power_state_plac("VT", dt_state_initial, seed)# SC outcomes for VT's ban
 power_state_plac6 <- power_state_plac("All", dt_state_initial,seed) #needed for the aggregate case
@@ -404,23 +288,14 @@ power_state_plac6 <- power_state_plac("All", dt_state_initial,seed) #needed for 
 
 write.csv(
   rbind(
-    power_state_plac1 %>% bind_rows %>% mutate(treated_state="MA"),
-    power_state_plac2 %>% bind_rows %>% mutate(treated_state="CA"), # CA and RI will be the same in this case
-    power_state_plac3 %>% bind_rows %>% mutate(treated_state="CT"),
+    power_state_plac1 %>% bind_rows %>% mutate(treated_state="MA"), # MA, CT, VT will all be the same
+    power_state_plac2 %>% bind_rows %>% mutate(treated_state="CA"), # CA and RI will be the same 
+    power_state_plac1 %>% bind_rows %>% mutate(treated_state="CT"),
     power_state_plac2 %>% bind_rows %>% mutate(treated_state="RI"),
-    power_state_plac1 %>% bind_rows %>% mutate(treated_state="VT"), # MA and VT will be the same in this case
+    power_state_plac1 %>% bind_rows %>% mutate(treated_state="VT"),
     power_state_plac6 %>% bind_rows %>% mutate(treated_state="All")
   ),
   paste0("power_state_plac_2025_seed_", seed, "_alt2.csv"), row.names=FALSE
 )
-#}
-
-power_state_plac1 %>% bind_rows() %>% mutate(treated_state="MA", s=5) %>% 
-  group_by(treated_state, county_id, sample_size, s) %>% 
-  filter(mape == min (mape), sample_size!=0) %>% 
-  summarise(att=mean(att)) %>% 
-  group_by(treated_state, sample_size, s) %>% #filter(sample_size==9, treated_state=="MA")
-  summarise(p = sort(att)[2], p2 = sort(att, decreasing = TRUE)[2], min= min(att), max=max(att)) %>% #filter(treated_state=="VT")
-  group_by(treated_state, s) %>% 
-  filter(p==max(p)) %>% arrange(treated_state,s) %>% print(n=100)
+}
 

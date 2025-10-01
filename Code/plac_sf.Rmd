@@ -1,0 +1,646 @@
+---
+title: "plac_sf"
+output: pdf_document
+date: "2025-09-29"
+---
+
+##############
+To replicate the results of Fig. 2, panel B, look at section "State" and subsection "Fig. 2: Placebo distribution". 
+Required sections to run before sunning subsection "Fig. 2: Placebo distribution": basic data, functions, pre-processing 
+#################
+```{r, include=FALSE}
+# library(ggplot2)
+# library(dplyr)
+library(tidyverse)
+# library(ggpubr)
+# library(stringr)
+# library(fixest)
+# library(knitr)
+# library(zoo)
+# library(tidyr)
+# library(tictoc)
+# library(purrr)
+library(extrafont)
+#state_data_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03. State_Data"
+#post_syp_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/06. Post SYP"
+#figure_path <- "C:/Users/fa24575/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures"
+#municipal_path <- "C:/Users/fa24575/Dropbox/Organic Waste Bans/03.1. Municipal Data"
+
+mypathname <-"/Users/fian4421/Library/CloudStorage/Dropbox/Organic Waste Bans"
+municipal_path <- paste0(mypathname, "/03.1. Municipal Data")
+state_data_path <- paste0(mypathname,"/03. State_Data")
+base_path <- paste0(mypathname,"/06. Post SYP/00. Code/")
+figure_path <- "/Users/fian4421/Library/CloudStorage/Dropbox/Apps/Overleaf/Organic Waste Bans/Figures/Corrections"
+
+```
+
+
+# Basic Data
+
+
+```{r, include=FALSE}
+loadfonts(device = "win")
+
+ut_colors <- c(
+  rgb(132, 59,14, max=255), # dark orange
+  rgb(255, 127, 21, max=255), # bright orange
+  rgb(191,87,0, max=255), # ut orange
+  rgb(51,73,72, max=255), # dark grey
+  rgb(156, 173, 183, max=255), #light grey
+  rgb(191,87,0,alpha=50, max=255))# ut orange
+
+# Population
+population <- read.csv(paste0(state_data_path,"/00. Controls/Population/population.csv"))
+population <- cbind(population[1:2], stack(population[3:31]))
+colnames(population)<- c("state_id", "county_name", "pop", "year")
+population$year <- substring(population$year, 2) %>% as.integer
+population$pop <- as.numeric(population$pop)
+population$county_name[population$county_name=="doña ana"] <- "dona ana"
+population <- population[population$state_id!="AK" & population$state_id!="co" & population$state_id!="ia",] # contiguous states, DC is considered a contiguous state
+
+population_2020 <- read.csv(paste0(state_data_path,"/00. Controls/Population/population_2020.csv"))
+population_2020 <- population_2020[population_2020$state_id !="DC",]
+population_2020$county_name[population_2020$county_name=="doña ana"] <- "dona ana"
+population <- rbind(population, population_2020)
+rm(population_2020)
+
+
+# Waste Data
+#power2 <- read.csv("power2_2.csv")
+power2 <- read.csv(file=paste0(base_path,"final_checks/power2_impexp_spec2_ut_nmsw.csv"))
+all_treated <- c("VT", "MA", "CA", "CT", "RI")# Never changes
+bans <- c(2014, 2014, 2016, 2014, 2016)
+#bans <- c(2014, 2014, 2016, 2014, 2016)
+bans_passage <- c(2012, 2013, 2014, 2011, 2014) #passage dates
+year_start <- 2006
+year_end <- 2018
+```
+
+
+# Functions
+```{r}
+
+do_many_times_v3 <- function (i, x, test_ind_end1, test_ind_end2,y_train, y_test, y_att, n_don,sample_size)
+{
+  samples <- sample(n_don, sample_size)
+  x <- rowMeans(x[, samples]) # This is for sample size > 1
+  #x=x[, samples] # This is for sample size equal to 1
+  n <- length(y_train)+ length(y_test) + length(y_att)
+  
+  intercept <- mean(y_train-x[1:test_ind_end1])
+  
+  ss_res <- sum((y_train-x[1:test_ind_end1] - intercept)^2) #calculating the in-sample R-squared
+  ss_tot <- sum((y_train-mean(y_train))^2)
+  r <- 1- ss_res/ss_tot
+  MA  <- (intercept + x[(test_ind_end1+1):test_ind_end2] - y_test )/(intercept + x[(test_ind_end1+1):test_ind_end2]) 
+  MA <- MA %>% abs %>%  mean
+  
+  att <- (y_att-x[(test_ind_end2+1):n]-intercept) %>% sum
+  cf <- (x[(test_ind_end2+1):n]+intercept) %>% sum
+  #c(r, MA, att, cf, c(samples))
+  intercept2 <-  mean(c(y_train, y_test)-x[1:test_ind_end2])
+  att <- (y_att-x[(test_ind_end2+1):n]-intercept2) %>% sum
+  cf <- (x[(test_ind_end2+1):n]+intercept2) %>% sum
+  c(r, MA, att, cf, c(samples))
+  
+  
+  
+}
+
+in_sample_R2_same_state <- function (k, dt, donors,iterations_scale, option, ban_year, offset, samp, seed)
+{
+  #### 
+  # this is the same function as in_sample_R2_v2 but for SF 
+  # (The difference is that it is allowed to choose donors from the same state, which is need for SF) 
+  ####
+  
+  set.seed(seed)
+  treated_location <- donors[k]
+  year_end <- ban_year-offset
+  
+  don_new <- donors[donors!=treated_location]
+
+  n_don <- length(don_new)
+  test_ind_end1 <- year_end - year_start+1
+  test_ind_end2 <- ban_year-year_end-1 +test_ind_end1
+  
+  y <- dt[dt$county_id==treated_location, "tons_pc"]
+  y_train <- y[1:test_ind_end1]
+  y_test <- y[(test_ind_end1+1): test_ind_end2]
+  y_att <- y[(test_ind_end2+1): length(y)]
+  
+  x <- dt[dt$county_id!=treated_location, c("tons_pc", "county_id")]
+  x <- as.matrix(unstack(x, tons_pc ~ county_id)) 
+
+  res <- tibble(
+    r_sq = 0, 
+    mape = 0, 
+    att=0, 
+    cf=0, 
+    sample_size=0, 
+    county_id ="", 
+    iterations = 0, 
+    ban_year = 0, 
+    donor_number="", 
+    chosen_donor=0
+  )
+  
+  for ( f in 1:length(samp))
+  {
+    sample_size <- samp[f]
+    #iterations <- min(iterations_scale* sample_size, 100000)
+    iterations = 100000
+
+    all <- lapply(seq(1:iterations),do_many_times_v3,x, test_ind_end1, test_ind_end2,y_train, y_test, y_att,n_don, sample_size)
+    all <- all %>% sapply(c) %>% t
+    
+    colnames(all) <- c(
+      "r_sq",
+      "mape", 
+      "att",
+      "cf",
+      paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))
+    )
+    
+    all <- 
+      all %>% 
+      as_tibble %>%
+      filter(r_sq > 0) %>% 
+      arrange(mape) %>% 
+      slice(1:100) %>% 
+      mutate(
+        sample_size = samp[f], 
+        county_id = treated_location, 
+        iterations = iterations, 
+        ban_year = ban_year,
+        att = att/cf
+      ) %>%  
+      pivot_longer(
+        cols = c(paste0(rep("donor", sample_size), paste0("_", c(1:sample_size)))), 
+        names_to = "donor_number", 
+        values_to = "chosen_donor"
+      )
+    
+    res <- rbind(res, all)
+  }
+  res %>% 
+    as_tibble 
+}
+
+```
+
+
+###  Pre-processing
+```{r, include=FALSE}
+pre_processing_dt <- function(power2)
+{
+  year_start <- 2006
+  year_cutoff <- 2018
+  year_end <- 2011
+  
+  dt <- power2
+  
+  
+  dt_ca <- 
+    dt %>% #filter(county_name!="calaveras") %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed"),
+      state_id=="CA"
+    ) %>% 
+    group_by(county_name) %>% 
+    mutate(
+      tons_high = quantile(tons, 0.975), 
+      tons_low = quantile(tons, 0.025), 
+      tons = ifelse(tons> tons_high, tons_high, tons), 
+      tons = ifelse(tons< tons_low, tons_low, tons)
+    ) %>% 
+    select(-tons_high) %>% select(-tons_low) %>% ungroup
+  
+  
+  
+  dt <- 
+    dt %>% 
+    as_tibble() %>% 
+    filter(state_id!="CA") %>% 
+    rbind(
+      dt_ca
+    ) %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed")
+    ) %>% 
+    group_by (year, state_id, county_name) %>% 
+    summarise(tons = sum(tons)) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    left_join (
+      population,
+      by = c("state_id", "county_name", "year")
+    ) %>% 
+    mutate(
+      tons_pc = ifelse(is.na(county_name),tons/state_pop, tons/pop), 
+      county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id) )
+    ) %>% 
+    filter(
+      tons_pc > 0.2
+    )
+  
+  #Exclude missing values and small values
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        #filter(state_id != "CT", state_id != "RI") %>% 
+        summarize(
+          m = mean(tons_pc), 
+          min_year = min(year), 
+          min_tons = min(tons_pc), 
+          max_tons = max(tons_pc)) %>%
+        filter(
+          m < 0.3 | min_year > year_start)#|max_tons>2.5)
+    ) %>% as_tibble()
+  
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  dt <- dt[dt$year >=year_start  & dt$year <=year_cutoff,]
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        summarize(n=  n()) %>% 
+        filter(
+          n < (year_cutoff- year_start+1)
+        )
+    )
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  
+  # Percentage change in disposal tons
+  f <- 
+    as.data.frame(
+      dt %>% 
+        filter(
+          #state_id != "RI", state_id!="CA", 
+          !is.na(county_name)) %>% 
+        group_by(county_id) %>% 
+        mutate(
+          percentage = (tons-dplyr::lag(tons, n = 1, default = NA))/dplyr::lag(tons, n = 1, default = NA),
+          percentage_1 = (tons-dplyr::lead(tons, n = 1, default = NA))/dplyr::lead(tons, n = 1, default = NA)
+        )
+    )
+  
+  f <- f[!is.na(f$percentage),]
+  threshold <- 0.42
+  exclude2 <- unique(f$county_id[#f$percentage > threshold | f$percentage < -threshold 
+    f$percentage_1 > threshold | f$percentage_1 < -threshold])
+  #dt %>% filter(county_id %in% exclude2, year == 2014) %>% ungroup %>% summarise(sum(tons))/
+  #dt %>% filter(year == 2014) %>% ungroup %>% summarise(sum(tons))
+  
+  
+  dt <- dt[!dt$county_id %in% exclude2,]
+  
+  rm(f, exc, exclude2)
+  
+  dt_initial <- dt
+  return(dt_initial)
+}
+```
+
+
+# Municipal
+
+## Importing Data
+
+```{r}
+year_start = 2006
+year_end = 2018
+population_seattle <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/population_seattle.csv"))
+composting <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/seattle_composting.csv"))
+disposal <- read.csv(paste0(municipal_path,"/Seattle, WA/import_R/seattle_disposal.csv"))
+
+seattle <- 
+  disposal %>%
+  rename(
+    total = Landfill,
+    year = Year, 
+    month = Month
+  ) %>% 
+  pivot_longer(
+    cols = c("Self_Haul", "Residential", "Commercial"), 
+    names_to = "generator", 
+    values_to = "tons"
+  ) %>%  
+  mutate(
+    type = "disposal", 
+    generator = str_to_lower(generator)
+  ) %>% 
+  select(
+    year, month, generator, tons, type
+  ) %>% 
+  rbind(
+    composting %>%
+      pivot_longer(
+        cols = c("self_haul", "residential", "commercial"), 
+        names_to = "generator", 
+        values_to = "tons"
+      ) %>%  
+      mutate(
+        type = "composting"
+      )
+  ) %>%  
+  group_by(year, type) %>%  
+  summarise(
+    tons = sum(tons, na.rm = TRUE)
+  ) %>% 
+  left_join(
+    population_seattle %>%  
+      rename (pop=population) %>% 
+      select (year, pop), 
+    by = c("year")
+  ) %>%  
+  mutate (
+    tons_pc = tons/pop,
+    state_id = "M1", 
+    county_name = "seattle", 
+    county_id = paste(county_name, state_id, sep = ""), 
+  ) 
+
+waste <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/boulder_waste.csv"))
+boulder_population <- read.csv(paste0(municipal_path,"/Boulder, CO/import_R/boulder_population.csv"))
+
+colnames(waste) <- c("year", "sector", "disposal", "recycling", "organics","reuse", "total", "diversion", "notes")
+
+boulder <- 
+  waste %>% 
+  filter(
+    year >= 2006, 
+  ) %>%  
+  pivot_longer(
+    cols = c("disposal", "recycling", "organics", "reuse", "total"), 
+    names_to = "type", 
+    values_to = "tons"
+  ) %>%  
+  select(
+    year, type, tons
+  ) %>% 
+  group_by(year, type) %>% 
+  summarise(
+    tons = sum(tons, na.rm = TRUE)
+  ) %>% 
+  left_join(
+    boulder_population %>%  
+      rename(pop=population),
+    by = c("year")) %>%  
+  mutate (
+    tons_pc = tons/pop, 
+    state_id = "M2", 
+    county_name = "boulder", 
+    county_id = paste(county_name, state_id, sep = ""), 
+    type = ifelse(type == "organics", "composting", type)
+  )
+```
+
+## Transforming data
+```{r}
+dt_initial <- pre_processing_dt(power2)
+
+dt_municipal <- 
+  dt_initial %>%
+  select(year, state_id, county_id, tons_pc, tons) %>%
+  rbind(
+    seattle %>%  
+      filter(
+        type == "disposal", 
+        year >= year_start, 
+        year <= 2018
+      ) %>%  
+      select(year, state_id, county_id, tons_pc, tons), 
+    boulder %>%  
+      filter(
+        type == "disposal", 
+        year >= year_start, 
+        year <= 2018
+      ) %>%  
+      select(year, state_id, county_id, tons_pc, tons)
+  ) %>% 
+  filter(
+    !state_id %in% c("WA", "CO")
+  ) %>% 
+  as.data.frame
+
+dt_municipal_initial <- dt_municipal
+```
+
+### San Francisco
+```{r}
+pre_processing_dt_sf <- function(power2)
+{
+  year_start <- 1996
+  year_cutoff <- 2014
+
+  dt <- power2
+  
+  
+  dt_ca <- 
+    dt %>% #filter(county_name!="calaveras") %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed"),
+      state_id=="CA"
+    ) %>% 
+    group_by(county_name) %>% 
+    mutate(
+      tons_high = quantile(tons, 0.975), 
+      tons_low = quantile(tons, 0.025), 
+      tons = ifelse(tons> tons_high, tons_high, tons), 
+      tons = ifelse(tons< tons_low, tons_low, tons)
+    ) %>% 
+    select(-tons_high) %>% select(-tons_low) %>% ungroup
+  
+  
+  
+  dt <- 
+    dt %>% 
+    as_tibble() %>% 
+    filter(state_id!="CA") %>% 
+    rbind(
+      dt_ca
+    ) %>% 
+    filter(
+      year >= year_start, 
+      year <= year_cutoff, 
+      type %in% c("disposal", "msw_disposed")
+    ) %>% 
+    group_by (year, state_id, county_name) %>% 
+    summarise(tons = sum(tons)) %>% 
+    left_join (
+      population %>% group_by(state_id, year) %>% summarise(state_pop = sum(pop)), 
+      by = c("state_id", "year")
+    ) %>%
+    left_join (
+      population,
+      by = c("state_id", "county_name", "year")
+    ) %>% 
+    mutate(
+      tons_pc = ifelse(is.na(county_name),tons/state_pop, tons/pop), 
+      county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id) )
+    ) %>% 
+    filter(
+      tons_pc > 0.2
+    )
+  
+  #Exclude missing values and small values
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        #filter(state_id != "CT", state_id != "RI") %>% 
+        summarize(
+          m = mean(tons_pc), 
+          min_year = min(year), 
+          min_tons = min(tons_pc), 
+          max_tons = max(tons_pc)) %>%
+        filter(
+          m < 0.3 | min_year > year_start)#|max_tons>2.5)
+    ) %>% as_tibble()
+  
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  dt <- dt[dt$year >=year_start  & dt$year <=year_cutoff,]
+  exc<- 
+    as.data.frame(
+      dt %>% 
+        group_by(county_id) %>% 
+        summarize(n=  n()) %>% 
+        filter(
+          n < (year_cutoff- year_start+1)
+        )
+    )
+  dt <- dt[!(dt$county_id %in% exc$county_id),]
+  
+  # Percentage change in disposal tons
+  f <- 
+    as.data.frame(
+      dt %>% 
+        filter(
+          #state_id != "RI", state_id!="CA", 
+          !is.na(county_name)) %>% 
+        group_by(county_id) %>% 
+        mutate(
+          percentage = (tons-dplyr::lag(tons, n = 1, default = NA))/dplyr::lag(tons, n = 1, default = NA),
+          percentage_1 = (tons-dplyr::lead(tons, n = 1, default = NA))/dplyr::lead(tons, n = 1, default = NA)
+        )
+    )
+  
+  f <- f[!is.na(f$percentage),]
+  threshold <- 0.42
+  exclude2 <- unique(f$county_id[#f$percentage > threshold | f$percentage < -threshold 
+    f$percentage_1 > threshold | f$percentage_1 < -threshold])
+  #dt %>% filter(county_id %in% exclude2, year == 2014) %>% ungroup %>% summarise(sum(tons))/
+  #dt %>% filter(year == 2014) %>% ungroup %>% summarise(sum(tons))
+  
+  
+  dt <- dt[!dt$county_id %in% exclude2,]
+  
+  rm(f, exc, exclude2)
+  
+  dt_initial <- dt
+  return(dt_initial)
+}
+
+```
+
+
+
+```{r}
+year_start <- 1996
+year_cutoff <- 2014
+year_end <- 2011
+all_treated <- c("VT", "MA", "CA", "CT", "RI", "M1", "M2", "M3")# Never changes
+bans <- c(2014, 2014, 2016, 2014, 2016, 2015, 2016, 2009)
+treated_state ="M3"
+
+
+dt <- 
+  power2 %>% pre_processing_dt_sf %>% 
+  filter(state_id=="CA") %>% 
+    mutate(
+    county_id = ifelse(is.na(county_name), state_id, paste0(county_name, state_id)),
+    county_id = ifelse(county_id=="san franciscoCA", "san franciscoM3", county_id),
+    state_id = ifelse(county_id == "san franciscoM3", "M3", "other")
+  )
+
+dt <- 
+  dt %>%
+  group_by(county_id) %>% 
+  mutate(
+    tons_pc = tons_pc*0.25 + 0.75*ifelse(is.na(lead(tons_pc, n=1, default = NA)), tons_pc, lead(tons_pc, n=1, default = NA)) 
+  )
+  
+
+
+# Power 
+dt <- dt %>%  as.data.frame()
+treated_counties_id <- unique(dt$county_id[dt$state_id%in% all_treated])
+dt <- dt[!(dt$state_id %in% all_treated),] %>% as.data.frame
+donors <- unique(dt$county_id[!(dt$state_id%in% all_treated)])
+ban_year <- bans[which(all_treated == treated_state)]
+
+plac <- lapply(seq(1:length(donors)),in_sample_R2_same_state,dt, donors=donors, iterations_scale=10000, option="V2", ban_year=ban_year, offset=3, samp =samp, seed=1)
+
+write.csv(plac %>% bind_rows, "plac_sf.csv", row.names = FALSE)
+
+plac = read.csv("plac_sf.csv")
+
+
+sf_power <- 
+  plac %>% 
+  bind_rows %>% 
+  group_by(sample_size, county_id,ban_year) %>% 
+  summarise(att=mean(att)) %>% 
+  group_by(sample_size, ban_year) %>% 
+  summarise(
+    att_min = quantile(att, 0.025), 
+    att_max = quantile(att, 0.975), 
+    att_median = median(att)) %>% 
+  mutate(year = 2009, specification = "County", treated_state = "M3")
+sf_power
+write.csv(sf_power,"sf_power.csv", row.names = FALSE)
+
+
+```
+
+#### P values
+
+```{r}
+plac_sf <- read.csv("plac_sf.csv")
+bt_with_power_data =  read.csv("bt_with_power_data.csv") %>% as_tibble()
+p_sf <- 
+  plac_sf %>% as_tibble %>% 
+  left_join(
+    bt_with_power_data %>% 
+      filter(state_id=="San Francisco, CA") %>% 
+      select(sample_size, actual_treatment_effect, ban_year) %>% 
+      rename(chosen_sample_size=sample_size), 
+    by = "ban_year"
+  ) %>% 
+  filter(
+    sample_size==chosen_sample_size, 
+    donor_number=="donor_1"
+  ) %>% 
+  group_by(county_id, actual_treatment_effect) %>% 
+  filter(mape==min(mape)) %>% 
+  ungroup %>% 
+  mutate(att = abs(att)) %>% 
+  summarise(p=mean(att >= abs(actual_treatment_effect))) %>% pluck("p")
+  
+  
+
+fileConn<-file(paste0(figure_path, "/p_sf.txt"))
+writeLines(paste0(format(scales::number(p_sf, accuracy = 0.01),big.mark=",",scientific=FALSE),'%'), fileConn)
+close(fileConn)
+
+```
